@@ -2,4 +2,4 @@
 
 ESTA PÁGINA ES PARA QUE PODAIS IR DIRECTAMENTE SIN PREGUNTARME
 
-![Apuntes DAM](apuntes_dam.jpg)
+![Apuntes DAM](img/apuntes_dam.jpg)
