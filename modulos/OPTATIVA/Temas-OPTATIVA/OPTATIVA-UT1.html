@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>OPTATIVA - UT 1: Gestión y Configuración de Sistemas Operativos mediante Comandos y Shell Scripting</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 1.8cm 1.5cm 2cm 1.5cm;
+      @bottom-right {
+        content: counter(page);
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        font-size: 9pt;
+        color: #64748b;
+      }
+      @bottom-left {
+        content: "ABS - UT 1 | IES Valle del Jerte";
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        font-size: 9pt;
+        color: #64748b;
+      }
+    }
+
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 10pt;
+      line-height: 1.5;
+      color: #1e293b;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1.doc-title {
+      font-size: 17pt;
+      font-weight: 700;
+      color: #0f172a;
+      text-align: center;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    p.doc-subtitle {
+      text-align: center;
+      font-size: 10.5pt;
+      color: #15803d;
+      font-weight: 600;
+      margin-top: 0;
+      margin-bottom: 25px;
+      border-bottom: 2px solid #16a34a;
+      padding-bottom: 10px;
+    }
+
+    .pdf-section {
+      background-color: #0f172a;
+      color: #ffffff;
+      padding: 8px 14px;
+      font-size: 11.5pt;
+      font-weight: 700;
+      border-radius: 4px;
+      margin-top: 25px;
+      margin-bottom: 15px;
+      page-break-after: avoid;
+    }
+
+    .page-break {
+      page-break-before: always;
+    }
+
+    h2 {
+      font-size: 11.5pt;
+      color: #15803d;
+      border-bottom: 1.5px solid #e2e8f0;
+      padding-bottom: 4px;
+      margin-top: 18px;
+      margin-bottom: 10px;
+      page-break-after: avoid;
+    }
+
+    h3 {
+      font-size: 10pt;
+      color: #334155;
+      margin-top: 12px;
+      margin-bottom: 6px;
+      page-break-after: avoid;
+    }
+
+    p {
+      margin: 0 0 8px 0;
+      text-align: justify;
+    }
+
+    ul, ol {
+      margin: 0 0 10px 0;
+      padding-left: 20px;
+    }
+
+    li {
+      margin-bottom: 4px;
+    }
+
+    .diagram-box {
+      background-color: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-left: 4px solid #16a34a;
+      padding: 10px 14px;
+      margin: 10px 0;
+      font-size: 9pt;
+      border-radius: 2px;
+      page-break-inside: avoid;
+    }
+
+    .diagram-title {
+      font-weight: bold;
+      color: #0f172a;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      font-size: 8.5pt;
+      letter-spacing: 0.5px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+      font-size: 8.5pt;
+      page-break-inside: avoid;
+    }
+
+    th, td {
+      border: 1px solid #cbd5e1;
+      padding: 6px 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background-color: #f1f5f9;
+      color: #0f172a;
+      font-weight: 700;
+    }
+
+    tr:nth-child(even) td {
+      background-color: #f8fafc;
+    }
+
+    pre, code {
+      font-family: 'Consolas', 'Courier New', monospace;
+    }
+
+    pre {
+      background-color: #0f172a;
+      color: #f8fafc;
+      padding: 10px 12px;
+      border-radius: 4px;
+      font-size: 8.5pt;
+      line-height: 1.4;
+      overflow-x: auto;
+      margin: 10px 0;
+      page-break-inside: avoid;
+    }
+
+    p code, li code, td code {
+      background-color: #f1f5f9;
+      color: #15803d;
+      padding: 1px 4px;
+      border-radius: 3px;
+      font-size: 8.5pt;
+      border: 1px solid #e2e8f0;
+    }
+  </style>
+</head>
+<body>
+
+  <h1 class="doc-title">Administración Básica de Sistemas (DAM / DAW)</h1>
+  <p class="doc-subtitle">Resumen Completo: UT 1 - Gestión y Configuración de Sistemas Operativos mediante Comandos y Shell Scripting | IES Valle del Jerte</p>
+
+  <!-- SECCIÓN 1: EL TERMINAL Y LA FILOSOFÍA CLI -->
+  <div class="pdf-section">1. El Terminal como Centro de Control del Sistema</div>
+
+  <h2>1.1. Filosofía de la Línea de Comandos (CLI)</h2>
+  <ul>
+    <li><strong>Precisión y Reproducibilidad:</strong> Un comando garantiza que dos ejecuciones produzcan dos resultados exactamente iguales.</li>
+    <li><strong>Eficiencia y Velocidad:</strong> La interacción mediante teclado combinada con el autocompletado (<code>TAB</code>) proporciona rapidez y agilidad operativa.</li>
+    <li><strong>Automatización:</strong> Creación de scripts (Bash, PowerShell) para evitar la repetición manual de tareas.</li>
+    <li><strong>Consumo de Recursos Mínimo:</strong> Exige un consumo de CPU y memoria RAM despreciable frente al sobrecoste de los entornos gráficos (GUI).</li>
+    <li><strong>Acceso Remoto Eficiente:</strong> La administración por SSH mediante terminal es rápida y fiable incluso en redes con conexiones lentas o inestables, donde las GUI resultan inoperables.</li>
+  </ul>
+
+  <!-- SECCIÓN 2: ESTRUCTURA DE DIRECTORIOS -->
+  <div class="page-break"></div>
+  <div class="pdf-section">2. Estructura de Directorios: Linux vs. Windows</div>
+
+  <h2>2.1. El Árbol de Directorios en Linux</h2>
+  <p>En Linux rige el principio de que «todo es un archivo» (*everything is a file*), estructurándose de forma jerárquica a partir del directorio raíz (<code>/</code>) y con estricta distinción entre mayúsculas y minúsculas (*case-sensitive*).</p>
+
+  <h3>Tabla: Principales Directorios del Filesystem en Linux</h3>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 20%;">Directorio</th>
+        <th style="width: 40%;">Propósito y Contenido</th>
+        <th style="width: 40%;">Archivos o Comandos Representativos</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>/</code></td>
+        <td>Raíz (*root*). Base jerárquica de la que cuelga todo el sistema de archivos.</td>
+        <td>Punto de partida de todas las rutas absolutas.</td>
+      </tr>
+      <tr>
+        <td><code>/bin</code> y <code>/usr/bin</code></td>
+        <td>Binarios esenciales del sistema y comandos básicos accesibles para los usuarios.</td>
+        <td><code>ls</code>, <code>cp</code>, <code>mv</code>, <code>cat</code>, <code>bash</code>.</td>
+      </tr>
+      <tr>
+        <td><code>/sbin</code> y <code>/usr/sbin</code></td>
+        <td>Binarios para la administración del sistema. Requieren privilegios de superusuario (root).</td>
+        <td><code>fdisk</code>, <code>ifconfig</code>, <code>reboot</code>, <code>sshd</code>.</td>
+      </tr>
+      <tr>
+        <td><code>/etc</code></td>
+        <td>Centro neurálgico de configuración global del sistema y servicios en texto plano.</td>
+        <td><code>/etc/passwd</code>, <code>/etc/shadow</code>, <code>/etc/ssh/sshd_config</code>, <code>nginx</code>.</td>
+      </tr>
+      <tr>
+        <td><code>/var</code></td>
+        <td>Datos variables que incrementan su tamaño con la actividad del sistema (logs, colas, bases de datos).</td>
+        <td><code>/var/log</code> (registros), <code>/var/www</code> (sitios web), <code>/var/spool</code> (colas de correo/impresión).</td>
+      </tr>
+      <tr>
+        <td><code>/home</code></td>
+        <td>Directorios personales de los usuarios estándar.</td>
+        <td><code>/home/usuario</code>.</td>
+      </tr>
+      <tr>
+        <td><code>/root</code></td>
+        <td>Directorio de trabajo personal del superusuario root (independiente de <code>/</code>).</td>
+        <td>Archivos personales y configuraciones del administrador.</td>
+      </tr>
+      <tr>
+        <td><code>/tmp</code></td>
+        <td>Archivos temporales del sistema y aplicaciones. Se purga habitualmente al reiniciar el equipo.</td>
+        <td>Archivos volátiles de ejecución de programas.</td>
+      </tr>
+      <tr>
+        <td><code>/opt</code></td>
+        <td>Paquetes de software opcionales y aplicaciones completas de terceros.</td>
+        <td>Software de distribución independiente o comercial.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>2.2. Comparativa Conceptual con Windows</h2>
+  <ul>
+    <li><strong>Raíz:</strong> Linux utiliza <code>/</code> unificada para todo el almacenamiento montado, mientras que Windows emplea letras de unidad físicas/lógicas independientes (<code>C:\</code>).</li>
+    <li><strong>Binarios:</strong> Los ejecutables y comandos esenciales de <code>/bin</code> y <code>/sbin</code> equivalen a <code>C:\Windows\System32</code>.</li>
+    <li><strong>Programas:</strong> <code>/usr/bin</code> y <code>/opt</code> se corresponden con las carpetas <code>C:\Program Files</code> y <code>C:\Program Files (x86)</code>.</li>
+    <li><strong>Usuarios:</strong> El homólogo de <code>/home</code> es <code>C:\Users</code>. Dentro de cada perfil, la carpeta oculta <code>AppData</code> alberga configuraciones de programas, equivalente a <code>~/.config</code> en Linux.</li>
+    <li><strong>Configuraciones:</strong> Mientras Linux almacena todas sus opciones en archivos de texto modular en <code>/etc</code> y <code>~/.config</code>, Windows centraliza la mayoría de parámetros del sistema y del software en una base de datos jerárquica: el <strong>Registro de Windows</strong>.</li>
+    <li><strong>Navegación:</strong> En Linux se usa <code>.</code> (directorio actual) y <code>..</code> (directorio padre), diferenciando rutas absolutas (desde <code>/</code>) y relativas. Además, las barras separadoras son normales <code>/</code>, frente a la barra invertida <code>\</code> de Windows.</li>
+  </ul>
+
+  <!-- SECCIÓN 3: USUARIOS, GRUPOS Y PERMISOS -->
+  <div class="page-break"></div>
+  <div class="pdf-section">3. Administración de Usuarios, Grupos y Permisos</div>
+
+  <h2>3.1. Gestión de Usuarios y Grupos en Linux</h2>
+  <p>La seguridad se fundamenta en que cada proceso se ejecuta bajo la identidad de un usuario específico. Se gestiona mediante archivos de texto plano estructurados:</p>
+  <ul>
+    <li><code>/etc/passwd</code>: Lista de cuentas de usuario con el formato <code>username:x:UID:GID:description:/home/dir:/bin/shell</code> (la <code>x</code> denota que el hash de contraseña está delegado a <code>/etc/shadow</code>; el UID 0 corresponde a <code>root</code>; el GID corresponde al identificador primario del grupo).</li>
+    <li><code>/etc/shadow</code>: Almacena las contraseñas cifradas con algoritmos seguros, accesible con permisos de lectura exclusivos para <code>root</code>.</li>
+    <li><code>/etc/group</code>: Contiene los grupos definidos con formato <code>group_name:x:GID:user_list</code>.</li>
+  </ul>
+
+  <p><strong>Comandos esenciales en Linux:</strong></p>
+  <pre><code># Crear usuario con home (-m), descripción (-c), shell (-s) y grupos secundarios (-G)
+sudo useradd -m -c "Alice Doe" -s /bin/bash -G developers,sudo alice
+
+# Añadir a un grupo sin sobrescribir (-aG)
+sudo usermod -aG docker alice
+
+# Eliminar usuario y borrar su directorio personal (-r)
+sudo userdel -r alice
+
+# Cambiar contraseñas (root puede cambiar la de cualquiera)
+sudo passwd alice
+
+# Gestión de grupos
+sudo groupadd admins
+sudo groupdel admins</code></pre>
+
+  <h2>3.2. Gestión en Windows: CMD vs. PowerShell</h2>
+  <h3>Tabla: Equivalencias de Comandos de Usuarios y Grupos en Windows</h3>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 25%;">Acción</th>
+        <th style="width: 35%;">Símbolo del Sistema (CMD - Net)</th>
+        <th style="width: 40%;">PowerShell (Módulo LocalAccounts)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Listar usuarios</td>
+        <td><code>net user</code></td>
+        <td><code>Get-LocalUser</code></td>
+      </tr>
+      <tr>
+        <td>Crear usuario</td>
+        <td><code>net user juan P@ssword /add</code></td>
+        <td><code>New-LocalUser -Name "juan" -Password $pass</code></td>
+      </tr>
+      <tr>
+        <td>Eliminar usuario</td>
+        <td><code>net user juan /delete</code></td>
+        <td><code>Remove-LocalUser -Name "juan"</code></td>
+      </tr>
+      <tr>
+        <td>Activar / Desactivar</td>
+        <td><code>net user juan /active:yes|no</code></td>
+        <td><code>Enable-LocalUser</code> / <code>Disable-LocalUser</code></td>
+      </tr>
+      <tr>
+        <td>Listar grupos</td>
+        <td><code>net localgroup</code></td>
+        <td><code>Get-LocalGroup</code></td>
+      </tr>
+      <tr>
+        <td>Crear grupo</td>
+        <td><code>net localgroup Ventas /add</code></td>
+        <td><code>New-LocalGroup -Name "Ventas"</code></td>
+      </tr>
+      <tr>
+        <td>Añadir a un grupo</td>
+        <td><code>net localgroup Ventas juan /add</code></td>
+        <td><code>Add-LocalGroupMember -Group "Ventas" -Member "juan"</code></td>
+      </tr>
+      <tr>
+        <td>Ver miembros de grupo</td>
+        <td><code>net localgroup Administradores</code></td>
+        <td><code>Get-LocalGroupMember -Group "Ventas"</code></td>
+      </tr>
+      <tr>
+        <td>Quitar de un grupo</td>
+        <td><code>net localgroup Ventas juan /delete</code></td>
+        <td><code>Remove-LocalGroupMember -Group "Ventas" -Member "juan"</code></td>
+      </tr>
+      <tr>
+        <td>Eliminar grupo</td>
+        <td><code>net localgroup Ventas /delete</code></td>
+        <td><code>Remove-LocalGroup -Name "Ventas"</code></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p><strong>Gestión en Dominio con ActiveDirectory (PowerShell):</strong></p>
+  <p>Se apoya en los cmdlets <code>Get-ADUser</code>, <code>New-ADUser</code> (especificando parámetros como <code>-SamAccountName</code>, <code>-UserPrincipalName</code> y la Unidad Organizativa en <code>-Path</code>), <code>Get-ADGroup</code>, <code>New-ADGroup</code> y <code>Add-ADGroupMember</code>.</p>
+
+  <h2>3.3. Permisos Estándar y Notaciones en Linux</h2>
+  <p>Se evalúan según las entidades: Propietario (<em>Owner/User - u</em>), Grupo propietario (<em>Group - g</em>) y Otros (<em>Others - o</em>):</p>
+  <ul>
+    <li><strong>Valores binarios/octales:</strong> Lectura (<code>r = 4</code>), Escritura (<code>w = 2</code>), Ejecución (<code>x = 1</code>).</li>
+    <li><strong>Cálculo:</strong> Un permiso <code>-rwxr-xr--</code> corresponde a <code>754</code>: Owner (<code>4+2+1=7</code>), Group (<code>4+0+1=5</code>), Others (<code>4+0+0=4</code>).</li>
+    <li><strong>Comandos:</strong> <code>ls -l</code> (consultar permisos), <code>chmod 640 archivo.conf</code> (modo octal), <code>chmod g+w archivo.txt</code> o <code>chmod ug+r</code> (modo simbólico) y <code>sudo chown alice:developers script.sh</code> (cambio de usuario y grupo propietario).</li>
+  </ul>
+
+  <h2>3.4. Permisos Especiales (Sticky Bit, SUID y SGID)</h2>
+  <h3>Tabla: Resumen de Permisos Especiales</h3>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 15%;">Permiso</th>
+        <th style="width: 15%;">Valor Octal</th>
+        <th style="width: 25%;">Representación Simbólica</th>
+        <th style="width: 45%;">Comportamiento y Utilidad</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Sticky Bit</strong></td>
+        <td><code>1000</code></td>
+        <td>Terna otros: <code>t</code> (activo) o <code>T</code> (sin ejecución previa).</td>
+        <td>En directorios compartidos como <code>/tmp</code> (<code>chmod 1777</code> u <code>o+t</code>), impide que un usuario borre o renombre ficheros ajenos; solo pueden hacerlo el dueño del fichero, el dueño del directorio o root.</td>
+      </tr>
+      <tr>
+        <td><strong>SUID</strong> (Set UID)</td>
+        <td><code>4000</code></td>
+        <td>Terna propietario: <code>s</code> (activo) o <code>S</code> (sin ejecución).</td>
+        <td>El usuario que ejecute el fichero binario adquiere temporalmente los privilegios del propietario del archivo durante la ejecución (ej. <code>passwd</code> o <code>su</code>). Se asigna con <code>chmod 4755</code> o <code>u+s</code>.</td>
+      </tr>
+      <tr>
+        <td><strong>SGID</strong> (Set GID)</td>
+        <td><code>2000</code></td>
+        <td>Terna grupo: <code>s</code> (activo) o <code>S</code> (sin ejecución).</td>
+        <td>En ejecutables adopta privilegios del grupo. En directorios compartidos (<code>chmod 2770</code> o <code>g+s</code>), los nuevos ficheros y subdirectorios heredan automáticamente el grupo propietario del directorio padre.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- SECCIÓN 4: DISCOS Y SISTEMAS DE ARCHIVOS -->
+  <div class="page-break"></div>
+  <div class="pdf-section">4. Gestión de Discos, Particiones y Sistemas de Archivos</div>
+
+  <h2>4.1. Conceptos Fundamentales</h2>
+  <ul>
+    <li><strong>Partición:</strong> División física o lógica en un soporte de almacenamiento organizada según una tabla MBR o GPT.</li>
+    <li><strong>Sistema de Archivos:</strong> Estructura organizativa (ext4, NTFS, XFS, Btrfs) que estipula el método de asignación y lectura de datos dentro de una partición.</li>
+    <li><strong>Punto de Montaje:</strong> Carpeta de la jerarquía existente donde se «engancha» el sistema de archivos de una partición para operar con ella (ej. <code>/mnt/datos</code>).</li>
+  </ul>
+
+  <h2>4.2. Operaciones de Particionado, Formateo y Montaje</h2>
+  <ul>
+    <li><strong>Herramientas de particionado:</strong> <code>fdisk</code> (interactivo para MBR), <code>gdisk</code> (para GPT) y <code>parted</code> (scriptable para entornos de automatización).
+      <pre><code># Secuencia típica con fdisk /dev/sdb
+# 'n' (nueva partición) -> 'p' (primaria) -> '1' -> primer/último sector -> 'w' (escribir tabla)</code></pre>
+    </li>
+    <li><strong>Creación del sistema de archivos (formateo):</strong>
+      <pre><code>sudo mkfs.ext4 /dev/sdb1</code></pre>
+    </li>
+    <li><strong>Montaje manual (volátil):</strong>
+      <pre><code>sudo mount /dev/sdb1 /mnt/misdatos</code></pre>
+    </li>
+    <li><strong>Montaje permanente (<code>/etc/fstab</code>):</strong> Permite montar dispositivos automáticamente durante el arranque. Es aconsejable identificar particiones mediante su <strong>UUID</strong> (obtenido con <code>blkid</code>) en vez de nombres de dispositivo dinámicos (<code>/dev/sdX</code>), y añadir la directiva <code>nofail</code> para evitar que un fallo de conexión del disco bloquee el arranque del servidor:
+      <pre><code>UUID=1234-5678  /mnt/misdatos  ext4  defaults,nofail  0  2</code></pre>
+    </li>
+  </ul>
+
+  <!-- SECCIÓN 5: MONITORIZACIÓN DEL SISTEMA -->
+  <div class="page-break"></div>
+  <div class="pdf-section">5. Monitorización del Sistema y Gestión de Logs</div>
+
+  <h2>5.1. Monitorización en Tiempo Real y Diagnóstico de Estado</h2>
+  <ul>
+    <li><code>top</code> / <code>htop</code>: Paneles interactivos en tiempo real con métricas de CPU, memoria, swap, carga global del sistema y procesos activos (<code>htop</code> ofrece mayor riqueza gráfica).</li>
+    <li><code>iotop</code>: Supervisa las tasas de entrada/salida (I/O de lectura y escritura en disco) por proceso individual para localizar cuellos de botella.</li>
+    <li><code>iftop</code>: Monitoriza el consumo de ancho de banda y conexiones de red en tiempo real.</li>
+    <li><code>df -h</code>: Espacio total, usado y libre de todos los sistemas de archivos montados en unidades legibles (G, M).</li>
+    <li><code>du -sh /ruta</code>: Estima el espacio real ocupado por un directorio específico (<code>-s</code> resumen, <code>-h</code> human-readable).</li>
+    <li><code>free -h</code>: Muestra la cantidad total, utilizada y disponible de memoria RAM física y espacio swap.</li>
+    <li><code>vmstat 2</code>: Informe periódico (cada 2 segundos) sobre procesos, memoria, paginación, bloques de E/S, interrupciones y actividad de CPU.</li>
+    <li><code>iostat -xz 2</code>: Métricas detalladas y extendidas (<code>-xz</code>) sobre la carga de los dispositivos de disco.</li>
+  </ul>
+
+  <h2>5.2. Análisis de Registros (Logs)</h2>
+  <p>Los logs en <code>/var/log</code> representan el diario de a bordo fundamental para auditar incidentes del sistema:</p>
+  <ul>
+    <li><code>tail -f /var/log/syslog</code>: Inspecciona y sigue en tiempo real las últimas líneas incorporadas a un archivo de registro.</li>
+    <li><code>grep -i error /var/log/syslog</code>: Filtra las líneas que contienen una palabra o patrón, ignorando mayúsculas/minúsculas (<code>-i</code>).</li>
+    <li><code>journalctl</code>: Herramienta del gestor de inicio systemd para auditar registros estructurados:
+      <pre><code># Seguir logs de un servicio concreto en tiempo real
+journalctl -u ssh.service -f
+
+# Filtrar eventos por ventana temporal exacta
+journalctl --since "2023-10-05 09:00:00" --until "2023-10-05 10:00:00"</code></pre>
+    </li>
+  </ul>
+
+  <!-- SECCIÓN 6: PROCESOS, SERVICIOS Y TAREAS -->
+  <div class="page-break"></div>
+  <div class="pdf-section">6. Gestión de Procesos, Servicios y Tareas Programadas</div>
+
+  <h2>6.1. Gestión de Procesos</h2>
+  <ul>
+    <li><code>ps aux</code>: Instantánea detallada de todos los procesos en ejecución en el sistema de todos los usuarios.</li>
+    <li><code>kill &lt;PID&gt;</code>: Envía por defecto la señal <code>SIGTERM</code> para solicitar una terminación limpia y ordenada del proceso.</li>
+    <li><code>kill -9 &lt;PID&gt;</code>: Envía la señal forzosa e inmediata <code>SIGKILL</code> (utilizar como último recurso si el proceso no responde).</li>
+    <li><code>pkill -f "nombre"</code>: Finaliza procesos basándose en la coincidencia del nombre del ejecutable.</li>
+  </ul>
+
+  <h2>6.2. Servicios del Sistema con systemd (systemctl)</h2>
+  <h3>Tabla: Comandos habituales de control de servicios</h3>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 40%;">Comando</th>
+        <th style="width: 60%;">Efecto sobre el Servicio</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>sudo systemctl start apache2</code></td>
+        <td>Inicia el servicio.</td>
+      </tr>
+      <tr>
+        <td><code>sudo systemctl stop apache2</code></td>
+        <td>Detiene la ejecución del servicio.</td>
+      </tr>
+      <tr>
+        <td><code>sudo systemctl restart apache2</code></td>
+        <td>Reinicia por completo el proceso del servicio.</td>
+      </tr>
+      <tr>
+        <td><code>sudo systemctl reload apache2</code></td>
+        <td>Recarga la configuración en caliente sin interrumpir las conexiones.</td>
+      </tr>
+      <tr>
+        <td><code>sudo systemctl enable apache2</code></td>
+        <td>Configura el arranque automático del servicio durante el inicio del sistema.</td>
+      </tr>
+      <tr>
+        <td><code>sudo systemctl disable apache2</code></td>
+        <td>Desactiva el arranque automático del servicio.</td>
+      </tr>
+      <tr>
+        <td><code>sudo systemctl status apache2</code></td>
+        <td>Muestra estado (active, inactive, failed) y las últimas líneas de logs asociadas.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>6.3. Programación de Tareas Automáticas</h2>
+  <ul>
+    <li><strong>cron:</strong> Demonio para la programación de tareas periódicas y recurrentes (configurado mediante <code>crontab -e</code>).
+      <pre><code># Ejecutar un script de backup todos los días a las 02:00 AM:
+0 2 * * * /ruta/al/script/backup.sh</code></pre>
+    </li>
+    <li><strong>at:</strong> Programa la ejecución de una tarea diferida para ejecutarse una única vez.
+      <pre><code># Apagar el servidor puntualmente a las 23:00 horas:
+echo "shutdown -h now" | at 23:00</code></pre>
+    </li>
+  </ul>
+
+  <!-- SECCIÓN 7: COPIAS DE SEGURIDAD -->
+  <div class="page-break"></div>
+  <div class="pdf-section">7. Copias de Seguridad, Empaquetado y Compresión</div>
+
+  <h2>7.1. Conceptos de Empaquetado vs. Compresión</h2>
+  <ul>
+    <li><strong>Empaquetar:</strong> Agrupar un conjunto de archivos o directorios dentro de un contenedor único sin reducir su tamaño original en bytes (herramienta estándar: <code>tar</code>).</li>
+    <li><strong>Comprimir:</strong> Aplicar un algoritmo de reducción de tamaño sobre los datos (herramientas: <code>gzip</code>, <code>bzip2</code>, <code>xz</code>, <code>zip</code>, <code>7z</code>).</li>
+    <li><strong>Estrategia en Linux:</strong> Comúnmente se empaqueta la carpeta con <code>tar</code> y se aplica compresión en el mismo flujo combinando modificadores.</li>
+  </ul>
+
+  <h2>7.2. Operaciones con tar y Compresores</h2>
+  <h3>Tabla: Opciones y Comandos con tar (Mnemotecnia)</h3>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 45%;">Acción Deseada</th>
+        <th style="width: 55%;">Comando CLI</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Empaquetar solo (sin comprimir)</td>
+        <td><code>tar -cvf paquete.tar carpeta/</code></td>
+      </tr>
+      <tr>
+        <td>Listar contenido del archivo tar</td>
+        <td><code>tar -tvf paquete.tar</code></td>
+      </tr>
+      <tr>
+        <td>Desempaquetar archivo tar</td>
+        <td><code>tar -xvf paquete.tar</code></td>
+      </tr>
+      <tr>
+        <td>Empaquetar + compresión gzip (rápido, estándar)</td>
+        <td><code>tar -czvf paquete.tar.gz carpeta/</code></td>
+      </tr>
+      <tr>
+        <td>Descomprimir y desempaquetar gzip</td>
+        <td><code>tar -xzvf paquete.tar.gz</code></td>
+      </tr>
+      <tr>
+        <td>Empaquetar + compresión bzip2 (mayor ratio)</td>
+        <td><code>tar -cjvf paquete.tar.bz2 carpeta/</code></td>
+      </tr>
+      <tr>
+        <td>Descomprimir y desempaquetar bzip2</td>
+        <td><code>tar -xjvf paquete.tar.bz2</code></td>
+      </tr>
+      <tr>
+        <td>Empaquetar + compresión xz (compresión máxima)</td>
+        <td><code>tar -cJvf paquete.tar.xz carpeta/</code></td>
+      </tr>
+      <tr>
+        <td>Descomprimir y desempaquetar xz</td>
+        <td><code>tar -xJvf paquete.tar.xz</code></td>
+      </tr>
+    </tbody>
+  </table>
+  <p><em>Mnemotecnia de tar:</em> <code>c</code> = crear, <code>x</code> = extraer, <code>t</code> = listar, <code>v</code> = ver detalle (verbose), <code>f</code> = fichero, <code>z</code> = gzip, <code>j</code> = bzip2, <code>J</code> = xz.</p>
+
+  <p><strong>Compresores individuales y multiplataforma:</strong></p>
+  <ul>
+    <li>Ficheros individuales: <code>gzip archivo</code> / <code>gunzip archivo.gz</code>; <code>bzip2 archivo</code> / <code>bunzip2 archivo.bz2</code>; <code>xz archivo</code> / <code>unxz archivo.xz</code>.</li>
+    <li>Compatibilidad multiplataforma (Windows/Linux): <code>zip -r paquete.zip carpeta/</code> y <code>unzip paquete.zip</code>; o formato de alta compresión <code>7z a paquete.7z carpeta/</code> y <code>7z x paquete.7z</code>.</li>
+  </ul>
+
+  <!-- SECCIÓN 8: BUENAS PRÁCTICAS CLI -->
+  <div class="pdf-section">8. Buenas Prácticas en la Administración por CLI</div>
+  <ol>
+    <li><strong>Aprende la ayuda integrada:</strong> Consultar <code>man &lt;comando&gt;</code>, el parámetro <code>--help</code> o aplicaciones como <code>tldr</code> para obtener ayuda inmediata y precisa sobre sintaxis y modificadores.</li>
+    <li><strong>Redirige y conecta comandos:</strong>
+      <ul>
+        <li>Tuberías (<code>|</code>): Conectan la salida de un proceso con la entrada del siguiente (ej. <code>cat /var/log/syslog | grep error | less</code>).</li>
+        <li>Redirección (<code>&gt;</code> y <code>&gt;&gt;</code>): Vuelcan flujos de datos hacia archivos, sobrescribiendo (<code>&gt;</code>) o añadiendo al final (<code>&gt;&gt;</code>).</li>
+      </ul>
+    </li>
+    <li><strong>Escribe scripts:</strong> Automatizar las tareas recurrentes mediante scripts de Shell para copias de seguridad o mantenimiento de logs.</li>
+    <li><strong>Prueba en entornos controlados:</strong> Validar scripts destructivos con <code>sudo</code> en máquinas virtuales o entornos de staging antes de su despliegue en entornos de producción.</li>
+    <li><strong>Mantén un registro:</strong> Documentar las secuencias de comandos y soluciones encontradas en manuales o wikis operativas.</li>
+  </ol>
+
+  <!-- ========================================== -->
+  <!-- SEGUNDO BLOQUE DEL TEMA: SHELL SCRIPTING   -->
+  <!-- ========================================== -->
+
+  <div class="page-break"></div>
+  <div class="pdf-section">9. Shell Scripting en Bash</div>
+
+  <h2>9.1. Creación, Permisos y Ejecución del Primer Script</h2>
+  <p>Bash (Bourne-Again shell) es uno de los intérpretes de órdenes estándar en entornos Linux. A diferencia de shells como Zsh donde los arrays comienzan en el índice 1, en Bash los índices comienzan en 0.</p>
+  <ul>
+    <li>
+      <strong>Creación de un script:</strong> Se crea un directorio y el archivo fuente (ej. con <code>cat &gt; hola.sh</code>):
+      <pre><code>mkdir scripts
+cd scripts
+cat > hola.sh
+echo '¡Hola, mundo!'</code></pre>
+      <p>Se pulsa <code>Ctrl+D</code> para guardar y salir del editor en consola.</p>
+    </li>
+    <li>
+      <strong>Línea SheBang (<code>#!/bin/bash</code>):</strong> Se sitúa obligatoriamente en la primera línea del script para especificar al kernel qué intérprete ejecutará el fichero:
+      <pre><code>#!/bin/bash
+echo '¡Hola, mundo!'</code></pre>
+    </li>
+    <li>
+      <strong>Permisos de ejecución y variable PATH:</strong>
+      <pre><code># Otorgar permisos de ejecución al script
+chmod +x hola.sh
+
+# Añadir el directorio de scripts al PATH actual para ejecutarlo desde cualquier ruta
+export PATH=$PATH:/home/user/scripts</code></pre>
+    </li>
+  </ul>
+
+  <h2>9.2. Variables, Tipado Débil y Sustitución de Comandos</h2>
+  <ul>
+    <li><strong>Tipado débil y dinámico:</strong> En Bash no se declaran tipos de datos de forma estricta (enteros, caracteres o cadenas se manejan internamente como texto y solo se procesan como números al evaluar contextos aritméticos).
+      <pre><code>letra='c'; color='azul'; anio=2021</code></pre>
+    </li>
+    <li><strong>Lectura de datos por teclado:</strong> Mediante el comando <code>read</code>:
+      <pre><code>#!/bin/bash
+echo "¿Cuál es tu nombre?"
+read nombre
+echo "Hola, $nombre"</code></pre>
+    </li>
+    <li><strong>Variables constantes (de solo lectura):</strong> Declaradas con <code>readonly</code> para evitar su modificación posterior:
+      <pre><code>readonly PI=3.14159
+# Si se intenta alterar el valor produce el error: bash: PI: readonly variable</code></pre>
+    </li>
+    <li><strong>Sustitución de comandos:</strong> Permite almacenar la salida producida por un comando en una variable. La sintaxis <code>HOY=$(date)</code> es equivalente a <code>HOY=`date`</code>, considerándose preferible la primera opción por claridad y legibilidad.</li>
+  </ul>
+
+  <h2>9.3. Paso de Argumentos y Variables Especiales</h2>
+  <p>Los parámetros que se introducen tras el nombre del script se capturan automáticamente mediante variables predefinidas:</p>
+
+  <h3>Tabla: Variables Especiales en Bash</h3>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 25%;">Variable Especial</th>
+        <th style="width: 75%;">Significado / Descripción</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>$0</code></td>
+        <td>Nombre exacto con el que se ha invocado el script bash.</td>
+      </tr>
+      <tr>
+        <td><code>$1, $2, ... $n</code></td>
+        <td>Argumentos posicionales pasados al script. Si se pasa del 9, debe escribirse <code>${10}</code>, <code>${11}</code>, etc.</td>
+      </tr>
+      <tr>
+        <td><code>$$</code></td>
+        <td>Identificador de proceso (PID) del shell actual en ejecución.</td>
+      </tr>
+      <tr>
+        <td><code>$#</code></td>
+        <td>Número total de argumentos transmitidos al script.</td>
+      </tr>
+      <tr>
+        <td><code>$@</code></td>
+        <td>Valor de todos los argumentos pasados representados individualmente.</td>
+      </tr>
+      <tr>
+        <td><code>$?</code></td>
+        <td>Estado de salida (exit code) del último comando ejecutado (0 indica éxito).</td>
+      </tr>
+      <tr>
+        <td><code>$!</code></td>
+        <td>Identificador de proceso (PID) del último comando ejecutado en segundo plano.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p><strong>Ejemplo práctico con argumentos y redirección de errores:</strong></p>
+  <pre><code># Archivo encontrar.sh: silencia mensajes de error redirigiendo stderr a /dev/null
+#!/bin/bash
+find / -iname $1 2> /dev/null</code></pre>
+  <p>La redirección <code>2&gt; /dev/null</code> descarta los mensajes generados por el canal de error estándar (descriptor 2), como permisos denegados al recorrer rutas protegidas.</p>
+
+  <!-- SECCIÓN 10: ARRAYS Y OPERADORES -->
+  <div class="page-break"></div>
+  <div class="pdf-section">10. Estructuras de Datos y Operadores en Bash</div>
+
+  <h2>10.1. Manipulación de Arrays</h2>
+  <p>Colecciones indexadas cuyo primer elemento comienza en el índice 0 (para el enésimo elemento se consulta la posición <code>n - 1</code>). Admite elementos con tipos de datos combinados o híbridos:</p>
+  <ul>
+    <li><strong>Definición e inicialización:</strong>
+      <pre><code>archivos=("a1.txt" "a2.txt" "a3.txt" "a4.txt" "a5.txt")</code></pre>
+    </li>
+    <li><strong>Acceso y lectura:</strong> <code>echo ${archivos[0]}</code> o <code>echo ${archivos[1]}</code>.</li>
+    <li><strong>Imprimir todos los elementos:</strong> <code>echo ${archivos[*]}</code> o <code>${archivos[@]}</code>.</li>
+    <li><strong>Obtener la longitud (número de elementos):</strong> <code>echo ${#archivos[@]}</code>.</li>
+    <li><strong>Actualizar o sobrescribir un elemento:</strong> <code>archivos[0]="a.txt"</code>.</li>
+    <li><strong>Añadir elementos dinámicamente:</strong>
+      <pre><code>distros=("Ubuntu" "Red Hat" "Fedora")
+distros+=("Kali")</code></pre>
+    </li>
+    <li><strong>Eliminar elementos o el array completo:</strong>
+      <pre><code>num=(1 2 3 4 5)
+unset num[2]   # Borra el valor del índice 2 -> (1 2 4 5)
+unset num      # Borra la colección entera de memoria</code></pre>
+    </li>
+    <li><strong>Array con datos heterogéneos:</strong>
+      <pre><code>usuario=("john" 122 "sudo, developers" "bash")
+echo "Nombre: ${usuario[0]}, ID: ${usuario[1]}, Grupos: ${usuario[2]}, Shell: ${usuario[3]}"</code></pre>
+    </li>
+  </ul>
+
+  <h2>10.2. Operadores Aritméticos y Evaluación Matemática</h2>
+  <p>La evaluación matemática de enteros se realiza envolviendo las expresiones entre dobles paréntesis: <code>$(( ... ))</code>.</p>
+
+  <h3>Tabla: Operadores Aritméticos en Bash</h3>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 25%;">Operador</th>
+        <th style="width: 40%;">Operación Aritmética</th>
+        <th style="width: 35%;">Ejemplo de Sintaxis</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>+</code></td>
+        <td>Adición o suma</td>
+        <td><code>total=$(($fs1 + $fs2))</code></td>
+      </tr>
+      <tr>
+        <td><code>-</code></td>
+        <td>Substracción o resta</td>
+        <td><code>sub=$((10 - 3))</code></td>
+      </tr>
+      <tr>
+        <td><code>*</code></td>
+        <td>Multiplicación</td>
+        <td><code>mega=$(($giga * 1024))</code></td>
+      </tr>
+      <tr>
+        <td><code>/</code></td>
+        <td>División entera (trunca y descarta decimales)</td>
+        <td><code>div=$((5 / 2)) # Da como resultado 2</code></td>
+      </tr>
+      <tr>
+        <td><code>%</code></td>
+        <td>Módulo (retorna exclusivamente el resto)</td>
+        <td><code>res=$((17 % 5)) # Da como resultado 2</code></td>
+      </tr>
+      <tr>
+        <td><code>**</code></td>
+        <td>Exponenciación (base elevado a potencia)</td>
+        <td><code>res=$((2 ** 3)) # Da como resultado 8</code></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>10.3. Operaciones Aritméticas con Decimales (Comando bc)</h2>
+  <p>Dado que Bash únicamente soporta por sí mismo operaciones con números enteros, para obtener resultados decimales se debe recurrir a la calculadora de precisión arbitraria <code>bc</code> mediante el argumento de biblioteca matemática <code>-l</code> y la directiva <code>scale</code> para acotar el número de cifras decimales:</p>
+  <pre><code># División decimal directa mediante tubería (pipe)
+echo "5/2" | bc -l
+# Devuelve: 2.50000000000000000000
+
+# Script completo c2f.sh para conversión de grados Celsius a Fahrenheit: F = C * (9/5) + 32
+#!/bin/bash
+C=$1
+F=$(echo "scale=2; $C * (9/5) + 32" | bc -l)
+echo "$C grados Celsius es igual a$F grados Fahrenheit."</code></pre>
+
+  <!-- ==================================================== -->
+  <!-- CONTINUACIÓN DEL BLOQUE: CADENAS, DECISIONES Y BUCLES -->
+  <!-- ==================================================== -->
+
+  <h2>10.4. Operaciones con Cadenas de Texto en Bash</h2>
+  <p>En Bash una cadena representa internamente una secuencia indexada de caracteres. A continuación se detallan las operaciones esenciales para su manipulación:</p>
+  <ul>
+    <li><strong>Longitud de una cadena:</strong> Anteponiendo el símbolo almohadilla <code>#</code> al identificador de la variable:
+      <pre><code>distro="Ubuntu"
+echo ${#distro}   # Imprime: 6</code></pre>
+    </li>
+    <li><strong>Concatenación:</strong> Se yuxtaponen las variables de forma directa sin necesidad de operadores especiales:
+      <pre><code>str1="its"; str2="foss"
+str3=$str1$str2   # Contiene: "itsfoss"</code></pre>
+    </li>
+    <li><strong>Búsqueda de subcadenas:</strong> Empleando el comando auxiliar <code>expr index</code> para obtener la posición numérica:
+      <pre><code>str="Bash es Cool"
+palabra="Cool"
+expr index "$str" "$palabra"   # Imprime: 9</code></pre>
+    </li>
+    <li><strong>Extracción de subcadenas (*Slicing*):</strong>
+      <pre><code>foss="Fedora es un sistema operativo libre"
+echo ${foss:0:6}   # Extrae 6 caracteres desde el índice 0 -> "Fedora"
+echo ${foss:12}    # Extrae desde el índice 12 hasta el final -> "sistema operativo libre"</code></pre>
+    </li>
+    <li><strong>Sustitución y reemplazo de subcadenas:</strong>
+      <pre><code>echo ${foss/Fedora/Ubuntu}   # Reemplaza 'Fedora' por 'Ubuntu'
+echo ${foss/libre/popular}   # Reemplaza 'libre' por 'popular'</code></pre>
+    </li>
+    <li><strong>Eliminación de subcadenas:</strong> Omitiendo el valor de reemplazo. La barra simple <code>/</code> borra únicamente la primera coincidencia, mientras que la doble barra <code>//</code> elimina todas las apariciones globales:
+      <pre><code>fact="El Sol es una gran estrella"
+echo ${fact/gran}     # Da: "El Sol es una  estrella"
+
+cel="112-358-1321"
+echo ${cel/-}         # 1ª coincidencia eliminada -> "112358-1321"
+echo ${cel//-}        # Todas eliminadas -> "1123581321"</code></pre>
+    </li>
+    <li><strong>Conversión de mayúsculas y minúsculas:</strong>
+      <pre><code>leyenda="john nash"
+actor="JULIA ROBERTS"
+
+echo ${leyenda^^}        # Todo a mayúsculas -> "JOHN NASH"
+echo ${actor,,}          # Todo a minúsculas -> "julia roberts"
+echo ${leyenda^}         # Solo la primera letra a mayúscula -> "John nash"
+echo ${actor,}           # Solo la primera letra a minúscula -> "jULIA ROBERTS"
+echo ${leyenda^^[jn]}    # Convierte a mayúsculas solo las letras indicadas ('j' y 'n') -> "John Nash"</code></pre>
+    </li>
+  </ul>
+
+  <!-- SECCIÓN 11: CONTROL DE FLUJO Y DECISIONES -->
+  <div class="page-break"></div>
+  <div class="pdf-section">11. Estructuras de Control: Decisiones (If, Else, Case)</div>
+
+  <h2>11.1. Estructura Condicional If, Else y Elif</h2>
+  <p>La evaluación se realiza mediante corchetes simples <code>[ condicion ]</code>. Es indispensable respetar los espacios en blanco tras abrir y antes de cerrar los corchetes, así como alrededor de los operadores:</p>
+
+  <pre><code># Verificación de usuario privilegiado
+#!/bin/bash
+if [ $(whoami) = 'root' ]; then
+    echo "Tú eres root"
+else
+    echo "Tú no eres root"
+fi</code></pre>
+
+  <p><strong>Condicional múltiple con elif y evaluación anidada:</strong></p>
+  <pre><code>#!/bin/bash
+EDAD=$1
+if [ $EDAD -lt 13 ]; then
+    echo "Eres un niño."
+elif [ $EDAD -lt 20 ]; then
+    echo "Eres un adolescente."
+elif [ $EDAD -lt 65 ]; then
+    echo "Eres un adulto."
+else
+    echo "Eres un adulto mayor."
+fi</code></pre>
+
+  <h2>11.2. Tabla de Operadores Condicionales en Bash</h2>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 22%;">Condición Numérica</th>
+        <th style="width: 28%;">Equivalente Aritmético</th>
+        <th style="width: 22%;">Condición Archivo / String</th>
+        <th style="width: 28%;">Significado y Verificación</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>$a -lt$b</code></td>
+        <td><code>$a &lt; $b</code> (menor que)</td>
+        <td><code>-e $FILE</code></td>
+        <td><code>$FILE</code> existe</td>
+      </tr>
+      <tr>
+        <td><code>$a -gt$b</code></td>
+        <td><code>$a &gt; $b</code> (mayor que)</td>
+        <td><code>-d $FILE</code></td>
+        <td><code>$FILE</code> existe y es un directorio</td>
+      </tr>
+      <tr>
+        <td><code>$a -le$b</code></td>
+        <td><code>$a &lt;=$b</code> (menor o igual)</td>
+        <td><code>-f $FILE</code></td>
+        <td><code>$FILE</code> existe y es un archivo regular</td>
+      </tr>
+      <tr>
+        <td><code>$a -ge$b</code></td>
+        <td><code>$a &gt;=$b</code> (mayor o igual)</td>
+        <td><code>-L $FILE</code></td>
+        <td><code>$FILE</code> existe y es un enlace simbólico (soft link)</td>
+      </tr>
+      <tr>
+        <td><code>$a -eq$b</code></td>
+        <td><code>$a ==$b</code> (igual a)</td>
+        <td><code>$STR1 =$STR2</code></td>
+        <td>Las cadenas son idénticas</td>
+      </tr>
+      <tr>
+        <td><code>$a -ne$b</code></td>
+        <td><code>$a !=$b</code> (distinto de)</td>
+        <td><code>$STR1 !=$STR2</code></td>
+        <td>Las cadenas son distintas</td>
+      </tr>
+      <tr>
+        <td>-</td>
+        <td>-</td>
+        <td><code>-z $STRING</code></td>
+        <td>La cadena de texto está vacía</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>11.3. Bifurcación Múltiple con Case</h2>
+  <p>La estructura <code>case</code> permite comparar una variable contra múltiples patrones ordenados de forma compacta:</p>
+  <ul>
+    <li>Cada patrón finaliza con un paréntesis de cierre <code>)</code>.</li>
+    <li>El bloque de acciones concluye obligatoriamente con doble punto y coma <code>;;</code>.</li>
+    <li>El comodín <code>*)</code> actúa como rama por defecto.</li>
+    <li>La sentencia finaliza con la palabra clave invertida <code>esac</code>.</li>
+  </ul>
+
+  <pre><code>#!/bin/bash
+CHAR=$1
+case $CHAR in
+    [a-z])
+        echo "Alfabeto minúsculas." ;;
+    [A-Z])
+        echo "Alfabeto mayúsculas." ;;
+    [0-9])
+        echo "Número." ;;
+    *)
+        echo "Caracter especial." ;;
+esac</code></pre>
+
+  <!-- SECCIÓN 12: BUCLES EN BASH -->
+  <div class="page-break"></div>
+  <div class="pdf-section">12. Estructuras Repetitivas (Bucles) en Bash</div>
+
+  <h2>12.1. Variantes del Bucle For</h2>
+  <ul>
+    <li><strong>Sintaxis estilo lenguaje C:</strong> Emplea inicialización, condición de parada e incremento aritmético entre dobles paréntesis:
+      <pre><code>for ((i=0; i&lt;10; i++)); do
+    echo "Hola amigo $i"
+done</code></pre>
+    </li>
+    <li><strong>Iteración sobre listas o rangos:</strong>
+      <pre><code>for i in {1..10}; do
+    echo "Hello Friend: $i"
+done
+
+# Iteración directa sobre rutas del sistema de archivos
+for i in /var/*; do
+    echo "Entrada: $i"
+done</code></pre>
+    </li>
+    <li><strong>Recorrido de colecciones tipo array:</strong>
+      <pre><code>prime=(2 3 5 7 11 13 17 19 23 29)
+for i in "${prime[@]}"; do
+    echo "Número primo: $i"
+done</code></pre>
+    </li>
+  </ul>
+
+  <h2>12.2. Bucles Condicionales: While y Until</h2>
+  <ul>
+    <li><strong>Bucle While:</strong> Se ejecuta indefinidamente <em>mientras la condición sea verdadera</em>:
+      <pre><code>#!/bin/bash
+num=1
+while [ $num -le 10 ]; do
+    echo $((num * 3))
+    num=$((num + 1))
+done</code></pre>
+    </li>
+    <li><strong>Bucle Until:</strong> Se ejecuta <em>hasta que la condición se vuelva verdadera</em> (es decir, continúa iterando mientras sea falsa; suple la ausencia de estructuras <code>do-while</code> en Bash):
+      <pre><code>#!/bin/bash
+num=1
+until [ $num -gt 10 ]; do
+    echo $((num * 3))
+    num=$((num + 1))
+done</code></pre>
+    </li>
+  </ul>
+
+  <h2>12.3. Control de Flujo Interno (Break, Continue y Bucles Infinitos)</h2>
+  <ul>
+    <li><code>break</code>: Provoca la finalización y salida inmediata del bucle.
+      <pre><code>for ((i=1; i&lt;=10; i++)); do
+    echo $i
+    if [ $i -eq 3 ]; then
+        break   # Detiene el bucle por completo
+    fi
+done</code></pre>
+    </li>
+    <li><code>continue</code>: Interrumpe la iteración en curso y salta directamente a la siguiente.
+      <pre><code>for ((i=0; i&lt;=10; i++)); do
+    if [ $((i % 2)) -ne 1 ]; then
+        continue   # Descarta los números pares y salta al siguiente
+    fi
+    echo "Impar: $i"
+done</code></pre>
+    </li>
+    <li><strong>Construcción de bucles infinitos:</strong> Mediante bucle <code>for ((;;))</code> sin cabecera o mediante la sentencia <code>while true; do ... done</code>.</li>
+  </ul>
+
+  <!-- SECCIÓN 13: FUNCIONES EN BASH -->
+  <div class="page-break"></div>
+  <div class="pdf-section">13. Funciones en Bash</div>
+
+  <h2>13.1. Definición, Declaración y Reglas de Uso</h2>
+  <p>Una función es un bloque de código reutilizable dentro de un script de Shell. En Bash existen dos sintaxis válidas para declararlas, siendo la primera la más extendida y estándar:</p>
+
+  <pre><code># Sintaxis 1 (más utilizada y recomendada):
+nombre_de_funcion () {
+    comandos
+}
+
+# Sintaxis 2 (con palabra reservada function):
+function nombre_de_funcion {
+    comandos
+}</code></pre>
+
+  <p><strong>Reglas esenciales de funcionamiento:</strong></p>
+  <ul>
+    <li>Una función nunca se ejecutará automáticamente a menos que sea invocada de forma explícita por su nombre.</li>
+    <li>La definición de la función debe preceder obligatoriamente en el archivo a cualquier llamada que se haga hacia ella (el intérprete lee de arriba hacia abajo).</li>
+  </ul>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Código: Ejemplo Básico de Definición y Llamada</div>
+    <pre><code>#!/bin/bash
+hola () {
+    echo "Hola Mundo"
+}
+
+# Invocación de la función tres veces
+hola
+hola
+hola</code></pre>
+  </div>
+
+  <h2>13.2. Devolución de Valores y Códigos de Salida</h2>
+  <p>Las funciones en Bash <strong>no devuelven valores de datos directos</strong> mediante la instrucción <code>return</code>, como ocurre en lenguajes como C o Java. Únicamente retornan un estado o código de salida numérico de ejecución:</p>
+  <ul>
+    <li>El valor <code>0</code> indica que la función se completó correctamente y sin errores.</li>
+    <li>Un valor comprendido entre <code>1</code> y <code>255</code> representa un código de error o terminación anómala.</li>
+    <li>El código de retorno de la última función ejecutada se consulta a través de la variable especial <code>$?</code>.</li>
+  </ul>
+
+  <pre><code>#!/bin/bash
+error () {
+    # Si se intenta ejecutar un comando inexistente
+    blabla
+    return 0
+}
+
+error
+echo "El estado return de la función error es: $?"</code></pre>
+
+  <h2>13.3. Argumentos en Funciones vs. Argumentos del Script</h2>
+  <p>Los argumentos pasados a una función y los pasados a nivel global del script son completamente independientes aunque utilicen los mismos identificadores numéricos:</p>
+  <ul>
+    <li>Las variables posicionales <code>$1</code>, <code>$2</code>, etc., fuera de cualquier función corresponden a los parámetros recibidos por el script al llamarse desde la terminal.</li>
+    <li>Dentro del bloque de una función, <code>$1</code>, <code>$2</code>, etc., se reasignan localmente a los parámetros que se le pasen a dicha función en su propia invocación.</li>
+  </ul>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Código: Distinción de Argumentos Globales y de Función</div>
+    <pre><code>#!/bin/bash
+fun () {
+    echo "$1 es el primer argumento de fun()"
+    echo "$2 es el segundo argumento de fun()"
+}
+
+echo "$1 es el primer argumento del script."
+echo "$2 es el segundo argumento del script."
+
+# Llamada a la función con sus propios argumentos
+fun Yes 7
+
+# Salida al ejecutar: ./funarg.sh Cool Cosa
+# Cool es el primer argumento del script.
+# Cosa es el segundo argumento del script.
+# Yes es el primer argumento de fun()
+# 7 es el segundo argumento de fun()</code></pre>
+  </div>
+
+  <p><strong>Ejemplo práctico: Función evaluadora de paridad numérica:</strong></p>
+  <pre><code>#!/bin/bash
+espar () {
+    if [ $(($1 % 2)) -eq 0 ]; then
+        echo "$1 es par."
+    else
+        echo "$1 es impar."
+    fi
+}
+
+espar 3
+espar 4
+espar 20
+espar 111</code></pre>
+
+  <h2>13.4. Ámbito de Variables: Variables Locales y Globales</h2>
+  <p>El alcance de las variables determina desde qué zonas del script pueden ser leídas o manipuladas:</p>
+  <ul>
+    <li><strong>Variable global:</strong> Es accesible y modificable desde cualquier punto del script bash, incluidas las funciones internas.</li>
+    <li><strong>Variable local:</strong> Creada anteponiendo la palabra clave <code>local</code> dentro de la función (ej. <code>local v1='C'</code>). Solo existe durante el ámbito de dicha función.</li>
+    <li><strong>Prioridad:</strong> Una variable local que comparta el mismo identificador que una global tendrá prioridad absoluta dentro del cuerpo de esa función.</li>
+    <li><strong>Efecto lateral:</strong> Si una variable global se altera desde dentro de una función sin usar la palabra <code>local</code>, modificará de manera permanente su valor en el resto del script.</li>
+  </ul>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Código: Demostración de Alcance Local y Global (scope.sh)</div>
+    <pre><code>#!/bin/bash
+v1='A'
+v2='B'
+
+myfun() {
+    local v1='C'   # Variable local a la función
+    v2='D'         # Modificación directa de la variable global v2
+    echo "Dentro de myfun(): v1: $v1, v2:$v2"
+}
+
+echo "Antes de llamar a myfun(): v1: $v1, v2:$v2"
+myfun
+echo "Después de llamar a myfun(): v1: $v1, v2:$v2"
+
+# Salida del terminal:
+# Antes de llamar a myfun(): v1: A, v2: B
+# Dentro de myfun(): v1: C, v2: D
+# Después de llamar a myfun(): v1: A, v2: D</code></pre>
+  </div>
+
+  <h2>13.5. Funciones Recursivas</h2>
+  <p>Una función recursiva es aquella que se llama a sí misma para resolver un problema dividiéndolo en subproblemas menores. Requiere dos elementos indispensables:</p>
+  <ol>
+    <li><strong>Caso base:</strong> Condición de parada que interrumpe la cadena de llamadas y devuelve un resultado elemental sin realizar más llamadas recursivas.</li>
+    <li><strong>Caso general o recursivo:</strong> Invocación sucesiva hacia la propia función aproximándose progresivamente al caso base.</li>
+  </ol>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Código: Cálculo Recursivo del Factorial</div>
+    <pre><code>#!/bin/bash
+factorial () {
+    if [ $1 -le 1 ]; then
+        echo 1   # Caso base: 0! = 1 y 1! = 1
+    else
+        last=$(factorial$(( $1 - 1 )))
+        echo $(( $1 * last ))   # Caso general: n * (n-1)!
+    fi
+}
+
+echo -n "4! es: "; factorial 4   # 24
+echo -n "5! es: "; factorial 5   # 120
+echo -n "6! es: "; factorial 6   # 720</code></pre>
+  </div>
+
+  <p><strong>Planteamiento de la sucesión recursiva de Fibonacci:</strong></p>
+  <ul>
+    <li>Casos base: <code>Fib(0) = 1</code> y <code>Fib(1) = 1</code>.</li>
+    <li>Fórmula recursiva general: <code>Fib(n) = Fib(n-1) + Fib(n-2)</code>.</li>
+  </ul>
+
+  <!-- APÉNDICE: MATERIAL GRÁFICO Y GUÍAS -->
+  <div class="page-break"></div>
+  <div class="pdf-section">Apéndice: Registro y Descripción de Contenido Gráfico Original</div>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Detalle del Contenido Gráfico de la Unidad</div>
+    <ul>
+      <li><strong>Diapositiva 4 (Infografía «The Automation Engineer - Linux File System»):</strong> Esquema gráfico que expone el árbol de directorios con sus bloques principales (<code>/</code>, <code>/home</code>, <code>/etc</code>, <code>/var</code>, <code>/usr</code>, <code>/opt</code>, <code>/tmp</code>, <code>/bin</code>) junto con anotaciones clave sobre el principio <em>«Everything in Linux is a file»</em>, distinción estricta de mayúsculas y comandos básicos de exploración.</li>
+      <li><strong>Diapositiva 5 (Guía visual «Veriqta - Understanding the Linux Filesystem»):</strong> Cuadro comparativo entre rutas absolutas (que arrancan desde la raíz <code>/</code>) y relativas, el propósito de las entidades punto <code>.</code> (directorio actual) y doble punto <code>..</code> (directorio padre), y una secuencia práctica de comandos de desplazamiento para el terminal.</li>
+      <li><strong>Diapositiva 45 (Icono de transición):</strong> Gráfico con una flecha curva en ángulo de noventa grados que simboliza el cambio pedagógico hacia la segunda sección dedicada al desarrollo de Shell Scripting.</li>
+    </ul>
+  </div>
+
+</body>
+</html>

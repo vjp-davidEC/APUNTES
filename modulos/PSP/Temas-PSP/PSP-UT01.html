@@ -1,0 +1,2524 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full bg-slate-50">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UT1: Hilos y Sincronizaciones en Java - IES Valle del Jerte</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0f7ff',
+                            100: '#e0effe',
+                            500: '#0284c7',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            900: '#0c4a6e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            font-size: 10pt;
+            line-height: 1.5;
+            color: #1e293b;
+            margin: 0;
+            padding: 0;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        pre code {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+        .tab-btn.active {
+            border-bottom-color: #027DCE;
+            color: #ffff;
+            font-weight: 600;
+            background-color: #027DCE;
+        }
+        .enlace-animado {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        .enlace-animado::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            transform: scaleX(0);
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background-color: white;
+            transform-origin: bottom left;
+            transition: transform 0.25s ease-out;
+        }
+        .enlace-animado:hover::after {
+            transform: scaleX(1);
+        }
+
+        /* Modo oscuro: añadido sin modificar los estilos originales */
+        html.dark {
+            color-scheme: dark;
+            background-color: #0f172a;
+        }
+        html.dark body {
+            background-color: #0f172a !important;
+            color: #e2e8f0 !important;
+        }
+        html.dark main {
+            color: #e2e8f0;
+        }
+        html.dark .bg-white {
+            background-color: #1e293b !important;
+        }
+        html.dark .bg-slate-50 {
+            background-color: #172334 !important;
+        }
+        html.dark .bg-slate-100 {
+            background-color: #263449 !important;
+        }
+        html.dark .text-slate-900,
+        html.dark .text-slate-800 {
+            color: #f1f5f9 !important;
+        }
+        html.dark .text-slate-700,
+        html.dark .text-slate-600 {
+            color: #cbd5e1 !important;
+        }
+        html.dark .text-slate-500 {
+            color: #94a3b8 !important;
+        }
+        html.dark .border-slate-100,
+        html.dark .border-slate-200 {
+            border-color: #334155 !important;
+        }
+        html.dark .divide-slate-100 > :not([hidden]) ~ :not([hidden]) {
+            border-color: #334155 !important;
+        }
+        html.dark input:not([type="radio"]):not([type="checkbox"]),
+        html.dark select,
+        html.dark textarea {
+            background-color: #263449 !important;
+            color: #f1f5f9 !important;
+            border-color: #475569 !important;
+        }
+        html.dark input::placeholder {
+            color: #94a3b8 !important;
+        }
+        html.dark .tab-btn:not(.active) {
+            color: #cbd5e1;
+        }
+        html.dark .tab-btn:not(.active):hover {
+            color: #ffffff;
+        }
+        html.dark .custom-scrollbar::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+        html.dark .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #475569;
+        }
+        html.dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+        .theme-toggle {
+            white-space: nowrap;
+            transition: background-color .2s ease, color .2s ease, border-color .2s ease;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Header Component -->
+    <header class="bg-slate-900 text-white shadow-lg sticky top-0 z-50 border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center space-x-3">
+                <div class="bg-brand-600 p-2.5 rounded-xl shadow-md text-white">
+                    <i class="fa-solid fa-microchip text-2xl"></i>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <span class="bg-brand-500/20 text-brand-300 text-xs px-2 py-0.5 rounded font-semibold border border-brand-500/30">DAM / DAW - PSP</span>
+                        <span class="text-xs text-slate-400">PSP</span>
+                    </div>
+                    <h1 class="text-xl font-bold tracking-tight text-slate-100">UT1: Hilos y Sincronizaciones en Java</h1>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-3 text-xs flex-wrap justify-center">
+                <button id="theme-toggle" type="button" onclick="toggleTheme()" class="theme-toggle bg-slate-800 hover:bg-slate-700 text-slate-100 px-3 py-2 rounded-lg border border-slate-700 font-semibold flex items-center gap-2" aria-label="Cambiar a modo oscuro">
+                    <i id="theme-icon" class="fa-solid fa-moon"></i>
+                    <span id="theme-label">Modo oscuro</span>
+                </button>
+                <span class="bg-slate-800 text-slate-300 px-3 py-1.5 rounded-lg border border-slate-700">
+                    <i class="fa-solid fa-user-tie text-brand-400 mr-1.5"></i> Prof. Marcos Fernández Sellers
+                </span>
+                <span class="bg-slate-800 text-slate-300 px-3 py-1.5 rounded-lg border border-slate-700 hidden sm:inline-block">
+                    <i class="fa-brands fa-java text-orange-400 mr-1.5"></i> Java Concurrency API
+                </span>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <nav class="bg-slate-800 border-t border-slate-700/60 px-4 overflow-x-auto custom-scrollbar">
+            <div class="max-w-7xl mx-auto flex space-x-1 min-w-max">
+                <button onclick="switchTab('teoria')" id="tab-teoria" class="tab-btn active px-4 py-3 text-sm font-medium text-slate-300 hover:text-white border-b-2 border-transparent transition-all flex items-center gap-2">
+                    <i class="fa-solid fa-book text-brand-400"></i> 1. Teoría Completa
+                </button>
+                <button onclick="switchTab('ejemplos')" id="tab-ejemplos" class="tab-btn px-4 py-3 text-sm font-medium text-slate-300 hover:text-white border-b-2 border-transparent transition-all flex items-center gap-2">
+                    <i class="fa-solid fa-code text-emerald-400"></i> 2. Ejemplos Base
+                </button>
+                <button onclick="switchTab('casos')" id="tab-casos" class="tab-btn px-4 py-3 text-sm font-medium text-slate-300 hover:text-white border-b-2 border-transparent transition-all flex items-center gap-2">
+                    <i class="fa-solid fa-hospital-user text-amber-400"></i> 3. Casos de Estudio
+                </button>
+                <button onclick="switchTab('ejercicios')" id="tab-ejercicios" class="tab-btn px-4 py-3 text-sm font-medium text-slate-300 hover:text-white border-b-2 border-transparent transition-all flex items-center gap-2">
+                    <i class="fa-solid fa-dumbbell text-purple-400"></i> 4. 18 Ejercicios Resueltos
+                </button>
+                <button onclick="switchTab('repaso')" id="tab-repaso" class="tab-btn px-4 py-3 text-sm font-medium text-slate-300 hover:text-white border-b-2 border-transparent transition-all flex items-center gap-2">
+                    <i class="fa-solid fa-book-open text-cyan-400"></i> 5. Repaso
+                </button>
+                <button onclick="switchTab('tips')" id="tab-tips" class="tab-btn px-4 py-3 text-sm font-medium text-slate-300 hover:text-white border-b-2 border-transparent transition-all flex items-center gap-2">
+                    <i class="fa-solid fa-lightbulb text-yellow-400"></i> 6. Tips y Errores
+                </button>
+                <button onclick="switchTab('test')" id="tab-test" class="tab-btn px-4 py-3 text-sm font-medium text-slate-300 hover:text-white border-b-2 border-transparent transition-all flex items-center gap-2">
+                    <i class="fa-solid fa-list-check text-rose-400"></i> 7. Autoevaluación
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
+
+        <!-- ==================== TAB 1: TEORÍA COMPLETA ==================== -->
+        <section id="content-teoria" class="tab-content space-y-8">
+            <!-- Hero banner -->
+            <div class="bg-gradient-to-r from-slate-900 via-brand-900 to-slate-900 text-white p-6 rounded-2xl shadow-xl border border-slate-700">
+                <h2 class="text-2xl font-extrabold mb-2 flex items-center gap-3">
+                    <i class="fa-solid fa-graduation-cap text-brand-400"></i> Fundamentos de Concurrencia y Procesos en Java
+                </h2>
+                <p class="text-slate-300 text-sm max-w-3xl leading-relaxed">
+                    Resumen teórico exhaustivo correspondiente a la Unidad Temática 1 del módulo PSP. Aprende cómo el SO y la JVM gestionan la ejecución concurrente, los recursos compartidos, la sincronización mediante monitores y la comunicación entre hilos.
+                </p>
+            </div>
+
+            <!-- Subsección 1.1 Programas vs Procesos -->
+            <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200 space-y-4">
+                <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2 border-b border-slate-100 pb-3">
+                    <span class="bg-brand-100 text-brand-700 w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold">1.1</span>
+                    Programas, Procesos e Imagen de Memoria
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-3">
+                        <p class="text-sm text-slate-600 leading-relaxed">
+                            Un <strong>Programa</strong> es un conjunto estático de instrucciones almacenado en disco (equivalente al concepto de <em>Clase</em> en POO). Para que haga algo, debe ponerse en ejecución, dando lugar a uno o varios <strong>Procesos</strong> (entidad dinámica, equivalente a un <em>Objeto</em>).
+                        </p>
+                        <div class="bg-slate-50 p-4 rounded-lg border border-slate-200">
+                            <h4 class="font-semibold text-xs text-slate-500 uppercase tracking-wider mb-2">Estructura de la Imagen de Memoria:</h4>
+                            <ul class="text-xs space-y-1.5 text-slate-700">
+                                <li class="flex items-start gap-2"><i class="fa-solid fa-code text-brand-500 mt-0.5"></i> <span><strong>Código / Texto:</strong> Instrucciones ejecutables del programa.</span></li>
+                                <li class="flex items-start gap-2"><i class="fa-solid fa-database text-brand-500 mt-0.5"></i> <span><strong>Datos:</strong> Constantes y variables estáticas.</span></li>
+                                <li class="flex items-start gap-2"><i class="fa-solid fa-layer-group text-brand-500 mt-0.5"></i> <span><strong>Pila (Stack):</strong> Argumentos de funciones, retornos y variables locales.</span></li>
+                                <li class="flex items-start gap-2"><i class="fa-solid fa-cubes text-brand-500 mt-0.5"></i> <span><strong>Heap (Memoria Dinámica):</strong> Memoria reservada dinámicamente.</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="bg-slate-900 text-slate-200 p-4 rounded-xl font-mono text-xs space-y-2 border border-slate-800">
+                        <div class="text-emerald-400 font-bold border-b border-slate-700 pb-1">// Vista Simplificada de PCB (Process Control Block)</div>
+                        <div>+---------------------------------------+</div>
+                        <div>| ID del Proceso (PID)                  |</div>
+                        <div>| Estado del Proceso (Listo, Ejec, etc) |</div>
+                        <div>| Registros de la CPU (Program Counter) |</div>
+                        <div>| Tablas de Páginas de Memoria          |</div>
+                        <div>| Archivos abiertos e E/S               |</div>
+                        <div>+---------------------------------------+</div>
+                        <p class="text-slate-400 text-[11px] pt-2">El SO utiliza las tablas PCB para gestionar el cambio de contexto entre procesos.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Subsección 1.2 Ciclo de Vida del Proceso -->
+            <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200 space-y-4">
+                <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2 border-b border-slate-100 pb-3">
+                    <span class="bg-brand-100 text-brand-700 w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold">1.2</span>
+                    Ciclo de Vida de un Proceso y Planificación
+                </h3>
+                <div class="grid grid-cols-1 sm:grid-cols-5 gap-3 text-center text-xs font-semibold">
+                    <div class="bg-slate-100 p-3 rounded-lg border border-slate-200 text-slate-700">1. Creado</div>
+                    <div class="bg-blue-50 p-3 rounded-lg border border-blue-200 text-blue-700">2. Listo (Ready)</div>
+                    <div class="bg-emerald-50 p-3 rounded-lg border border-emerald-200 text-emerald-700">3. Ejecución</div>
+                    <div class="bg-amber-50 p-3 rounded-lg border border-amber-200 text-amber-700">4. Bloqueado</div>
+                    <div class="bg-rose-50 p-3 rounded-lg border border-rose-200 text-rose-700">5. Terminado</div>
+                </div>
+                <p class="text-sm text-slate-600 leading-relaxed">
+                    El <strong>Planificador de Procesos (Scheduler)</strong> asigna rodajas de tiempo (<strong>cuantum</strong>) a los procesos en estado <em>Listo</em>. Si el cuantum se agota o se abandona voluntariamente, regresa a <em>Listo</em>. Si espera una operación de E/S o suceso, pasa a <em>Bloqueado</em>. El cambio entre estados se denomina <strong>Cambio de Contexto</strong>.
+                </p>
+            </div>
+
+            <!-- Subsección 1.3 Concurrencia vs Paralelismo -->
+            <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200 space-y-4">
+                <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2 border-b border-slate-100 pb-3">
+                    <span class="bg-brand-100 text-brand-700 w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold">1.3</span>
+                    Concurrencia vs Paralelismo (Ejemplo de los Albañiles)
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 space-y-2">
+                        <span class="text-xs font-bold text-slate-500 uppercase">Secuencial</span>
+                        <h4 class="font-bold text-slate-800 text-sm">1 Albañil - Pared a Pared</h4>
+                        <p class="text-xs text-slate-600">Construye la pared 1 completa, luego la 2, luego la 3 y finalmente la 4. Sin solapamientos.</p>
+                    </div>
+                    <div class="bg-blue-50 p-4 rounded-xl border border-blue-200 space-y-2">
+                        <span class="text-xs font-bold text-blue-600 uppercase">Paralelismo</span>
+                        <h4 class="font-bold text-blue-900 text-sm">2 Albañiles Simultáneos</h4>
+                        <p class="text-xs text-blue-800">Cada albañil construye paredes al mismo instante físico en diferentes CPUs/núcleos. Reduce el tiempo a la mitad.</p>
+                    </div>
+                    <div class="bg-purple-50 p-4 rounded-xl border border-purple-200 space-y-2">
+                        <span class="text-xs font-bold text-purple-600 uppercase">Concurrencia</span>
+                        <h4 class="font-bold text-purple-900 text-sm">1 Albañil Intercalando</h4>
+                        <p class="text-xs text-purple-800">Pone 2 ladrillos en la pared 1, 2 en la pared 2, 2 en la 3... Intercala tareas progresando en todas de forma solapada.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Subsección 1.4 Problemas de Concurrencia -->
+            <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200 space-y-4">
+                <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2 border-b border-slate-100 pb-3">
+                    <span class="bg-brand-100 text-brand-700 w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold">1.4</span>
+                    Problemas Clásicos de Concurrencia
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                    <div class="p-4 rounded-lg bg-rose-50 border border-rose-200 text-rose-900 space-y-2">
+                        <div class="font-bold text-sm flex items-center gap-2"><i class="fa-solid fa-lock"></i> Exclusión Mutua</div>
+                        <p>Solo un proceso debe acceder a un recurso compartido (Sección Crítica) a la vez. <em>Ejemplo: Juego del pañuelo o impresora compartida.</em></p>
+                    </div>
+                    <div class="p-4 rounded-lg bg-amber-50 border border-amber-200 text-amber-900 space-y-2">
+                        <div class="font-bold text-sm flex items-center gap-2"><i class="fa-solid fa-hourglass-half"></i> Condición de Sincronización</div>
+                        <p>Un proceso debe esperar a que ocurra un evento para continuar. <em>Ejemplo: Un jugador debe esperar a que el juez diga su número.</em></p>
+                    </div>
+                    <div class="p-4 rounded-lg bg-slate-100 border border-slate-300 text-slate-900 space-y-2">
+                        <div class="font-bold text-sm flex items-center gap-2"><i class="fa-solid fa-skull"></i> Interbloqueo (Deadlock)</div>
+                        <p>Todos los procesos esperan por un evento que nunca ocurrirá (Abrazo Mortal). El sistema se congela por completo.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Subsección 1.5 Hilos en Java -->
+            <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200 space-y-4">
+                <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2 border-b border-slate-100 pb-3">
+                    <span class="bg-brand-100 text-brand-700 w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold">1.5</span>
+                    Procesos vs Hilos (Threads) en Java
+                </h3>
+                <p class="text-sm text-slate-600">
+                    Un <strong>Hilo</strong> es una secuencia de control ligera dentro de un proceso. Mientras que los procesos son entidades pesadas con espacio de memoria aislado en el núcleo, los hilos residen en el espacio de usuario y <strong>comparten la memoria del proceso (código y datos)</strong>, haciendo que los cambios de contexto sean muy eficientes.
+                </p>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-xs text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-100 border-b border-slate-200 text-slate-700">
+                                <th class="p-2.5 font-bold">Característica</th>
+                                <th class="p-2.5 font-bold">Proceso</th>
+                                <th class="p-2.5 font-bold">Hilo (Thread)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 text-slate-600">
+                            <tr>
+                                <td class="p-2.5 font-semibold text-slate-800">Peso / Recursos</td>
+                                <td class="p-2.5">Pesado (Estructura en núcleo / PCB)</td>
+                                <td class="p-2.5">Ligero (Espacio de usuario)</td>
+                            </tr>
+                            <tr>
+                                <td class="p-2.5 font-semibold text-slate-800">Memoria</td>
+                                <td class="p-2.5">Espacio de direcciones aislado</td>
+                                <td class="p-2.5">Memoria compartida del proceso padre</td>
+                            </tr>
+                            <tr>
+                                <td class="p-2.5 font-semibold text-slate-800">Cambio de Contexto</td>
+                                <td class="p-2.5">Costoso en tiempo de CPU</td>
+                                <td class="p-2.5">Rápido y de bajo consumo</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Subsección 1.6 Métodos de Thread y Sincronización -->
+            <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200 space-y-4">
+                <h3 class="text-lg font-bold text-slate-900 flex items-center gap-2 border-b border-slate-100 pb-3">
+                    <span class="bg-brand-100 text-brand-700 w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold">1.6</span>
+                    Monitores y Métodos de Coordinación (`synchronized`, `wait`, `notify`)
+                </h3>
+                <div class="space-y-3 text-sm text-slate-600">
+                    <p>
+                        Java asigna a cada objeto un <strong>monitor implícito (cerrojo / lock)</strong>. La palabra clave <code>synchronized</code> asegura que solo un hilo a la vez ejecute un bloque o método protegido sobre ese objeto.
+                    </p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+                        <div class="p-3 bg-slate-50 rounded-lg border border-slate-200">
+                            <strong class="text-brand-600">wait()</strong>
+                            <p class="mt-1">Hace que el hilo libere el cerrojo y se ponga en espera hasta que otro hilo invoque notify() o notifyAll(). Debe estar dentro de un bucle <code>while</code>.</p>
+                        </div>
+                        <div class="p-3 bg-slate-50 rounded-lg border border-slate-200">
+                            <strong class="text-brand-600">notify()</strong>
+                            <p class="mt-1">Despierta al primer hilo que llamó a wait() sobre el mismo objeto monitor.</p>
+                        </div>
+                        <div class="p-3 bg-slate-50 rounded-lg border border-slate-200">
+                            <strong class="text-brand-600">notifyAll()</strong>
+                            <p class="mt-1">Despierta a todos los hilos en espera sobre el monitor. Es la opción recomendada.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TAB 2: EJEMPLOS BASE ==================== -->
+        <section id="content-ejemplos" class="tab-content hidden space-y-8">
+            <div class="bg-emerald-900 text-white p-6 rounded-2xl shadow-xl border border-emerald-800">
+                <h2 class="text-2xl font-extrabold mb-2 flex items-center gap-3">
+                    <i class="fa-solid fa-code text-emerald-400"></i> Ejemplos Base del Tema
+                </h2>
+                <p class="text-emerald-100 text-sm max-w-3xl">
+                    Aprende las dos formas fundamentales de crear hilos en Java (extender de <code>Thread</code> e implementar <code>Runnable</code>), además del control de prioridades.
+                </p>
+            </div>
+
+            <!-- Ejemplo 1: Contador Básico -->
+            <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200 space-y-3">
+                <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                    <h3 class="font-bold text-slate-900">Ejemplo 1: Proceso Concurrente Básico (Contador a 100)</h3>
+                    <button onclick="copyCode('code-ej1', this)" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-md font-medium flex items-center gap-1.5">
+                        <i class="fa-regular fa-copy"></i> Copiar Código
+                    </button>
+                </div>
+                <p class="text-xs text-slate-600">Lanzar varias ejecuciones simultáneas de esta clase demuestra la concurrencia administrada por el SO.</p>
+                <pre class="bg-slate-900 text-slate-100 p-4 rounded-xl overflow-x-auto"><code id="code-ej1">package es.iesvjp.psp;
+
+public class Ejemplo1 {
+    public static void main(String[] args) {
+        System.out.println("Este es un proceso que cuenta hasta 100");
+        for (int i = 1; i <= 100; i++) {
+            System.out.println(i);
+            try {
+                Thread.sleep(50);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}</code></pre>
+            </div>
+
+            <!-- Método 1: Heredando de Thread -->
+            <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200 space-y-3">
+                <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                    <h3 class="font-bold text-slate-900">Método 1: Creación Heredando de la Clase Thread</h3>
+                    <button onclick="copyCode('code-ej2', this)" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-md font-medium flex items-center gap-1.5">
+                        <i class="fa-regular fa-copy"></i> Copiar Código
+                    </button>
+                </div>
+                <pre class="bg-slate-900 text-slate-100 p-4 rounded-xl overflow-x-auto"><code id="code-ej2">// Clase que extiende de Thread
+package es.iesvjp.psp;
+
+public class ThreadConHerencia extends Thread {
+    private int numHilo;
+
+    public ThreadConHerencia(int hilo) {
+        this.numHilo = hilo;
+    }
+
+    public int getNumHilo() {
+        return numHilo;
+    }
+
+    @Override
+    public void run() {
+        for (int i = 0; i < 4; i++) {
+            System.out.println("Hilo " + this.getNumHilo());
+        }
+    }
+}
+
+// Programa Principal
+public class Main {
+    public static void main(String[] args) {
+        ThreadConHerencia thH1 = new ThreadConHerencia(1);
+        ThreadConHerencia thH2 = new ThreadConHerencia(2);
+
+        thH1.start(); // Inicia el hilo (invoca run)
+        thH2.start();
+        System.out.println("Fin del hilo principal");
+    }
+}</code></pre>
+            </div>
+
+            <!-- Método 2: Implementando Runnable -->
+            <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200 space-y-3">
+                <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                    <h3 class="font-bold text-slate-900">Método 2: Creación Implementando la Interfaz Runnable (Recomendado)</h3>
+                    <button onclick="copyCode('code-ej3', this)" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-md font-medium flex items-center gap-1.5">
+                        <i class="fa-regular fa-copy"></i> Copiar Código
+                    </button>
+                </div>
+                <p class="text-xs text-slate-600">
+                    <strong>¿Por qué es superior?</strong> Java no admite herencia múltiple. Si heredas de <code>Thread</code>, la clase no podrá heredar de ninguna otra. Implementando <code>Runnable</code> mantienes libre la herencia.
+                </p>
+                <pre class="bg-slate-900 text-slate-100 p-4 rounded-xl overflow-x-auto"><code id="code-ej3">package es.iesvjp.psp;
+
+public class ThreadConRunnable implements Runnable {
+    private String palabra;
+
+    public ThreadConRunnable(String palabra) {
+        this.palabra = palabra;
+    }
+
+    @Override
+    public void run() {
+        for (int i = 0; i < 10; i++) {
+            System.out.println(palabra);
+        }
+    }
+}
+
+// Clase Principal
+public class MainRunnable {
+    public static void main(String[] args) {
+        ThreadConRunnable a = new ThreadConRunnable("Hilo 1");
+        ThreadConRunnable b = new ThreadConRunnable("Hilo 2");
+
+        // Pasamos el objeto Runnable al constructor de Thread
+        Thread th1 = new Thread(a);
+        Thread th2 = new Thread(b);
+
+        th1.start();
+        th2.start();
+        System.out.println("Fin del hilo principal");
+    }
+}</code></pre>
+            </div>
+
+            <!-- Ejemplo Prioridades -->
+            <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200 space-y-3">
+                <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                    <h3 class="font-bold text-slate-900">Ejemplo de Prioridades de Hilos</h3>
+                    <button onclick="copyCode('code-prio', this)" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-md font-medium flex items-center gap-1.5">
+                        <i class="fa-regular fa-copy"></i> Copiar Código
+                    </button>
+                </div>
+                <pre class="bg-slate-900 text-slate-100 p-4 rounded-xl overflow-x-auto"><code id="code-prio">package es.iesvjp.psp.hilos.Ejemplos;
+
+public class Ejemplo2 implements Runnable {
+    String palabra;
+
+    public Ejemplo2(String _palabra) {
+        this.palabra = _palabra;
+    }
+
+    @Override
+    public void run() {
+        for (int i = 0; i < 100; i++) {
+            System.out.println(palabra);
+        }
+    }
+
+    public static void main(String[] args) {
+        Ejemplo2 ejem1 = new Ejemplo2("Hilo 1");
+        Ejemplo2 ejem2 = new Ejemplo2("Hilo 2");
+
+        Thread th1 = new Thread(ejem1);
+        Thread th2 = new Thread(ejem2);
+
+        th1.start();
+        th1.setPriority(1); // Mínima prioridad (Thread.MIN_PRIORITY)
+        System.out.println("Prioridad del Hilo 1: " + th1.getPriority());
+
+        th2.start(); // Prioridad por defecto: 5 (Thread.NORM_PRIORITY)
+        System.out.println("Prioridad del Hilo 2: " + th2.getPriority());
+    }
+}</code></pre>
+            </div>
+        </section>
+
+        <!-- ==================== TAB 3: CASOS DE ESTUDIO ==================== -->
+        <section id="content-casos" class="tab-content hidden space-y-8">
+            <div class="bg-amber-900 text-white p-6 rounded-2xl shadow-xl border border-amber-800">
+                <h2 class="text-2xl font-extrabold mb-2 flex items-center gap-3">
+                    <i class="fa-solid fa-hospital-user text-amber-400"></i> Casos de Estudio Avanzados
+                </h2>
+                <p class="text-amber-100 text-sm max-w-3xl">
+                    Análisis detallado de los dos grandes problemas prácticos abordados en el documento: La exclusión mutua en cajeros bancarios y la coordinación en el patrón Productor-Consumidor.
+                </p>
+            </div>
+
+            <!-- Caso 1: El Banco -->
+            <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200 space-y-4">
+                <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                    <h3 class="font-bold text-slate-900 text-lg flex items-center gap-2">
+                        <i class="fa-solid fa-piggy-bank text-amber-500"></i> Caso 1: El Banco (Condición de Carrera y Cerrojos)
+                    </h3>
+                    <button onclick="copyCode('code-banco', this)" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-md font-medium flex items-center gap-1.5">
+                        <i class="fa-regular fa-copy"></i> Copiar Código Completo
+                    </button>
+                </div>
+                <p class="text-xs text-slate-600 leading-relaxed">
+                    <strong>Escenario:</strong> Ana y Juan comparten una cuenta bancaria con 50€. Ambos intentan retirar dinero al mismo tiempo. Si el método <code>retirar()</code> no es atómico, ambos leen un saldo suficiente de 50€ y retiran dinero simultáneamente, dejando la cuenta en <strong>saldo negativo (-10€)</strong>.
+                </p>
+
+                <div class="bg-amber-50 p-4 rounded-xl border border-amber-200 text-xs text-amber-900">
+                    <strong>Solución:</strong> Marcar el método <code>retirar</code> como <code>synchronized</code>. Al hacerlo, el hilo toma el monitor de la instancia de <code>Cuenta</code> y la otra persona debe esperar a que termine la operación completa.
+                </div>
+
+                <pre class="bg-slate-900 text-slate-100 p-4 rounded-xl overflow-x-auto"><code id="code-banco">// 1. Clase Cuenta Sincronizada
+public class Cuenta {
+    private double saldo;
+
+    public Cuenta(double saldo) {
+        this.saldo = saldo;
+    }
+
+    public double getSaldo() {
+        return saldo;
+    }
+
+    // Al declarar synchronized, evitamos saldos negativos
+    public synchronized void retirar(double cantidad, String persona) {
+        if (getSaldo() >= cantidad) {
+            System.out.println("Se va a retirar dinero. El saldo actual es de: " + getSaldo() + "€");
+            saldo = saldo - cantidad;
+            System.out.println(persona + " retira " + cantidad + " €. (Saldo actual: " + getSaldo() + "€)");
+        } else {
+            System.out.println(persona + " no puede retirar " + cantidad + " € porque el saldo actual es insuficiente: " + getSaldo() + "€");
+        }
+        if (getSaldo() < 0) {
+            System.out.println("SALDO NEGATIVO: " + getSaldo());
+        }
+    }
+}
+
+// 2. Clase Persona
+public class Persona extends Thread {
+    private String nombre;
+    private Cuenta cuenta;
+
+    public Persona(String nombre, Cuenta cuenta) {
+        this.nombre = nombre;
+        this.cuenta = cuenta;
+    }
+
+    @Override
+    public void run() {
+        for (int i = 0; i < 4; i++) {
+            this.cuenta.retirar(10, this.nombre);
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+
+// 3. Clase Principal
+public class PrincipalBanco {
+    public static void main(String[] args) {
+        Cuenta cuenta = new Cuenta(50);
+        Persona ana = new Persona("Ana", cuenta);
+        Persona juan = new Persona("Juan", cuenta);
+
+        ana.start();
+        juan.start();
+    }
+}</code></pre>
+            </div>
+
+            <!-- Caso 2: Productor Consumidor -->
+            <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200 space-y-4">
+                <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                    <h3 class="font-bold text-slate-900 text-lg flex items-center gap-2">
+                        <i class="fa-solid fa-arrows-spin text-brand-500"></i> Caso 2: Modelo Productor - Consumidor (Cola Monitor)
+                    </h3>
+                    <button onclick="copyCode('code-prodcons', this)" class="text-xs bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-md font-medium flex items-center gap-1.5">
+                        <i class="fa-regular fa-copy"></i> Copiar Código Completo
+                    </button>
+                </div>
+                <p class="text-xs text-slate-600 leading-relaxed">
+                    Un hilo <strong>Productor</strong> genera números en un búfer/cola compartido y un hilo <strong>Consumidor</strong> los consume. Se requiere sincronización estricta: el productor debe esperar si la cola está llena, y el consumidor si está vacía.
+                </p>
+
+                <pre class="bg-slate-900 text-slate-100 p-4 rounded-xl overflow-x-auto"><code id="code-prodcons">// 1. Monitor Búfer / Cola
+public class Cola {
+    private int numero;
+    private boolean llena = false; // inicialmente vacía
+
+    public synchronized void put(int valor) {
+        while (llena) { // SIEMPRE usar bucle while con wait
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        this.numero = valor;
+        llena = true;
+        System.out.println("=> Productor, produce: " + valor);
+        notifyAll(); // Notifica a los consumidores en espera
+    }
+
+    public synchronized int get() {
+        while (!llena) {
+            try {
+                wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        llena = false;
+        System.out.println("<= Consumidor, consume: " + this.numero);
+        notifyAll(); // Notifica al productor en espera
+        return this.numero;
+    }
+}
+
+// 2. Productor
+public class Productor extends Thread {
+    private Cola cola;
+
+    public Productor(Cola cola) {
+        this.cola = cola;
+    }
+
+    @Override
+    public void run() {
+        for (int i = 1; i <= 5; i++) {
+            cola.put(i);
+            try { sleep(1000); } catch (InterruptedException e) { e.printStackTrace(); }
+        }
+    }
+}
+
+// 3. Consumidor
+public class Consumidor extends Thread {
+    private Cola cola;
+
+    public Consumidor(Cola cola) {
+        this.cola = cola;
+    }
+
+    @Override
+    public void run() {
+        for (int i = 1; i <= 5; i++) {
+            int valor = cola.get();
+            try { sleep(1000); } catch (InterruptedException e) { e.printStackTrace(); }
+        }
+    }
+}
+
+// 4. Principal
+public class PrincipalProdCons {
+    public static void main(String[] args) {
+        Cola cola = new Cola();
+        Productor prod = new Productor(cola);
+        Consumidor con = new Consumidor(cola);
+
+        prod.start();
+        con.start();
+    }
+}</code></pre>
+            </div>
+        </section>
+
+        <!-- ==================== TAB 4: 18 EJERCICIOS RESUELTOS ==================== -->
+        <section id="content-ejercicios" class="tab-content hidden space-y-6">
+            <div class="bg-purple-900 text-white p-6 rounded-2xl shadow-xl border border-purple-800 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div>
+                    <h2 class="text-2xl font-extrabold mb-1 flex items-center gap-3">
+                        <i class="fa-solid fa-dumbbell text-purple-400"></i> Banco de 18 Ejercicios Resueltos - <a href="EJERCICIOS-PSP-JAVA/" class="enlace-animado">EJERCICIOS TEMA</a>
+                    </h2>
+                    <p class="text-purple-200 text-xs max-w-2xl">
+                        Soluciones completas listas para compilar e implementar en Java correspondiente a todas las actividades propuestas en el documento oficial.
+                    </p>
+                </div>
+                <!-- Filter Search Bar -->
+                <div class="w-full md:w-72 relative">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-slate-400 text-xs"></i>
+                    <input type="text" id="exercise-search" oninput="filterExercises()" placeholder="Buscar ejercicio (ej. puente, fumadores...)" class="w-full bg-slate-800 text-xs text-white pl-9 pr-4 py-2.5 rounded-xl border border-purple-700/50 focus:outline-none focus:ring-2 focus:ring-purple-400">
+                </div>
+            </div>
+
+            <!-- Exercises Container Grid -->
+            <div id="exercises-container" class="space-y-6">
+                <!-- Dynamic insertion or static templates -->
+            </div>
+        </section>
+
+        <!-- ==================== TAB 5: REPASO RESUELTO ==================== -->
+        <section id="content-repaso" class="tab-content hidden space-y-8">
+            <div class="bg-cyan-900 text-white p-6 rounded-2xl shadow-xl border border-cyan-800">
+                <h2 class="text-2xl font-extrabold mb-2 flex items-center gap-3">
+                    <i class="fa-solid fa-book-open text-cyan-300"></i> Punto 5. Repaso: 12 ejercicios resueltos
+                </h2>
+                <p class="text-cyan-100 text-sm max-w-3xl">
+                    Casos nuevos de práctica basados en los puntos 3 y 4. Cada ejercicio presenta primero el enunciado, después el bloque de solución y, por último, el código Java completo.
+                    Copia cada bloque en archivos .java separados cuando haya varias clases públicas.
+                </p>
+            </div>
+            <div class="bg-amber-50 border border-amber-200 text-amber-900 rounded-xl p-4 text-sm">
+                <strong>Importante:</strong> En Java solo puede haber una clase <code>public</code> por archivo y el nombre del archivo
+                debe coincidir con esa clase. Para simplificar, en algunos ejercicios se indican varias clases; guárdalas en archivos
+                separados dentro del mismo paquete.
+            </div>
+
+            <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200 space-y-3">
+                <h3 class="font-bold text-slate-900">Repaso 1. El supermercado: caja compartida</h3>
+                <p class="text-sm text-slate-600">Tres cajeros comparten una caja registradora. Cada uno atiende a cuatro clientes. Solo una atención puede realizarse a la vez.</p>
+                
+                <hr class="border-t-2 border-slate-200 my-5">
+                <div class="bg-emerald-900 text-white p-5 rounded-2xl shadow-xl border border-emerald-800">
+                    <h4 class="text-lg font-extrabold mb-2 flex items-center gap-2 uppercase">
+                        <i class="fa-solid fa-code text-emerald-300"></i> SOLUCIONES DEL REPASO
+                    </h4>
+                    <p class="text-emerald-100 text-sm">
+                        Código de referencia para este ejercicio. Revisa la solución y adapta los nombres de las clases
+                        y de los componentes a lo que pide el enunciado.
+                    </p>
+                </div>
+            
+                <pre class="bg-slate-900 text-slate-100 p-4 rounded-xl overflow-x-auto"><code>// CajaRegistradora.java
+public class CajaRegistradora {
+    public synchronized void atender(String cajero, int cliente) {
+        System.out.println(cajero + " atiende al cliente " + cliente);
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        System.out.println(cajero + " termina con el cliente " + cliente);
+    }
+}
+
+// Cajero.java
+public class Cajero extends Thread {
+    private final CajaRegistradora caja;
+
+    public Cajero(String nombre, CajaRegistradora caja) {
+        super(nombre);
+        this.caja = caja;
+    }
+
+    @Override
+    public void run() {
+        for (int i = 1; i <= 4; i++) {
+            caja.atender(getName(), i);
+        }
+    }
+}
+
+// PrincipalSupermercado.java
+public class PrincipalSupermercado {
+    public static void main(String[] args) {
+        CajaRegistradora caja = new CajaRegistradora();
+        new Cajero("Cajero 1", caja).start();
+        new Cajero("Cajero 2", caja).start();
+        new Cajero("Cajero 3", caja).start();
+    }
+}</code></pre>
+            </div>
+
+            <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200 space-y-3">
+                <h3 class="font-bold text-slate-900">Repaso 2. El aparcamiento: aforo máximo de cuatro coches</h3>
+                <p class="text-sm text-slate-600">Ocho coches compiten por cuatro plazas. Los que encuentran el aparcamiento lleno esperan hasta que otro salga.</p>
+                
+                <hr class="border-t-2 border-slate-200 my-5">
+                <div class="bg-emerald-900 text-white p-5 rounded-2xl shadow-xl border border-emerald-800">
+                    <h4 class="text-lg font-extrabold mb-2 flex items-center gap-2 uppercase">
+                        <i class="fa-solid fa-code text-emerald-300"></i> SOLUCIONES DEL REPASO
+                    </h4>
+                    <p class="text-emerald-100 text-sm">
+                        Código de referencia para este ejercicio. Revisa la solución y adapta los nombres de las clases
+                        y de los componentes a lo que pide el enunciado.
+                    </p>
+                </div>
+            
+                <pre class="bg-slate-900 text-slate-100 p-4 rounded-xl overflow-x-auto"><code>// Aparcamiento.java
+public class Aparcamiento {
+    private int dentro = 0;
+    private final int capacidad = 4;
+
+    public synchronized void entrar(String coche) throws InterruptedException {
+        while (dentro >= capacidad) {
+            System.out.println(coche + " espera: aparcamiento lleno");
+            wait();
+        }
+        dentro++;
+        System.out.println(coche + " entra. Ocupación: " + dentro);
+    }
+
+    public synchronized void salir(String coche) {
+        dentro--;
+        System.out.println(coche + " sale. Ocupación: " + dentro);
+        notifyAll();
+    }
+}
+
+// Coche.java
+public class Coche extends Thread {
+    private final Aparcamiento parking;
+
+    public Coche(String nombre, Aparcamiento parking) {
+        super(nombre);
+        this.parking = parking;
+    }
+
+    @Override
+    public void run() {
+        try {
+            parking.entrar(getName());
+            Thread.sleep(3000);
+            parking.salir(getName());
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
+}
+
+// PrincipalParking.java
+public class PrincipalParking {
+    public static void main(String[] args) {
+        Aparcamiento parking = new Aparcamiento();
+        for (int i = 1; i <= 8; i++) {
+            new Coche("Coche " + i, parking).start();
+        }
+    }
+}</code></pre>
+            </div>
+
+            <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200 space-y-3">
+                <h3 class="font-bold text-slate-900">Repaso 3. La fotocopiadora: implementación con Runnable</h3>
+                <p class="text-sm text-slate-600">Cinco profesores imprimen tres documentos cada uno en una única fotocopiadora.</p>
+                
+                <hr class="border-t-2 border-slate-200 my-5">
+                <div class="bg-emerald-900 text-white p-5 rounded-2xl shadow-xl border border-emerald-800">
+                    <h4 class="text-lg font-extrabold mb-2 flex items-center gap-2 uppercase">
+                        <i class="fa-solid fa-code text-emerald-300"></i> SOLUCIONES DEL REPASO
+                    </h4>
+                    <p class="text-emerald-100 text-sm">
+                        Código de referencia para este ejercicio. Revisa la solución y adapta los nombres de las clases
+                        y de los componentes a lo que pide el enunciado.
+                    </p>
+                </div>
+            
+                <pre class="bg-slate-900 text-slate-100 p-4 rounded-xl overflow-x-auto"><code>// Fotocopiadora.java
+public class Fotocopiadora {
+    public synchronized void imprimir(String profesor, int documento) {
+        System.out.println(profesor + " imprime el documento " + documento);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        System.out.println(profesor + " termina el documento " + documento);
+    }
+}
+
+// Profesor.java
+public class Profesor implements Runnable {
+    private final String nombre;
+    private final Fotocopiadora fotocopiadora;
+
+    public Profesor(String nombre, Fotocopiadora fotocopiadora) {
+        this.nombre = nombre;
+        this.fotocopiadora = fotocopiadora;
+    }
+
+    @Override
+    public void run() {
+        for (int i = 1; i <= 3; i++) {
+            fotocopiadora.imprimir(nombre, i);
+        }
+    }
+}
+
+// PrincipalFotocopiadora.java
+public class PrincipalFotocopiadora {
+    public static void main(String[] args) {
+        Fotocopiadora f = new Fotocopiadora();
+        for (int i = 1; i <= 5; i++) {
+            new Thread(new Profesor("Profesor " + i, f)).start();
+        }
+    }
+}</code></pre>
+            </div>
+
+            <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200 space-y-3">
+                <h3 class="font-bold text-slate-900">Repaso 4. Fábrica: productor y dos consumidores</h3>
+                <p class="text-sm text-slate-600">Almacén con capacidad tres. El productor fabrica diez productos y dos consumidores los retiran hasta que se hayan consumido todos.</p>
+                
+                <hr class="border-t-2 border-slate-200 my-5">
+                <div class="bg-emerald-900 text-white p-5 rounded-2xl shadow-xl border border-emerald-800">
+                    <h4 class="text-lg font-extrabold mb-2 flex items-center gap-2 uppercase">
+                        <i class="fa-solid fa-code text-emerald-300"></i> SOLUCIONES DEL REPASO
+                    </h4>
+                    <p class="text-emerald-100 text-sm">
+                        Código de referencia para este ejercicio. Revisa la solución y adapta los nombres de las clases
+                        y de los componentes a lo que pide el enunciado.
+                    </p>
+                </div>
+            
+                <pre class="bg-slate-900 text-slate-100 p-4 rounded-xl overflow-x-auto"><code>// Almacen.java
+import java.util.LinkedList;
+import java.util.Queue;
+
+public class Almacen {
+    private final Queue&lt;Integer&gt; productos = new LinkedList&lt;&gt;();
+    private final int capacidad = 3;
+    private boolean terminado = false;
+
+    public synchronized void producir(int valor) throws InterruptedException {
+        while (productos.size() == capacidad) wait();
+        productos.add(valor);
+        System.out.println("Produce: " + valor + " | Almacén: " + productos);
+        notifyAll();
+    }
+
+    public synchronized Integer consumir() throws InterruptedException {
+        while (productos.isEmpty() &amp;&amp; !terminado) wait();
+        if (productos.isEmpty() &amp;&amp; terminado) return null;
+        int valor = productos.remove();
+        System.out.println(Thread.currentThread().getName()
+                + " consume: " + valor + " | Almacén: " + productos);
+        notifyAll();
+        return valor;
+    }
+
+    public synchronized void finalizarProduccion() {
+        terminado = true;
+        notifyAll();
+    }
+}
+
+// Productor.java
+public class Productor extends Thread {
+    private final Almacen almacen;
+
+    public Productor(Almacen almacen) { this.almacen = almacen; }
+
+    @Override
+    public void run() {
+        try {
+            for (int i = 1; i <= 10; i++) {
+                almacen.producir(i);
+                Thread.sleep(300);
+            }
+            almacen.finalizarProduccion();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            almacen.finalizarProduccion();
+        }
+    }
+}
+
+// Consumidor.java
+public class Consumidor extends Thread {
+    private final Almacen almacen;
+
+    public Consumidor(String nombre, Almacen almacen) {
+        super(nombre);
+        this.almacen = almacen;
+    }
+
+    @Override
+    public void run() {
+        try {
+            Integer valor;
+            while ((valor = almacen.consumir()) != null) {
+                Thread.sleep(500);
+            }
+            System.out.println(getName() + " termina.");
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
+}
+
+// PrincipalFabrica.java
+public class PrincipalFabrica {
+    public static void main(String[] args) {
+        Almacen a = new Almacen();
+        Productor p = new Productor(a);
+        Consumidor c1 = new Consumidor("Consumidor 1", a);
+        Consumidor c2 = new Consumidor("Consumidor 2", a);
+        p.start();
+        c1.start();
+        c2.start();
+    }
+}</code></pre>
+            </div>
+
+            <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200 space-y-3">
+                <h3 class="font-bold text-slate-900">Repaso 5. Números pares e impares</h3>
+                <p class="text-sm text-slate-600">Dos hilos imprimen pares e impares del 1 al 20 con una pausa de medio segundo.</p>
+                
+                <hr class="border-t-2 border-slate-200 my-5">
+                <div class="bg-emerald-900 text-white p-5 rounded-2xl shadow-xl border border-emerald-800">
+                    <h4 class="text-lg font-extrabold mb-2 flex items-center gap-2 uppercase">
+                        <i class="fa-solid fa-code text-emerald-300"></i> SOLUCIONES DEL REPASO
+                    </h4>
+                    <p class="text-emerald-100 text-sm">
+                        Código de referencia para este ejercicio. Revisa la solución y adapta los nombres de las clases
+                        y de los componentes a lo que pide el enunciado.
+                    </p>
+                </div>
+            
+                <pre class="bg-slate-900 text-slate-100 p-4 rounded-xl overflow-x-auto"><code>public class Numeros extends Thread {
+    private final boolean pares;
+
+    public Numeros(String nombre, boolean pares) {
+        super(nombre);
+        this.pares = pares;
+    }
+
+    @Override
+    public void run() {
+        int inicio = pares ? 2 : 1;
+        for (int i = inicio; i &lt;= 20; i += 2) {
+            System.out.println(getName() + ": " + i);
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                return;
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        new Numeros("Pares", true).start();
+        new Numeros("Impares", false).start();
+    }
+}</code></pre>
+            </div>
+
+            <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200 space-y-3">
+                <h3 class="font-bold text-slate-900">Repaso 6. Mensajes con Runnable</h3>
+                <p class="text-sm text-slate-600">Dos tareas imprimen sus mensajes veinte veces, con un segundo de pausa.</p>
+                
+                <hr class="border-t-2 border-slate-200 my-5">
+                <div class="bg-emerald-900 text-white p-5 rounded-2xl shadow-xl border border-emerald-800">
+                    <h4 class="text-lg font-extrabold mb-2 flex items-center gap-2 uppercase">
+                        <i class="fa-solid fa-code text-emerald-300"></i> SOLUCIONES DEL REPASO
+                    </h4>
+                    <p class="text-emerald-100 text-sm">
+                        Código de referencia para este ejercicio. Revisa la solución y adapta los nombres de las clases
+                        y de los componentes a lo que pide el enunciado.
+                    </p>
+                </div>
+            
+                <pre class="bg-slate-900 text-slate-100 p-4 rounded-xl overflow-x-auto"><code>public class Mensaje implements Runnable {
+    private final String texto;
+
+    public Mensaje(String texto) {
+        this.texto = texto;
+    }
+
+    @Override
+    public void run() {
+        for (int i = 1; i &lt;= 20; i++) {
+            System.out.println(texto + " (" + i + ")");
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                return;
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        Thread t1 = new Thread(new Mensaje("BUENOS DÍAS"));
+        Thread t2 = new Thread(new Mensaje("BUENAS NOCHES"));
+        t1.start();
+        t2.start();
+    }
+}</code></pre>
+            </div>
+
+            <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200 space-y-3">
+                <h3 class="font-bold text-slate-900">Repaso 7. Carrera de cuatro corredores y prioridades</h3>
+                <p class="text-sm text-slate-600">Cuatro hilos recorren cincuenta metros. Se asignan prioridades diferentes; estas no garantizan el orden de llegada.</p>
+                
+                <hr class="border-t-2 border-slate-200 my-5">
+                <div class="bg-emerald-900 text-white p-5 rounded-2xl shadow-xl border border-emerald-800">
+                    <h4 class="text-lg font-extrabold mb-2 flex items-center gap-2 uppercase">
+                        <i class="fa-solid fa-code text-emerald-300"></i> SOLUCIONES DEL REPASO
+                    </h4>
+                    <p class="text-emerald-100 text-sm">
+                        Código de referencia para este ejercicio. Revisa la solución y adapta los nombres de las clases
+                        y de los componentes a lo que pide el enunciado.
+                    </p>
+                </div>
+            
+                <pre class="bg-slate-900 text-slate-100 p-4 rounded-xl overflow-x-auto"><code>public class Corredor extends Thread {
+    public Corredor(String nombre, int prioridad) {
+        super(nombre);
+        setPriority(prioridad);
+    }
+
+    @Override
+    public void run() {
+        for (int metro = 1; metro &lt;= 50; metro++) {
+            System.out.println(getName() + " lleva " + metro + " metros");
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                return;
+            }
+        }
+        System.out.println(getName() + " llega a la meta.");
+    }
+
+    public static void main(String[] args) {
+        new Corredor("Carlos", 2).start();
+        new Corredor("Marta", 4).start();
+        new Corredor("Pedro", 7).start();
+        new Corredor("Lucía", 10).start();
+    }
+}</code></pre>
+            </div>
+
+            <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200 space-y-3">
+                <h3 class="font-bold text-slate-900">Repaso 8. Suma de matrices con nueve hilos y join()</h3>
+                <p class="text-sm text-slate-600">Cada hilo calcula una celda de la matriz resultado. El hilo principal espera a los nueve antes de imprimirla.</p>
+                
+                <hr class="border-t-2 border-slate-200 my-5">
+                <div class="bg-emerald-900 text-white p-5 rounded-2xl shadow-xl border border-emerald-800">
+                    <h4 class="text-lg font-extrabold mb-2 flex items-center gap-2 uppercase">
+                        <i class="fa-solid fa-code text-emerald-300"></i> SOLUCIONES DEL REPASO
+                    </h4>
+                    <p class="text-emerald-100 text-sm">
+                        Código de referencia para este ejercicio. Revisa la solución y adapta los nombres de las clases
+                        y de los componentes a lo que pide el enunciado.
+                    </p>
+                </div>
+            
+                <pre class="bg-slate-900 text-slate-100 p-4 rounded-xl overflow-x-auto"><code>public class SumaMatrices {
+    static int[][] a = {{1,2,3},{4,5,6},{7,8,9}};
+    static int[][] b = {{9,8,7},{6,5,4},{3,2,1}};
+    static int[][] resultado = new int[3][3];
+
+    static class HiloSuma extends Thread {
+        private final int fila, columna;
+
+        HiloSuma(int fila, int columna) {
+            this.fila = fila;
+            this.columna = columna;
+        }
+
+        @Override
+        public void run() {
+            resultado[fila][columna] = a[fila][columna] + b[fila][columna];
+        }
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        Thread[][] hilos = new Thread[3][3];
+
+        for (int i = 0; i &lt; 3; i++) {
+            for (int j = 0; j &lt; 3; j++) {
+                hilos[i][j] = new HiloSuma(i, j);
+                hilos[i][j].start();
+            }
+        }
+
+        for (int i = 0; i &lt; 3; i++)
+            for (int j = 0; j &lt; 3; j++)
+                hilos[i][j].join();
+
+        for (int[] fila : resultado) {
+            for (int valor : fila) System.out.print(valor + " ");
+            System.out.println();
+        }
+    }
+}</code></pre>
+            </div>
+
+            <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200 space-y-3">
+                <h3 class="font-bold text-slate-900">Repaso 9. Puente de un solo carril</h3>
+                <p class="text-sm text-slate-600">Cinco coches comparten un puente. El método sincronizado garantiza que solo uno lo cruce cada vez.</p>
+                
+                <hr class="border-t-2 border-slate-200 my-5">
+                <div class="bg-emerald-900 text-white p-5 rounded-2xl shadow-xl border border-emerald-800">
+                    <h4 class="text-lg font-extrabold mb-2 flex items-center gap-2 uppercase">
+                        <i class="fa-solid fa-code text-emerald-300"></i> SOLUCIONES DEL REPASO
+                    </h4>
+                    <p class="text-emerald-100 text-sm">
+                        Código de referencia para este ejercicio. Revisa la solución y adapta los nombres de las clases
+                        y de los componentes a lo que pide el enunciado.
+                    </p>
+                </div>
+            
+                <pre class="bg-slate-900 text-slate-100 p-4 rounded-xl overflow-x-auto"><code>public class Puente {
+    public synchronized void cruzar(String coche) {
+        System.out.println(coche + " entra en el puente");
+        for (int km = 1; km &lt;= 3; km++) {
+            System.out.println(coche + " cruza el km " + km);
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                return;
+            }
+        }
+        System.out.println(coche + " sale del puente");
+    }
+}
+
+class Coche extends Thread {
+    private final Puente puente;
+
+    Coche(String nombre, Puente puente) {
+        super(nombre);
+        this.puente = puente;
+    }
+
+    @Override
+    public void run() {
+        puente.cruzar(getName());
+    }
+}
+
+class PrincipalPuente {
+    public static void main(String[] args) {
+        Puente p = new Puente();
+        for (int i = 1; i &lt;= 5; i++) {
+            new Coche("Coche " + i, p).start();
+        }
+    }
+}</code></pre>
+            </div>
+
+            <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200 space-y-3">
+                <h3 class="font-bold text-slate-900">Repaso 10. Tablas de multiplicar sin intercalación</h3>
+                <p class="text-sm text-slate-600">Tres hilos imprimen las tablas del 4, 5 y 6. El método sincronizado protege cada tabla completa.</p>
+                
+                <hr class="border-t-2 border-slate-200 my-5">
+                <div class="bg-emerald-900 text-white p-5 rounded-2xl shadow-xl border border-emerald-800">
+                    <h4 class="text-lg font-extrabold mb-2 flex items-center gap-2 uppercase">
+                        <i class="fa-solid fa-code text-emerald-300"></i> SOLUCIONES DEL REPASO
+                    </h4>
+                    <p class="text-emerald-100 text-sm">
+                        Código de referencia para este ejercicio. Revisa la solución y adapta los nombres de las clases
+                        y de los componentes a lo que pide el enunciado.
+                    </p>
+                </div>
+            
+                <pre class="bg-slate-900 text-slate-100 p-4 rounded-xl overflow-x-auto"><code>public class ImpresoraTablas {
+    public synchronized void imprimir(int numero) {
+        System.out.println("Tabla del " + numero);
+        for (int i = 1; i &lt;= 10; i++) {
+            System.out.println(numero + " x " + i + " = " + (numero * i));
+        }
+        System.out.println("Fin tabla del " + numero);
+    }
+}
+
+class HiloTabla extends Thread {
+    private final int numero;
+    private final ImpresoraTablas impresora;
+
+    HiloTabla(int numero, ImpresoraTablas impresora) {
+        this.numero = numero;
+        this.impresora = impresora;
+    }
+
+    @Override
+    public void run() {
+        impresora.imprimir(numero);
+    }
+}
+
+class PrincipalTablas {
+    public static void main(String[] args) {
+        ImpresoraTablas impresora = new ImpresoraTablas();
+        new HiloTabla(4, impresora).start();
+        new HiloTabla(5, impresora).start();
+        new HiloTabla(6, impresora).start();
+    }
+}</code></pre>
+            </div>
+
+            <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200 space-y-3">
+                <h3 class="font-bold text-slate-900">Repaso 11. TIC, TAC y TOC en orden</h3>
+                <p class="text-sm text-slate-600">Tres hilos imprimen diez ciclos en el orden exacto TIC, TAC, TOC mediante un monitor compartido.</p>
+                
+                <hr class="border-t-2 border-slate-200 my-5">
+                <div class="bg-emerald-900 text-white p-5 rounded-2xl shadow-xl border border-emerald-800">
+                    <h4 class="text-lg font-extrabold mb-2 flex items-center gap-2 uppercase">
+                        <i class="fa-solid fa-code text-emerald-300"></i> SOLUCIONES DEL REPASO
+                    </h4>
+                    <p class="text-emerald-100 text-sm">
+                        Código de referencia para este ejercicio. Revisa la solución y adapta los nombres de las clases
+                        y de los componentes a lo que pide el enunciado.
+                    </p>
+                </div>
+            
+                <pre class="bg-slate-900 text-slate-100 p-4 rounded-xl overflow-x-auto"><code>public class MonitorReloj {
+    private int turno = 0;
+
+    public synchronized void imprimir(int miTurno, String texto) {
+        for (int i = 0; i &lt; 10; i++) {
+            while (turno != miTurno) {
+                try {
+                    wait();
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    return;
+                }
+            }
+            System.out.println(texto);
+            turno = (turno + 1) % 3;
+            notifyAll();
+        }
+    }
+}
+
+class PrincipalReloj {
+    public static void main(String[] args) {
+        MonitorReloj monitor = new MonitorReloj();
+        new Thread(() -&gt; monitor.imprimir(0, "TIC")).start();
+        new Thread(() -&gt; monitor.imprimir(1, "TAC")).start();
+        new Thread(() -&gt; monitor.imprimir(2, "TOC")).start();
+    }
+}</code></pre>
+            </div>
+
+            <div class="bg-white rounded-xl p-6 shadow-sm border border-slate-200 space-y-3">
+                <h3 class="font-bold text-slate-900">Repaso 12. Sala de ordenadores: máximo tres alumnos</h3>
+                <p class="text-sm text-slate-600">Diez alumnos comparten tres ordenadores. Los que llegan cuando los tres están ocupados esperan.</p>
+                
+                <hr class="border-t-2 border-slate-200 my-5">
+                <div class="bg-emerald-900 text-white p-5 rounded-2xl shadow-xl border border-emerald-800">
+                    <h4 class="text-lg font-extrabold mb-2 flex items-center gap-2 uppercase">
+                        <i class="fa-solid fa-code text-emerald-300"></i> SOLUCIONES DEL REPASO
+                    </h4>
+                    <p class="text-emerald-100 text-sm">
+                        Código de referencia para este ejercicio. Revisa la solución y adapta los nombres de las clases
+                        y de los componentes a lo que pide el enunciado.
+                    </p>
+                </div>
+            
+                <pre class="bg-slate-900 text-slate-100 p-4 rounded-xl overflow-x-auto"><code>// SalaOrdenadores.java
+public class SalaOrdenadores {
+    private int ocupados = 0;
+    private final int capacidad = 3;
+
+    public synchronized void entrar(String alumno) throws InterruptedException {
+        while (ocupados == capacidad) {
+            System.out.println(alumno + " espera un ordenador");
+            wait();
+        }
+        ocupados++;
+        System.out.println(alumno + " entra. Ocupados: " + ocupados);
+    }
+
+    public synchronized void salir(String alumno) {
+        ocupados--;
+        System.out.println(alumno + " sale. Ocupados: " + ocupados);
+        notifyAll();
+    }
+}
+
+// Alumno.java
+class Alumno extends Thread {
+    private final SalaOrdenadores sala;
+
+    Alumno(String nombre, SalaOrdenadores sala) {
+        super(nombre);
+        this.sala = sala;
+    }
+
+    @Override
+    public void run() {
+        try {
+            sala.entrar(getName());
+            Thread.sleep(2000);
+            sala.salir(getName());
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    }
+}
+
+// PrincipalSala.java
+public class PrincipalSala {
+    public static void main(String[] args) {
+        SalaOrdenadores sala = new SalaOrdenadores();
+        for (int i = 1; i &lt;= 10; i++) {
+            new Alumno("Alumno " + i, sala).start();
+        }
+    }
+}</code></pre>
+            </div>
+
+            <div class="bg-slate-900 text-white rounded-xl p-5 space-y-2">
+                <h3 class="font-bold text-lg">Claves para el examen</h3>
+                <ul class="list-disc pl-5 text-sm text-slate-300 space-y-1">
+                    <li><code>start()</code> inicia un hilo nuevo; llamar a <code>run()</code> directamente no lo hace.</li>
+                    <li><code>synchronized</code> protege el recurso solo si los hilos comparten el mismo objeto monitor.</li>
+                    <li><code>wait()</code> y <code>notifyAll()</code> se ejecutan dentro de código sincronizado sobre el mismo monitor.</li>
+                    <li>Usa siempre <code>while</code> para comprobar la condición después de despertar de <code>wait()</code>.</li>
+                    <li><code>sleep()</code> pausa el hilo, pero no libera el monitor que ya posee.</li>
+                    <li><code>join()</code> permite esperar a que otro hilo termine.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- ==================== TAB 6: TIPS Y ERRORES ==================== -->
+        <section id="content-tips" class="tab-content hidden space-y-8">
+            <div class="bg-slate-900 text-white p-6 rounded-2xl shadow-xl border border-slate-800">
+                <h2 class="text-2xl font-extrabold mb-2 flex items-center gap-3">
+                    <i class="fa-solid fa-lightbulb text-yellow-400"></i> Tips, Reglas de Oro y Errores Típicos
+                </h2>
+                <p class="text-slate-300 text-sm max-w-3xl">
+                    Colección de pautas esenciales para superar el examen práctico de PSP y evitar fallos clásicos de concurrencia en la JVM.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Reglas de Oro -->
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                    <h3 class="font-bold text-slate-900 text-base flex items-center gap-2 border-b border-slate-100 pb-2">
+                        <i class="fa-solid fa-circle-check text-emerald-500"></i> Reglas de Oro de Sincronización
+                    </h3>
+                    <ul class="space-y-3 text-xs text-slate-600">
+                        <li class="bg-slate-50 p-3 rounded-lg border border-slate-200">
+                            <strong class="text-slate-900 block mb-1">1. `wait()` SIEMPRE dentro de un bucle `while`:</strong>
+                            Nunca uses un `if`. Cuando un hilo despierta, la condición de espera podría haber dejado de cumplirse por la acción de otro hilo.
+                        </li>
+                        <li class="bg-slate-50 p-3 rounded-lg border border-slate-200">
+                            <strong class="text-slate-900 block mb-1">2. Prefiere `notifyAll()` sobre `notify()`:</strong>
+                            `notify()` despierta a un hilo indeterminado. Si despierta al hilo equivocado, el sistema puede quedar bloqueado permanentemente.
+                        </li>
+                        <li class="bg-slate-50 p-3 rounded-lg border border-slate-200">
+                            <strong class="text-slate-900 block mb-1">3. `sleep()` no libera cerrojos; `wait()` SI los libera:</strong>
+                            Si duermes a un hilo con `Thread.sleep()` dentro de un bloque sincronizado, mantendrá el cerrojo bloqueando a los demás.
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Errores Comunes -->
+                <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm space-y-4">
+                    <h3 class="font-bold text-slate-900 text-base flex items-center gap-2 border-b border-slate-100 pb-2">
+                        <i class="fa-solid fa-triangle-exclamation text-rose-500"></i> Errores Típicos a Evitar
+                    </h3>
+                    <ul class="space-y-3 text-xs text-slate-600">
+                        <li class="bg-rose-50 p-3 rounded-lg border border-rose-200 text-rose-900">
+                            <strong class="block mb-1">1. Invocación directa a `run()` en lugar de `start()`:</strong>
+                            Si llamas a `hilo.run()`, el código se ejecutará secuencialmente en el hilo principal y NO en una nueva hebra concurrente.
+                        </li>
+                        <li class="bg-rose-50 p-3 rounded-lg border border-rose-200 text-rose-900">
+                            <strong class="block mb-1">2. Usar `wait()` o `notify()` fuera de `synchronized`:</strong>
+                            Lanzará la excepción runtime <code>IllegalMonitorStateException</code> en tiempo de ejecución.
+                        </li>
+                        <li class="bg-rose-50 p-3 rounded-lg border border-rose-200 text-rose-900">
+                            <strong class="block mb-1">3. Sincronizar objetos distintos:</strong>
+                            Para que la exclusión mutua funcione entre dos hilos, ambos deben sincronizarse exactamente sobre la misma referencia de objeto.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TAB 7: AUTOEVALUACIÓN ==================== -->
+        <section id="content-test" class="tab-content hidden space-y-8">
+            <div class="bg-rose-900 text-white p-6 rounded-2xl shadow-xl border border-rose-800 flex justify-between items-center">
+                <div>
+                    <h2 class="text-2xl font-extrabold mb-1 flex items-center gap-3">
+                        <i class="fa-solid fa-list-check text-rose-400"></i> Test de Autoevaluación
+                    </h2>
+                    <p class="text-rose-200 text-xs">
+                        Preguntas extraídas textualmente de la autoevaluación oficial del documento (Páginas 34 y 35).
+                    </p>
+                </div>
+                <div id="quiz-score" class="text-right hidden">
+                    <span class="text-2xl font-black text-rose-300" id="score-val">0/10</span>
+                    <span class="block text-[10px] text-rose-200 uppercase tracking-widest">Puntuación</span>
+                </div>
+            </div>
+
+            <!-- Quiz Questions Form Container -->
+            <div id="quiz-container" class="space-y-6">
+                <!-- Question Cards populated dynamically via JS -->
+            </div>
+
+            <div class="flex justify-end gap-3 pt-4">
+                <button onclick="resetQuiz()" class="px-5 py-2.5 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-xl text-xs font-bold transition-all">
+                    <i class="fa-solid fa-rotate-left mr-1.5"></i> Reiniciar Test
+                </button>
+                <button onclick="evaluateQuiz()" class="px-6 py-2.5 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-bold shadow-lg shadow-brand-500/30 transition-all">
+                    <i class="fa-solid fa-check-double mr-1.5"></i> Corregir Test
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer Component -->
+    <footer class="bg-slate-900 text-slate-400 text-xs py-6 border-t border-slate-800 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 text-center space-y-2">
+            <p>PSP UT1: Hilos y Sincronizaciones en Java &bull; IES Valle del Jerte (Plasencia)</p>
+            <p class="text-slate-600">Material Didáctico adaptado por Marcos Fernández Sellers. Aplicación interactiva autónoma.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // Data for all 18 Exercises
+        const exercisesData = [
+            {
+                id: 1,
+                title: "Ejercicio 1: Reloj con Hebra Avisadora de Tiempo",
+                desc: "Añadir una hebra que escriba 'Se te está acabando el tiempo' en el terminal cada 5 segundos al programa del Reloj.",
+                code: `// Clase Hebra Avisadora
+public class Avisador extends Thread {
+    @Override
+    public void run() {
+        for (int i = 0; i < 2; i++) {
+            try {
+                Thread.sleep(5000);
+                System.out.println("--> Se te está acabando el tiempo");
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+
+// Programa Principal Reloj
+public class RelojConAviso {
+    public static void main(String[] args) {
+        Hora hora = new Hora();
+        Sonido sonido = new Sonido();
+        Avisador aviso = new Avisador();
+
+        hora.start();
+        sonido.start();
+        aviso.start();
+    }
+}`
+            },
+            {
+                id: 2,
+                title: "Ejercicio 2: Bucle Infinito TIC y TAC con Sleep",
+                desc: "Dos clases que extienden Thread para imprimir de forma continua TIC y TAC con sleep().",
+                code: `public class HiloTic extends Thread {
+    @Override
+    public void run() {
+        while (true) {
+            System.out.println("TIC");
+            try { Thread.sleep(500); } catch (InterruptedException e) { e.printStackTrace(); }
+        }
+    }
+}
+
+public class HiloTac extends Thread {
+    @Override
+    public void run() {
+        while (true) {
+            System.out.println("TAC");
+            try { Thread.sleep(500); } catch (InterruptedException e) { e.printStackTrace(); }
+        }
+    }
+}
+
+public class MainTicTac {
+    public static void main(String[] args) {
+        new HiloTic().start();
+        new HiloTac().start();
+    }
+}`
+            },
+            {
+                id: 3,
+                title: "Ejercicio 3: Transformación del Reloj a la Interfaz Runnable",
+                desc: "Reimplementación del ejercicio del Reloj utilizando Runnable en lugar de heredar de Thread.",
+                code: `public class HoraRunnable implements Runnable {
+    @Override
+    public void run() {
+        for (int i = 0; i < 10; i++) {
+            System.out.println(java.time.LocalDateTime.now());
+            try { Thread.sleep(1000); } catch (InterruptedException e) { e.printStackTrace(); }
+        }
+    }
+}
+
+public class SonidoRunnable implements Runnable {
+    @Override
+    public void run() {
+        for (int i = 0; i < 10; i++) {
+            System.out.println("Beep!!");
+            java.awt.Toolkit.getDefaultToolkit().beep();
+            try { Thread.sleep(1000); } catch (InterruptedException e) { e.printStackTrace(); }
+        }
+    }
+}
+
+public class RelojRunnableMain {
+    public static void main(String[] args) {
+        Thread tHora = new Thread(new HoraRunnable());
+        Thread tSonido = new Thread(new SonidoRunnable());
+        tHora.start();
+        tSonido.start();
+    }
+}`
+            },
+            {
+                id: 4,
+                title: "Ejercicio 4: Hilos Runnable HOLA y ADIÓS",
+                desc: "Dos clases Runnable imprimiendo 100 veces HOLA y ADIÓS observando el intercalado concurrente.",
+                code: `public class HiloHola implements Runnable {
+    @Override
+    public void run() {
+        for (int i = 0; i < 100; i++) System.out.println("HOLA");
+    }
+}
+
+public class HiloAdios implements Runnable {
+    @Override
+    public void run() {
+        for (int i = 0; i < 100; i++) System.out.println("ADIÓS");
+    }
+}
+
+public class MainHolaAdios {
+    public static void main(String[] args) {
+        new Thread(new HiloHola()).start();
+        new Thread(new HiloAdios()).start();
+    }
+}`
+            },
+            {
+                id: 5,
+                title: "Ejercicio 5: PintaDiezVeces con ID, Prioridad y Nombre",
+                desc: "Arrancar 5 hilos que muestren su cadena, ID, prioridad y nombre 10 veces por pantalla.",
+                code: `public class PintaDiezVeces extends Thread {
+    private String cadena;
+
+    public PintaDiezVeces(String cadena) {
+        this.cadena = cadena;
+    }
+
+    @Override
+    public void run() {
+        for (int i = 0; i < 10; i++) {
+            System.out.println("Cadena: " + cadena + " | ID: " + getId() + 
+                               " | Prioridad: " + getPriority() + " | Nombre: " + getName());
+        }
+    }
+
+    public static void main(String[] args) {
+        for (int i = 1; i <= 5; i++) {
+            PintaDiezVeces h = new PintaDiezVeces("Mensaje-" + i);
+            h.setName("HiloPinta-" + i);
+            h.setPriority(i);
+            h.start();
+        }
+    }
+}`
+            },
+            {
+                id: 6,
+                title: "Ejercicio 6: Fábula de la Tortuga, Liebre y Guepardo",
+                desc: "Simulación de una carrera asignando prioridades mínima (Tortuga), media (Liebre) y máxima (Guepardo).",
+                code: `public class CorredorAnimal extends Thread {
+    public CorredorAnimal(String nombre) {
+        super(nombre);
+    }
+
+    @Override
+    public void run() {
+        for (int i = 1; i <= 100; i++) {
+            System.out.println(getName() + " recorre el metro " + i);
+            Thread.yield(); // cede voluntariamente la CPU para suavizar la transición
+        }
+        System.out.println(">>> ¡LLEGO A LA META: " + getName() + "! <<<");
+    }
+
+    public static void main(String[] args) {
+        CorredorAnimal tortuga = new CorredorAnimal("Tortuga");
+        CorredorAnimal liebre = new CorredorAnimal("Liebre");
+        CorredorAnimal guepardo = new CorredorAnimal("Guepardo");
+
+        tortuga.setPriority(Thread.MIN_PRIORITY); // 1
+        liebre.setPriority(Thread.NORM_PRIORITY);  // 5
+        guepardo.setPriority(Thread.MAX_PRIORITY); // 10
+
+        tortuga.start();
+        liebre.start();
+        guepardo.start();
+    }
+}`
+            },
+            {
+                id: 7,
+                title: "Ejercicio 7: Generador Concurrente de Tablas de Multiplicar",
+                desc: "Clase PintaTabla que guarda las tablas de multiplicar en archivos en la carpeta TABLAS/N.txt.",
+                code: `import java.io.*;
+import java.util.Scanner;
+
+public class PintaTabla extends Thread {
+    private int numero;
+
+    public PintaTabla(int numero) {
+        this.numero = numero;
+    }
+
+    @Override
+    public void run() {
+        File dir = new File("TABLAS");
+        if (!dir.exists()) dir.mkdir();
+
+        try (PrintWriter writer = new PrintWriter(new FileWriter("TABLAS/" + numero + ".txt"))) {
+            writer.println("La Tabla del " + numero + ":");
+            writer.println("***************************");
+            for (int i = 0; i <= 10; i++) {
+                writer.println(numero + " x " + i + " = " + (numero * i));
+            }
+            System.out.println("--> Generado el fichero de la tabla del " + numero);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+public class GeneradorTablas {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int opc = -1;
+        while (opc != 1) {
+            System.out.println("Opciones:\\n 0: Generar una tabla\\n 1: Salir");
+            opc = sc.nextInt();
+            if (opc == 0) {
+                System.out.print("Introduce el número del cual quieres generar la tabla: ");
+                int num = sc.nextInt();
+                new PintaTabla(num).start();
+            }
+        }
+    }
+}`
+            },
+            {
+                id: 8,
+                title: "Ejercicio 8: Suma de 3 Matrices Cuadradas con 9 Hilos",
+                desc: "Creación de 9 hilos (uno por celda) que se duermen 1ms, realizan la suma parcial y aguardan con join().",
+                code: `public class SumaMatricesConcurrente {
+    public static int[][] matriz1 = {{1,2,3},{4,5,6},{7,8,9}};
+    public static int[][] matriz2 = {{4,2,1},{9,8,1},{1,1,0}};
+    public static int[][] matrizResultado = new int[3][3];
+
+    static class HiloSuma extends Thread {
+        private int fila, col;
+        public HiloSuma(int fila, int col) {
+            this.fila = fila;
+            this.col = col;
+        }
+        @Override
+        public void run() {
+            try { Thread.sleep(1); } catch (InterruptedException e) {}
+            matrizResultado[fila][col] = matriz1[fila][col] + matriz2[fila][col];
+        }
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        Thread[][] hilos = new Thread[3][3];
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                hilos[i][j] = new HiloSuma(i, j);
+                hilos[i][j].start();
+            }
+        }
+
+        // Esperar a que terminen los 9 hilos
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                hilos[i][j].join();
+            }
+        }
+
+        // Imprimir matriz resultado
+        System.out.println("Matriz Resultado:");
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                System.out.print(matrizResultado[i][j] + "\\t");
+            }
+            System.out.println();
+        }
+    }
+}`
+            },
+            {
+                id: 9,
+                title: "Ejercicio 9: Carretera Plasencia-Malpartida y Puente Colgante",
+                desc: "Simulación de 4 coches donde los km 6-9 son un puente colgante sincronizado que solo permite 1 coche a la vez.",
+                code: `public class PuenteColgante {
+    public synchronized void cruzarPuente(String coche) {
+        for (int km = 6; km <= 9; km++) {
+            System.out.println("*** El " + coche + " está atravesando el km " + km + " del puente");
+            try { Thread.sleep(100); } catch (InterruptedException e) {}
+        }
+    }
+}
+
+public class Coche extends Thread {
+    private String nombre;
+    private PuenteColgante puente;
+
+    public Coche(String nombre, PuenteColgante puente) {
+        this.nombre = nombre;
+        this.puente = puente;
+    }
+
+    @Override
+    public void run() {
+        for (int km = 1; km <= 5; km++) {
+            System.out.println("El " + nombre + " va por el km" + km + " de la carretera");
+            try { Thread.sleep(50); } catch (InterruptedException e) {}
+        }
+        puente.cruzarPuente(nombre);
+        for (int km = 10; km <= 12; km++) {
+            System.out.println("El " + nombre + " va por el km" + km + " de la carretera");
+            try { Thread.sleep(50); } catch (InterruptedException e) {}
+        }
+    }
+
+    public static void main(String[] args) {
+        PuenteColgante puente = new PuenteColgante();
+        for (int i = 0; i < 4; i++) {
+            new Coche("coche-" + i, puente).start();
+        }
+    }
+}`
+            },
+            {
+                id: 10,
+                title: "Ejercicio 10: Múltiplos de Hilo Ordenados sin Intercalación",
+                desc: "Tres hilos con NAME '1', '2' y '3' imprimen sus 5 múltiplos utilizando un objeto monitor compartido.",
+                code: `public class ImpresorMultiplos {
+    public synchronized void imprimirTabla(String name) {
+        int x = Integer.parseInt(name);
+        System.out.println("Soy el hilo " + x + " los primeros múltiplos son:");
+        for (int i = 1; i <= 5; i++) {
+            System.out.println("Múltiplo[" + i + "]: " + (x * i));
+        }
+        System.out.println("Fin de los múltiplos de " + x);
+    }
+}
+
+public class HiloMultiplo extends Thread {
+    private ImpresorMultiplos impresor;
+
+    public HiloMultiplo(String name, ImpresorMultiplos impresor) {
+        super(name);
+        this.impresor = impresor;
+    }
+
+    @Override
+    public void run() {
+        impresor.imprimirTabla(getName());
+    }
+
+    public static void main(String[] args) {
+        ImpresorMultiplos monitor = new ImpresorMultiplos();
+        new HiloMultiplo("1", monitor).start();
+        new HiloMultiplo("2", monitor).start();
+        new HiloMultiplo("3", monitor).start();
+    }
+}`
+            },
+            {
+                id: 11,
+                title: "Ejercicio 11: Repartidores de Flyers Publicitarios",
+                desc: "Pila compartida de 1000 flyers repartida por 5 empleados en exclusión mutua con recuento final.",
+                code: `public class PilaFlyers {
+    private int flyers = 1000;
+
+    public synchronized boolean cogerFlyer() {
+        if (flyers > 0) {
+            flyers--;
+            return true;
+        }
+        return false;
+    }
+
+    public int getRestantes() { return flyers; }
+}
+
+public class Repartidor extends Thread {
+    private PilaFlyers pila;
+    private int repartidos = 0;
+
+    public Repartidor(String nombre, PilaFlyers pila) {
+        super(nombre);
+        this.pila = pila;
+    }
+
+    public int getRepartidos() { return repartidos; }
+
+    @Override
+    public void run() {
+        while (pila.cogerFlyer()) {
+            repartidos++;
+        }
+    }
+
+    public static void main(String[] args) throws InterruptedException {
+        PilaFlyers pila = new PilaFlyers();
+        Repartidor[] r = {
+            new Repartidor("Juan", pila), new Repartidor("Marta", pila),
+            new Repartidor("Pedro", pila), new Repartidor("María", pila),
+            new Repartidor("Lucía", pila)
+        };
+
+        for (Repartidor rep : r) rep.start();
+        for (Repartidor rep : r) rep.join();
+
+        int suma = 0;
+        for (Repartidor rep : r) {
+            System.out.println("El repartidor " + rep.getName() + " ha repartido " + rep.getRepartidos() + " flyers.");
+            suma += rep.getRepartidos();
+        }
+        System.out.println("La suma de repartidos entre todos es: " + suma);
+        System.out.println("Al final quedan " + pila.getRestantes() + " flyers.");
+    }
+}`
+            },
+            {
+                id: 12,
+                title: "Ejercicio 12: Productor con Múltiples Consumidores",
+                desc: "Adaptación del modelo Productor-Consumidor para dar soporte a varios consumidores sincronizados.",
+                code: `public class ColaMultiplesConsumidores {
+    // Código de Cola del Caso de Estudio (usando wait, notifyAll)
+    // Permite que un Productor abastezca a varios hilos Consumidores
+}`
+            },
+            {
+                id: 13,
+                title: "Ejercicio 13: TIC-TAC Alternado con Token / Testigo",
+                desc: "Garantizar la alternancia estricta TIC -> TAC -> TIC -> TAC utilizando un testigo sincronizado.",
+                code: `public class TokenReloj {
+    private boolean turnoTic = true;
+
+    public synchronized void pasoTic() {
+        while (!turnoTic) {
+            try { wait(); } catch (InterruptedException e) {}
+        }
+        System.out.println("TIC");
+        turnoTic = false;
+        notifyAll();
+    }
+
+    public synchronized void pasoTac() {
+        while (turnoTic) {
+            try { wait(); } catch (InterruptedException e) {}
+        }
+        System.out.println("TAC");
+        turnoTic = true;
+        notifyAll();
+    }
+}
+
+public class RelojSincronizado {
+    public static void main(String[] args) {
+        TokenReloj token = new TokenReloj();
+        
+        new Thread(() -> {
+            while (true) { token.pasoTic(); try { Thread.sleep(500); } catch (Exception e) {} }
+        }).start();
+
+        new Thread(() -> {
+            while (true) { token.pasoTac(); try { Thread.sleep(500); } catch (Exception e) {} }
+        }).start();
+    }
+}`
+            },
+            {
+                id: 14,
+                title: "Ejercicio 14: iReloj Triple Hilo (TIC -> TAC -> TOC)",
+                desc: "Cronometración de 3 hilos coordinados mediante wait(), notify() y notifyAll().",
+                code: `public class MonitorIReloj {
+    private int estado = 0; // 0: TIC, 1: TAC, 2: TOC
+
+    public synchronized void tic() {
+        while (estado != 0) { try { wait(); } catch (InterruptedException e) {} }
+        System.out.print("TIC -> ");
+        estado = 1;
+        notifyAll();
+    }
+
+    public synchronized void tac() {
+        while (estado != 1) { try { wait(); } catch (InterruptedException e) {} }
+        System.out.print("TAC -> ");
+        estado = 2;
+        notifyAll();
+    }
+
+    public synchronized void toc() {
+        while (estado != 2) { try { wait(); } catch (InterruptedException e) {} }
+        System.out.println("TOC");
+        estado = 0;
+        notifyAll();
+    }
+
+    public static void main(String[] args) {
+        MonitorIReloj reloj = new MonitorIReloj();
+        new Thread(() -> { while(true) reloj.tic(); }).start();
+        new Thread(() -> { while(true) reloj.tac(); }).start();
+        new Thread(() -> { while(true) reloj.toc(); }).start();
+    }
+}`
+            },
+            {
+                id: 15,
+                title: "Ejercicio 15: Pintor de Cadenas 'A' y 'B' Sincronizado",
+                desc: "Regla: Tantas 'A' seguidas como se desee; solo se pinta una 'B' tras una 'A'. Límite total: 20 letras.",
+                code: `public class ControladorLetras {
+    private int total = 0;
+    private boolean ultimaFueA = false;
+    private int numA = 0, numB = 0;
+
+    public synchronized boolean pintarA() {
+        if (total >= 20) return false;
+        System.out.print("A");
+        total++; numA++;
+        ultimaFueA = true;
+        notifyAll();
+        return true;
+    }
+
+    public synchronized boolean pintarB() {
+        while (!ultimaFueA && total < 20) {
+            try { wait(); } catch (InterruptedException e) {}
+        }
+        if (total >= 20) return false;
+        System.out.print("B");
+        total++; numB++;
+        ultimaFueA = false;
+        notifyAll();
+        return true;
+    }
+
+    public void mostrarTotales() {
+        System.out.println("\\nA's: " + numA + " | B's: " + numB);
+    }
+}`
+            },
+            {
+                id: 16,
+                title: "Ejercicio 16: Baño Único del IES Valle del Jerte",
+                desc: "Aforo máximo de 3 personas simultáneas en el baño. Simulación para 5 personas.",
+                code: `public class CuartoBano {
+    private int personasDentro = 0;
+
+    public synchronized void entrar(String persona) {
+        while (personasDentro >= 3) {
+            System.out.println("¡" + persona + " espera porque el baño está lleno!");
+            try { wait(); } catch (InterruptedException e) {}
+        }
+        personasDentro++;
+        System.out.println("Entra " + persona + " --- Hay " + personasDentro);
+    }
+
+    public synchronized void salir(String persona) {
+        personasDentro--;
+        System.out.println("Sale " + persona + " --- Hay " + personasDentro);
+        notifyAll();
+    }
+}`
+            },
+            {
+                id: 17,
+                title: "Ejercicio 17: Puente Levadizo Peatones vs Barco",
+                desc: "Los barcos tienen prioridad absoluta. Si un barco quiere pasar, no entran más peatones y se vacía el puente.",
+                code: `public class ControladorPuente {
+    private int peatones = 0;
+    private boolean barcoEsperando = false;
+
+    public synchronized void entrarPeaton(String nombre) {
+        while (barcoEsperando) {
+            try { wait(); } catch (InterruptedException e) {}
+        }
+        peatones++;
+        System.out.println("Entra " + nombre + " por el puente. Hay " + peatones);
+    }
+
+    public synchronized void salirPeaton(String nombre) {
+        peatones--;
+        System.out.println("=> Sale " + nombre + " del puente. Quedan " + peatones);
+        if (peatones == 0) notifyAll();
+    }
+
+    public synchronized void pasarBarco(String nombreBarco) {
+        barcoEsperando = true;
+        System.out.println("*************** BARCO QUIERE PASAR ****************");
+        while (peatones > 0) {
+            try { wait(); } catch (InterruptedException e) {}
+        }
+        System.out.println(nombreBarco + " está cruzando....<P>");
+        System.out.println("El barco " + nombreBarco + " salió del puente.");
+        barcoEsperando = false;
+        notifyAll();
+    }
+}`
+            },
+            {
+                id: 18,
+                title: "Ejercicio 18: Alumnos Fumadores de 2º DAM y el Estanquero",
+                desc: "Problema clásico de los fumadores (1=tabaco, 2=cerillas, 3=papel) y el estanquero que coloca 2 ingredientes en la repisa.",
+                code: `public class BanoEstanco {
+    // repisa: 0=vacía, 1=falta tabaco, 2=falta cerillas, 3=falta papel
+    private int repisa = 0;
+
+    public synchronized void ponerIngredientes(int faltaIngrediente) {
+        while (repisa != 0) {
+            try { wait(); } catch (InterruptedException e) {}
+        }
+        repisa = faltaIngrediente;
+        String txt = (faltaIngrediente == 1) ? "CERILLAS Y PAPEL" :
+                     (faltaIngrediente == 2) ? "TABACO Y PAPEL" : "TABACO Y CERILLAS";
+        System.out.println("=> El estanquero repone ingredientes: en la repisa hay " + txt);
+        notifyAll();
+    }
+
+    public synchronized void fumar(int idFumador) {
+        while (repisa != idFumador) {
+            try { wait(); } catch (InterruptedException e) {}
+        }
+        System.out.println("El fumador " + idFumador + " coge ingredientes y empieza a fumar");
+        repisa = 0;
+        notifyAll();
+    }
+}`
+            }
+        ];
+
+        // Quiz Questions Data
+        const quizQuestions = [
+            {
+                id: "q1",
+                type: "vf",
+                text: "1. Una clase no puede tener métodos sincronizados y no sincronizados a la vez.",
+                correct: "F",
+                exp: "Falso. Una clase puede combinar ambos tipos. Únicamente los métodos protegidos con synchronized estarán restringidos por el cerrojo."
+            },
+            {
+                id: "q2",
+                type: "vf",
+                text: "2. A un método no sincronizado pueden acceder muchos hilos al mismo tiempo.",
+                correct: "V",
+                exp: "Verdadero. Al no estar protegido por un cerrojo, la JVM permite el acceso concurrente de múltiples hilos."
+            },
+            {
+                id: "q3",
+                type: "vf",
+                text: "3. Si un hilo ejecuta el método wait(), pierde el bloqueo del monitor en el caso de que lo tenga.",
+                correct: "V",
+                exp: "Verdadero. wait() libera el cerrojo permitiendo que otros hilos entren en secciones sincronizadas."
+            },
+            {
+                id: "q4",
+                type: "vf",
+                text: "4. Si un hilo ejecuta el método sleep(), pierde el bloqueo del monitor en caso de que lo tenga.",
+                correct: "F",
+                exp: "Falso. sleep() pasa el hilo al estado Dormido pero MANTIENE los cerrojos adquiridos."
+            },
+            {
+                id: "q5",
+                type: "vf",
+                text: "5. Los métodos wait(), notify() y notifyAll() siempre deben ejecutarse dentro de bloques de código sincronizado.",
+                correct: "V",
+                exp: "Verdadero. Si se invocan fuera de un contexto synchronized, la JVM lanzará IllegalMonitorStateException."
+            },
+            {
+                id: "q6",
+                type: "fill",
+                text: "6. Completa el enunciado con las palabras correspondientes:",
+                sentence: "Si dos [h1] quieren ejecutar un método [h2] de una clase y los dos usan la misma [h3] de la clase para llamar al método, únicamente uno de los dos podrá [h4] el código en un momento determinado. El otro hilo deberá [h5] a que el primero termine.",
+                corrects: { h1: "hilos", h2: "sincronizado", h3: "instancia", h4: "ejecutar", h5: "esperar" },
+                options: ["hilos", "sincronizado", "instancia", "ejecutar", "esperar", "bloquear", "proceso"]
+            },
+            {
+                id: "q7",
+                type: "matching",
+                text: "7. Relaciona los conceptos de forma correcta:",
+                pairs: [
+                    { label: "1. Palabra reservada para sincronizar", correct: "synchronized" },
+                    { label: "2. Runnable es una...", correct: "interfaz" },
+                    { label: "3. yield() envía el hilo al estado de...", correct: "preparado" },
+                    { label: "4. Bloqueo cruzado entre dos hilos es un...", correct: "interbloqueo" },
+                    { label: "5. wait() envía al hilo al estado de...", correct: "en espera" }
+                ],
+                options: ["synchronized", "interfaz", "preparado", "interbloqueo", "en espera"]
+            }
+        ];
+
+        // Modo claro / modo oscuro
+        function applyTheme(theme) {
+            const isDark = theme === 'dark';
+            document.documentElement.classList.toggle('dark', isDark);
+
+            const icon = document.getElementById('theme-icon');
+            const label = document.getElementById('theme-label');
+            const button = document.getElementById('theme-toggle');
+
+            if (icon && label && button) {
+                icon.className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+                label.textContent = isDark ? 'Modo claro' : 'Modo oscuro';
+                button.setAttribute(
+                    'aria-label',
+                    isDark ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'
+                );
+            }
+        }
+
+        function toggleTheme() {
+            const nextTheme = document.documentElement.classList.contains('dark')
+                ? 'light'
+                : 'dark';
+            applyTheme(nextTheme);
+            try {
+                localStorage.setItem('psp-theme', nextTheme);
+            } catch (e) {
+                // La página sigue funcionando aunque el navegador no permita guardar la preferencia.
+            }
+        }
+
+        // Recuperar la preferencia guardada; por defecto se usa el modo claro.
+        try {
+            applyTheme(localStorage.getItem('psp-theme') || 'light');
+        } catch (e) {
+            applyTheme('light');
+        }
+
+        // Switch Tabs Logic
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.add('hidden'));
+
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+            document.getElementById(`content-${tabId}`).classList.remove('hidden');
+        }
+
+        // Render All Exercises
+        function renderExercises() {
+            const container = document.getElementById('exercises-container');
+            container.innerHTML = exercisesData.map(ex => `
+                <div class="exercise-card bg-white rounded-xl p-6 shadow-sm border border-slate-200 space-y-4" data-title="${ex.title.toLowerCase()} ${ex.desc.toLowerCase()}">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 border-b border-slate-100 pb-3">
+                        <h3 class="font-bold text-slate-900 text-base">${ex.title}</h3>
+                        <button onclick="copyCode('code-ex-${ex.id}', this)" class="text-xs bg-purple-50 hover:bg-purple-100 text-purple-700 px-3 py-1.5 rounded-md font-semibold flex items-center gap-1.5 transition-all">
+                            <i class="fa-regular fa-copy"></i> Copiar Código Java
+                        </button>
+                    </div>
+                    <p class="text-xs text-slate-600">${ex.desc}</p>
+                    <pre class="bg-slate-900 text-slate-100 p-4 rounded-xl overflow-x-auto"><code id="code-ex-${ex.id}">${escapeHtml(ex.code)}</code></pre>
+                </div>
+            `).join('');
+        }
+
+        function filterExercises() {
+            const query = document.getElementById('exercise-search').value.toLowerCase();
+            document.querySelectorAll('.exercise-card').forEach(card => {
+                const text = card.getAttribute('data-title');
+                card.style.display = text.includes(query) ? 'block' : 'none';
+            });
+        }
+
+        function escapeHtml(text) {
+            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+
+        // Copy Code Functionality
+        function copyCode(elementId, btn) {
+            const codeText = document.getElementById(elementId).innerText;
+            const textArea = document.createElement("textarea");
+            textArea.value = codeText;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand("copy");
+            document.body.removeChild(textArea);
+
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = `<i class="fa-solid fa-check text-emerald-600"></i> ¡Copiado!`;
+            btn.classList.add('bg-emerald-50', 'text-emerald-700');
+            setTimeout(() => {
+                btn.innerHTML = originalHTML;
+                btn.classList.remove('bg-emerald-50', 'text-emerald-700');
+            }, 2000);
+        }
+
+        // Render Quiz
+        function renderQuiz() {
+            const container = document.getElementById('quiz-container');
+            container.innerHTML = quizQuestions.map((q, idx) => {
+                if (q.type === 'vf') {
+                    return `
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-3" id="card-${q.id}">
+                            <p class="font-bold text-xs text-slate-800">${q.text}</p>
+                            <div class="flex gap-4 text-xs font-semibold">
+                                <label class="flex items-center gap-2 cursor-pointer">
+                                    <input type="radio" name="${q.id}" value="V" class="text-brand-600"> Verdadero (V)
+                                </label>
+                                <label class="flex items-center gap-2 cursor-pointer">
+                                    <input type="radio" name="${q.id}" value="F" class="text-brand-600"> Falso (F)
+                                </label>
+                            </div>
+                            <div class="exp-box hidden text-xs p-3 rounded-lg mt-2 bg-slate-50 border border-slate-200"></div>
+                        </div>
+                    `;
+                } else if (q.type === 'fill') {
+                    return `
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-3" id="card-${q.id}">
+                            <p class="font-bold text-xs text-slate-800">${q.text}</p>
+                            <p class="text-xs text-slate-700 leading-relaxed">
+                                Si dos 
+                                <select id="${q.id}-h1" class="bg-slate-100 border p-1 rounded font-semibold text-xs">${q.options.map(o => `<option value="${o}">${o}</option>`).join('')}</select>
+                                quieren ejecutar un método 
+                                <select id="${q.id}-h2" class="bg-slate-100 border p-1 rounded font-semibold text-xs">${q.options.map(o => `<option value="${o}">${o}</option>`).join('')}</select>
+                                de una clase y los dos usan la misma 
+                                <select id="${q.id}-h3" class="bg-slate-100 border p-1 rounded font-semibold text-xs">${q.options.map(o => `<option value="${o}">${o}</option>`).join('')}</select>
+                                para llamar al método, únicamente uno de los dos podrá 
+                                <select id="${q.id}-h4" class="bg-slate-100 border p-1 rounded font-semibold text-xs">${q.options.map(o => `<option value="${o}">${o}</option>`).join('')}</select>
+                                el código en un momento determinado. El otro hilo deberá 
+                                <select id="${q.id}-h5" class="bg-slate-100 border p-1 rounded font-semibold text-xs">${q.options.map(o => `<option value="${o}">${o}</option>`).join('')}</select>
+                                a que el primero termine.
+                            </p>
+                            <div class="exp-box hidden text-xs p-3 rounded-lg mt-2 bg-slate-50 border border-slate-200"></div>
+                        </div>
+                    `;
+                } else if (q.type === 'matching') {
+                    return `
+                        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-3" id="card-${q.id}">
+                            <p class="font-bold text-xs text-slate-800">${q.text}</p>
+                            <div class="space-y-2 text-xs">
+                                ${q.pairs.map((p, pIdx) => `
+                                    <div class="flex items-center justify-between gap-4 bg-slate-50 p-2 rounded border border-slate-200">
+                                        <span>${p.label}</span>
+                                        <select id="${q.id}-pair-${pIdx}" class="bg-white border p-1 rounded font-semibold">
+                                            ${q.options.map(o => `<option value="${o}">${o}</option>`).join('')}
+                                        </select>
+                                    </div>
+                                `).join('')}
+                            </div>
+                            <div class="exp-box hidden text-xs p-3 rounded-lg mt-2 bg-slate-50 border border-slate-200"></div>
+                        </div>
+                    `;
+                }
+            }).join('');
+        }
+
+        // Evaluate Quiz
+        function evaluateQuiz() {
+            let score = 0;
+            let total = 7;
+
+            // Q1 - Q5 (VF)
+            for (let i = 1; i <= 5; i++) {
+                const q = quizQuestions[i - 1];
+                const selected = document.querySelector(`input[name="${q.id}"]:checked`);
+                const card = document.getElementById(`card-${q.id}`);
+                const expBox = card.querySelector('.exp-box');
+                expBox.classList.remove('hidden');
+
+                if (selected && selected.value === q.correct) {
+                    score++;
+                    card.className = "bg-emerald-50 p-5 rounded-xl border border-emerald-300 shadow-sm space-y-3";
+                    expBox.innerHTML = `<span class="text-emerald-800 font-bold">¡Correcto!</span> ${q.exp}`;
+                } else {
+                    card.className = "bg-rose-50 p-5 rounded-xl border border-rose-300 shadow-sm space-y-3";
+                    expBox.innerHTML = `<span class="text-rose-800 font-bold">Incorrecto.</span> ${q.exp}`;
+                }
+            }
+
+            // Q6 (Fill)
+            const q6 = quizQuestions[5];
+            const card6 = document.getElementById(`card-${q6.id}`);
+            const expBox6 = card6.querySelector('.exp-box');
+            expBox6.classList.remove('hidden');
+            let q6Ok = true;
+            Object.keys(q6.corrects).forEach(key => {
+                if (document.getElementById(`${q6.id}-${key}`).value !== q6.corrects[key]) q6Ok = false;
+            });
+            if (q6Ok) {
+                score++;
+                card6.className = "bg-emerald-50 p-5 rounded-xl border border-emerald-300 shadow-sm space-y-3";
+                expBox6.innerHTML = `<span class="text-emerald-800 font-bold">¡Correcto!</span> Frase completada a la perfección.`;
+            } else {
+                card6.className = "bg-rose-50 p-5 rounded-xl border border-rose-300 shadow-sm space-y-3";
+                expBox6.innerHTML = `<span class="text-rose-800 font-bold">Incorrecto.</span> El orden correcto es: hilos, sincronizado, instancia, ejecutar, esperar.`;
+            }
+
+            // Q7 (Matching)
+            const q7 = quizQuestions[6];
+            const card7 = document.getElementById(`card-${q7.id}`);
+            const expBox7 = card7.querySelector('.exp-box');
+            expBox7.classList.remove('hidden');
+            let q7Ok = true;
+            q7.pairs.forEach((p, pIdx) => {
+                if (document.getElementById(`${q7.id}-pair-${pIdx}`).value !== p.correct) q7Ok = false;
+            });
+            if (q7Ok) {
+                score++;
+                card7.className = "bg-emerald-50 p-5 rounded-xl border border-emerald-300 shadow-sm space-y-3";
+                expBox7.innerHTML = `<span class="text-emerald-800 font-bold">¡Correcto!</span> Todas las parejas coinciden.`;
+            } else {
+                card7.className = "bg-rose-50 p-5 rounded-xl border border-rose-300 shadow-sm space-y-3";
+                expBox7.innerHTML = `<span class="text-rose-800 font-bold">Incorrecto.</span> Revisa los pares de conceptos.`;
+            }
+
+            // Show Score
+            document.getElementById('quiz-score').classList.remove('hidden');
+            document.getElementById('score-val').innerText = `${score} / ${total}`;
+        }
+
+        function resetQuiz() {
+            renderQuiz();
+            document.getElementById('quiz-score').classList.add('hidden');
+        }
+
+        // Initialize on Load
+        window.onload = function () {
+            renderExercises();
+            renderQuiz();
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Acceso a Datos - UT2: Manejo de Ficheros XML</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 1.8cm 1.5cm 2cm 1.5cm;
+      @bottom-right {
+        content: counter(page);
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        font-size: 9pt;
+        color: #64748b;
+      }
+      @bottom-left {
+        content: "Acceso a Datos - UT2: Ficheros XML y JSON";
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        font-size: 9pt;
+        color: #64748b;
+      }
+    }
+
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 10pt;
+      line-height: 1.5;
+      color: #1e293b;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1.doc-title {
+      font-size: 17pt;
+      font-weight: 700;
+      color: #0f172a;
+      text-align: center;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    p.doc-subtitle {
+      text-align: center;
+      font-size: 10.5pt;
+      color: #15803d;
+      font-weight: 600;
+      margin-top: 0;
+      margin-bottom: 25px;
+      border-bottom: 2px solid #16a34a;
+      padding-bottom: 10px;
+    }
+
+    .pdf-section {
+      background-color: #0f172a;
+      color: #ffffff;
+      padding: 8px 14px;
+      font-size: 11.5pt;
+      font-weight: 700;
+      border-radius: 4px;
+      margin-top: 25px;
+      margin-bottom: 15px;
+      page-break-after: avoid;
+    }
+
+    .page-break {
+      page-break-before: always;
+    }
+
+    h2 {
+      font-size: 11.5pt;
+      color: #15803d;
+      border-bottom: 1.5px solid #e2e8f0;
+      padding-bottom: 4px;
+      margin-top: 18px;
+      margin-bottom: 10px;
+      page-break-after: avoid;
+    }
+
+    h3 {
+      font-size: 10pt;
+      color: #334155;
+      margin-top: 12px;
+      margin-bottom: 6px;
+      page-break-after: avoid;
+    }
+
+    p {
+      margin: 0 0 8px 0;
+      text-align: justify;
+    }
+
+    ul {
+      margin: 0 0 10px 0;
+      padding-left: 20px;
+    }
+
+    li {
+      margin-bottom: 4px;
+    }
+
+    .diagram-box {
+      background-color: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-left: 4px solid #16a34a;
+      padding: 10px 14px;
+      margin: 10px 0;
+      font-size: 9pt;
+      border-radius: 2px;
+      page-break-inside: avoid;
+    }
+
+    .diagram-title {
+      font-weight: bold;
+      color: #0f172a;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      font-size: 8.5pt;
+      letter-spacing: 0.5px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+      font-size: 8.5pt;
+      page-break-inside: avoid;
+    }
+
+    th, td {
+      border: 1px solid #cbd5e1;
+      padding: 6px 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background-color: #f1f5f9;
+      color: #0f172a;
+      font-weight: 700;
+    }
+
+    tr:nth-child(even) td {
+      background-color: #f8fafc;
+    }
+
+    pre, code {
+      font-family: 'Consolas', 'Courier New', monospace;
+    }
+
+    pre {
+      background-color: #0f172a;
+      color: #f8fafc;
+      padding: 10px 12px;
+      border-radius: 4px;
+      font-size: 8.5pt;
+      line-height: 1.4;
+      overflow-x: auto;
+      margin: 10px 0;
+      page-break-inside: avoid;
+    }
+
+    p code, li code, td code {
+      background-color: #f1f5f9;
+      color: #15803d;
+      padding: 1px 4px;
+      border-radius: 3px;
+      font-size: 8.5pt;
+      border: 1px solid #e2e8f0;
+    }
+  </style>
+</head>
+<body>
+
+  <h1 class="doc-title">Acceso a Datos - Unidad de Trabajo 2</h1>
+  <p class="doc-subtitle">Manejo de Ficheros XML y JSON: Procesamiento con DOM - SAX - XStream - Gson</p>
+
+  <!-- SECCIÓN 1: INTRODUCCIÓN A XML -->
+  <div class="pdf-section">1. Trabajo con Ficheros XML</div>
+  <p><strong>Definición y Naturaleza:</strong> XML (<em>eXtensible Markup Language</em>) es un metalenguaje, es decir, un lenguaje pensado para la definición de lenguajes de marcado. Permite jerarquizar y describir semánticamente los contenidos dentro del propio documento.</p>
+  <p><strong>Organización de los Datos:</strong> Los ficheros XML organizan la información de manera secuencial y en estricto orden jerárquico (relaciones de árbol: padres, hijos, hermanos, ascendientes y descendientes).</p>
+
+  <p><strong>Principales Casos de Uso:</strong></p>
+  <ul>
+    <li>Alimentar y proporcionar datos de entrada a bases de datos relacionales o estructuradas.</li>
+    <li>Almacenar información en bases de datos especiales orientadas a documentos.</li>
+    <li>Ficheros de configuración de aplicaciones y entornos de despliegue.</li>
+    <li>Intercambio de datos e interoperabilidad en servicios web (como el protocolo SOAP).</li>
+    <li>Ejecución e invocación de comandos en servidores y sistemas remotos.</li>
+  </ul>
+
+  <p><strong>Procesadores XML (Parsers):</strong> Como XML no es un lenguaje Turing completo, requiere de un lenguaje de programación anfitrión (como Java) para dotarlo de lógica operativa. Para leer, analizar y modificar la estructura de estos archivos se emplea un <em>XML parser</em>, siendo los más utilizados <strong>DOM</strong> y <strong>SAX</strong>.</p>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Representación textual: Anatomía y Estructura Jerárquica de un Fichero XML</div>
+    <p><strong>Componentes sintácticos:</strong></p>
+    <ul>
+      <li><strong>Prólogo XML:</strong> Declaración inicial que define la versión de especificación empleada (ej.: <code>&lt;?xml version="1.0"?&gt;</code>).</li>
+      <li><strong>Elemento Raíz:</strong> Nodo contenedor único del que descienden todos los demás (ej.: <code>&lt;raíz&gt; ... &lt;/raíz&gt;</code>).</li>
+      <li><strong>Elementos Hijos y Contenido:</strong> Nodos anidados que contienen texto u otros subelementos (ej.: <code>&lt;elemento1&gt;</code>, <code>&lt;elemento2&gt;Contenido&lt;/elemento2&gt;</code>).</li>
+      <li><strong>Atributos:</strong> Pares clave-valor insertados en la etiqueta de apertura para aportar metadatos al nodo (ej.: <code>&lt;elemento11 atributo="contenido atributo"&gt;</code>).</li>
+    </ul>
+    <p><strong>Estructura en Árbol:</strong> Nodo raíz superior conectado a nodos intermedios ramificados que culminan en nodos hoja con el contenido textual o de datos.</p>
+  </div>
+
+  <!-- SECCIÓN 2: ACCESO CON DOM -->
+  <div class="pdf-section">2. Acceso a Ficheros con DOM (Document Object Model)</div>
+  <p><strong>Características Principales:</strong></p>
+  <ul>
+    <li>DOM es el estándar oficial definido por el <strong>W3C</strong> para trabajar con documentos estructurados XML.</li>
+    <li>Carga y almacena <strong>toda la estructura jerárquica del documento completa en la memoria principal (RAM)</strong> en forma de árbol de nodos navegable.</li>
+    <li>Permite navegación bidireccional, lectura aleatoria y modificación total en memoria, pero exige significativamente <strong>más memoria y tiempo de procesamiento</strong> que enfoques basados en eventos.</li>
+  </ul>
+
+  <p><strong>Paquetes de Java Empleados:</strong></p>
+  <ul>
+    <li><code>org.w3c.dom</code>: Contiene las interfaces centrales del modelo de nodos del JSDK.</li>
+    <li><code>javax.xml.parsers</code>: Provee las fábricas y constructores <code>DocumentBuilderFactory</code> y <code>DocumentBuilder</code> del API estándar de Java.</li>
+    <li><code>javax.xml.transform</code>: DOM por sí mismo no define cómo volcar un árbol a disco; este paquete permite transformar y escribir fuentes (<code>Source</code>) en destinos (<code>Result</code>), como ficheros o flujos.</li>
+  </ul>
+
+  <h3>Tabla: Interfaces Fundamentales de org.w3c.dom</h3>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 30%;">Interfaz</th>
+        <th style="width: 70%;">Función y Descripción</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>Document</code></td>
+        <td>Representa el documento XML al completo en memoria; actúa como fábrica para crear nuevos nodos y elementos.</td>
+      </tr>
+      <tr>
+        <td><code>Element</code></td>
+        <td>Representa de manera específica cada uno de los elementos o etiquetas del documento.</td>
+      </tr>
+      <tr>
+        <td><code>Node</code></td>
+        <td>Interfaz base de la jerarquía que representa cualquier tipo de nodo genérico del árbol.</td>
+      </tr>
+      <tr>
+        <td><code>NodeList</code></td>
+        <td>Colección indexada ordenada que almacena una lista con los nodos hijos obtenidos de una consulta.</td>
+      </tr>
+      <tr>
+        <td><code>Attr</code></td>
+        <td>Permite acceder y manipular los atributos declarados dentro de un nodo elemento.</td>
+      </tr>
+      <tr>
+        <td><code>Text</code></td>
+        <td>Representa la información textual o contenido de caracteres situado en el cuerpo de un elemento.</td>
+      </tr>
+      <tr>
+        <td><code>CharacterData</code></td>
+        <td>Subinterfaz que agrupa y gestiona los datos de tipo carácter presentes en el árbol.</td>
+      </tr>
+      <tr>
+        <td><code>DocumentType</code></td>
+        <td>Proporciona el acceso a la información y definiciones contenidas en la etiqueta de cabecera <code>&lt;!DOCTYPE&gt;</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- SECCIÓN 3: ESCRITURA Y LECTURA CON DOM -->
+  <div class="page-break"></div>
+  <div class="pdf-section">3. Programación con DOM: Escritura y Lectura en Java</div>
+
+  <h2>3.1. Escritura y Generación de Ficheros XML con DOM</h2>
+  <p>El procedimiento técnico para construir y persistir un XML con DOM requiere cuatro pasos fundamentales:</p>
+  <ul>
+    <li><strong>1. Inicialización del Documento:</strong> Crear una factoría <code>DocumentBuilderFactory</code>, instanciar el <code>DocumentBuilder</code> y obtener el <code>DOMImplementation</code> para crear un documento vacío asignando el elemento raíz y la versión XML.</li>
+    <li><strong>2. Construcción del Árbol de Elementos:</strong> Crear elementos con <code>createElement()</code>, nodos de texto con <code>createTextNode()</code> y ensamblarlos mediante llamadas sucesivas a <code>appendChild()</code>.</li>
+    <li><strong>3. Transformación y Serialización:</strong> Instanciar un <code>Transformer</code> desde <code>TransformerFactory</code>, vinculando una fuente DOM (<code>DOMSource</code>) con un destino de flujo o archivo (<code>StreamResult</code>).</li>
+    <li><strong>4. Salida por Pantalla:</strong> Es posible redirigir la misma transformación hacia la salida estándar usando <code>new StreamResult(System.out)</code>.</li>
+  </ul>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Código Ejemplo: Creación y Volcado de XML con DOM</div>
+    <pre><code>// 1. Instanciamos la factoría y el builder
+DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+DocumentBuilder builder = dbf.newDocumentBuilder();
+DOMImplementation implementacion = builder.getDOMImplementation();
+Document registroEmpleados = implementacion.createDocument(null, "empleados", null);
+registroEmpleados.setXmlVersion("1.0");
+
+// 2. Creación y adición de nodos de datos
+Element empleado = registroEmpleados.createElement("empleado");
+registroEmpleados.getDocumentElement().appendChild(empleado);
+
+Element id = registroEmpleados.createElement("id");
+Text textoId = registroEmpleados.createTextNode("01");
+id.appendChild(textoId);
+empleado.appendChild(id);
+
+Element nombre = registroEmpleados.createElement("nombre");
+Text textoNombre = registroEmpleados.createTextNode("Antonio");
+nombre.appendChild(textoNombre);
+empleado.appendChild(nombre);
+
+// 3. Volcado del documento a disco con Transformer
+Source origen = new DOMSource(registroEmpleados);
+Result resultado = new StreamResult(new File("Empleados.xml"));
+Transformer transformador = TransformerFactory.newInstance().newTransformer();
+transformador.transform(origen, resultado);</code></pre>
+  </div>
+
+  <h2>3.2. Lectura y Procesamiento de Ficheros XML con DOM</h2>
+  <p>Para procesar un documento existente mediante DOM se siguen las siguientes fases operativas:</p>
+  <ul>
+    <li><strong>Carga y Parseo:</strong> Se instancia el <code>DocumentBuilder</code> y se invoca el método <code>builder.parse(new File("archivo.xml"))</code>, cargando todo el árbol en memoria.</li>
+    <li><strong>Normalización:</strong> Se aplica <code>normalize()</code> sobre el elemento raíz para unir nodos de texto contiguos y asegurar una estructura uniforme de lectura.</li>
+    <li><strong>Extracción y Recorrido:</strong> Mediante <code>getElementsByTagName("etiqueta")</code> se extrae un objeto <code>NodeList</code>; se itera sobre la lista recuperando cada <code>Node</code> con <code>item(i)</code>, verificando que sea de tipo <code>Node.ELEMENT_NODE</code> para extraer los datos con <code>getTextContent()</code>.</li>
+  </ul>
+
+  <div class="diagram-box">
+  <div class="diagram-title">Código Ejemplo: Lectura y Procesamiento de Ficheros XML con DOM</div>
+  <pre><code>// 1. Instanciamos la factoría y el builder para cargar el parser
+DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+DocumentBuilder builder = dbf.newDocumentBuilder();
+
+// 2. Leemos y parseamos el documento XML desde disco
+Document registroEmpleados = builder.parse(new File("Empleados.xml"));
+
+// 3. Normalizamos el documento para estructurar el árbol y evitar fallos de lectura
+registroEmpleados.getDocumentElement().normalize();
+
+// Mostramos el nombre del elemento raíz
+System.out.println("El elemento raíz es: " + 
+    registroEmpleados.getDocumentElement().getNodeName());
+
+// 4. Obtenemos la lista con todos los nodos 'empleado'
+NodeList empleados = registroEmpleados.getElementsByTagName("empleado");
+System.out.println("Se han encontrado " + empleados.getLength() + " empleados");
+
+// 5. Recorremos el NodeList y procesamos cada elemento
+for (int i = 0; i &lt; empleados.getLength(); i++) {
+    Node emple = empleados.item(i);
+    
+    // Comprobamos que el nodo sea de tipo elemento (etiqueta)
+    if (emple.getNodeType() == Node.ELEMENT_NODE) {
+        Element empleado = (Element) emple;
+        
+        // Extraemos y mostramos el valor de cada subetiqueta
+        String id = empleado.getElementsByTagName("id").item(0).getTextContent();
+        String nombre = empleado.getElementsByTagName("nombre").item(0).getTextContent();
+        String apellido = empleado.getElementsByTagName("apellido").item(0).getTextContent();
+        
+        System.out.print("ID: " + id);
+        System.out.print("\tNombre: " + nombre);
+        System.out.println("\tApellido: " + apellido);
+    }
+}</code></pre>
+</div>
+
+  <!-- SECCIÓN 4: PARSER SAX -->
+  <div class="page-break"></div>
+  <div class="pdf-section">4. Acceso a Ficheros con SAX (Simple API for XML)</div>
+  <p><strong>Características Principales:</strong></p>
+  <ul>
+    <li>SAX es un API orientado a eventos que procesa el flujo del documento XML de <strong>forma secuencial línea a línea</strong>.</li>
+    <li>A diferencia de DOM, <strong>no carga todo el documento en memoria principal</strong>, reduciendo drásticamente el consumo de RAM.</li>
+    <li>Es la solución óptima para procesar <strong>archivos XML de gran volumen</strong> o cuando solo se precisa extraer información puntual.</li>
+    <li>Su API viene completamente integrada dentro del JRE estándar de Java.</li>
+    <li><em>Desventaja:</em> Es más complejo de programar y requiere diseñar manejadores de eventos personalizados con variables de estado, ya que no permite navegar hacia atrás en el árbol.</li>
+  </ul>
+
+  <h3>Eventos Principales durante el Parseo con SAX</h3>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 35%;">Método de Evento</th>
+        <th style="width: 65%;">Disparador / Momento en el que se ejecuta</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>startDocument()</code></td>
+        <td>Se dispara al detectar el inicio del documento XML (prólogo).</td>
+      </tr>
+      <tr>
+        <td><code>endDocument()</code></td>
+        <td>Se ejecuta una vez alcanzado el final absoluto del documento.</td>
+      </tr>
+      <tr>
+        <td><code>startElement(...)</code></td>
+        <td>Se activa cada vez que el analizador encuentra una etiqueta de apertura de un elemento.</td>
+      </tr>
+      <tr>
+        <td><code>endElement(...)</code></td>
+        <td>Se notifica cuando el procesador encuentra la etiqueta de cierre correspondiente.</td>
+      </tr>
+      <tr>
+        <td><code>characters(...)</code></td>
+        <td>Permite leer el contenido textual (caracteres) ubicado dentro de un elemento.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Manejadores Especializados en SAX (Interfaces de XMLReader)</div>
+    <ul>
+      <li><code>ContentHandler</code>: Recibe las notificaciones de los eventos sintácticos del contenido del documento.</li>
+      <li><code>DTDHandler</code>: Recoge los eventos vinculados al procesamiento de definiciones DTD.</li>
+      <li><code>ErrorHandler</code>: Define los métodos específicos para la captura y gestión de errores de validación sintáctica.</li>
+      <li><code>EntityResolver</code>: Se invoca cada vez que se detecta una referencia a una entidad externa.</li>
+      <li><code>DefaultHandler</code>: Clase base que implementa por defecto todas las interfaces anteriores; el desarrollador hereda de ella y solo sobrescribe los métodos necesarios.</li>
+    </ul>
+  </div>
+
+  <h2>4.1. Implementación de un Manejador Personalizado (AlumnosReader)</h2>
+  <div class="diagram-box">
+    <div class="diagram-title">Código Ejemplo: Implementación de un Manejador Personalizado (AlumnosReader)</div>
+    <pre><code>public class AlumnosReader extends DefaultHandler {
+    @Override
+    public void startDocument() throws SAXException {
+        System.out.println("Inicio del documento");
+    }
+
+    @Override
+    public void endDocument() throws SAXException {
+        System.out.println("Fin del documento");
+    }
+
+    @Override
+    public void startElement(String uri, String localName, String qName, Attributes attributes) {
+        System.out.printf("\t Inicio del Elemento: %s \n", qName);
+    }
+
+    @Override
+    public void endElement(String uri, String localName, String qName) {
+        System.out.printf("\t Final del Elemento: %s \n", qName);
+    }
+
+    @Override
+    public void characters(char[] ch, int start, int length) {
+        String car = new String(ch, start, length).replaceAll("[\t\n]", "");
+        if (!car.trim().isEmpty()) {
+            System.out.printf("\t Valor del Elemento: %s \n\n", car);
+        }
+    }
+}</code></pre>
+  </div>
+
+  <h2>4.2. Flujo de Ejecución Principal con SAX</h2>
+  <p>Los pasos para procesar un archivo con SAX se resumen en cuatro acciones secuenciales:</p>
+  <ol>
+    <li>Crear una factoría <code>SAXParserFactory</code> y obtener la instancia del parser <code>SAXParser</code>.</li>
+    <li>Obtener el analizador <code>XMLReader</code> e invocar <code>setContentHandler(new AlumnosReader())</code> vinculando el manejador.</li>
+    <li>Crear la fuente de datos mediante un objeto <code>InputSource</code> apuntando al archivo XML.</li>
+    <li>Lanzar el parseo secuencial mediante <code>procesadorxml.parse(xmlFile)</code> gestionando las excepciones correspondientes.</li>
+  </ol>
+
+<div class="diagram-box">
+<div class="diagram-title">Código Ejemplo: Flujo de Ejecución Principal con SAX</div>
+<pre><code>import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
+import java.io.IOException;
+
+public class ReaderSAX {
+    public static void main(String[] args) {
+        try {
+            // 1. Creamos la factoría y el parser SAX
+            SAXParserFactory parserFactory = SAXParserFactory.newInstance();
+            SAXParser parser = parserFactory.newSAXParser();
+            
+            // 2. Obtenemos el XMLReader y le asignamos nuestro manejador (ContentHandler)
+            XMLReader procesadorxml = parser.getXMLReader();
+            procesadorxml.setContentHandler(new AlumnosReader());
+            
+            // 3. Definimos la fuente de datos (el fichero XML a leer)
+            InputSource xmlFile = new InputSource("./alumnos.xml");
+            
+            // 4. Iniciamos el parseo secuencial del fichero
+            procesadorxml.parse(xmlFile);
+            
+        } catch (SAXException | IOException e) {
+            e.printStackTrace();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        }
+    }
+}
+</code></pre>
+</div>
+
+  <!-- SECCIÓN 5: COMPARATIVA Y CONCLUSIÓN -->
+  <div class="pdf-section">5. Cuadro Comparativo: DOM vs. SAX</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 25%;">Criterio de Análisis</th>
+        <th style="width: 37%;">Modelo DOM (Tree-Based)</th>
+        <th style="width: 38%;">Modelo SAX (Event-Driven)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Modelo de Datos</strong></td>
+        <td>Árbol en memoria (jerarquía completa de nodos).</td>
+        <td>Flujo de eventos unidireccional y secuencial.</td>
+      </tr>
+      <tr>
+        <td><strong>Consumo de Memoria</strong></td>
+        <td>Alto; proporcional al tamaño total del archivo.</td>
+        <td>Muy bajo y constante; no almacena el árbol en RAM.</td>
+      </tr>
+      <tr>
+        <td><strong>Velocidad y Acceso</strong></td>
+        <td>Acceso aleatorio bidireccional ágil una vez cargado.</td>
+        <td>Lectura secuencial rápida en un solo paso hacia adelante.</td>
+      </tr>
+      <tr>
+        <td><strong>Capacidad de Edición</strong></td>
+        <td>Permite crear, modificar, reordenar y eliminar nodos.</td>
+        <td>Solo lectura; no permite modificar el XML directamente.</td>
+      </tr>
+      <tr>
+        <td><strong>Escenario Idóneo</strong></td>
+        <td>Documentos pequeños o medianos que requieren edición.</td>
+        <td>Documentos XML masivos o consultas rápidas de datos.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <br>
+
+  <!--TEMA02.1-->
+  <div class="page-break"></div>
+  <p class="doc-subtitle">Manejo de Ficheros XML con Objetos (Librería XStream)</p>
+
+  <!-- SECCIÓN 1: CONFIGURACIÓN XSTREAM -->
+  <div class="pdf-section">1. Configuración e Instalación de XStream</div>
+  
+  <p>Para serializar objetos Java a formato XML de forma sencilla, se emplea la librería externa <strong>XStream</strong>.</p>
+  
+  <ul>
+    <li><strong>Descarga:</strong> Es necesario descargar la distribución binaria (ej. <code>xstream-distribution-1.4.20-bin.zip</code>) desde <code>http://x-stream.github.io/download.html</code>.</li>
+    <li><strong>Librerías requeridas (JARs):</strong> Se deben extraer e importar al proyecto dos archivos principales:
+      <ul>
+        <li><code>xstream-1.4.20.jar</code> (ubicado en la carpeta <code>lib</code>).</li>
+        <li><code>kxml2-min-2.3.0.jar</code> (analizador sintáctico ligero tipo pull, ubicado también en <code>lib/xstream</code>).</li>
+      </ul>
+    </li>
+    <li><strong>Configuración en el IDE:</strong> Añadir estos JARs al <em>Build Path</em> del proyecto (en Eclipse: <code>Project Properties &rarr; Java Build Path &rarr; Libraries &rarr; Classpath &rarr; Add JARs</code>).</li>
+  </ul>
+
+  <!-- SECCIÓN 2: PREPARACIÓN DE LAS CLASES XSTREAM -->
+  <div class="pdf-section">2. Preparación de Clases de Datos</div>
+  <p>Para generar un XML jerárquico a partir de múltiples objetos, se define una clase contenedora que agrupe una lista de instancias del modelo base (en este caso, <code>Contacto</code>).</p>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Código: ListaContactos.java</div>
+    <pre><code>import java.util.ArrayList;
+import java.util.List;
+
+public class ListaContactos {
+    private List&lt;Contacto&gt; lista = new ArrayList&lt;Contacto&gt;();
+
+    public ListaContactos() { }
+
+    public void add(Contacto con) {
+        lista.add(con);
+    }
+
+    public List&lt;Contacto&gt; getListaContactos() {
+        return lista;
+    }
+}</code></pre>
+  </div>
+
+  <!-- SECCIÓN 3: SERIALIZACIÓN XSTREAM -->
+  <div class="page-break"></div>
+  <div class="pdf-section">3. Serialización: Convertir Objeto a XML</div>
+
+  <h2>3.1. Inicialización y Configuración de Etiquetas</h2>
+  <p>Para crear el motor conversor y formatear el XML resultante se instancian clases del paquete <code>com.thoughtworks.xstream.*</code>.</p>
+  
+  <ul>
+    <li><strong>Instanciación:</strong> <code>XStream xstream = new XStream(new DomDriver("UTF-8"));</code> (Fuerza el uso de DOM con codificación UTF-8). Si se usa <code>new XStream()</code> sin parámetros, usará el parser por defecto (KXML).</li>
+    <li><strong>Alias de Etiquetas:</strong> Cambia el nombre por defecto de los nodos XML (que coinciden con el nombre de la clase) usando <code>alias()</code>:<br> <code>xstream.alias("DatosContacto", Contacto.class);</code></li>
+    <li><strong>Ocultar Colecciones Implícitas:</strong> Evita que aparezca una etiqueta extra para envolver el atributo lista de la clase contenedora:<br> <code>xstream.addImplicitCollection(ListaContactos.class, "lista");</code></li>
+    <li><strong>Omitir Campos:</strong> Excluye atributos específicos para que no se vuelquen al XML:<br> <code>xstream.omitField(Contacto.class, "telefono");</code></li>
+    <li><strong>Generación del Archivo:</strong> <code>xstream.toXML(objeto, OutputStream)</code>.</li>
+  </ul>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Código: Extracción desde Binario y Volcado a XML</div>
+    <pre><code>public static void CrearFicheroXML() {
+    File fichero = new File("contactos.dat");
+        
+        if (!fichero.exists()) {
+            System.out.println("No existe el fichero " + fichero.getName());
+        } else {
+            ListaContactos listaContactos = new ListaContactos();
+            ObjectInputStream ois = null;
+            
+            try {
+                FileInputStream fis = new FileInputStream(fichero);
+                ois = new ObjectInputStream(fis);
+                
+                System.out.println("Se esta leyendo el fichero...");
+                
+                while (true) {
+                    Contacto c = (Contacto) ois.readObject();
+                    listaContactos.add(c);
+                }
+            } catch (EOFException e) {
+            } catch (FileNotFoundException e) {
+                System.out.println("ERROR-1");
+            } catch (IOException e) {
+                System.out.println("ERROR-2");
+            } catch (ClassNotFoundException e) {
+                System.out.println("ERROR-3");
+            } finally {
+                try {
+                    if (ois != null) {
+                        ois.close();
+                    }
+                } catch (IOException e) {
+                    System.out.println("Error al cerrar el flujo");
+                }
+            }
+            
+            try {
+                XStream xstream = new XStream(new DomDriver("UTF-8"));
+        
+                xstream.alias("DatosContacto", Contacto.class);
+                xstream.alias("Contactos", ListaContactos.class);
+        
+                xstream.addImplicitCollection(ListaContactos.class, "listaCont");
+                xstream.omitField(Contacto.class, "numeroTelefono");
+        
+                xstream.toXML(listaContactos, new FileOutputStream("Contactos.xml"));
+            } catch (IOException e) {
+                System.out.println("ERROR-1");
+            }
+        }
+    }</code></pre>
+  </div>
+
+  <!-- SECCIÓN 4: DESERIALIZACIÓN XSTREAM -->
+  <div class="page-break"></div>
+  <div class="pdf-section">4. Deserialización: Leer de XML a Objeto</div>
+
+  <p>Para recuperar los datos, se requiere instanciar XStream y aplicarle <strong>la misma configuración de alias y colecciones implícitas</strong> que se usó al escribir. La lectura en sí se realiza mediante el método <code>fromXML()</code>.</p>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Código: Lectura del Archivo XML</div>
+    <pre><code>public static void LeerXML() {
+    XStream xstream = new XStream(new DomDriver("UTF-8"));
+        
+        xstream.addPermission(AnyTypePermission.ANY);
+        xstream.alias("DatosContacto", Contacto.class);
+        xstream.alias("Contactos", ListaContactos.class);
+        xstream.addImplicitCollection(ListaContactos.class, "listaCont");
+        
+        try {
+            ListaContactos contactos = (ListaContactos) xstream.fromXML(new FileInputStream("Contactos.xml"));
+            System.out.println("Numeros de contactos: " + contactos.getListaContactos().size());
+            List<Contacto> listaContactos = contactos.getListaContactos();
+            
+            ListIterator<Contacto> iterator = listaContactos.listIterator();
+            while (iterator.hasNext()) {
+                Contacto c = (Contacto) iterator.next();
+                System.out.println("Nombre: " + c.getNombre() + ", apellidos: " 
+                + c.getApellidos() + ", email: " + c.getEmail());
+            }
+            System.out.println("Fin del listado");
+        } catch (FileNotFoundException e) {
+            System.out.println("ERROR-1");
+        }
+    }</code></pre>
+  </div>
+  
+  <!-- SECCIÓN JSON -->
+  <div class="page-break"></div>
+  <p class="doc-subtitle">Manejo de Objetos JSON (Librería GSON)</p>
+
+  <div class="pdf-section">1. Introducción a JSON y GSON</div>
+  <p><strong>JSON (JavaScript Object Notation):</strong> Es un estándar abierto basado en texto plano diseñado para codificar información bajo un formato simple de atributo-valor. JSON es una alternativa altamente eficiente a XML y destaca fundamentalmente por su gran simplicidad para interactuar con arrays y objetos de manera directa.</p>
+  <p><strong>Librería GSON:</strong> Google Gson es la librería open-source utilizada de forma general para realizar procesos de serialización y deserialización bidireccional entre objetos nativos de Java y su representación equivalente en JSON. Es necesario descargar su fichero JAR (por ejemplo, la versión 2.10.1) e incluirlo directamente en el <em>Java Build Path</em> (librerías externas) de nuestro proyecto.</p>
+
+  <div class="pdf-section">2. Serialización: De Objeto Java a JSON</div>
+  <p>Para realizar la conversión directa de un objeto Java hacia formato JSON, basta con instanciar un objeto de la clase <code>Gson</code> y ejecutar su método <code>toJson()</code>. Sin embargo, esta salida genera todo el texto condensado en una sola línea sin espacios. Para obtener una salida estética y legible con sangrías e indentaciones correctas, se debe habilitar el <em>Pretty Printing</em> utilizando <code>GsonBuilder</code>.</p>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Código: Serialización Básica y Pretty Printing</div>
+    <pre><code>import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+// Serialización simple en una línea
+Gson gson = new Gson();
+System.out.println(gson.toJson(empleado));
+
+// Serialización formateada estéticamente (Pretty Printing)
+Gson prettyGson = new GsonBuilder().setPrettyPrinting().create();
+System.out.println(prettyGson.toJson(empleado));</code></pre>
+  </div>
+
+  <p><strong>Personalización de Etiquetas:</strong> Si se desea forzar un nombre concreto para el atributo dentro del documento JSON resultante, diferente al de la variable en Java, se puede utilizar la anotación <code>@SerializedName("nuevo_nombre")</code> directamente sobre el campo de la clase.</p>
+
+  <div class="pdf-section">3. Deserialización: De JSON a Objeto Java</div>
+  <p>El proceso inverso emplea el método <code>fromJson(String, Clase.class)</code>, el cual toma como entrada la cadena JSON en bruto y la clase objetivo, mapeando automáticamente los valores siempre que los atributos del JSON coincidan con los de la clase base.</p>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Código: Deserialización Estándar de un Objeto</div>
+    <pre><code>import com.google.gson.Gson;
+
+String json = "{\"nombre\":\"Pepe\", \"apellidos\":\"Lopez\", \"edad\":20}";
+Gson gson = new Gson();
+// El texto JSON se mapea y convierte automáticamente a una instancia de Empleado
+Empleado emp1 = gson.fromJson(json, Empleado.class);
+System.out.println(emp1.toString());</code></pre>
+  </div>
+
+  <div class="pdf-section">4. Manejo de Colecciones y Múltiples Objetos</div>
+  <p><strong>Serializar Listas:</strong> Se puede inyectar directamente un <code>ArrayList</code> al método <code>toJson()</code>, y Gson se encargará de generar un array JSON (representado entre corchetes <code>[]</code>) iterando sobre sus elementos.</p>
+  <p><strong>Deserializar Listas:</strong> Para leer un array JSON de vuelta a una colección estructurada (<code>List&lt;Empleado&gt;</code>), Gson requiere conocer específicamente el tipo parametrizado genérico que va a contener la lista. Para lograr esto, se hace uso de la clase <code>TypeToken</code>.</p>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Código: Deserializar dinámicamente un Array JSON a una Lista de Objetos</div>
+    <pre><code>import com.google.gson.reflect.TypeToken;
+import java.lang.reflect.Type;
+import java.util.List;
+
+// 1. Obtener y asegurar la estructura del Type de la lista utilizando TypeToken
+Type tipoListaEmpleados = new TypeToken&lt;List&lt;Empleado&gt;&gt;() {}.getType();
+
+// 2. Ejecutar la deserialización pasando el Type como segundo parámetro
+List&lt;Empleado&gt; empleados = gson.fromJson(jsonArrayString, tipoListaEmpleados);
+
+// 3. Iterar sobre la colección resultante
+for (Empleado emp : empleados) {
+    System.out.println(emp.toString());
+}</code></pre>
+<br>
+<div class="diagram-title">Código: Serializar dinámicamente un ArrayList de Objetos a JSON</div>
+    <pre><code>public static void ArrayToJSON() {
+ArrayList&lt;Empleado&gt; empleados = new ArrayList&lt;Empleado&gt;();
+
+Empleado emple1 = new Empleado("Pepe", "Lopez", 20, Arrays.asList("Gerente", "Jefe de zona"));
+Empleado emple2 = new Empleado("Maria", "Gutierrez", 30, Arrays.asList("Jefe de RR.HH"));
+
+empleados.add(emple1);
+empleados.add(emple2);
+
+Gson prettyGson = new GsonBuilder().setPrettyPrinting().create();
+System.out.println(prettyGson.toJson(empleados));
+}</code></pre>
+  </div>
+
+  <!-- SECCIÓN 5: LECTURA Y ESCRITURA DE FICHEROS JSON (STREAMING) -->
+  <div class="page-break"></div>
+  <p class="doc-subtitle">Lectura y Escritura de Ficheros JSON mediante Flujos (Streaming)</p>
+
+  <div class="page-break"></div>
+  <div class="pdf-section">1. Lectura con JsonReader</div>
+  <p>Se utiliza la clase <code>JsonReader</code> envolviendo un flujo de entrada (por ejemplo, <code>FileInputStream</code> con codificación UTF-8). Permite recorrer la estructura del documento de forma secuencial, abriendo arrays con <code>beginArray()</code> y procesando cada objeto de forma iterativa comprobando el avance con <code>hasNext()</code>.</p>
+    
+  <div class="diagram-box">
+    <div class="diagram-title">Código: Lectura de fichero JSON (JsonReader)</div>
+    <pre><code>public static void JSONReaderFile() {
+    Gson gson = new Gson();
+    try {
+        InputStream fis = new FileInputStream("empleados.json");
+        JsonReader reader = new JsonReader(new InputStreamReader(fis, "UTF-8"));
+        
+        // Iniciamos la lectura del array principal
+        reader.beginArray();
+        
+        // Iteramos mientras haya elementos en el array
+        while (reader.hasNext()) {
+            // Deserializamos el elemento actual directamente al objeto Empleado
+            Empleado emp = gson.fromJson(reader, Empleado.class);
+            System.out.println(emp.toString());
+        }
+        
+        reader.close();
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}</code></pre>
+  </div>
+
+  <div class="page-break"></div>
+  <div class="pdf-section">2. Escritura con JsonWriter</div>
+  <p>La clase <code>JsonWriter</code> permite construir un fichero JSON paso a paso escribiendo secuencialmente en el flujo de salida. Se moldea la estructura controlando las aperturas y cierres mediante llamadas explícitas a los métodos <code>beginArray()</code>, <code>beginObject()</code>, <code>name()</code> y <code>value()</code>.</p>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Código: Escritura de fichero JSON (JsonWriter)</div>
+    <pre><code>public static void JSONWriterFile(ArrayList&lt;Empleado&gt; empleados) {
+    try {
+        JsonWriter writer = new JsonWriter(new FileWriter("workers.json"));
+        
+        writer.beginArray(); // Inicia el array principal de empleados
+        
+        for (Empleado emp : empleados) {
+            writer.beginObject(); // Inicia un objeto empleado
+            
+            writer.name("nombre").value(emp.getNombre());
+            writer.name("apellidos").value(emp.getApellidos());
+            writer.name("edad").value(emp.getEdad());
+            
+            // Sub-array para la lista de puestos del empleado
+            writer.name("puestos");
+            writer.beginArray(); 
+            for (String puesto : emp.getPuestos()) {
+                writer.value(puesto);
+            }
+            writer.endArray(); // Fin del array de puestos
+            
+            writer.endObject(); // Fin del objeto empleado
+        }
+        
+        writer.endArray(); // Fin del array principal de empleados
+        writer.close();
+        
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}</code></pre>
+  </div>
+
+</body>
+</html>

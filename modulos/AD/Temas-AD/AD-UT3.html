@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Acceso a Datos - UT3: Manejo de Conectores (Bases de Datos Relacionales)</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 1.8cm 1.5cm 2cm 1.5cm;
+      @bottom-right {
+        content: counter(page);
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        font-size: 9pt;
+        color: #64748b;
+      }
+      @bottom-left {
+        content: "Acceso a Datos - UT3: Conectores, DML, DDL y Procedimientos";
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        font-size: 9pt;
+        color: #64748b;
+      }
+    }
+
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 10pt;
+      line-height: 1.5;
+      color: #1e293b;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1.doc-title {
+      font-size: 17pt;
+      font-weight: 700;
+      color: #0f172a;
+      text-align: center;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    p.doc-subtitle {
+      text-align: center;
+      font-size: 10.5pt;
+      color: #15803d;
+      font-weight: 600;
+      margin-top: 0;
+      margin-bottom: 25px;
+      border-bottom: 2px solid #16a34a;
+      padding-bottom: 10px;
+    }
+
+    .pdf-section {
+      background-color: #0f172a;
+      color: #ffffff;
+      padding: 8px 14px;
+      font-size: 11.5pt;
+      font-weight: 700;
+      border-radius: 4px;
+      margin-top: 25px;
+      margin-bottom: 15px;
+      page-break-after: avoid;
+    }
+
+    .page-break {
+      page-break-before: always;
+    }
+
+    h2 {
+      font-size: 11.5pt;
+      color: #15803d;
+      border-bottom: 1.5px solid #e2e8f0;
+      padding-bottom: 4px;
+      margin-top: 18px;
+      margin-bottom: 10px;
+      page-break-after: avoid;
+    }
+
+    h3 {
+      font-size: 10pt;
+      color: #334155;
+      margin-top: 12px;
+      margin-bottom: 6px;
+      page-break-after: avoid;
+    }
+
+    p {
+      margin: 0 0 8px 0;
+      text-align: justify;
+    }
+
+    ul, ol {
+      margin: 0 0 10px 0;
+      padding-left: 20px;
+    }
+
+    li {
+      margin-bottom: 4px;
+    }
+
+    .diagram-box {
+      background-color: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-left: 4px solid #16a34a;
+      padding: 10px 14px;
+      margin: 10px 0;
+      font-size: 9pt;
+      border-radius: 2px;
+      page-break-inside: avoid;
+    }
+
+    .diagram-title {
+      font-weight: bold;
+      color: #0f172a;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      font-size: 8.5pt;
+      letter-spacing: 0.5px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+      font-size: 8.5pt;
+      page-break-inside: avoid;
+    }
+
+    th, td {
+      border: 1px solid #cbd5e1;
+      padding: 6px 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background-color: #f1f5f9;
+      color: #0f172a;
+      font-weight: 700;
+    }
+
+    tr:nth-child(even) td {
+      background-color: #f8fafc;
+    }
+
+    pre, code {
+      font-family: 'Consolas', 'Courier New', monospace;
+    }
+
+    pre {
+      background-color: #0f172a;
+      color: #f8fafc;
+      padding: 10px 12px;
+      border-radius: 4px;
+      font-size: 8.5pt;
+      line-height: 1.4;
+      overflow-x: auto;
+      margin: 10px 0;
+      page-break-inside: avoid;
+    }
+
+    p code, li code, td code {
+      background-color: #f1f5f9;
+      color: #15803d;
+      padding: 1px 4px;
+      border-radius: 3px;
+      font-size: 8.5pt;
+      border: 1px solid #e2e8f0;
+    }
+  </style>
+</head>
+<body>
+
+  <h1 class="doc-title">Acceso a Datos - Unidad de Trabajo 3</h1>
+  <p class="doc-subtitle">Manejo de Conectores: Bases de Datos Relacionales y Arquitectura JDBC</p>
+
+  <!-- SECCIÓN 1: INTRODUCCIÓN Y DESFASE OBJETO-RELACIONAL -->
+  <div class="pdf-section">1. Introducción y el Desfase Objeto-Relacional</div>
+  <p><strong>Acceso a Datos:</strong> Es el proceso de recuperación o manipulación de datos procedentes de orígenes locales o remotos, tales como bases de datos relacionales, hojas de cálculo, ficheros de texto o servicios web.</p>
+  <p><strong>El Desfase Objeto-Relacional (Object-Relational Impedance Mismatch):</strong> Aunque las bases de datos relacionales dominan el mercado por su rendimiento y flexibilidad, el paradigma imperante de desarrollo de software es la <strong>Programación Orientada a Objetos (POO)</strong>. Dado que las bases de datos relacionales no fueron concebidas para almacenar objetos directamente, surge una disparidad estructural que exige un esfuerzo de programación adicional para adaptar las tablas relacionales a las clases y objetos.</p>
+
+  <!-- SECCIÓN 2: CONECTORES Y DRIVERS -->
+  <div class="pdf-section">2. Concepto de Conector y Arquitectura de Drivers</div>
+  <p>Los Sistemas Gestores de Bases de Datos (SGBD) operan mediante lenguajes especializados como SQL, mientras que las aplicaciones cliente se programan en lenguajes de propósito general como Java. Los <strong>conectores</strong> proporcionan una API común que permite a estos programas comunicarse de forma transparente con los SGBD.</p>
+  <p>El conector define una <strong>arquitectura</strong> donde la interfaz es unificada, mientras que los <strong>drivers</strong> se encargan de gestionar las particularidades sintácticas y de red de cada motor específico.</p>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Representación conceptual: Arquitectura de Conectores y Drivers</div>
+    <pre><code>[ Programa de Aplicación (Java) ]
+              │
+              ▼
+       [ Conector (API) ]
+              │
+    ┌─────────┼─────────┐
+    ▼         ▼         ▼
+[Driver 1] [Driver 2] [Driver 3]
+    │         │         │
+    ▼         ▼         ▼
+ [SGBD 1]  [SGBD 2]  [SGBD 3]</code></pre>
+  </div>
+
+  <p><strong>Principales Arquitecturas de Conexión:</strong></p>
+  <ul>
+    <li><strong>ODBC (Open Database Connectivity):</strong> Especificación escrita en C para conectar aplicaciones con motores SQL compatibles.</li>
+    <li><strong>JDBC (Java Database Connectivity):</strong> El estándar por antonomasia de Java para enlazar programas con bases de datos relacionales.</li>
+    <li>Otras arquitecturas históricas/propietarias: OLE-DB y ADO.</li>
+  </ul>
+
+  <!-- SECCIÓN 3: MODELOS Y TIPOS DE DRIVERS -->
+  <div class="page-break"></div>
+  <div class="pdf-section">3. Modelos de Acceso y Tipos de Drivers en JDBC</div>
+
+  <h2>3.1. Modelos de Acceso</h2>
+  <ul>
+    <li><strong>Modelo de dos capas (Cliente/Servidor):</strong> La aplicación Java se comunica directamente con la base de datos a través del driver JDBC residente en su mismo entorno de ejecución. El SGBD procesa las sentencias SQL y devuelve los resultados directamente.</li>
+    <li><strong>Modelo de tres capas:</strong> Las peticiones de la aplicación cliente se envían a un servidor de aplicaciones o capa intermedia encargada de gestionar los comandos SQL contra el motor de la base de datos y recolectar los datos.</li>
+  </ul>
+
+  <h2>3.2. Clasificación de Drivers JDBC</h2>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 30%;">Tipo de Driver</th>
+        <th style="width: 70%;">Descripción y Mecanismo</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Tipo 1: Puente JDBC-ODBC</strong></td>
+        <td>Permite el acceso a SGBD JDBC mediante el protocolo ODBC.</td>
+      </tr>
+      <tr>
+        <td><strong>Tipo 2: API Nativa</strong></td>
+        <td>Controlador escrito parcialmente en Java y en código nativo de bases de datos que traduce las llamadas de la API a llamadas del SGBD.</td>
+      </tr>
+      <tr>
+        <td><strong>Tipo 3: Protocolo de Red</strong></td>
+        <td>Controlador de Java puro que utiliza un protocolo de red independiente para comunicarse con un servidor intermedio.</td>
+      </tr>
+      <tr>
+        <td><strong>Tipo 4: Thin Driver (Protocolo Nativo)</strong></td>
+        <td>Controlador de Java puro con protocolo nativo que traduce llamadas de la API directamente al protocolo de red del SGBD.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- SECCIÓN 4: API JAVA.SQL -->
+  <div class="pdf-section">4. Interfaces y Clases Fundamentales de java.sql</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 28%;">Clase / Interfaz</th>
+        <th style="width: 72%;">Propósito dentro de JDBC</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>Driver</code></td>
+        <td>Permite conectarse a una base de datos.</td>
+      </tr>
+      <tr>
+        <td><code>DriverManager</code></td>
+        <td>Permite gestionar los Driver instalados en el sistema.</td>
+      </tr>
+      <tr>
+        <td><code>DriverPropertyInfo</code></td>
+        <td>Proporciona información del driver.</td>
+      </tr>
+      <tr>
+        <td><code>Connection</code></td>
+        <td>Representa una conexión a la base de datos.</td>
+      </tr>
+      <tr>
+        <td><code>Statement</code></td>
+        <td>Permite ejecutar sentencias SQL sin parámetros.</td>
+      </tr>
+      <tr>
+        <td><code>PreparedStatement</code></td>
+        <td>Permite ejecutar sentencias SQL con parámetros.</td>
+      </tr>
+      <tr>
+        <td><code>CallableStatement</code></td>
+        <td>Permite ejecutar sentencias SQL con parámetros de entrada y salida.</td>
+      </tr>
+      <tr>
+        <td><code>ResultSet</code></td>
+        <td>Contiene el resultado devuelto por las consultas.</td>
+      </tr>
+      <tr>
+        <td><code>DatabaseMetaData</code></td>
+        <td>Proporciona información general sobre la base de datos.</td>
+      </tr>
+      <tr>
+        <td><code>ResultSetMetaData</code></td>
+        <td>Permite obtener información estructural sobre un <code>ResultSet</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- SECCIÓN 5: FLUJO DE TRABAJO Y CÓDIGO EJEMPLO -->
+  <div class="page-break"></div>
+  <div class="pdf-section">5. Ciclo de Vida y Ejecución de Consultas JDBC</div>
+  <p>El ciclo de vida estándar de una operación JDBC consta de las siguientes etapas secuenciales:</p>
+  <ol>
+    <li>Importar las clases necesarias del paquete <code>java.sql</code>.</li>
+    <li>Cargar el Driver JDBC en memoria mediante <code>Class.forName()</code>.</li>
+    <li>Establecer el objeto <code>Connection</code> a través de <code>DriverManager.getConnection()</code>.</li>
+    <li>Crear un objeto de ejecución <code>Statement</code> desde la conexión activa.</li>
+    <li>Ejecutar la consulta SQL llamando a <code>sentencia.executeQuery()</code>.</li>
+    <li>Recuperar y procesar las tuplas del <code>ResultSet</code> mediante el cursor secuencial <code>next()</code> y métodos <code>getXXX()</code>.</li>
+    <li>Liberar los recursos explícitamente cerrando <code>ResultSet</code>, <code>Statement</code> y <code>Connection</code> con <code>close()</code>.</li>
+  </ol>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Código Ejemplo: Consulta de Departamentos en MySQL con JDBC</div>
+    <pre><code>import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+public class ConsultaJDBC {
+    public static void selectMySQL() {
+        try {
+            // 1. Cargar el driver
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            
+            // 2. Establecer la conexión con la base de datos
+            Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost/empresa", "root", "");
+            
+            // 3. Preparar la consulta
+            Statement sentencia = conexion.createStatement();
+            String sql = "SELECT * FROM departamentos";
+            ResultSet resultado = sentencia.executeQuery(sql);
+            
+            // 4. Recorrer el resultado para visualizar cada fila
+            while (resultado.next()) {
+                System.out.println(resultado.getInt(1) + " " + resultado.getString(2) + " " + resultado.getString(3));
+            }
+            
+            // 5. Cierre de recursos
+            resultado.close();
+            sentencia.close();
+            conexion.close();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void main(String[] args) {
+        selectMySQL();
+    }
+}</code></pre>
+  </div>
+
+  <!-- SECCIÓN 6: SENTENCIAS DML -->
+  <div class="page-break"></div>
+  <p class="doc-subtitle">Sentencias DML y DDL en JDBC: Manipulación y Definición de Datos</p>
+
+  <div class="pdf-section">6. Ejecución de Sentencias DML (Data Manipulation Language)</div>
+  <p>Las sentencias DML permiten operar directamente con los datos almacenados en una base de datos relacional:</p>
+  <ul>
+    <li><code>SELECT</code>: Para obtener o consultar datos.</li>
+    <li><code>INSERT</code>: Para añadir nuevos registros a una tabla.</li>
+    <li><code>UPDATE</code>: Para modificar registros existentes.</li>
+    <li><code>DELETE</code>: Para eliminar registros sin destruir la estructura de la tabla.</li>
+  </ul>
+
+  <h2>6.1. Métodos de Ejecución de la Interfaz Statement</h2>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 35%;">Método</th>
+        <th style="width: 65%;">Descripción de Funcionamiento</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>ResultSet executeQuery(String query)</code></td>
+        <td>Ejecuta consultas de selección y devuelve un objeto <code>ResultSet</code> con los datos recuperados.</td>
+      </tr>
+      <tr>
+        <td><code>int executeUpdate(String query)</code></td>
+        <td>Ejecuta sentencias DML de modificación (<code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code>) y devuelve un entero con el número de filas afectadas.</td>
+      </tr>
+      <tr>
+        <td><code>boolean execute(String query)</code></td>
+        <td>Permite ejecutar cualquier instrucción SQL. Si devuelve un <code>ResultSet</code> retorna <code>true</code> (obteniéndose con <code>getResultSet()</code>); en caso contrario retorna <code>false</code> (obteniéndose el recuento de filas con <code>getUpdateCount()</code>).</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>6.2. Sentencias Preparadas (PreparedStatement)</h2>
+  <p>Para consultas con parámetros variables se utiliza <code>PreparedStatement</code>. Emplea marcadores de posición o <em>placeholders</em> representados con signos de interrogación (<code>?</code>) que se indexan a partir de 1. La precompilación de la sentencia aporta seguridad, evita inyecciones SQL y permite ejecutar la misma consulta múltiples veces de manera eficiente.</p>
+
+  <h3>Métodos de Asignación por Tipos SQL</h3>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 50%;">Método de Asignación Java</th>
+        <th style="width: 50%;">Tipo Equivalente en SQL</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>setString(int index, String valor)</code></td>
+        <td><code>VARCHAR</code></td>
+      </tr>
+      <tr>
+        <td><code>setInt(int index, int valor)</code></td>
+        <td><code>INTEGER</code></td>
+      </tr>
+      <tr>
+        <td><code>setFloat(int index, float valor)</code></td>
+        <td><code>FLOAT</code></td>
+      </tr>
+      <tr>
+        <td><code>setDouble(int index, double valor)</code></td>
+        <td><code>DOUBLE</code></td>
+      </tr>
+      <tr>
+        <td><code>setDate(int index, Date valor)</code></td>
+        <td><code>DATE</code></td>
+      </tr>
+      <tr>
+        <td><code>setBoolean(int index, boolean valor)</code></td>
+        <td><code>BIT</code></td>
+      </tr>
+      <tr>
+        <td><code>setBytes(int index, byte[] valor)</code></td>
+        <td><code>VARBINARY</code></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Código Ejemplo: Inserción de Datos con PreparedStatement</div>
+    <pre><code>// Definición de consulta parametrizada con placeholders
+String sql = "INSERT INTO empleados (emp_no, apellido, oficio, fecha_alt, salario, dept_no) "
+           + "VALUES (?, ?, ?, ?, ?, ?)";
+
+PreparedStatement sentenciaPreparada = conexion.prepareStatement(sql);
+sentenciaPreparada.setInt(1, 20);
+sentenciaPreparada.setString(2, "FERNANDEZ");
+sentenciaPreparada.setString(3, "ANALISTA");
+sentenciaPreparada.setDate(4, new java.sql.Date(System.currentTimeMillis()));
+sentenciaPreparada.setFloat(5, 1500f);
+sentenciaPreparada.setInt(6, 40);
+
+int filasAfectadas = sentenciaPreparada.executeUpdate();
+System.out.println("Registros insertados: " + filasAfectadas);
+
+sentenciaPreparada.close();
+conexion.close();</code></pre>
+  </div>
+
+  <h2>6.3. Procesamiento Avanzado con ResultSet</h2>
+  <p>El acceso a los datos de la tupla activa puede realizarse tanto por índice numérico (comenzando en 1) como mediante el nombre de la columna:</p>
+  <ul>
+    <li>Extracción posicional: <code>resultado.getString(1)</code> o <code>resultado.getDouble(2)</code>.</li>
+    <li>Extracción nominal: <code>resultado.getString("nombre")</code> o <code>resultado.getDouble("salario")</code>.</li>
+    <li>Inspección estructural: el método <code>resultado.getMetaData()</code> permite recuperar metadatos como el número o tipo de las columnas devueltas.</li>
+  </ul>
+
+  <!-- SECCIÓN 7: SENTENCIAS DDL -->
+  <div class="page-break"></div>
+  <div class="pdf-section">7. Ejecución de Sentencias DDL y Metadatos de la Base de Datos</div>
+
+  <h2>7.1. Definición y Modificación de Estructuras (DDL)</h2>
+  <p>Aunque el trabajo diario suele ser DML, las instrucciones DDL (como <code>CREATE TABLE</code> o <code>ALTER TABLE</code>) son esenciales para inicializar esquemas en instalaciones limpias o aplicar migraciones tras actualizaciones. Se ejecutan mediante llamadas al método <code>executeUpdate()</code> de un objeto <code>Statement</code>.</p>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Código Ejemplo: Creación Dinámica de Tablas con DDL</div>
+    <pre><code>Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost/animales", "root", "");
+Statement sentencia = conexion.createStatement();
+
+String sql = "CREATE TABLE IF NOT EXISTS mascotas ("
+           + "codigo VARCHAR(3), "
+           + "nombre VARCHAR(20), "
+           + "CONSTRAINT mascotas_PK PRIMARY KEY (codigo)"
+           + ");";
+
+int resultado = sentencia.executeUpdate(sql);
+System.out.println("Resultado de ejecución DDL: " + resultado);
+
+sentencia.close();
+conexion.close();</code></pre>
+  </div>
+
+  <h2>7.2. Inspección del Esquema con DatabaseMetaData</h2>
+  <p>Cuando se desconoce la estructura física de la base de datos, se recurre a la interfaz <code>DatabaseMetaData</code> obtenida desde la conexión activa mediante <code>conexion.getMetaData()</code>.</p>
+
+  <h3>Métodos Principales de DatabaseMetaData</h3>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 35%;">Método</th>
+        <th style="width: 65%;">Información Recuperada</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>ResultSet getTables(...)</code></td>
+        <td>Proporciona información sobre objetos del esquema (tablas, vistas, alias, tablas del sistema).</td>
+      </tr>
+      <tr>
+        <td><code>ResultSet getColumns(...)</code></td>
+        <td>Devuelve las columnas, tipos y configuraciones de una tabla específica.</td>
+      </tr>
+      <tr>
+        <td><code>ResultSet getPrimaryKeys(...)</code></td>
+        <td>Lista los campos que componen la clave primaria.</td>
+      </tr>
+      <tr>
+        <td><code>ResultSet getExportedKeys(...)</code></td>
+        <td>Devuelve las claves foráneas que apuntan hacia una tabla.</td>
+      </tr>
+      <tr>
+        <td><code>ResultSet getImportedKeys(...)</code></td>
+        <td>Devuelve las claves foráneas que la tabla importa de otras tablas.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Código Ejemplo: Listado de Tablas y Vistas mediante DatabaseMetaData</div>
+    <pre><code>DatabaseMetaData dbmd = conexion.getMetaData();
+String[] tipos = {"TABLE", "VIEW"};
+
+// Parámetros: catálogo (null=actual), esquema (null=actual), patrón tabla (null=todas), tipos
+ResultSet tablas = dbmd.getTables(null, null, null, tipos);
+
+while (tablas.next()) {
+    String catalogo = tablas.getString("TABLE_CAT");
+    String esquema  = tablas.getString("TABLE_SCHEM");
+    String nombre   = tablas.getString("TABLE_NAME");
+    String tipo     = tablas.getString("TABLE_TYPE");
+
+    System.out.println("Objeto: " + nombre + " | Tipo: " + tipo + " | Catálogo: " + catalogo);
+}
+
+tablas.close();</code></pre>
+  </div>
+
+  <!-- SECCIÓN 8: PROCEDIMIENTOS Y FUNCIONES ALMACENADAS -->
+  <div class="page-break"></div>
+  <p class="doc-subtitle">Procedimientos y Funciones Almacenadas en JDBC</p>
+
+  <div class="pdf-section">8. Fundamentos y Creación de Procedimientos</div>
+  <p><strong>Definición:</strong> Un procedimiento almacenado consiste en un conjunto de instrucciones SQL compiladas y almacenadas en el propio motor de la base de datos, invocables por su nombre para llevar a cabo alguna tarea.</p>
+  <p><strong>Tipos de Parámetros:</strong> Pueden definirse con parámetros de entrada (<code>IN</code>), de salida (<code>OUT</code>), de entrada/salida combinada (<code>INOUT</code>) o sin ningún parámetro. Si la rutina devuelve directamente un valor computable, se cataloga técnicamente como una <strong>función</strong>.</p>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Definición SQL: Procedimiento subida_sal y delimitadores en MySQL</div>
+    <pre><code>DELIMITER //
+CREATE PROCEDURE subida_sal (d INT, subida INT)
+BEGIN
+    UPDATE empleados SET salario = salario + subida WHERE dept_no = d;
+    COMMIT;
+END//
+DELIMITER ;</code></pre>
+    <p><em>Nota sobre DELIMITER:</em> En la consola de MySQL o scripts externos se sustituye temporalmente el carácter de terminación <code>;</code> por <code>//</code> para evitar que el intérprete finalice la instrucción prematuramente al encontrar el primer punto y coma interno del cuerpo del procedimiento.</p>
+  </div>
+
+  <h2>8.1. Creación Programática de Procedimientos desde Java</h2>
+  <p>Mediante un objeto <code>Statement</code> es posible emitir sentencias DDL para registrar o sustituir procedimientos almacenados en la base de datos directamente desde código Java:</p>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Código Ejemplo: Creación de Procedimiento subida_sal con Statement</div>
+    <pre><code>public static void crearProcedimientoSalario() {
+    try {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost/empresa", "root", "");
+        Statement statement = conexion.createStatement();
+
+        String queryDrop = "DROP PROCEDURE IF EXISTS subida_sal;";
+        String queryCreate = "CREATE PROCEDURE subida_sal (IN d INT, IN subida INT) "
+                           + "BEGIN "
+                           + "UPDATE empleados SET salario = salario + subida WHERE dept_no=d; "
+                           + "END";
+
+        statement.execute(queryDrop);
+        statement.execute(queryCreate);
+        System.out.println("Procedimiento creado");
+
+        statement.close();
+        conexion.close();
+    } catch (ClassNotFoundException | SQLException e) {
+        e.printStackTrace();
+    }
+}</code></pre>
+  </div>
+
+  <!-- SECCIÓN 9: INVOCACIÓN CON CALLABLESTATEMENT -->
+  <div class="page-break"></div>
+  <div class="pdf-section">9. Invocación desde Java con CallableStatement</div>
+  <p>La interfaz <code>CallableStatement</code> permite que se pueda llamar desde Java a los procedimientos y funciones almacenadas. Para crear un objeto se llama al método <code>prepareCall(String)</code> del objeto <code>Connection</code>, empleando marcadores de posición (<code>?</code>) para suministrar los argumentos.</p>
+
+  <h2>9.1. Sintaxis Estándar de Escape para Llamadas</h2>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 35%;">Formato de Declaración</th>
+        <th style="width: 65%;">Caso de Uso y Descripción</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>{call procedimiento}</code></td>
+        <td>Para un procedimiento almacenado sin parámetros.</td>
+      </tr>
+      <tr>
+        <td><code>{call procedimiento(?, ?, ...)}</code></td>
+        <td>Para un procedimiento almacenado que recibe parámetros posicionales.</td>
+      </tr>
+      <tr>
+        <td><code>{? = call funcion}</code></td>
+        <td>Para una función almacenada que devuelve un valor (a la izquierda del igual, primer parámetro) y no recibe argumentos.</td>
+      </tr>
+      <tr>
+        <td><code>{? = call funcion(?, ?, ...)}</code></td>
+        <td>Para una función almacenada que devuelve un valor (primer parámetro) y recibe varios parámetros.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>9.2. Código Ejemplo: Ejecución de Procedimiento con Parámetros IN</h2>
+  <div class="diagram-box">
+    <div class="diagram-title">Código: Subida de Salario con Parámetros de Entrada</div>
+    <pre><code>public static void SubidaSalarioEmpleados(int dep, double subida) {
+    try {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost/empresa", "root", "");
+        
+        // 1. Preparación de la llamada con marcadores posicionales (?)
+        String sql = "{call subida_sal(?, ?)}";
+        CallableStatement cst = conexion.prepareCall(sql);
+        
+        // 2. Damos valor a los argumentos IN según su índice
+        cst.setInt(1, dep);
+        cst.setDouble(2, subida);
+        
+        // 3. Ejecución del procedimiento
+        cst.executeUpdate();
+        System.out.println("Subida realizada....");
+        
+        cst.close();
+        conexion.close();
+    } catch (ClassNotFoundException | SQLException e) {
+        e.printStackTrace();
+    }
+}</code></pre>
+  </div>
+
+  <h2>9.3. Consulta y Recorrido de Resultados Devueltos por Procedimientos</h2>
+  <p>Cuando un procedimiento ejecuta internamente una consulta <code>SELECT</code> (como <code>get_departamentos()</code>), el objeto <code>CallableStatement</code> se ejecuta mediante <code>executeQuery()</code> y retorna un objeto <code>ResultSet</code> para procesar las filas resultantes.</p>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Código Ejemplo: Obtención de ResultSet mediante CallableStatement</div>
+    <pre><code>public static void getDepartamentosMySQL() {
+    try {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost/empresa", "root", "");
+        
+        String sql = "{call get_departamentos()}";
+        CallableStatement cst = conexion.prepareCall(sql);
+        ResultSet rs = cst.executeQuery();
+        
+        while (rs.next()) {
+            System.out.println("Codigo: " + rs.getString(1));
+            System.out.println("Departamento: " + rs.getString(2));
+        }
+        
+        cst.close();
+        rs.close();
+        conexion.close();
+    } catch (ClassNotFoundException | SQLException e) {
+        e.printStackTrace();
+    }
+}</code></pre>
+  </div>
+
+  <!-- SECCIÓN 10: PARÁMETROS DE SALIDA -->
+  <div class="page-break"></div>
+  <div class="pdf-section">10. Gestión de Parámetros de Salida (OUT e INOUT)</div>
+  <p>Cuando un procedimiento o función cuenta con parámetros de salida (<code>OUT</code>), estos <strong>deben ser registrados obligatoriamente antes de que la llamada tenga lugar</strong> para evitar que se produzca un error.</p>
+
+  <h2>10.1. Registro y Extracción</h2>
+  <ul>
+    <li><strong>Registro:</strong> Se utiliza el método <code>cst.registerOutParameter(índice, tipoJDBC)</code>. El primer parámetro representa la posición y el segundo es una constante genérica SQL definida en la clase <code>java.sql.Types</code> (ej.: <code>Types.VARCHAR</code>, <code>Types.INTEGER</code>, <code>Types.DOUBLE</code>, <code>Types.FLOAT</code>).</li>
+    <li><strong>Extracción:</strong> Una vez ejecutada la llamada con <code>executeUpdate()</code>, los valores devueltos por los parámetros <code>OUT</code> e <code>INOUT</code> se obtienen mediante los métodos <code>getXXX(índice)</code>.</li>
+  </ul>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Definición SQL: Procedimiento localidad_depart con Parámetro OUT</div>
+    <pre><code>CREATE PROCEDURE localidad_depart (IN d INT, OUT localidad VARCHAR(15))
+BEGIN
+    SELECT loc INTO localidad FROM departamentos WHERE dept_no = d;
+END;</code></pre>
+  </div>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Código Ejemplo: Registro y Lectura de Parámetro OUT en Java</div>
+    <pre><code>public static void obtenerLocalidad(int dep) {
+    try {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost/empresa", "root", "");
+        
+        String sql = "{call localidad_depart(?, ?)}";
+        CallableStatement cst = conexion.prepareCall(sql);
+        
+        // Damos valor al argumento de entrada (IN)
+        cst.setInt(1, dep);
+        
+        // Registro obligatorio del argumento de salida (OUT)
+        cst.registerOutParameter(2, java.sql.Types.VARCHAR);
+        
+        // Ejecutar el procedimiento
+        cst.executeUpdate();
+        
+        // Recuperación del resultado con getXXX()
+        System.out.println("Localidad: " + cst.getString(2));
+        
+        cst.close();
+        conexion.close();
+    } catch (ClassNotFoundException | SQLException e) {
+        e.printStackTrace();
+    }
+}</code></pre>
+  </div>
+
+</body>
+</html>

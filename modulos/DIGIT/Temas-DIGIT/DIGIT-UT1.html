@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>DIGIT - Operación Digitalización</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 1.8cm 1.5cm 2cm 1.5cm;
+      @bottom-right {
+        content: counter(page);
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        font-size: 9pt;
+        color: #64748b;
+      }
+      @bottom-left {
+        content: "Operación Digitalización | Resumen";
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        font-size: 9pt;
+        color: #64748b;
+      }
+    }
+
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 10pt;
+      line-height: 1.5;
+      color: #1e293b;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1.doc-title {
+      font-size: 17pt;
+      font-weight: 700;
+      color: #0f172a;
+      text-align: center;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    p.doc-subtitle {
+      text-align: center;
+      font-size: 10.5pt;
+      color: #15803d;
+      font-weight: 600;
+      margin-top: 0;
+      margin-bottom: 25px;
+      border-bottom: 2px solid #16a34a;
+      padding-bottom: 10px;
+    }
+
+    .pdf-section {
+      background-color: #0f172a;
+      color: #ffffff;
+      padding: 8px 14px;
+      font-size: 11.5pt;
+      font-weight: 700;
+      border-radius: 4px;
+      margin-top: 25px;
+      margin-bottom: 15px;
+      page-break-after: avoid;
+    }
+
+    .page-break {
+      page-break-before: always;
+    }
+
+    h2 {
+      font-size: 11.5pt;
+      color: #15803d;
+      border-bottom: 1.5px solid #e2e8f0;
+      padding-bottom: 4px;
+      margin-top: 18px;
+      margin-bottom: 10px;
+      page-break-after: avoid;
+    }
+
+    h3 {
+      font-size: 10pt;
+      color: #334155;
+      margin-top: 12px;
+      margin-bottom: 6px;
+      page-break-after: avoid;
+    }
+
+    p {
+      margin: 0 0 8px 0;
+      text-align: justify;
+    }
+
+    ul, ol {
+      margin: 0 0 10px 0;
+      padding-left: 20px;
+    }
+
+    li {
+      margin-bottom: 4px;
+    }
+
+    ul.explicacion {
+      margin-bottom: 0px;
+      list-style-type: square;
+    }
+
+    .diagram-box {
+      background-color: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-left: 4px solid #16a34a;
+      padding: 10px 14px;
+      margin: 10px 0;
+      font-size: 9pt;
+      border-radius: 2px;
+      page-break-inside: avoid;
+    }
+
+    .diagram-title {
+      font-weight: bold;
+      color: #0f172a;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      font-size: 8.5pt;
+      letter-spacing: 0.5px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+      font-size: 8.5pt;
+      page-break-inside: avoid;
+    }
+
+    th, td {
+      border: 1px solid #cbd5e1;
+      padding: 6px 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background-color: #f1f5f9;
+      color: #0f172a;
+      font-weight: 700;
+    }
+
+    tr:nth-child(even) td {
+      background-color: #f8fafc;
+    }
+  </style>
+</head>
+<body>
+
+  <h1 class="doc-title">Operación Digitalización</h1>
+  <p class="doc-subtitle">Resumen: Digitalización aplicada a los sectores productivos</p>
+
+  <!-- ========================================== -->
+  <!-- BLOQUE 1                                   -->
+  <!-- ========================================== -->
+
+  <div class="pdf-section">1. Concepto y Tipos de Digitalización</div>
+  
+  <p>La digitalización es un proceso fundamental en la transformación de las empresas, consistente en la integración de tecnologías digitales en todos los ámbitos de la organización. Permite convertir en formatos digitales los procesos, la información y las operaciones tradicionales, mejorando la toma de decisiones y la gestión empresarial.</p>
+
+  <h2>1.1. Tipos de Digitalización</h2>
+  <ul>
+    <li><strong>Digitalización de documentos:</strong> Transformación del papel a formato digital. Disminuye el volumen de material físico, agiliza el acceso a la información y permite el trabajo remoto.</li>
+    <li><strong>Digitalización de procesos:</strong> Transformación de procesos manuales a digitales. Automatiza tareas, disminuye errores y aumenta el rendimiento (ej. robotización de cadenas de montaje).</li>
+    <li><strong>Digitalización de productos y servicios:</strong> Venta remota o en formatos digitales, lo que abre el mercado a nivel global y aumenta beneficios.</li>
+    <li><strong>Digitalización de la comunicación:</strong> Uso de herramientas digitales para comunicaciones internas y externas más rápidas y efectivas (ej. videoconferencias, correo electrónico).</li>
+    <li><strong>Digitalización de la experiencia del cliente:</strong> Uso de la tecnología para ofrecer una experiencia personalizada, como el uso de chatbots.</li>
+  </ul>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Ventajas de la Digitalización</div>
+    <ul>
+      <li>Incremento de la eficiencia y productividad.</li>
+      <li>Reducción de costes y mejora en la toma de decisiones.</li>
+      <li>Disponibilidad constante de acceso a la información.</li>
+      <li>Mayor flexibilidad, innovación continua y sostenibilidad.</li>
+    </ul>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- BLOQUE 2                                   -->
+  <!-- ========================================== -->
+
+  <div class="pdf-section">2. Entornos IT y OT</div>
+
+  <p>En el contexto de la digitalización, las empresas integran y optimizan dos entornos tecnológicos complementarios pero diferentes:</p>
+
+  <h3>Tabla: Comparativa entre Entornos IT y OT</h3>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 25%;">Entorno</th>
+        <th style="width: 35%;">Descripción</th>
+        <th style="width: 40%;">Características clave</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>IT (Tecnologías de la Información)</strong></td>
+        <td>Recursos utilizados para gestionar y procesar la información digital (hardware, software, redes, datos).</td>
+        <td>Foco en operaciones administrativas y de negocio. Prioridad: proteger la información. Cambios y actualizaciones frecuentes.</td>
+      </tr>
+      <tr>
+        <td><strong>OT (Tecnologías Operativas)</strong></td>
+        <td>Sistemas para operar, controlar y monitorizar máquinas físicas y procesos industriales (PLCs, sensores).</td>
+        <td>Foco en sistemas físicos y maquinaria. Prioridad: proteger procesos industriales sin interrupciones. Entorno más estable.</td>
+      </tr>
+    </tbody>
+  </table>
+  <p>La convergencia entre IT y OT es fundamental en la era digital para obtener una visión integral de las operaciones y facilitar la automatización y toma de decisiones en tiempo real.</p>
+
+  <!-- ========================================== -->
+  <!-- BLOQUE 3                                   -->
+  <!-- ========================================== -->
+
+  <div class="page-break"></div>
+  <div class="pdf-section">3. Software Libre en la Transformación Digital</div>
+
+  <p>El software libre proporciona mayores libertades que el propietario (ejecutar, estudiar, modificar y redistribuir) y fomenta una cultura tecnológica abierta. Su integración es clave para la Industria 4.0 y 5.0:</p>
+
+  <ul>
+    <li><strong>Sostenibilidad y economía circular:</strong> Reduce costes de licencias y permite alargar la vida útil de los equipos informáticos.</li>
+    <li><strong>Control y personalización:</strong> Añade una capa ética permitiendo a las empresas mantener el control sobre sus datos y procesos (soberanía tecnológica).</li>
+    <li><strong>Ciberseguridad y privacidad:</strong> El código puede ser auditado de forma abierta para detectar vulnerabilidades rápidamente y evitar la explotación de datos personales.</li>
+  </ul>
+
+  <!-- ========================================== -->
+  <!-- BLOQUE 4                                   -->
+  <!-- ========================================== -->
+
+  <div class="pdf-section">4. Tecnologías Habilitadoras Digitales (THD)</div>
+
+  <p>Las THD son herramientas que permiten la modernización de los procesos en el sector empresarial, mejorando la eficiencia operativa, la toma de decisiones y la sostenibilidad.</p>
+
+  <ul>
+    <li><strong>Internet de las Cosas (IoT):</strong> Objetos físicos conectados a Internet que recopilan y comparten datos para ser gestionados remotamente.</li>
+    <li><strong>Inteligencia Artificial (IA):</strong> Capacidad de las máquinas para aprender, razonar y tomar decisiones.</li>
+    <li><strong>Big Data:</strong> Gestión y análisis de conjuntos de datos extremadamente grandes para extraer patrones y tendencias.</li>
+    <li><strong>5G y Redes Avanzadas:</strong> Infraestructura que permite comunicaciones a mayor velocidad, con menor latencia y mayor densidad de conexiones.</li>
+    <li><strong>Robótica:</strong> Máquinas automatizadas programadas para realizar tareas físicas, aumentando la productividad y reduciendo riesgos para los humanos.</li>
+    <li><strong>Blockchain:</strong> Registro descentralizado para transacciones seguras y transparentes sin intermediarios.</li>
+    <li><strong>Ciberseguridad:</strong> Tecnologías para proteger sistemas, información y comunicaciones, garantizando confidencialidad, integridad y disponibilidad.</li>
+    <li><strong>Fabricación aditiva:</strong> Creación de objetos tridimensionales por superposición de material por capas (Impresión 3D).</li>
+    <li><strong>Realidad Aumentada (RA) y Virtual (RV):</strong> Tecnologías para experiencias inmersivas; la RA agrega elementos al mundo real y la RV crea entornos completamente virtuales.</li>
+    <li><strong>Gemelos digitales (Digital Twins):</strong> Copia digital de un objeto o proceso real alimentada con datos en tiempo real mediante sensores.</li>
+    <li><strong>Computación en la nube (Cloud Computing):</strong> Almacenamiento y procesamiento de datos en servidores remotos.</li>
+  </ul>
+
+  <!-- ========================================== -->
+  <!-- BLOQUE 5                                   -->
+  <!-- ========================================== -->
+
+  <div class="pdf-section">5. Enfoque Especial: Internet de las Cosas (IoT)</div>
+
+  <p>El IoT convierte objetos cotidianos en "objetos inteligentes" al incorporarles sensores y software que les permite interactuar con su entorno o recibir órdenes.</p>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Aplicaciones principales del IoT</div>
+    <ul>
+      <li><strong>Ciudades inteligentes (Smart Cities):</strong> Optimización de tráfico, alumbrado público inteligente y gestión de residuos.</li>
+      <li><strong>Atención médica:</strong> Monitorización remota de signos vitales de pacientes.</li>
+      <li><strong>Agricultura:</strong> Sensores de humedad para riego automático y monitorización de ganado.</li>
+      <li><strong>Cadena de fabricación (IIoT):</strong> Seguimiento en tiempo real, detección de fallos y optimización de producción.</li>
+      <li><strong>Cadena de suministro:</strong> Control de inventarios y tiempos estimados de entrega al cliente.</li>
+    </ul>
+  </div>
+
+</body>
+</html>

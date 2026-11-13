@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>PMYDM - Temas 1 y 2: Introducción, Configuración, Android Studio y Emuladores</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 1.8cm 1.5cm 2cm 1.5cm;
+      @bottom-right {
+        content: counter(page);
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        font-size: 9pt;
+        color: #64748b;
+      }
+      @bottom-left {
+        content: "PMYDM - Temas 1 y 2 | IES Valle del Jerte";
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        font-size: 9pt;
+        color: #64748b;
+      }
+    }
+
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 10pt;
+      line-height: 1.5;
+      color: #1e293b;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1.doc-title {
+      font-size: 17pt;
+      font-weight: 700;
+      color: #0f172a;
+      text-align: center;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    p.doc-subtitle {
+      text-align: center;
+      font-size: 10.5pt;
+      color: #15803d;
+      font-weight: 600;
+      margin-top: 0;
+      margin-bottom: 25px;
+      border-bottom: 2px solid #16a34a;
+      padding-bottom: 10px;
+    }
+
+    .pdf-section {
+      background-color: #0f172a;
+      color: #ffffff;
+      padding: 8px 14px;
+      font-size: 11.5pt;
+      font-weight: 700;
+      border-radius: 4px;
+      margin-top: 25px;
+      margin-bottom: 15px;
+      page-break-after: avoid;
+    }
+
+    .page-break {
+      page-break-before: always;
+    }
+
+    h2 {
+      font-size: 11.5pt;
+      color: #15803d;
+      border-bottom: 1.5px solid #e2e8f0;
+      padding-bottom: 4px;
+      margin-top: 18px;
+      margin-bottom: 10px;
+      page-break-after: avoid;
+    }
+
+    h3 {
+      font-size: 10pt;
+      color: #334155;
+      margin-top: 12px;
+      margin-bottom: 6px;
+      page-break-after: avoid;
+    }
+
+    p {
+      margin: 0 0 8px 0;
+      text-align: justify;
+    }
+
+    ul, ol {
+      margin: 0 0 10px 0;
+      padding-left: 20px;
+    }
+
+    li {
+      margin-bottom: 4px;
+    }
+
+    ul.explicacion {
+      margin-bottom: 0px;
+      list-style-type: square;
+    }
+
+    .diagram-box {
+      background-color: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-left: 4px solid #16a34a;
+      padding: 10px 14px;
+      margin: 10px 0;
+      font-size: 9pt;
+      border-radius: 2px;
+      page-break-inside: avoid;
+    }
+
+    .diagram-title {
+      font-weight: bold;
+      color: #0f172a;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      font-size: 8.5pt;
+      letter-spacing: 0.5px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+      font-size: 8.5pt;
+      page-break-inside: avoid;
+    }
+
+    th, td {
+      border: 1px solid #cbd5e1;
+      padding: 6px 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background-color: #f1f5f9;
+      color: #0f172a;
+      font-weight: 700;
+    }
+
+    tr:nth-child(even) td {
+      background-color: #f8fafc;
+    }
+
+    pre, code {
+      font-family: 'Consolas', 'Courier New', monospace;
+    }
+
+    pre {
+      background-color: #0f172a;
+      color: #f8fafc;
+      padding: 10px 12px;
+      border-radius: 4px;
+      font-size: 8.5pt;
+      line-height: 1.4;
+      overflow-x: auto;
+      margin: 10px 0;
+      page-break-inside: avoid;
+    }
+
+    p code, li code, td code {
+      background-color: #f1f5f9;
+      color: #15803d;
+      padding: 1px 4px;
+      border-radius: 3px;
+      font-size: 8.5pt;
+      border: 1px solid #e2e8f0;
+    }
+
+    .math-formula {
+      text-align: center;
+      background-color: #f8fafc;
+      border: 1px dashed #94a3b8;
+      padding: 8px;
+      margin: 10px 0;
+      font-weight: bold;
+      color: #0f172a;
+      border-radius: 4px;
+      page-break-inside: avoid;
+    }
+  </style>
+</head>
+<body>
+
+  <h1 class="doc-title">Programación Multimedia y Dispositivos Móviles</h1>
+  <p class="doc-subtitle">Resumen Completo: Temas 01 y 02</p>
+
+  <!-- ========================================== -->
+  <!-- BLOQUE TEMA 1                              -->
+  <!-- ========================================== -->
+
+  <div class="pdf-section">TEMA 1: Introducción a la programación multimedia y dispositivos móviles</div>
+
+  <h2>1. Evolución de los dispositivos móviles</h2>
+  <h2>1.1. Línea Cronológica de Hitos</h2>
+  <p>Cronología detallada de la evolución tecnológica en telecomunicaciones y terminales móviles:</p>
+  <ul>
+    <li><strong>1973:</strong> El Dr. Martin Cooper inventa el primer Sistema de Radio Teléfono y realiza la primera llamada móvil de la historia desde un prototipo de Motorola DynaTAC 8000X. Carecía de pantalla, era muy pesado y grande, y su batería no alcanzaba la media hora de autonomía tras diez horas de recarga.</li>
+    <li><strong>1982:</strong> Se pone a la venta el <strong>Motorola DynaTAC 8000X</strong>, el primer teléfono móvil comercializado al gran público tras el despliegue de las redes móviles, a un precio de 3.995 dólares de la época.</li>
+    <li><strong>1989:</strong> Sale a la venta el primer teléfono de bolsillo, el <strong>Motorola MicroTAC 9800X</strong>, incorporando una batería de Níquel-Cadmio.</li>
+    <li><strong>1992:</strong> Lanzamiento del <strong>Nokia 1011</strong>, primer teléfono comercial GSM (2G) que añade servicios digitales como los mensajes SMS.</li>
+    <li><strong>1997:</strong> Se presenta el <strong>Siemens S10</strong>, el primer teléfono móvil dotado con pantalla a color.</li>
+    <li><strong>1998:</strong> Lanzamiento del <strong>Nokia 8810</strong>, primer móvil con antena integrada y batería de Níquel-Metal Hidruro (menor peso, no tóxica y menor calentamiento).</li>
+    <li><strong>1999:</strong> Aparece el primer móvil con GPS integrado (<strong>Benefon Esc!</strong>) y el primer terminal con soporte para aplicaciones y navegación WAP (<strong>Nokia 7110</strong>).</li>
+    <li><strong>2000:</strong> Se comercializa el <strong>Samsung SPH-M100</strong>, primer teléfono con soporte para reproducción de música en formato MP3.</li>
+    <li><strong>2001:</strong> Llega al mercado el <strong>Ericsson T39</strong>, primer teléfono móvil con conectividad inalámbrica Bluetooth.</li>
+    <li><strong>2004:</strong> Comienzan a implantarse las primeras baterías de Litio y se crea el primer móvil UMTS-WCDMA (3G) con soporte para videollamadas: el <strong>Motorola A845</strong>.</li>
+    <li><strong>2005:</strong> Surgen las primeras PDAs con posibilidad de realizar llamadas telefónicas, incorporando pantalla táctil resistiva, Wi-Fi, Bluetooth, GPS, MP3, cámara, tarjetas microSD, radio FM y sistemas operativos Windows Mobile o Palm OS.</li>
+    <li><strong>2007:</strong> Aparición del considerado primer smartphone moderno: el <strong>Apple iPhone</strong>. Adopta características de las PDA y añade una pantalla táctil capacitiva multitouch junto al sistema operativo iOS, más ágil, rápido y accesible que Windows Mobile.</li>
+    <li><strong>2008:</strong> Lanzamiento comercial del primer terminal con sistema operativo Android: el <strong>HTC Dream</strong>.</li>
+    <li><strong>2010:</strong> Se comercializa el primer teléfono móvil con tecnología de conectividad 4G: el <strong>HTC EVO 4G</strong>.</li>
+    <li><strong>2011:</strong> Aparece el primer móvil con procesador de doble núcleo (Dual-Core): el <strong>LG Optimus 2X</strong>.</li>
+    <li><strong>2015:</strong> Llega al mercado el primer teléfono con resolución de pantalla 4K: el <strong>Sony Xperia Z5 Premium</strong>.</li>
+    <li><strong>2018:</strong> Se pone a la venta el primer dispositivo móvil con lector de huellas integrado bajo la pantalla: el <strong>Vivo X20 UD</strong>.</li>
+    <li><strong>2019:</strong> Lanzamiento del primer móvil con soporte comercial 5G: el <strong>Xiaomi Mi Mix 3 5G</strong>.</li>
+    <li><strong>2020:</strong> La conectividad 5G se expande a escala global, asentándose como el estándar de redes móviles de última generación.</li>
+    <li><strong>2021:</strong> Introducción de la carga ultrarrápida comercial de 120 W en modelos como el <strong>Xiaomi 11T Pro</strong>, cargando la batería al 100% en menos de 20 minutos.</li>
+    <li><strong>2022:</strong> Ganan cuota y popularidad los dispositivos con pantalla flexible plegable, como los <strong>Samsung Galaxy Z Fold</strong> y <strong>Z Flip</strong>.</li>
+    <li><strong>2023:</strong> Introducción de Inteligencia Artificial (IA) en el hardware de los smartphones para optimizar la autonomía de la batería y el procesado de las cámaras.</li>
+    <li><strong>2024:</strong> Evolución de los procesadores hacia tecnologías litográficas de 3 nm, mejorando sustancialmente la potencia y eficiencia energética.</li>
+    <li><strong>2025:</strong> Los procesadores con arquitectura integrada <code>CPU + GPU + NPU</code> marcan el estándar del rendimiento.</li>
+    <li><strong>2026:</strong> Apple presenta el <strong>iPhone 18 Pro</strong> y sus nuevos diseños plegables.</li>
+  </ul>
+
+  <h2>2. Características de los dispositivos móviles</h2>
+  <ul>
+    <li><strong>Fabricantes / Marcas:</strong> Samsung, Nokia, Apple, Sony, LG, HTC, Motorola, Huawei, Xiaomi, BlackBerry, Alcatel, BQ, Asus, OnePlus, ZTE, Jiayu, Lenovo, Meizu, Doogee, Honor, UMI, Oppo, Nubia, Vivo, entre otros.</li>
+    <li><strong>Sistemas Operativos:</strong> Android, iOS, Windows Phone, BlackBerry OS, Firefox OS, Ubuntu Touch, Tizen.</li>
+    <li><strong>Memoria RAM:</strong> Hasta 24 GB en modelos premium actuales orientados a videojuegos.</li>
+    <li><strong>Batería:</strong> Capacidades que oscilan entre los 5.000 mAh y los 7.500 mAh, alcanzando los 10.000 mAh en dispositivos rugerizados. Cargas ultrarrápidas de más de 120 W y carga inalámbrica.</li>
+    <li><strong>Peso:</strong> Se mantiene habitualmente en el rango de los 160 a 250 gramos.</li>
+    <li><strong>Red:</strong> Sistema que se precisa para que se dé una comunicación entre una central y los aparatos que se conectan a ella. Las redes se componen de antenas, ondas de radio, transmisores y receptores, dispositivos móviles...</li>
+    <li><strong>Conectividad:</strong> 2G, 3G, 4G LTE, 5G, Wi-Fi, <strong>DLNA</strong>, Bluetooth, Jack de audio de 3,5mm, <strong>ANT+</strong>, NFC, Carga inalámbrica, Salida TV (HDMI o MHL), GPS/GNSS, microUSB, Lightning (Apple) o USB Type-C…</li>
+    <ul class="explicacion">
+      <li><strong>DLNA:</strong> Estándar que permite compartir contenido multimedia entre dispositivos conectados a una misma red - <code>Digital Living Network Alliance</code>.</li>
+      <li><strong>ANT+:</strong> Tecnología de transmisión inalámbrica de datos a corta distancia diseñada para conectar dispositivos y sensores deportivos - <code>Adaptive Network Topology</code>.</li>
+    </ul>
+    <li><strong>Cámaras:</strong> Sensores traseros desde 50 Mpx hasta 200 Mpx (ej. Samsung Galaxy S26 Ultra) y sensores frontales de hasta 50 Mpx, respaldados por fotografía computacional.</li>
+    <li><strong>Otras características:</strong> Resistencia al agua y al polvo (certificaciones IP), cristales Gorilla Glass, chasis en aluminio, vidrio o plástico, puerto infrarrojos, radio FM, lector microSD, lectores biométricos bajo pantalla, reconocimiento facial y altavoces estéreo.</li>
+  </ul>
+
+  <h2>2.1. Pantalla: Tecnologías, Resolución y Densidad</h2>
+  <ul>
+    <li><strong>Tamaño:</strong> Diagonales desde 5 pulgadas hasta 8 pulgadas, ampliándose aún más en formatos plegables hacia el factor de forma tablet.</li>
+    <li><strong>Resoluciones comunes:</strong> 800×600 píxeles, HD 720p (1280×720 px), FullHD 1080p (1920×1080 px), QuadHD o 2K (2560×1440 px) y UltraHD o 4K (3840×2160 px).</li>
+    <li><strong>Densidad de Píxeles (PPP / DPI):</strong> Puntos Por Pulgada (Dots Per Inch). Mide la nitidez real relacionando resolución y tamaño de diagonal.</li>
+  </ul>
+
+  <div class="math-formula">
+    PPP (DPI) = &radic;(ancho&sup2; + alto&sup2;) / diagonal_pulgadas
+  </div>
+  <p><strong>Ejemplo de cálculo comparativo del tema:</strong></p>
+  <ul>
+    <li><strong>Pantalla A (4 pulgadas, 800×600 px):</strong> <code>&radic;(800&sup2; + 600&sup2;) / 4 = 1000 / 4 = 250 ppp</code> (se visualiza nítida y bien).</li>
+    <li><strong>Pantalla B (7 pulgadas, 800×600 px):</strong> <code>&radic;(800&sup2; + 600&sup2;) / 7 = 1000 / 7 = 142 ppp</code> (se visualiza con calidad pobre).</li>
+  </ul>
+
+  <h3>Tabla: Comparativa de Tecnologías de Pantalla (LCD vs. OLED)</h3>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 25%;">Tecnología</th>
+        <th style="width: 35%;">Variantes Principales</th>
+        <th style="width: 40%;">Ventajas y Desventajas</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>LCD</strong><br>(Liquid Crystal Display)</td>
+        <td>
+          &bull; <strong>TFT:</strong> Base estándar de bajo coste.<br>
+          &bull; <strong>Super LCD:</strong> Elimina el espacio de aire entre cristal y panel; reduce reflejos, consume menos y da el mejor brillo en exteriores.<br>
+          &bull; <strong>IPS:</strong> Optimiza ángulos de visión y ofrece colores vivos.
+        </td>
+        <td><strong>Ventajas:</strong> Menor coste de fabricación, excelente visibilidad bajo el sol y mayor vida útil al no contener compuestos orgánicos.<br><strong>Desventajas:</strong> Menor profundidad de negros y mayor grosor.</td>
+      </tr>
+      <tr>
+        <td><strong>OLED</strong><br>(Organic Light-Emitting Diode)</td>
+        <td>
+          &bull; <strong>AMOLED:</strong> Principal fabricante Samsung.<br>
+          &bull; <strong>Super AMOLED:</strong> Más delgado, más brillante, eficiente en consumo, mejor contraste y menores tiempos de respuesta.
+        </td>
+        <td><strong>Ventajas:</strong> Polímero autoiluminado, negros puros absolutos, contraste infinito, alta saturación cromática y paneles muy finos.<br><strong>Desventajas:</strong> Menor vida útil por degradación de sus componentes orgánicos.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>2.2. Procesadores y Arquitectura SoC</h2>
+  <p>Los dispositivos móviles emplean sistemas SoC (<em>System on a Chip</em>), que integran CPU, GPU y NPU en una sola pastilla de silicio buscando el equilibrio entre eficiencia energética y rendimiento. Ejemplos punteros de referencia:</p>
+  <ul>
+    <li><strong>Apple A20 Pro:</strong> 6 núcleos (iPhone 18 Pro y Pro Max).</li>
+    <li><strong>Snapdragon 8 Elite Gen 5:</strong> 8 núcleos (Qualcomm).</li>
+    <li><strong>Samsung Exynos 2600:</strong> 10 núcleos (Galaxy S26).</li>
+    <li><strong>MediaTek Dimensity 9500:</strong> 8 núcleos.</li>
+  </ul>
+
+  <h3>Tabla: Cuota de Mercado Global de Smartphones (Counterpoint Research 2025 - 2026)</h3>
+  <p>Distribución de ventas mundiales por fabricante entre el primer trimestre de 2025 y el segundo de 2026:</p>
+  <table>
+    <thead>
+      <tr>
+        <th>Trimestre</th>
+        <th>Apple</th>
+        <th>Samsung</th>
+        <th>Xiaomi</th>
+        <th>Vivo</th>
+        <th>OPPO</th>
+        <th>Otros</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Q1 2025</strong></td><td>19%</td><td>20%</td><td>14%</td><td>7%</td><td>7%</td><td>33%</td></tr>
+      <tr><td><strong>Q2 2025</strong></td><td>17%</td><td>20%</td><td>14%</td><td>9%</td><td>8%</td><td>32%</td></tr>
+      <tr><td><strong>Q3 2025</strong></td><td>18%</td><td>19%</td><td>14%</td><td>9%</td><td>8%</td><td>32%</td></tr>
+      <tr><td><strong>Q4 2025</strong></td><td>25%</td><td>18,1%</td><td>11,3%</td><td>8,2%</td><td>8%</td><td>29,4%</td></tr>
+      <tr><td><strong>Q1 2026</strong></td><td>21,2%</td><td>20,8%</td><td>11,5%</td><td>7,4%</td><td>7,6%</td><td>31,5%</td></tr>
+      <tr><td><strong>Q2 2026</strong></td><td>21%</td><td>23%</td><td>11%</td><td>8%</td><td>8%</td><td>29%</td></tr>
+    </tbody>
+  </table>
+
+  <!-- SECCIÓN 3 TEMA 1 -->
+  <div class="page-break"></div>
+  <div class="pdf-section">3. Sistemas operativos para dispositivos móviles</div>
+
+  <h2>3.1. Concentración y Duopolio de Mercado</h2>
+  <p>De un mercado inicial multiplataforma y diverso se ha pasado a un duopolio prácticamente absoluto encabezado por Android y iOS, que extinguieron a alternativas como Windows Phone o BlackBerry:</p>
+  <ul>
+    <li><strong>Evolución global (2010 vs. 2020):</strong>
+      <ul>
+        <li><em>Año 2010 (305 millones de unidades):</em> Symbian / Otros: 40,2%; Android: 23,3%; BlackBerry: 16,0%; iOS: 15,6%; Windows Phone: 4,9%.</li>
+        <li><em>Año 2020 (1.292 millones de unidades):</em> Android alcanzó el 84,1% del mercado e iOS el 15,9%.</li>
+      </ul>
+    </li>
+    <li><strong>Cuota en España (2026 - StatCounter):</strong> <strong>Android abarca el 68,64%</strong> y <strong>iOS el 31,35%</strong> (ambos copan el 99,99% del parque total de dispositivos).</li>
+  </ul>
+
+  <h2>3.2. Arquitectura de Android</h2>
+  <ul>
+    <li>Sistema operativo móvil basado en el núcleo <strong>Linux</strong>, adquirido por Google en 2005.</li>
+    <li>Sistema abierto y de naturaleza multiplataforma: teléfonos, tablets, smartwatches, coches, televisores, consolas, ebooks y GPS.</li>
+    <li>Para garantizar compatibilidad con múltiples arquitecturas hardware, las aplicaciones desarrolladas en Java o Kotlin se ejecutan sobre una Máquina Virtual: históricamente <strong>Dalvik (DVM)</strong> y a partir de Android 5 sustituida por <strong>ART (Android Runtime)</strong>.</li>
+    <li>Evolución desde versiones de postres como <em>Apple Pie</em> (2008), <em>Cupcake</em>, <em>Donut</em>, <em>Eclair</em>, <em>Froyo</em>, <em>Gingerbread</em>, <em>Honeycomb</em>, <em>Ice Cream Sandwich</em>, <em>Jelly Bean</em>, <em>KitKat</em>, <em>Lollipop</em>, <em>Marshmallow</em>, <em>Nougat</em>, <em>Oreo</em>, hasta la versión <strong>Android 17</strong> lanzada en 2026.</li>
+  </ul>
+
+  <h2>3.3. Arquitectura de iOS</h2>
+  <ul>
+    <li>Sistema operativo propietario desarrollado exclusivamente por Apple para su gama de dispositivos móviles (lanzado en 2007 junto al primer iPhone).</li>
+    <li>Ecosistema controlado y cerrado con cadencia de actualización anual (versión <strong>iOS 26</strong> en septiembre de 2026).</li>
+  </ul>
+
+  <h3>Tabla: Comparativa de Características entre Android e iOS</h3>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 25%;">Característica</th>
+        <th style="width: 38%;">Android (Google)</th>
+        <th style="width: 37%;">iOS (Apple)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Modelo de Código</strong></td>
+        <td>Código abierto (Open Source); los fabricantes integran sus propias capas de personalización.</td>
+        <td>Código propietario y cerrado, restringido en exclusiva al hardware de Apple.</td>
+      </tr>
+      <tr>
+        <td><strong>Descarga de Aplicaciones</strong></td>
+        <td>Descarga desde Google Play Store e instalación externa manual mediante archivos ejecutables <code>.apk</code>.</td>
+        <td>Distribución e instalación restringida exclusivamente a través de la App Store oficial.</td>
+      </tr>
+      <tr>
+        <td><strong>Almacenamiento Externo</strong></td>
+        <td>Permite tradicionalmente el uso de tarjetas microSD (aunque prácticamente abandonado en gamas altas en 2025).</td>
+        <td>No admite tarjetas de memoria microSD externas.</td>
+      </tr>
+      <tr>
+        <td><strong>Almacenamiento en la Nube</strong></td>
+        <td>Integración estándar con Google Drive, Microsoft OneDrive o servicios en la nube de cada fabricante.</td>
+        <td>Fomenta el almacenamiento en la nube centralizado mediante su servicio iCloud.</td>
+      </tr>
+      <tr>
+        <td><strong>Personalización</strong></td>
+        <td>Muy configurable y flexible a nivel visual y de sistema.</td>
+        <td>Más limitado y rígido, garantizando consistencia y uniformidad visual.</td>
+      </tr>
+      <tr>
+        <td><strong>Entorno de Ejecución</strong></td>
+        <td>Máquina Virtual intermedia (ART / Dalvik).</td>
+        <td>Compilación y ejecución directa sobre código máquina.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- SECCIÓN 4 TEMA 1 -->
+  <div class="pdf-section">4. Desarrollo de aplicaciones para dispositivos móviles</div>
+
+  <h2>4.1. Desarrollo Nativo vs. Desarrollo Multiplataforma</h2>
+
+  <h3>A. Desarrollo de Aplicaciones Nativas</h3>
+  <ul>
+    <li><strong>Ventajas:</strong> Rendimiento y fluidez máximos, acceso directo al hardware (cámara, sensores, procesador) y compatibilidad integral con las APIs del sistema.</li>
+    <li><strong>Desventajas:</strong> Altos costes temporales y económicos al tener que programar y mantener proyectos independientes para cada plataforma.</li>
+    <li><strong>Ecosistema iOS:</strong>
+      <ul>
+        <li>Requiere hardware Apple (macOS) y alta en el programa <em>Apple Developer Program</em> para publicar.</li>
+        <li><strong>SDK & Entorno:</strong> Xcode (IDE oficial), Interface Builder (diseño de interfaces gráficas), Simulator (pruebas y emulación) e Instruments (análisis de consumo de memoria, ancho de banda y uso de CPU).</li>
+        <li><strong>Lenguajes:</strong> Objective-C o Swift.</li>
+      </ul>
+    </li>
+    <li><strong>Ecosistema Android:</strong>
+      <ul>
+        <li>Entorno instalable en cualquier sistema operativo (Windows, Linux, macOS).</li>
+        <li><strong>SDK & Entorno:</strong> Android Studio (IDE oficial con emulador integrado) y controlador ADB (Android Debug Bridge) para desplegar y depurar por USB en terminales físicos con modo depuración activo.</li>
+        <li><strong>Lenguajes:</strong> Java o Kotlin.</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h3>B. Desarrollo de Aplicaciones Multiplataforma (Híbridas)</h3>
+  <p>Reducen drásticamente los costes temporales y económicos al unificar el código para diferentes plataformas. Se dividen en dos arquitecturas principales:</p>
+  <ul>
+    <li><strong>1. Tipo Web View:</strong> Envuelven una aplicación web clásica (HTML, CSS y JavaScript) dentro del componente de navegación interna de una app nativa, disponiendo de acceso a APIs del sistema y hardware. Son las más sencillas de desarrollar con perfil web. <em>Frameworks destacados:</em> <strong>Apache Cordova, Ionic y Capacitor</strong>.</li>
+    <li><strong>2. Tipo Multiplataforma Moderna:</strong> Emplean lenguajes universales pero generan código compilado nativo, utilizando los propios controles de interfaz reales del sistema (botones, ventanas, listas). Logran un acabado y rendimiento cercano al desarrollo nativo. <em>Frameworks destacados:</em> <strong>Flutter (Dart), React Native (JavaScript), .NET MAUI (C#) y Kotlin Multiplatform - KMP</strong>.</li>
+  </ul>
+
+  <!-- SECCIÓN 5 TEMA 1 -->
+  <div class="page-break"></div>
+  <div class="pdf-section">5. Presupuesto de una aplicación móvil</div>
+
+  <h2>5.1. Perfiles Profesionales Intervinientes</h2>
+  <ul>
+    <li><strong>Analista:</strong> Identifica y extrae las necesidades del cliente, redacta los requisitos funcionales y determina qué debe hacer la aplicación.</li>
+    <li><strong>Desarrollador / Programador:</strong> Implementa y codifica el software de la app móvil.</li>
+    <li><strong>Otros perfiles habituales:</strong> Diseñador UX/UI, desarrollador backend (servidores y APIs), testers o personal de aseguramiento de calidad (QA), Project Manager y especialistas en ciberseguridad. En equipos pequeños, un mismo perfil puede asumir varias de estas funciones.</li>
+  </ul>
+
+  <h2>5.2. Estimación y Fórmula Presupuestaria</h2>
+  <p>El presupuesto se elabora estimando las horas de dedicación necesarias para cubrir todas las fases del ciclo de vida (análisis, diseño, desarrollo, pruebas, publicación y mantenimiento) según la tarifa del perfil contratado (experiencia, especialización o régimen freelance/empresa):</p>
+
+  <div class="math-formula">
+    Presupuesto aproximado = (Horas de trabajo &times; Coste de los perfiles) + Otros costes
+  </div>
+
+  <h2>5.3. Variables que condicionan el presupuesto</h2>
+  <ul>
+    <li><strong>Complejidad de la aplicación:</strong> Lógica de negocio y alcance del software según su finalidad.</li>
+    <li><strong>Plataformas y Tecnologías elegidas:</strong> Desarrollo dual para Android e iOS de forma nativa por separado o empleo de soluciones multiplataforma.</li>
+    <li><strong>Acceso y persistencia de datos:</strong> Conexión con servidores externos, consumo de bases de datos remotas y sincronización en tiempo real.</li>
+    <li><strong>Pasarelas de pago:</strong> Integración de pasarelas bancarias y transaccionales para comercio electrónico interno.</li>
+    <li><strong>Registro y gestión de usuarios:</strong> Módulo de autenticación, control de perfiles y sesiones seguras.</li>
+    <li><strong>Diseño gráfico (UI/UX):</strong> Diferencia sustancial de coste entre basarse en plantillas preexistentes o diseñar una interfaz de usuario personalizada a medida.</li>
+    <li><strong>Notificaciones push:</strong> Envío periódico o segmentado de avisos y alertas remotas al dispositivo.</li>
+    <li><strong>Integraciones externas:</strong> Consumo de servicios de terceros como mapas (Google Maps), redes sociales, pasarelas de correo y APIs externas.</li>
+  </ul>
+
+  <!-- SECCIÓN 6: APÉNDICE GRÁFICO TEMA 1 -->
+  <div class="pdf-section">Apéndice Tema 1: Registro y Descripción de Imágenes</div>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Detalle del Contenido Gráfico Original del Tema 1</div>
+    <ul>
+      <li><strong>Portadas y separadores de bloque (Diapositivas 1, 3, 16, 29, 38, 49):</strong> Gráficos del robot de Android en tonalidades verdes y blancas, engranajes técnicos de desarrollo, la figura de una rosquilla/donut estilizada y el símbolo tridimensional del euro en color verde para la unidad económica.</li>
+      <li><strong>Silueta histórica (Diapositiva 4):</strong> Panorámica gráfica "Historia del teléfono móvil" mostrando la evolución lineal de dispositivos desde los primeros terminales pesados de antena, pasando por teléfonos con tapa o concha, los modelos clásicos de Nokia, hasta los smartphones todo pantalla táctil.</li>
+      <li><strong>Retrato de Martin Cooper (Diapositiva 5):</strong> Fotografía de Martin Cooper posando con el primer prototipo de mano del Motorola DynaTAC 8000X.</li>
+      <li><strong>Galería histórica (Diapositivas 6 a 12):</strong> Fotografías de terminales emblemáticos: Motorola DynaTAC 8000X comercial, MicroTAC 9800X, Nokia 1011, Siemens S10, Nokia 8810 y 7110 con antena retráctil, Samsung SPH-M100 con auriculares, Ericsson T39, Motorola A845 con lente frontal, PDA HP/iPAQ ejecutando Windows Mobile, iPhone original de 2007 (frontal, perfil y chasis bitono), HTC Dream con teclado QWERTY deslizable, HTC EVO 4G, LG Optimus 2X, Sony Xperia Z5 Premium, Vivo X20 UD y Xiaomi Mi Mix 3 5G.</li>
+      <li><strong>Tecnología contemporánea (Diapositivas 13 a 15):</strong> Ilustración de antenas y conectividad 5G, terminal Xiaomi 11T Pro con adaptador de 120 W, terminales Samsung Galaxy Z Flip y Fold plegados a la mitad, ilustración conceptual de cerebro con circuitos de inteligencia artificial y esquema de silicio mostrando los tres bloques centrales: <code>CPU</code>, <code>GPU</code> y <code>NPU</code>.</li>
+      <li><strong>Gráficas de dimensiones físicas (Diapositivas 19 y 23):</strong>
+        <ul>
+          <li><em>Grosor (Thickness of smallest phone 2012-2022):</em> Curvas que muestran la transición desde terminales gruesos de 14 mm hacia espesores estilizados de 7 a 9 mm.</li>
+          <li><em>Peso (Weight of smallest phone 2012-2022):</em> Curvas ascendentes desde los 100 g iniciales hasta un promedio estándar de 160 a 200 g debido a baterías más grandes y materiales de chasis resistentes.</li>
+          <li><em>Anchura (Width of smallest phones 2012-2022):</em> Estabilización progresiva del ancho de los terminales en la cota de 64 mm a 74 mm para asegurar el manejo a una mano.</li>
+          <li><em>Tamaño de Pantalla (Screen size 2012-2022):</em> Incremento continuo desde paneles iniciales de 3,5" a 4,0" en 2012 hasta diagonales medias de 6,0" a 6,7" en 2022.</li>
+        </ul>
+      </li>
+      <li><strong>Logotipos de Desarrollo y Entornos (Diapositivas 44, 45 y 48):</strong> Muestra de logotipos oficiales de frameworks híbridos (Apache Cordova, Ionic, Capacitor, Flutter, React Native, .NET MAUI y Kotlin Multiplatform - KMP), composición fotográfica de MacBook con iPhone para Xcode y el logotipo oficial de Android Studio junto al robot de depuración por ADB.</li>
+    </ul>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- BLOQUE TEMA 2                              -->
+  <!-- ========================================== -->
+
+  <div class="page-break"></div>
+  <div class="pdf-section">TEMA 2: Instalación, configuración y uso del entorno de desarrollo Android Studio. Emuladores</div>
+
+  <h2>1. Instalación de Android Studio</h2>
+
+  <h2>1.1. Pasos de Instalación y Requisitos Base</h2>
+  <ul>
+    <li><strong>Paso 1: Descarga e instalación del JDK (Java Development Kit):</strong> Obtenido desde la web oficial de Oracle (<code>oracle.com/es/java/technologies/downloads/</code>) seleccionando el instalador correspondiente a la plataforma del sistema operativo (Linux, macOS, Windows). <em>Nota:</em> Si el equipo ya cuenta previamente con el JDK instalado, no es necesario repetir el proceso.</li>
+    <li><strong>Paso 2: Descarga e instalación de Android Studio:</strong> Obtenido desde la web oficial para desarrolladores (<code>developer.android.com/studio</code>). Durante el asistente de configuración (<em>Android Studio Setup</em>), se debe marcar la opción <strong>Android Virtual Device (AVD)</strong> para instalar el soporte de emulación virtual. Se requieren al menos 500 MB de espacio libre para la ruta base de instalación (y aproximadamente 4,1 GB de espacio en disco para el conjunto de componentes iniciales).</li>
+    <li><strong>Paso 3: Instalación y actualización de componentes del SDK de Android:</strong> Al iniciar por primera vez el IDE, el asistente <em>Android Studio Setup Wizard</em> descarga y actualiza los paquetes base (herramientas de construcción <em>Build-Tools</em>, plataformas del SDK, emulador y fuentes). Es obligatorio marcar la aceptación de licencias contractuales (<code>android-sdk-license</code>) para completar la descarga.</li>
+  </ul>
+
+  <h2>1.2. Gestión Avanzada con el SDK Manager</h2>
+  <p>Se puede acceder a la gestión y actualización de componentes desde la ventana de bienvenida (<code>More Actions -> SDK Manager</code>) o desde un proyecto abierto mediante <code>File -> Settings -> Languages & Frameworks -> Android SDK</code>:</p>
+  <ul>
+    <li><strong>Pestaña SDK Platforms:</strong> Permite seleccionar e instalar las APIs deseadas de Android (versiones actuales como Android 17.0 "CinnamonBun" API 37 y anteriores como Android 16.0 "Baklava" API 36 o Android 15.0 "VanillaIceCream" API 35) para hacer retrocompatible la app.</li>
+    <li><strong>Pestaña SDK Tools:</strong> Herramientas indispensables para el desarrollo y depuración. Es imprescindible asegurarse de instalar el <strong>Google USB Driver</strong>, controlador requerido para ejecutar y depurar aplicaciones directamente sobre terminales físicos conectados por cable USB.</li>
+  </ul>
+
+  <h3>Tabla: Herramientas del SDK (SDK Tools destacadas)</h3>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 35%;">Componente SDK</th>
+        <th style="width: 25%;">Identificador / Versión</th>
+        <th style="width: 40%;">Función Principal</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Android SDK Build-Tools</strong></td>
+        <td>v35 / v36.1</td>
+        <td>Herramientas de compilación, empaquetado y firmado del ejecutable Android.</td>
+      </tr>
+      <tr>
+        <td><strong>Android Emulator</strong></td>
+        <td>v35.1.x / v36.1.9</td>
+        <td>Motor de virtualización para emular dispositivos móviles en el PC.</td>
+      </tr>
+      <tr>
+        <td><strong>Android SDK Platform-Tools</strong></td>
+        <td>v35.0.x / v36.0.0</td>
+        <td>Incluye utilidades de plataforma como el depurador ADB (Android Debug Bridge).</td>
+      </tr>
+      <tr>
+        <td><strong>Google USB Driver</strong></td>
+        <td>v13</td>
+        <td>Controlador imprescindible para comunicar el PC con teléfonos físicos Android por USB.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>2. Estructura de un proyecto</h2>
+
+  <h2>2.1. Creación de un Nuevo Proyecto</h2>
+  <ul>
+    <li>Se pulsa en <code>Projects -> New Project</code> (o <code>File -> New -> New Project</code> desde un proyecto abierto).</li>
+    <li><strong>Plantilla de actividad:</strong> Se selecciona <strong>Empty Activity</strong> (plantilla básica configurada para la interfaz declarativa <strong>Jetpack Compose</strong>).</li>
+    <li><strong>Configuración básica del proyecto:</strong>
+      <ul>
+        <li><code>Name</code>: Nombre comercial de la aplicación (ej. <em>MiPrimeraApp</em>).</li>
+        <li><code>Package name</code>: Identificador único en formato DNS inverso (ej. <code>com.example.miprimeraapp</code>).</li>
+        <li><code>Save location</code>: Ruta del disco local asegurándose de que añada la carpeta con el nombre de la app.</li>
+        <li><code>Minimum SDK</code>: Nivel mínimo de API del sistema en el que funcionará la app (ej. API 23 "Marshmallow"; Android 6.0, que abarca aproximadamente el 99,6% de los dispositivos).</li>
+        <li><code>Build configuration language</code>: <strong>Kotlin DSL (build.gradle.kts)</strong> como estándar recomendado.</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h2>2.2. Vistas del Proyecto y Módulos</h2>
+  <p>La entidad <strong>Proyecto</strong> es única y puede albergar múltiples <strong>Módulos</strong> (el módulo principal es <code>:app</code>, que contiene el software ejecutable). Para una comprensión real de la disposición de archivos en disco se recomienda cambiar la vista del explorador al modo <strong>Project</strong> en lugar del modo simplificado <em>Android</em>.</p>
+
+  <h3>Tabla: Organización de Directorios y Archivos de un Proyecto Android</h3>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 30%;">Ruta / Directorio</th>
+        <th style="width: 70%;">Descripción y Contenido</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>/app/src/main/java</code></td>
+        <td>Aloja los paquetes y el código fuente Kotlin (<code>.kt</code>). Contiene <code>MainActivity.kt</code> y el subpaquete <code>ui.theme</code> con los archivos de personalización estética: <code>Theme.kt</code> (tema), <code>Color.kt</code> (paleta) y <code>Type.kt</code> (tipografías).</td>
+      </tr>
+      <tr>
+        <td><code>/app/src/main/res</code></td>
+        <td>Directorio raíz de recursos multimedia e imágenes (<em>resources</em>). Subdividido para adaptarse a distintas densidades de pantalla: <code>/drawable</code> (independiente), <code>/drawable-ldpi</code> (baja), <code>/drawable-mdpi</code> (media), <code>/drawable-hdpi</code> (alta).</td>
+      </tr>
+      <tr>
+        <td><code>/app/src/main/res/values</code></td>
+        <td>Contiene ficheros XML de recursos. Destaca <code>strings.xml</code>, empleado para constantes de texto e <strong>internacionalización (traducción de idiomas)</strong>. <em>(Ficheros clásicos como colors.xml, styles.xml o themes.xml quedan en desuso con Compose)</em>.</td>
+      </tr>
+      <tr>
+        <td><code>AndroidManifest.xml</code></td>
+        <td>Fichero descriptor global de configuración. Informa al sistema de la identidad de la app (icono, nombre), componentes (pantallas, actividades, servicios) y <strong>permisos de acceso a recursos del sistema</strong> (contactos, GPS, SMS).</td>
+      </tr>
+      <tr>
+        <td><code>/app/libs</code></td>
+        <td>Directorio destinado a alojar librerías externas empaquetadas en archivos Java <code>.jar</code>.</td>
+      </tr>
+      <tr>
+        <td><code>/app/build</code></td>
+        <td>Archivos intermedios generados automáticamente tras compilar. Incluye <code>R-def.txt</code> (relativo a la <strong>clase R</strong>), que genera constantes enteras (ID) para cada recurso de <code>/res</code> (ej. <code>R.string.saludo</code>).</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- SECCIÓN 3 TEMA 2 -->
+  <div class="page-break"></div>
+  <div class="pdf-section">3. Creación de un emulador</div>
+
+  <h2>3.1. Configuración de Dispositivos Virtuales (AVD)</h2>
+  <p>Para probar las aplicaciones sin recurrir a un teléfono físico, Android Studio cuenta con la herramienta <strong>Device Manager</strong>:</p>
+  <ul>
+    <li>Se abre el panel lateral <em>Device Manager</em> y se pulsa en el botón <strong>Create Virtual Device</strong>.</li>
+    <li><strong>Selección de Perfil de Hardware:</strong> Se define el factor de forma (Phone, Tablet, Wear OS, TV) y el dispositivo (ej. <em>Pixel 7</em> con pantalla de 6,3", resolución de 1080×2400 píxeles y densidad de 420 dpi).</li>
+    <li><strong>Selección de System Image:</strong> Se descarga la imagen del sistema operativo indicando la API correspondiente (ej. Android 17.0 "CinnamonBun" API 37.2 en arquitectura <code>x86_64</code> con soporte para Google Play Store).</li>
+  </ul>
+
+  <h2>3.2. Lanzamiento y Tiempos de Arranque</h2>
+  <ul>
+    <li>Se inicia el emulador haciendo clic en el icono de <strong>Play</strong> dentro del <em>Device Manager</em>.</li>
+    <li><strong>Tiempos de arranque estimados:</strong>
+      <ul>
+        <li><em>Primer inicio:</em> Tarda aproximadamente <strong>1 minuto y medio</strong> (debe reservar y configurar el espacio en el disco duro).</li>
+        <li><em>Inicios posteriores:</em> Mucho más veloces, demorando alrededor de <strong>30 segundos</strong>.</li>
+      </ul>
+    </li>
+    <li>Una vez iniciado, se selecciona el emulador en el menú superior de dispositivos y se pulsa el botón verde <strong>Run App</strong> (<code>Mayús + F10</code>). La interfaz se visualiza e interactúa en la pestaña <strong>Running Devices</strong>.</li>
+    <li><strong>Alternativas de emulación de terceros para PC:</strong> BlueStacks, Genymotion, NoxPlayer o GameLoop.</li>
+  </ul>
+
+  <h2>4. Ejecución de aplicaciones en dispositivos físicos</h2>
+
+  <h2>4.1. Configuración del Dispositivo Android Físico</h2>
+  <ol>
+    <li><strong>Habilitar las Opciones de Desarrollo:</strong> Desde Android 4.2 están ocultas por defecto. Se entra en <code>Ajustes -> Acerca del dispositivo</code> (o información del teléfono) y se presiona <strong>7 veces consecutivas sobre "Número de compilación"</strong> hasta que aparezca el aviso de activación.</li>
+    <li><strong>Activar la Depuración USB:</strong> Acceder a <code>Ajustes -> Opciones de desarrollo</code> (o dentro de <em>Sistema</em>) y habilitar la casilla <strong>Depuración USB</strong> (permite transferir e instalar apps de depuración).</li>
+  </ol>
+
+  <h2>4.2. Conexión y Despliegue desde Android Studio</h2>
+  <ul>
+    <li>Verificar que el controlador <strong>Google USB Driver</strong> esté instalado en el PC mediante el <em>SDK Manager</em> (<code>File -> Settings -> Languages & Frameworks -> Android SDK -> SDK Tools</code>).</li>
+    <li>Conectar el terminal móvil al PC con un cable USB y aceptar en la pantalla del dispositivo el mensaje que solicita autorización para permitir la depuración USB desde esa computadora.</li>
+    <li>El terminal físico (ej. <em>Xiaomi 23049PCD8G</em>) aparecerá listado automáticamente en el desplegable superior de dispositivos disponibles de Android Studio.</li>
+    <li>Al pulsar <strong>Run App</strong>, la aplicación se compilará, se transferirá e instalará directamente en el smartphone físico, ejecutándose en pantalla en lugar de hacerlo en el emulador.</li>
+  </ul>
+
+  <!-- SECCIÓN 5: APÉNDICE GRÁFICO TEMA 2 -->
+  <div class="pdf-section">Apéndice Tema 2: Registro y Descripción de Imágenes</div>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Detalle del Contenido Gráfico Original del Tema 2</div>
+    <ul>
+      <li><strong>Diapositiva 1 y 14:</strong> Mascota verde de Android con el interior abierto mostrando engranajes técnicos y operarios en miniatura, y gráfico del robot dentro de una rosquilla/donut con glaseado y virutas de colores.</li>
+      <li><strong>Diapositiva 4:</strong> Captura de la página oficial de descargas del JDK de Oracle mostrando opciones para Linux, macOS y Windows.</li>
+      <li><strong>Diapositiva 5:</strong> Captura de la página oficial de Android Studio promocionando el IDE junto al asistente Gemini integrado.</li>
+      <li><strong>Diapositivas 6 a 8:</strong> Ventanas del asistente <em>Android Studio Setup</em>: selección del componente Android Virtual Device, ruta de instalación y diálogo de aceptación de licencias contractuales (<code>android-sdk-license</code>).</li>
+      <li><strong>Diapositivas 9 a 12:</strong> Capturas de la pantalla de bienvenida y del <em>SDK Manager</em> mostrando las pestañas <em>SDK Platforms</em> (APIs) y <em>SDK Tools</em> con la casilla de <strong>Google USB Driver</strong> remarcada en rojo, junto al instalador descargando el archivo zip del controlador.</li>
+      <li><strong>Diapositivas 15 a 19:</strong> Proceso de creación de proyectos: botón <em>New Project</em>, selección de plantilla <em>Empty Activity</em> (Jetpack Compose), formulario de nombre/mínimo SDK y vista de la barra de herramientas resaltando el botón <em>Run App</em>.</li>
+      <li><strong>Diapositivas 21 a 27:</strong> Capturas de la interfaz de Android Studio en vista <em>Project</em> mostrando el árbol de carpetas (<code>/src</code>, <code>/res</code>, <code>/values</code> con <code>strings.xml</code> y <code>MainActivity.kt</code>), además del archivo de símbolos generados <code>R-def.txt</code> dentro de <code>/build</code>.</li>
+      <li><strong>Diapositivas 31 a 34:</strong> Asistente del <em>Device Manager</em> configurando un Pixel 7, interfaz de emulación en <em>Running Devices</em>, menú de Android pulsando 7 veces en <em>Número de compilación</em>, activación de <em>Depuración USB</em> y terminal Xiaomi físico ejecutando la aplicación <em>"Hello World!"</em>.</li>
+    </ul>
+  </div>
+
+</body>
+</html>

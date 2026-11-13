@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>UT1 - Manejo de Ficheros de Texto, Binarios y Acceso Aleatorio</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 1.8cm 1.5cm 2cm 1.5cm;
+      @bottom-right {
+        content: counter(page);
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        font-size: 9pt;
+        color: #64748b;
+      }
+      @bottom-left {
+        content: "Acceso a Datos - UT1";
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        font-size: 9pt;
+        color: #64748b;
+      }
+    }
+
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 10pt;
+      line-height: 1.5;
+      color: #1e293b;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1.doc-title {
+      font-size: 18pt;
+      font-weight: 700;
+      color: #0f172a;
+      text-align: center;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    p.doc-subtitle {
+      text-align: center;
+      font-size: 11pt;
+      color: #0284c7;
+      font-weight: 600;
+      margin-top: 0;
+      margin-bottom: 25px;
+      border-bottom: 2px solid #0284c7;
+      padding-bottom: 10px;
+    }
+
+    .pdf-section {
+      background-color: #0f172a;
+      color: #ffffff;
+      padding: 8px 14px;
+      font-size: 12pt;
+      font-weight: 700;
+      border-radius: 4px;
+      margin-top: 25px;
+      margin-bottom: 15px;
+      page-break-after: avoid;
+    }
+
+    .page-break {
+      page-break-before: always;
+    }
+
+    h2 {
+      font-size: 12pt;
+      color: #0369a1;
+      border-bottom: 1.5px solid #e2e8f0;
+      padding-bottom: 4px;
+      margin-top: 18px;
+      margin-bottom: 10px;
+      page-break-after: avoid;
+    }
+
+    h3 {
+      font-size: 10.5pt;
+      color: #334155;
+      margin-top: 12px;
+      margin-bottom: 6px;
+      page-break-after: avoid;
+    }
+
+    p {
+      margin: 0 0 8px 0;
+      text-align: justify;
+    }
+
+    ul {
+      margin: 0 0 10px 0;
+      padding-left: 20px;
+    }
+
+    li {
+      margin-bottom: 4px;
+    }
+
+    .diagram-box {
+      background-color: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-left: 4px solid #0284c7;
+      padding: 10px 14px;
+      margin: 10px 0;
+      font-size: 9pt;
+      border-radius: 2px;
+      page-break-inside: avoid;
+    }
+
+    .diagram-title {
+      font-weight: bold;
+      color: #0f172a;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      font-size: 8.5pt;
+      letter-spacing: 0.5px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+      font-size: 9pt;
+      page-break-inside: avoid;
+    }
+
+    th, td {
+      border: 1px solid #cbd5e1;
+      padding: 6px 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background-color: #f1f5f9;
+      color: #0f172a;
+      font-weight: 700;
+    }
+
+    tr:nth-child(even) td {
+      background-color: #f8fafc;
+    }
+
+    pre, code {
+      font-family: 'Consolas', 'Courier New', monospace;
+    }
+
+    pre {
+      background-color: #0f172a;
+      color: #f8fafc;
+      padding: 10px 12px;
+      border-radius: 4px;
+      font-size: 8.5pt;
+      line-height: 1.4;
+      overflow-x: auto;
+      margin: 10px 0;
+      page-break-inside: avoid;
+    }
+
+    p code, li code, td code {
+      background-color: #f1f5f9;
+      color: #0369a1;
+      padding: 1px 4px;
+      border-radius: 3px;
+      font-size: 8.5pt;
+      border: 1px solid #e2e8f0;
+    }
+
+    .math-formula {
+      text-align: center;
+      background-color: #f8fafc;
+      border: 1px dashed #94a3b8;
+      padding: 8px;
+      margin: 10px 0;
+      font-weight: bold;
+      color: #0f172a;
+      border-radius: 4px;
+      page-break-inside: avoid;
+    }
+  </style>
+</head>
+<body>
+
+  <h1 class="doc-title">Acceso a Datos - Unidad de Trabajo 1</h1>
+  <p class="doc-subtitle">Resumen Completo: Manejo de Ficheros de Texto, Binarios y de Acceso Aleatorio</p>
+
+  <!-- BLOQUE PDF 1 -->
+  <div class="pdf-section">PDF 1: ACADT - UT1 - 01 Manejo de ficheros de texto</div>
+
+  <h2>1. Introducción</h2>
+  <p><strong>Memoria vs. Persistencia:</strong> Los programas utilizan variables para almacenar información en memoria (datos de entrada, resultados intermedios, etc.), pero estos datos son efímeros y desaparecen al finalizar la ejecución. Cuando se necesita almacenar datos permanentemente, se recurre a soportes de almacenamiento persistente en forma de ficheros o bases de datos (las cuales internamente también se apoyan en archivos).</p>
+
+  <p><strong>Clasificación de los ficheros:</strong></p>
+  <ul>
+    <li><strong>Por contenido:</strong>
+      <ul>
+        <li><em>Texto (caracteres):</em> Contienen únicamente caracteres legibles a través de un editor de texto convencional.</li>
+        <li><em>Binarios (bytes):</em> Almacenan secuencias de bytes que representan cualquier tipo de dato (números, sonido, imágenes, ejecutables, etc.).</li>
+      </ul>
+    </li>
+    <li><strong>Por modo de acceso:</strong>
+      <ul>
+        <li><em>Secuenciales:</em> La información se organiza de forma secuencial; para acceder al byte <em>i</em>-ésimo es forzoso haber leído previamente todos los anteriores.</li>
+        <li><em>Acceso directo o aleatorio:</em> Permite posicionarse y leer/escribir directamente en el byte <em>i</em>-ésimo sin procesar los anteriores.</li>
+      </ul>
+    </li>
+  </ul>
+  <p><strong>Paquetes en Java:</strong> Las clases principales para el manejo de archivos se localizan en los paquetes <code>java.io</code> y <code>java.nio.file</code>.</p>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Representación textual: Jerarquía de clases de java.io (Diagrama)</div>
+    <p>A partir de la clase base <code>Object</code> de <code>java.lang</code>, se despliegan en <code>java.io</code>:</p>
+    <ul>
+      <li><strong>Clases independientes/auxiliares:</strong> <code>File</code>, <code>FileDescriptor</code>, <code>RandomAccessFile</code> (implementa <code>DataInput</code> y <code>DataOutput</code>), <code>FilenameFilter</code> (interfaz) y <code>ObjectStreamClass</code>.</li>
+      <li><strong>Rama InputStream (flujo de entrada de bytes):</strong> <code>ByteArrayInputStream</code>, <code>FileInputStream</code>, <code>FilterInputStream</code> (de la que derivan: <code>BufferedInputStream</code>, <code>DataInputStream</code>, <code>LineNumberInputStream</code>, <code>PushbackInputStream</code>), <code>ObjectInputStream</code> (implementa <code>DataInput</code>), <code>PipedInputStream</code>, <code>SequenceInputStream</code>, <code>StringBufferInputStream</code>.</li>
+      <li><strong>Rama OutputStream (flujo de salida de bytes):</strong> <code>ByteArrayOutputStream</code>, <code>FileOutputStream</code>, <code>FilterOutputStream</code> (de la que derivan: <code>BufferedOutputStream</code>, <code>DataOutputStream</code>, <code>PrintStream</code>), <code>ObjectOutputStream</code> (implementa <code>DataOutput</code>), <code>PipedOutputStream</code>.</li>
+    </ul>
+  </div>
+
+  <h2>2. La clase File</h2>
+  <p>Proporciona utilidades para obtener información de archivos y directorios del sistema de ficheros (nombre, atributos, rutas, etc.). Un objeto <code>File</code> puede representar un archivo físico concreto, una colección de archivos dentro de un directorio o un directorio nuevo pendiente de creación.</p>
+  
+  <ul>
+    <li><strong>Constructores:</strong>
+      <ul>
+        <li><code>File(String rutaCompleta)</code> &rarr; Ejemplo: <code>new File("./resources/textFiles/file001.txt");</code></li>
+        <li><code>File(String rutaDirectorio, String nombreArchivo)</code> &rarr; Ejemplo: <code>new File("./resources/textFiles", "file001.txt");</code></li>
+      </ul>
+    </li>
+    <li><strong>Rutas según el Sistema Operativo:</strong>
+      <ul>
+        <li><em>Windows:</em> Usa barras invertidas escapadas (<code>"C:\\Users\\Admin\\DocumentsandFiles\\file001.txt"</code>).</li>
+        <li><em>Sistemas tipo Unix (Linux, macOS, Android):</em> Emplea barras inclinadas (<code>"/Users/Admin/DocumentsandFiles/file001.txt"</code>).</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h3>Tabla: Métodos principales de la clase File</h3>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 35%;">Método</th>
+        <th style="width: 65%;">Función</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><code>String[] list()</code></td><td>Devuelve un array de String con los nombres de los ficheros y directorios asociados al objeto File.</td></tr>
+      <tr><td><code>File[] listFiles()</code></td><td>Devuelve un array de objetos File conteniendo los ficheros que estén dentro del directorio representado por el objeto File.</td></tr>
+      <tr><td><code>String getName()</code></td><td>Devuelve el nombre del fichero o directorio.</td></tr>
+      <tr><td><code>String getPath()</code></td><td>Devuelve la ruta del fichero o directorio.</td></tr>
+      <tr><td><code>String getAbsolutePath()</code></td><td>Devuelve la ruta absoluta al fichero o directorio.</td></tr>
+      <tr><td><code>boolean exists()</code></td><td>Devuelve true si el fichero o directorio existe.</td></tr>
+      <tr><td><code>boolean canWrite()</code></td><td>Devuelve true si el fichero se puede escribir.</td></tr>
+      <tr><td><code>boolean canRead()</code></td><td>Devuelve true si el fichero o directorio se puede leer.</td></tr>
+      <tr><td><code>boolean isFile()</code></td><td>Devuelve true si el objeto File corresponde a un fichero.</td></tr>
+      <tr><td><code>boolean isDirectory()</code></td><td>Devuelve true si el objeto File corresponde con un directorio.</td></tr>
+      <tr><td><code>long length()</code></td><td>Devuelve el tamaño del fichero en bytes.</td></tr>
+      <tr><td><code>boolean mkdir()</code></td><td>Crea un directorio con el nombre del objeto File (en caso de que no exista).</td></tr>
+      <tr><td><code>boolean renameFileTo(File newName)</code></td><td>Renombra el fichero representado por el objeto File, asignándole el nuevo nombre.</td></tr>
+      <tr><td><code>boolean delete()</code></td><td>Borra el fichero o directorio.</td></tr>
+      <tr><td><code>boolean createNewFile()</code></td><td>Crea un fichero vacío asociado al objeto File (solo se creará en caso de que no exista previamente).</td></tr>
+    </tbody>
+  </table>
+
+  <p><strong>Ejemplo práctico de uso:</strong> Se instancia un archivo <code>File f = new File("src/file001.txt")</code>, se imprimen su nombre, ruta absoluta y directorio padre; con <code>f.exists()</code> se comprueba su presencia para consultar permisos (<code>f.canRead()</code>, <code>f.canWrite()</code>, <code>f.canExecute()</code>) y tamaño (<code>f.length()</code>), o de lo contrario mostrar que no existe.</p>
+
+  <h2>3. Flujos o Streams</h2>
+  <p>Un Stream es la abstracción empleada en Java para canalizar la transferencia de datos entre una fuente (disco duro, memoria principal, red, otro proceso) y un destino. Por defecto operan en serie.</p>
+  <p><strong>Representación del flujo:</strong> <code>[Data Source] &rarr; [Stream de Bytes / Bits] &rarr; [Programa Java]</code>.</p>
+  
+  <ul>
+    <li><strong>Flujos de Bytes (8 bits):</strong> Orientados a operaciones de E/S binarias. Todas las clases derivan de <code>InputStream</code> y <code>OutputStream</code>.</li>
+    <li><strong>Flujos de Caracteres (16 bits):</strong> Orientados a caracteres y texto (soporte para caracteres Unicode de 16 bits). Derivan de las clases abstractas <code>Reader</code> y <code>Writer</code>.</li>
+  </ul>
+
+  <h3>Tabla: Clases derivadas de InputStream (Byte Streams)</h3>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 35%;">Clase</th>
+        <th style="width: 65%;">Función</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><code>ByteArrayInputStream</code></td><td>Permite usar el espacio de almacenamiento intermedio de memoria.</td></tr>
+      <tr><td><code>StringBufferInputStream</code></td><td>Convierte un String en un InputStream.</td></tr>
+      <tr><td><code>FileInputStream</code></td><td>Se emplea para leer datos de un fichero.</td></tr>
+      <tr><td><code>PipedInputStream</code></td><td>Implementa el concepto de tubería (comunicación entre hilos/procesos).</td></tr>
+      <tr><td><code>FilterInputStream</code></td><td>Proporciona funcionalidad adicional a otros streams.</td></tr>
+      <tr><td><code>SequenceInputStream</code></td><td>Concatena dos o más objetos InputStream.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Tabla: Clases derivadas de OutputStream (Byte Streams)</h3>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 35%;">Clase</th>
+        <th style="width: 65%;">Función</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><code>ByteArrayOutputStream</code></td><td>Crea un espacio de almacenamiento en memoria; todos los datos enviados se almacenan en él.</td></tr>
+      <tr><td><code>FileOutputStream</code></td><td>Se emplea para escribir datos en un fichero.</td></tr>
+      <tr><td><code>PipedOutputStream</code></td><td>La información escrita se usa como entrada para un PipedInputStream asociado.</td></tr>
+      <tr><td><code>FilterOutputStream</code></td><td>Proporciona funcionalidad adicional a otras OutputStreams.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Representación textual: Jerarquía de clases de Flujos de Caracteres (Diagrama)</div>
+    <ul>
+      <li><strong>Rama Reader:</strong> <code>BufferedReader</code>, <code>CharArrayReader</code>, <code>InputStreamReader</code> &rarr; de la cual deriva directamente <code>FileReader</code>, <code>FilterReader</code>, <code>PipedReader</code>, <code>StringReader</code>.</li>
+      <li><strong>Rama Writer:</strong> <code>BufferedWriter</code>, <code>CharArrayWriter</code>, <code>OutputStreamWriter</code> &rarr; de la cual deriva directamente <code>FileWriter</code>, <code>FilterWriter</code>, <code>PipedWriter</code>, <code>StringWriter</code>, <code>PrintWriter</code>.</li>
+    </ul>
+    <p><strong>Clases puente (Byte &rarr; Character):</strong></p>
+    <ul>
+      <li><code>InputStreamReader</code>: Convierte flujos de bytes (<code>InputStream</code>) en flujos de caracteres (<code>Reader</code>).</li>
+      <li><code>OutputStreamWriter</code>: Convierte flujos de salida de bytes (<code>OutputStream</code>) en flujos de caracteres (<code>Writer</code>).</li>
+    </ul>
+  </div>
+
+  <h2>4. Formas de acceso y operaciones</h2>
+  <ul>
+    <li><strong>Acceso secuencial:</strong> Los datos se leen y escriben en estricto orden progresivo. Para leer el dato <em>N</em> es imprescindible leer los <em>N-1</em> anteriores. Las inserciones siempre van al final.</li>
+    <li><strong>Acceso directo o aleatorio:</strong> Permite acceder a cualquier byte o registro conociendo su posición o tamaño mediante cálculos de desplazamiento sin recorrer el resto.</li>
+  </ul>
+
+  <p><strong>Operaciones sobre ficheros:</strong> Creación, apertura, lectura, escritura y cierre.</p>
+  <p><strong>Gestión sobre datos (CRUD):</strong></p>
+  <ul>
+    <li><strong>En ficheros secuenciales:</strong>
+      <ul>
+        <li><em>Consulta:</em> Lectura secuencial desde el inicio hasta dar con el registro.</li>
+        <li><em>Alta:</em> Siempre al final del fichero.</li>
+        <li><em>Bajas y Modificaciones:</em> Obligan a procesar el fichero volcando todos los registros (excepto el que se borra o actualiza) a un fichero auxiliar temporal, para luego eliminar el original y renombrar el auxiliar.</li>
+      </ul>
+    </li>
+    <li><strong>En ficheros aleatorios:</strong>
+      <ul>
+        <li>Se utiliza una función de conversión basada en la clave y tamaño de registro (ej.: para clave autonómica <em>N</em>, posición = <code>tamaño * (N - 1)</code>).</li>
+        <li><em>Bajas:</em> Pueden ser lógicas (marca booleana de activo/eliminado) o físicas (eliminación real).</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h2>5. Ficheros de texto en Java</h2>
+  <p>Se gestionan a través de <code>FileReader</code> y <code>FileWriter</code>, requiriendo control de excepciones (<code>FileNotFoundException</code> e <code>IOException</code>).</p>
+
+  <h3>Tabla: Métodos de FileReader (retornan -1 en EOF)</h3>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 40%;">Método</th>
+        <th style="width: 60%;">Función</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><code>int read()</code></td><td>Lee un único carácter y lo devuelve en formato entero.</td></tr>
+      <tr><td><code>int read(char[] buf)</code></td><td>Lee hasta <code>buf.length</code> caracteres de datos y los deposita en el buffer <code>buf</code>.</td></tr>
+      <tr><td><code>int read(char[] buf, int desplazamiento, int n)</code></td><td>Lee hasta <code>n</code> caracteres a partir de la posición <code>desplazamiento</code>.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Tabla: Métodos de FileWriter</h3>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 40%;">Método</th>
+        <th style="width: 60%;">Función</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><code>void write(int c)</code></td><td>Escribe un único carácter.</td></tr>
+      <tr><td><code>void write(char[] buf)</code></td><td>Escribe un array completo de caracteres.</td></tr>
+      <tr><td><code>void write(char[] buf, int desplazamiento, int n)</code></td><td>Escribe <code>n</code> caracteres a partir del índice de <code>desplazamiento</code>.</td></tr>
+      <tr><td><code>void write(String str)</code></td><td>Escribe una cadena de texto directamente.</td></tr>
+      <tr><td><code>void append(char c)</code></td><td>Añade un carácter al final del fichero.</td></tr>
+    </tbody>
+  </table>
+
+  <p><strong>Modo append en FileWriter:</strong> El constructor <code>new FileWriter(f, boolean append)</code> define el comportamiento:</p>
+  <ul>
+    <li><code>true</code>: Concatena nuevos datos al final sin borrar lo previo.</li>
+    <li><code>false</code> (por defecto): Trunca y sobrescribe el contenido previo.</li>
+  </ul>
+
+  <p><strong>Clases avanzadas con buffer y formateo:</strong></p>
+  <ul>
+    <li><code>BufferedReader</code>: Incluye el método <code>readLine()</code> para leer líneas completas de texto (retorna <code>null</code> en EOF); envuelve un <code>FileReader</code>.</li>
+    <li><code>BufferedWriter</code>: Facilita la escritura con buffering y el método <code>newLine()</code> para saltos de línea independientes de la plataforma.</li>
+    <li><code>PrintWriter</code>: Aporta métodos de alto nivel equivalentes a consola (<code>print()</code> y <code>println()</code>), envolviendo un flujo como <code>FileWriter</code>.</li>
+  </ul>
+
+  <!-- SALTO DE PÁGINA PARA EL BLOQUE 2 -->
+  <div class="page-break"></div>
+
+  <!-- BLOQUE PDF 2 -->
+  <div class="pdf-section">PDF 2: ACADT - UT1 - 02 Manejo de ficheros binarios y de acceso aleatorio</div>
+
+  <h2>1. Ficheros binarios en Java</h2>
+  <p>Guardan directamente la representación interna en bits; no son legibles de forma directa con un editor de texto plano y optimizan el espacio en disco.</p>
+  <p>Las clases base de E/S son <code>FileInputStream</code> (lectura) y <code>FileOutputStream</code> (escritura).</p>
+  <p><strong>Modo Append:</strong> Al igual que en texto, <code>new FileOutputStream(f, true)</code> preserva la información existente.</p>
+
+  <h3>Tabla: Métodos de FileInputStream</h3>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 40%;">Método</th>
+        <th style="width: 60%;">Función</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><code>int read()</code></td><td>Lee un byte y lo devuelve como entero (o -1 si es EOF).</td></tr>
+      <tr><td><code>int read(byte[] buf)</code></td><td>Lee hasta <code>buf.length</code> bytes y los almacena en el array <code>buf</code>.</td></tr>
+      <tr><td><code>int read(byte[] buf, int desplazamiento, int n)</code></td><td>Lee hasta <code>n</code> bytes a partir de la posición indicada.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Tabla: Métodos de FileOutputStream</h3>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 40%;">Método</th>
+        <th style="width: 60%;">Función</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><code>void write(int b)</code></td><td>Escribe un byte en el flujo.</td></tr>
+      <tr><td><code>void write(byte[] buf)</code></td><td>Escribe un array completo de bytes.</td></tr>
+      <tr><td><code>void write(byte[] buf, int desplazamiento, int n)</code></td><td>Escribe <code>n</code> bytes del buffer comenzando en la posición indicada.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>2. Flujos de datos primitivos (DataInputStream / DataOutputStream)</h2>
+  <p><strong>Concepto de envoltorio (Wrapper):</strong> <code>FileInputStream</code> y <code>FileOutputStream</code> solo procesan secuencias de bytes crudos. Para trabajar directamente con tipos nativos (<code>int</code>, <code>float</code>, <code>boolean</code>, cadenas UTF, etc.) sin gestionar la conversión de bits a mano, se envuelve el flujo en <code>DataInputStream</code> o <code>DataOutputStream</code>.</p>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Representación conceptual: Wrapping de flujos (Diagrama)</div>
+    <ul>
+      <li><strong>Lectura:</strong> <code>[InputStream crudo (read())] &rarr; Envuelto por &rarr; [DataInputStream (readInt(), readFloat(), readLong()...)]</code></li>
+      <li><strong>Escritura:</strong> <code>[DataOutputStream (writeInt(), writeFloat(), writeLong()...)] &rarr; Envuelve a &rarr; [OutputStream crudo (write())]</code></li>
+    </ul>
+  </div>
+
+  <h3>Tabla: Métodos complementarios de DataInputStream y DataOutputStream</h3>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 50%;">DataInputStream (Lectura)</th>
+        <th style="width: 50%;">DataOutputStream (Escritura)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><code>boolean readBoolean()</code></td><td><code>void writeBoolean(boolean v)</code></td></tr>
+      <tr><td><code>byte readByte()</code></td><td><code>void writeByte(int v)</code></td></tr>
+      <tr><td><code>int readUnsignedInt()</code></td><td><code>void writeBytes(String s)</code></td></tr>
+      <tr><td><code>int readUnsignedShort()</code></td><td><code>void writeShort(short v)</code></td></tr>
+      <tr><td><code>short readShort()</code></td><td><code>void writeChars(String s)</code></td></tr>
+      <tr><td><code>char readChar()</code></td><td><code>void writeChar(char c)</code></td></tr>
+      <tr><td><code>int readInt()</code></td><td><code>void writeInt(int v)</code></td></tr>
+      <tr><td><code>long readLong()</code></td><td><code>void writeLong(long v)</code></td></tr>
+      <tr><td><code>float readFloat()</code></td><td><code>void writeFloat(float v)</code></td></tr>
+      <tr><td><code>double readDouble()</code></td><td><code>void writeDouble(double v)</code></td></tr>
+      <tr><td><code>String readUTF()</code></td><td><code>void writeUTF(String str)</code></td></tr>
+    </tbody>
+  </table>
+
+  <p><strong>Detección de Fin de Fichero:</strong> Al leer con <code>DataInputStream</code>, el fin del archivo no devuelve -1, sino que lanza la excepción <code>EOFException</code>. La estructura canónica consiste en encerrar la lectura en un bucle infinito <code>do { ... } while(true);</code> dentro de un bloque <code>try-catch (EOFException e)</code> para proceder al cierre del flujo en la captura.</p>
+
+  <h2>3. Persistencia de Objetos (ObjectInputStream / ObjectOutputStream)</h2>
+  <p>Permite guardar y recuperar instancias de clases completas en formato binario mediante serialización, evitando tener que descomponer el objeto atributo por atributo.</p>
+  <ul>
+    <li><strong>Requisito indispensable:</strong> La clase del objeto a persistir debe implementar la interfaz <code>Serializable</code> (del paquete <code>java.io</code>).</li>
+    <li><strong>Lectura y escritura:</strong>
+      <ul>
+        <li><code>oos.writeObject(objeto)</code>: Serializa y escribe el objeto.</li>
+        <li><code>(TipoClase) ois.readObject()</code>: Lee y deserializa el objeto (requiere capturar <code>ClassNotFoundException</code> y <code>EOFException</code>).</li>
+      </ul>
+    </li>
+  </ul>
+
+  <p><strong>La problemática de la cabecera (Header Corrupted):</strong></p>
+  <ul>
+    <li>Cada vez que se crea una nueva instancia de <code>ObjectOutputStream</code>, Java inyecta automáticamente una cabecera binaria inicial con metainformación.</li>
+    <li>Si se abre un fichero existente para añadir objetos en modo append, se volverá a incrustar una cabecera intermedia entre los objetos ya guardados y los nuevos.</li>
+    <li>Al leer el fichero secuencialmente con <code>ObjectInputStream</code>, al topar con esa cabecera secundaria en mitad del flujo se lanza un error de tipo <code>StreamCorruptedException</code>.</li>
+  </ul>
+
+  <p><strong>Solución técnica:</strong></p>
+  <p>Crear una subclase personalizada derivada de <code>ObjectOutputStream</code> (por ejemplo, <code>MyObjectOutputStream</code>) sobrescribiendo el método <code>writeStreamHeader()</code> para dejarlo completamente vacío:</p>
+
+  <pre><code>public class MyObjectOutputStream extends ObjectOutputStream {
+    public MyObjectOutputStream(OutputStream out) throws IOException {
+        super(out);
+    }
+    @Override
+    protected void writeStreamHeader() throws IOException {
+        // Se deja vacío para no duplicar cabeceras en archivos ya creados
+    }
+}</code></pre>
+
+  <p>Al abrir el archivo para escritura, comprobar si existe mediante <code>f.exists()</code>: si el archivo no existe se usa <code>ObjectOutputStream</code> estándar (para escribir la cabecera requerida); si ya existe, se instancia <code>MyObjectOutputStream</code>.</p>
+
+  <h2>4. Ficheros de acceso aleatorio (RandomAccessFile)</h2>
+  <p>Permite el posicionamiento libre dentro de un archivo mediante un puntero de lectura/escritura sin estar obligado a recorrer los registros previos.</p>
+  <ul>
+    <li><strong>Constructores y modos:</strong> <code>RandomAccessFile(String ruta, String modo)</code> o <code>RandomAccessFile(File f, String modo)</code>. Modos: <code>"r"</code> (solo lectura) y <code>"rw"</code> (lectura y escritura).</li>
+  </ul>
+
+  <h3>Tabla: Métodos de control del puntero en RandomAccessFile</h3>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 35%;">Método</th>
+        <th style="width: 65%;">Función</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><code>long getFilePointer()</code></td><td>Devuelve la posición actual (en bytes) donde se ubica el puntero.</td></tr>
+      <tr><td><code>void seek(long posición)</code></td><td>Mueve y coloca el cursor de forma absoluta en la posición de bytes indicada.</td></tr>
+      <tr><td><code>long length()</code></td><td>Devuelve el tamaño global del fichero en bytes.</td></tr>
+      <tr><td><code>int skipBytes(int desp)</code></td><td>Desplaza el cursor de forma relativa un número de bytes dado a partir de la posición actual.</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Tabla: Tamaño de tipos de datos en Java (Cálculo de registros)</h3>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 50%;">Tipo de dato</th>
+        <th style="width: 50%;">Tamaño en bytes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td><code>boolean</code></td><td>1 bit (se alinea a nivel de byte en flujos estándar)</td></tr>
+      <tr><td><code>byte</code></td><td>1 byte</td></tr>
+      <tr><td><code>char</code></td><td>2 bytes (codificación Unicode)</td></tr>
+      <tr><td><code>short</code></td><td>2 bytes</td></tr>
+      <tr><td><code>int</code></td><td>4 bytes</td></tr>
+      <tr><td><code>float</code></td><td>4 bytes</td></tr>
+      <tr><td><code>long</code></td><td>8 bytes</td></tr>
+      <tr><td><code>double</code></td><td>8 bytes</td></tr>
+    </tbody>
+  </table>
+
+  <p><strong>Cálculo de tamaño de un registro compuesto (Caso del documento):</strong></p>
+  <ul>
+    <li>Campo <code>id</code> (<code>int</code>): 4 bytes</li>
+    <li>Campo <code>apellido</code> (fijado a 10 <code>char</code> usando <code>StringBuffer.setLength(10)</code>): 10 &times; 2 = 20 bytes</li>
+    <li>Campo <code>departamento</code> (<code>int</code>): 4 bytes</li>
+    <li>Campo <code>salario</code> (<code>double</code>): 8 bytes</li>
+    <li><strong>Tamaño total del registro:</strong> 4 + 20 + 4 + 8 = <strong>36 bytes</strong>.</li>
+  </ul>
+
+  <p><strong>Fórmula de acceso posicional:</strong></p>
+  <div class="math-formula">
+    Posición = (N - 1) &times; tamañoRegistro
+  </div>
+  <p>Ejemplo: para el empleado con ID 5 con registros de 36 bytes, el cursor se posiciona en:</p>
+  <pre><code>raf.seek((5 - 1) * 36); // Posiciona el puntero en el byte 144</code></pre>
+
+</body>
+</html>

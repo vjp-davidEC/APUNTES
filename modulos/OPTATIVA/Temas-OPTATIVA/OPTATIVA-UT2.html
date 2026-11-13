@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>ABS - UT 2: Administración Remota de Sistemas</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 1.8cm 1.5cm 2cm 1.5cm;
+      @bottom-right {
+        content: counter(page);
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        font-size: 9pt;
+        color: #64748b;
+      }
+      @bottom-left {
+        content: "ABS - UT 2 | IES Valle del Jerte";
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        font-size: 9pt;
+        color: #64748b;
+      }
+    }
+
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 10pt;
+      line-height: 1.5;
+      color: #1e293b;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1.doc-title {
+      font-size: 17pt;
+      font-weight: 700;
+      color: #0f172a;
+      text-align: center;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    p.doc-subtitle {
+      text-align: center;
+      font-size: 10.5pt;
+      color: #15803d;
+      font-weight: 600;
+      margin-top: 0;
+      margin-bottom: 25px;
+      border-bottom: 2px solid #16a34a;
+      padding-bottom: 10px;
+    }
+
+    .pdf-section {
+      background-color: #0f172a;
+      color: #ffffff;
+      padding: 8px 14px;
+      font-size: 11.5pt;
+      font-weight: 700;
+      border-radius: 4px;
+      margin-top: 25px;
+      margin-bottom: 15px;
+      page-break-after: avoid;
+    }
+
+    .page-break {
+      page-break-before: always;
+    }
+
+    h2 {
+      font-size: 11.5pt;
+      color: #15803d;
+      border-bottom: 1.5px solid #e2e8f0;
+      padding-bottom: 4px;
+      margin-top: 18px;
+      margin-bottom: 10px;
+      page-break-after: avoid;
+    }
+
+    h3 {
+      font-size: 10pt;
+      color: #334155;
+      margin-top: 12px;
+      margin-bottom: 6px;
+      page-break-after: avoid;
+    }
+
+    p {
+      margin: 0 0 8px 0;
+      text-align: justify;
+    }
+
+    ul, ol {
+      margin: 0 0 10px 0;
+      padding-left: 20px;
+    }
+
+    li {
+      margin-bottom: 4px;
+    }
+
+    .diagram-box {
+      background-color: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-left: 4px solid #16a34a;
+      padding: 10px 14px;
+      margin: 10px 0;
+      font-size: 9pt;
+      border-radius: 2px;
+      page-break-inside: avoid;
+    }
+
+    .diagram-title {
+      font-weight: bold;
+      color: #0f172a;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      font-size: 8.5pt;
+      letter-spacing: 0.5px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+      font-size: 8.5pt;
+      page-break-inside: avoid;
+    }
+
+    th, td {
+      border: 1px solid #cbd5e1;
+      padding: 6px 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background-color: #f1f5f9;
+      color: #0f172a;
+      font-weight: 700;
+    }
+
+    tr:nth-child(even) td {
+      background-color: #f8fafc;
+    }
+
+    pre, code {
+      font-family: 'Consolas', 'Courier New', monospace;
+    }
+
+    pre {
+      background-color: #0f172a;
+      color: #f8fafc;
+      padding: 10px 12px;
+      border-radius: 4px;
+      font-size: 8.5pt;
+      line-height: 1.4;
+      overflow-x: auto;
+      margin: 10px 0;
+      page-break-inside: avoid;
+    }
+
+    p code, li code, td code {
+      background-color: #f1f5f9;
+      color: #15803d;
+      padding: 1px 4px;
+      border-radius: 3px;
+      font-size: 8.5pt;
+      border: 1px solid #e2e8f0;
+    }
+  </style>
+</head>
+<body>
+
+  <h1 class="doc-title">Administración Básica de Sistemas (DAM / DAW)</h1>
+  <p class="doc-subtitle">Resumen Completo: UT 2 - Administración Remota de Sistemas | IES Valle del Jerte</p>
+
+  <!-- SECCIÓN 1: INTRODUCCIÓN Y CONCEPTOS BÁSICOS -->
+  <div class="pdf-section">1. Introducción y Conceptos Básicos</div>
+
+  <h2>1.1. ¿Qué es la Administración Remota?</h2>
+  <p>La administración remota permite supervisar, configurar y controlar sistemas informáticos desde ubicaciones remotas sin necesidad de presencia física ante el equipo. Constituye un pilar esencial en infraestructuras corporativas y centros de datos modernos.</p>
+  <ul>
+    <li><strong>Ventajas:</strong> Disminución drástica de costes por desplazamientos, agilización en la resolución de incidencias y flexibilidad operativa.</li>
+    <li><strong>Desafíos y riesgos:</strong> Dependencia absoluta de la disponibilidad del enlace de red e introducción de vectores de ataque adicionales que exigen blindar la seguridad.</li>
+    <li><strong>Casos de aplicación:</strong> Gestión integral de centros de datos, soporte técnico a usuarios, administración centralizada de redes corporativas distribuidas, teletrabajo y automatización de procesos sobre múltiples servidores en paralelo.</li>
+  </ul>
+
+  <h2>1.2. Modo Texto y Arquitectura Cliente-Servidor</h2>
+  <ul>
+    <li><strong>Modo texto (CLI):</strong> Las consolas en modo texto (como Bash en Linux o PowerShell en Windows) permiten redirección de flujos de entrada/salida (E/S), gestión directa de procesos y ejecución de scripts de automatización. Son la solución óptima para servidores remotos por su mínimo consumo de memoria RAM y CPU, funcionando con total agilidad sobre enlaces lentos o inestables.</li>
+    <li><strong>Arquitectura Cliente-Servidor:</strong> El modelo de comunicación se fundamenta en un software cliente que envía peticiones y órdenes a través de la red hacia un servicio demonio que se ejecuta en el servidor. El servidor procesa la instrucción y devuelve los flujos de respuesta correspondientes de manera estructurada y segura.</li>
+  </ul>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Ejemplo en Consola: Descubrimiento de Servicios Remotos con Nmap</div>
+    <pre><code>bash-3.00$ su
+Password:
+-bash-3.00# nmap 192.168.1.5
+Starting nmap 3.75 (http://www.insecure.org/nmap/) at 2005-05-04 18:31 CEST
+Interesting ports on genserv (192.168.1.5):
+(The 1661 ports scanned but not shown below are in state closed)
+PORT   STATE SERVICE
+21/tcp open  ftp
+22/tcp open  openssh
+MAC Address: 00:90:27:AA:57:40 (Intel)
+Nmap run completed -- 1 IP address (1 host up) scanned in 0.338 seconds</code></pre>
+  </div>
+
+  <!-- SECCIÓN 2: PROTOCOLOS DE ACCESO REMOTO -->
+  <div class="page-break"></div>
+  <div class="pdf-section">2. Protocolos de Acceso Remoto</div>
+
+  <h2>2.1. SSH (Secure Shell)</h2>
+  <ul>
+    <li><strong>Características y puerto:</strong> Opera a través del <strong>puerto TCP 22</strong>. Proporciona comunicaciones cifradas de extremo a extremo mediante algoritmos robustos como AES, DES y ChaCha20.</li>
+    <li><strong>Mecanismos de autenticación:</strong> Soporta inicio de sesión mediante clave pública/privada (asimétrica), contraseñas robustas y autenticación corporativa centralizada basada en Kerberos.</li>
+    <li><strong>Evolución de versiones:</strong> La especificación <code>SSH-1</code> está obsoleta por vulnerabilidades de diseño. El estándar actual es <code>SSH-2</code>, que añade mejoras críticas de seguridad, algoritmos de compresión de datos, reenvío de puertos (<em>port forwarding</em> / túneles seguros) y reenvío gráfico mediante <em>X11 forwarding</em>.</li>
+    <li><strong>Propósito:</strong> Es el estándar de facto para la administración remota, transferencia cifrada de archivos y tunelización segura.</li>
+  </ul>
+
+  <h2>2.2. Protocolos de Escritorio Gráfico: RDP vs. VNC</h2>
+  <ul>
+    <li><strong>RDP (Remote Desktop Protocol):</strong> Desarrollado por Microsoft, opera sobre el <strong>puerto TCP 3389</strong>. Está optimizado para transferir la interfaz gráfica de Windows, soportando redirección de sonido, portapapeles y dispositivos USB. Proporciona una seguridad media-alta gracias al uso de TLS y autenticación a nivel de red (NLA - <em>Network Level Authentication</em>).</li>
+    <li><strong>VNC (Virtual Network Computing):</strong> Basado en el protocolo RFB (<em>Remote Framebuffer</em>), opera por defecto en el <strong>puerto TCP 5900</strong> (y puertos sucesivos). Es una solución multiplataforma (Windows, Linux, macOS) orientada a asistencia técnica que transmite mapas de bits de la pantalla; no integra cifrado nativo robusto por defecto (siendo opcional o requiriendo encapsulación mediante túneles SSH).</li>
+  </ul>
+
+  <h3>Tabla: Cuadro Comparativo de Protocolos de Acceso Remoto</h3>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 15%;">Protocolo</th>
+        <th style="width: 12%;">Puerto</th>
+        <th style="width: 25%;">Nivel de Seguridad</th>
+        <th style="width: 23%;">Consumo de Ancho de Banda</th>
+        <th style="width: 25%;">Ámbito y Recomendación de Uso</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>SSH</strong></td>
+        <td>TCP 22</td>
+        <td>Alta (Cifrado robusto AES/ChaCha20, claves públicas).</td>
+        <td>Muy bajo (modo texto optimizado).</td>
+        <td>Estándar universal de administración y transferencias seguras.</td>
+      </tr>
+      <tr>
+        <td><strong>Telnet</strong></td>
+        <td>TCP 23</td>
+        <td>Nula (Tráfico y credenciales en texto plano).</td>
+        <td>Muy bajo.</td>
+        <td>Totalmente obsoleto; prohibido en entornos de producción.</td>
+      </tr>
+      <tr>
+        <td><strong>RDP</strong></td>
+        <td>TCP 3389</td>
+        <td>Media - Alta (Cifrado TLS y autenticación NLA).</td>
+        <td>Moderado (transmisión por primitivas gráficas).</td>
+        <td>Administración visual nativa de plataformas Windows.</td>
+      </tr>
+      <tr>
+        <td><strong>VNC</strong></td>
+        <td>TCP 5900+</td>
+        <td>Baja (Cifrado opcional / no nativo por defecto).</td>
+        <td>Alto (transmisión continua de framebuffer).</td>
+        <td>Soporte interactivo multiplataforma en redes locales protegidas.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- SECCIÓN 3: SERVICIOS EN SISTEMAS OPERATIVOS -->
+  <div class="page-break"></div>
+  <div class="pdf-section">3. Configuración de Servicios Nativos en Sistemas Operativos</div>
+
+  <h2>3.1. OpenSSH en Linux / Unix</h2>
+  <ul>
+    <li><strong>Instalación:</strong> Despliegue del paquete del servidor mediante los gestores correspondientes (<code>sudo apt install openssh-server</code> en Debian/Ubuntu o <code>sudo dnf/yum install openssh-server</code> en RHEL/CentOS).</li>
+    <li><strong>Archivo de configuración del demonio:</strong> Se ubica en <code>/etc/ssh/sshd_config</code>.</li>
+    <li><strong>Directivas recomendadas de bastionado (Hardening):</strong>
+      <pre><code># Modificaciones esenciales en /etc/ssh/sshd_config
+Port 2222                    # Cambiar el puerto estándar TCP 22
+PermitRootLogin no           # Prohibir inicio de sesión directo al superusuario root
+PasswordAuthentication no    # Forzar uso exclusivo de autenticación por par de claves
+AllowUsers admin_usuario     # Limitar el acceso solo a cuentas autorizadas explícitamente</code></pre>
+    </li>
+    <li><strong>Herramientas accesorias del ecosistema:</strong>
+      <ul>
+        <li><code>ssh-keygen</code>: Generación de pares de claves públicas/privadas (ej. RSA de 4096 bits o Ed25519).</li>
+        <li><code>scp</code>: Copia y transferencia segura de ficheros de terminal a terminal.</li>
+        <li><code>sftp</code>: Protocolo interactivo seguro de transferencia de archivos montado sobre el canal SSH.</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h2>3.2. Servicios Remotos en Windows: RDP y WinRM / PSRemoting</h2>
+  <ul>
+    <li><strong>Remote Desktop Services (RDP):</strong> Habilita el control interactivo completo del escritorio gráfico. En entornos corporativos multiusuario o de terminal server requiere el licenciamiento CAL (<em>Client Access License</em>) y se gestiona mediante directivas de grupo locales o de dominio (GPO).</li>
+    <li><strong>WinRM (Windows Remote Management) y PSRemoting:</strong> Es la implementación del protocolo estándar WS-Management en Windows. Permite la ejecución de cmdlets remotos y la apertura de sesiones interactivas persistentes desde PowerShell mediante <code>Enter-PSSession</code> o <code>Invoke-Command</code>.</li>
+  </ul>
+
+  <h2>3.3. Configuración y Políticas de Firewall</h2>
+  <p>El cortafuegos constituye la primera barrera defensiva en los servicios remotos, requiriendo aplicar el principio de mínimo privilegio:</p>
+  <ul>
+    <li><strong>Linux (UFW / Iptables):</strong> Permite abrir puertos específicos con restricción opcional por dirección IP de origen:
+      <pre><code># Permitir el acceso SSH solo desde una red de confianza mediante UFW
+sudo ufw allow from 192.168.1.0/24 to any port 22 proto tcp
+sudo ufw allow 3389/tcp
+sudo ufw enable</code></pre>
+    </li>
+    <li><strong>Windows (PowerShell):</strong> Gestión directa de reglas a través del módulo <code>NetSecurity</code>:
+      <pre><code># Habilitar regla de entrada para la administración remota
+New-NetFirewallRule -Name "Permitir_RDP" -DisplayName "Escritorio Remoto Seguro" `
+  -Enabled True -Direction Inbound -Protocol TCP -LocalPort 3389 -Action Allow</code></pre>
+    </li>
+    <li><strong>Pautas generales de seguridad:</strong> Cambiar los números de puerto asignados por defecto para mitigar escaneos automatizados, filtrar accesos por listas blancas de IP y monitorizar activamente los logs de intentos de autenticación anómalos.</li>
+  </ul>
+
+  <!-- SECCIÓN 4: HERRAMIENTAS GRÁFICAS EXTERNAS -->
+  <div class="page-break"></div>
+  <div class="pdf-section">4. Herramientas Gráficas Externas y Soluciones Web</div>
+
+  <h2>4.1. Soluciones de Soporte y Acceso P2P: TeamViewer y AnyDesk</h2>
+  <ul>
+    <li><strong>TeamViewer:</strong> Emplea arquitectura híbrida con conexiones P2P (Peer-to-Peer) intermediadas por servidores de enrutamiento y cifrado robusto AES de 256 bits. Incorpora chat interactivo, intercambio rápido de ficheros, VPN integrada y gestión no presencial con inicio automático del sistema.</li>
+    <li><strong>AnyDesk:</strong> Desarrollado sobre el códec propietario <code>DeskRT</code>, especialmente diseñado para proporcionar una tasa de refresco fluida y latencias ultra reducidas. Destaca por ser un ejecutable extremadamente ligero, soportando grabación de sesiones, libreta de direcciones centralizada y transferencia bidireccional de datos.</li>
+  </ul>
+
+  <h2>4.2. Clientes y Gestores Multiprotocolo: NoMachine y Remmina</h2>
+  <ul>
+    <li><strong>NoMachine:</strong> Utiliza la tecnología NX, optimizada para ofrecer una alta compresión de tráfico de pantalla, permitiendo operar con fluidez en redes con ancho de banda restringido o alta latencia, gestionando múltiples sesiones de usuario en paralelo.</li>
+    <li><strong>Remmina:</strong> Cliente universal de código abierto para entornos Linux. Soporta de forma unificada conexiones bajo los protocolos RDP, VNC y SSH, ofreciendo gestión de marcadores/favoritos, personalización de resoluciones, credenciales guardadas y arquitectura extensible mediante plugins.</li>
+  </ul>
+
+  <h2>4.3. Soluciones Basadas en Web y Gestión Empresarial Centralizada</h2>
+  <ul>
+    <li><strong>Apache Guacamole:</strong> Pasarela de acceso remoto sin cliente (<em>clientless</em>). Se ejecuta como un portal web accesible desde cualquier navegador moderno mediante HTML5, traduciendo conexiones hacia servidores RDP, VNC o SSH de la red interna sin requerir agentes instalados en los equipos clientes o dispositivos móviles.</li>
+    <li><strong>RDCMan (Remote Desktop Connection Manager):</strong> Herramienta administrativa para entornos Windows que centraliza y organiza múltiples sesiones RDP simultáneas en árbol jerárquico, permitiendo herencia de credenciales y administración agrupada de grandes parques de servidores.</li>
+  </ul>
+
+  <!-- APÉNDICE: MATERIAL GRÁFICO ORIGINAL -->
+  <div class="page-break"></div>
+  <div class="pdf-section">Apéndice: Registro y Descripción de Contenido Gráfico Original</div>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Contenido Visual e Interfaces Capturadas en la Presentación</div>
+    <ul>
+      <li><strong>Diapositiva 4 (Terminal con escaneo Nmap):</strong> Captura de pantalla de consola Linux ejecutando como root la utilidad <code>nmap 192.168.1.5</code> sobre el host objetivo 'genserv', identificando abiertos los puertos TCP 21 (FTP) y TCP 22 (OpenSSH).</li>
+      <li><strong>Diapositiva 11 (Cliente Conexión a Escritorio Remoto de Windows):</strong> Ventana nativa de <code>mstsc.exe</code> (Conexión a Escritorio Remoto) configurando una sesión hacia el equipo 'ARTEMIS' bajo la cuenta de usuario 'fernando.torrecilla'.</li>
+      <li><strong>Diapositiva 14 (Panel de Control de TeamViewer y AnyDesk):</strong> Captura comparativa que ilustra las interfaces operativas de TeamViewer (con ID de acceso y clave temporal) y de AnyDesk (mostrando la solicitud de sesión entrante del usuario 'Andi' y el panel de permisos interactivos).</li>
+    </ul>
+  </div>
+
+</body>
+</html>

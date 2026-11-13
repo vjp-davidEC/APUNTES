@@ -1,0 +1,1145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>PMYDM - Temario Completo (Temas 3, 4, 5, 6 y 7)</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 1.8cm 1.5cm 2cm 1.5cm;
+      @bottom-right {
+        content: counter(page);
+        font-family: Georgia, 'Times New Roman', Times, serif;
+        font-size: 9pt;
+        color: #64748b;
+      }
+      @bottom-left {
+        content: "PMYDM - Guía y Catálogo Completo | IES Valle del Jerte";
+        font-family: Georgia, 'Times New Roman', Times, serif;
+        font-size: 9pt;
+        color: #64748b;
+      }
+    }
+
+    body {
+      font-family: Georgia, 'Times New Roman', Times, serif;
+      font-size: 10pt;
+      line-height: 1.5;
+      color: #1e293b;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1.doc-title {
+      font-size: 17pt;
+      font-weight: 700;
+      color: #0f172a;
+      text-align: center;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    p.doc-subtitle {
+      text-align: center;
+      font-size: 10.5pt;
+      color: #15803d;
+      font-weight: 600;
+      margin-top: 0;
+      margin-bottom: 25px;
+      border-bottom: 2px solid #16a34a;
+      padding-bottom: 10px;
+    }
+
+    .pdf-section {
+      background-color: #0f172a;
+      color: #ffffff;
+      padding: 8px 14px;
+      font-size: 11.5pt;
+      font-weight: 700;
+      border-radius: 4px;
+      margin-top: 25px;
+      margin-bottom: 15px;
+      page-break-after: avoid;
+    }
+
+    .page-break {
+      page-break-before: always;
+    }
+
+    h2 {
+      font-size: 11.5pt;
+      color: #15803d;
+      border-bottom: 1.5px solid #e2e8f0;
+      padding-bottom: 4px;
+      margin-top: 18px;
+      margin-bottom: 10px;
+      page-break-after: avoid;
+    }
+
+    h3 {
+      font-size: 10pt;
+      color: #334155;
+      margin-top: 12px;
+      margin-bottom: 6px;
+      page-break-after: avoid;
+    }
+
+    p {
+      margin: 0 0 8px 0;
+      text-align: justify;
+    }
+
+    ul, ol {
+      margin: 0 0 10px 0;
+      padding-left: 20px;
+    }
+
+    li {
+      margin-bottom: 4px;
+    }
+
+    .diagram-box {
+      background-color: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-left: 4px solid #16a34a;
+      padding: 10px 14px;
+      margin: 10px 0;
+      font-size: 9pt;
+      border-radius: 2px;
+      page-break-inside: avoid;
+    }
+
+    .diagram-title {
+      font-weight: bold;
+      color: #0f172a;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      font-size: 8.5pt;
+      letter-spacing: 0.5px;
+    }
+
+    .exercise-box {
+      background-color: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-left: 4px solid #22c55e;
+      padding: 10px 14px;
+      margin: 12px 0;
+      border-radius: 4px;
+      page-break-inside: avoid;
+    }
+
+    .exercise-title {
+      font-weight: 700;
+      color: #166534;
+      margin-bottom: 4px;
+      font-size: 9.5pt;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+      font-size: 8.5pt;
+      page-break-inside: avoid;
+    }
+
+    th, td {
+      border: 1px solid #cbd5e1;
+      padding: 6px 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background-color: #f1f5f9;
+      color: #0f172a;
+      font-weight: 700;
+    }
+
+    tr:nth-child(even) td {
+      background-color: #f8fafc;
+    }
+
+    pre, code {
+      font-family: 'Consolas', 'Courier New', monospace;
+    }
+
+    pre {
+      background-color: #0f172a;
+      color: #f8fafc;
+      padding: 10px 12px;
+      border-radius: 4px;
+      font-size: 8.5pt;
+      line-height: 1.4;
+      overflow-x: auto;
+      margin: 10px 0;
+      page-break-inside: avoid;
+    }
+
+    p code, li code, td code {
+      background-color: #f1f5f9;
+      color: #15803d;
+      padding: 1px 4px;
+      border-radius: 3px;
+      font-size: 8.5pt;
+      border: 1px solid #e2e8f0;
+    }
+
+    a {
+      color: #15803d;
+      text-decoration: underline;
+      font-weight: 600;
+    }
+
+    a:hover {
+      color: #166534;
+    }
+  </style>
+</head>
+<body>
+
+  <h1 class="doc-title">Programación Multimedia y Dispositivos Móviles</h1>
+  <p class="doc-subtitle">Guía de Estudio Integral y Catálogo Técnico (Temas 3, 4, 5, 6 y 7)</p>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Propósito, Referencias y Configuración de Recursos</div>
+    <p>Documento unificado y completo que combina la <strong>guía didáctica y temática exhaustiva</strong> (teoría completa, sintaxis, explicaciones detalladas y enunciados de consolidación de los temas 3, 4, 5, 6 y 7) con las <strong>tablas de referencia rápida y catálogo canónico</strong> de componentes, modificadores, estados, menús y ciclo de vida en Android con Jetpack Compose (IES Valle del Jerte, Plasencia).</p>
+    <p><strong>Selector y Conversor de Colores Web (HTML / Hex / RGB):</strong> Consulta la paleta y códigos en <a href="https://htmlcolorcodes.com/es/" target="_blank">HTML Color Codes (Español)</a>.</p>
+    <div class="diagram-title" style="margin-top: 8px;">Configuración de Dependencias: Material Icons Extended</div>
+    <p><strong>1. Archivo <code>libs.versions.toml</code> (carpeta gradle del proyecto):</strong><br>
+    En la sección <code>[libraries]</code> añadir:<br>
+    <code>androidx-compose-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended" }</code></p>
+    <p><strong>2. Archivo <code>build.gradle.kts</code> (Module :app):</strong><br>
+    En el bloque <code>dependencies { ... }</code> añadir:<br>
+    <code>implementation(libs.androidx.compose.material.icons.extended)</code></p>
+    <p><strong>3. Sincronización:</strong> Pulsar sobre <em>Sync Now</em> en Android Studio para descargar la librería.</p>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- TABLAS RÁPIDAS DE ARQUITECTURA Y CICLO    -->
+  <!-- ========================================== -->
+  <div class="pdf-section">Sección Rápida: Arquitectura y Ciclo de Vida de la Actividad</div>
+
+  <p>Componentes base administrados directamente por el sistema operativo Android para la ejecución, servicios y comunicación entre aplicaciones:</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 25%;">Componente</th>
+        <th style="width: 35%;">Función Principal</th>
+        <th style="width: 40%;">Implementación / Ejemplo</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Activity</strong></td>
+        <td>Punto de entrada con ventana gráfica. En Compose se aplica <em>Single-Activity Architecture</em> donde una sola actividad contiene los composables.</td>
+        <td><code>class MainActivity : ComponentActivity()</code></td>
+      </tr>
+      <tr>
+        <td><strong>Composable</strong></td>
+        <td>Funciones que describen partes visuales de la interfaz de forma declarativa.</td>
+        <td><code>@Composable fun MiPantalla() { ... }</code></td>
+      </tr>
+      <tr>
+        <td><strong>Service</strong></td>
+        <td>Procesa tareas prolongadas en segundo plano sin proporcionar interfaz gráfica (música, descargas).</td>
+        <td>Clases derivadas de <code>Service</code> ejecutadas en background.</td>
+      </tr>
+      <tr>
+        <td><strong>Content Provider</strong></td>
+        <td>Gestiona el acceso y compartición de datos seguros entre distintas apps (contactos, galería).</td>
+        <td>Consultas mediante <code>ContentResolver</code> e identificadores URI.</td>
+      </tr>
+      <tr>
+        <td><strong>Broadcast Receiver</strong></td>
+        <td>Permite recibir y responder a anuncios de eventos del sistema o de apps (modo avión, batería baja).</td>
+        <td>Clases receptoras suscritas a filtros de emisión.</td>
+      </tr>
+      <tr>
+        <td><strong>Widget</strong></td>
+        <td>Vistas interactivas incrustadas directamente en la pantalla de inicio del sistema.</td>
+        <td>Componentes ligeros para calendario, notas o clima.</td>
+      </tr>
+      <tr>
+        <td><strong>Intent</strong></td>
+        <td>Objeto de mensajería para solicitar acciones a otros componentes o apps (abrir navegador, llamada, mapas).</td>
+        <td><code>val intent = Intent(Intent.ACTION_VIEW, uri)</code></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Tabla Resumen: Métodos Callback del Ciclo de Vida (Activity Lifecycle)</h3>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 20%;">Método Callback</th>
+        <th style="width: 20%;">Estado Resultante</th>
+        <th style="width: 60%;">Momento de Ejecución y Propósito</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>onCreate()</code></td>
+        <td>Detenida</td>
+        <td>Se llama al instanciar la actividad. Inicializa variables base y define la interfaz con <code>setContent</code>.</td>
+      </tr>
+      <tr>
+        <td><code>onStart()</code></td>
+        <td>Pausada</td>
+        <td>La actividad pasa a ser visible para el usuario.</td>
+      </tr>
+      <tr>
+        <td><code>onResume()</code></td>
+        <td><strong>En Marcha</strong></td>
+        <td>La actividad toma el primer plano absoluto y comienza a recibir interacciones táctiles.</td>
+      </tr>
+      <tr>
+        <td><code>onPause()</code></td>
+        <td>Pausada</td>
+        <td>La actividad pierde el foco de interacción (se muestra un diálogo o se pulsa Inicio).</td>
+      </tr>
+      <tr>
+        <td><code>onStop()</code></td>
+        <td>Detenida</td>
+        <td>La actividad deja de ser completamente visible para el usuario.</td>
+      </tr>
+      <tr>
+        <td><code>onRestart()</code></td>
+        <td>Detenida</td>
+        <td>Se dispara cuando una actividad detenida vuelve a iniciarse antes de pasar por <code>onStart()</code>.</td>
+      </tr>
+      <tr>
+        <td><code>onDestroy()</code></td>
+        <td>Inexistente</td>
+        <td>Se invoca justo antes de que la actividad sea eliminada de la memoria RAM.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Estructura Canónica en MainActivity.kt</div>
+    <pre><code>class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContent {
+            MiPrimeraAppTheme { /* Contenido Composable */ }
+        }
+    }
+    override fun onStart() { super.onStart() }
+    override fun onResume() { super.onResume() }
+    override fun onPause() { super.onPause() }
+    override fun onStop() { super.onStop() }
+    override fun onRestart() { super.onRestart() }
+    override fun onDestroy() { super.onDestroy() }
+}</code></pre>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- TABLAS RÁPIDAS: LAYOUTS, MODIFIERS, ESTADO -->
+  <!-- ========================================== -->
+  <div class="page-break"></div>
+  <div class="pdf-section">Sección Rápida: Contenedores, Modificadores y Gestión de Estados</div>
+
+  <h3>Contenedores y Estructuras de Diseño (Layouts)</h3>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 15%;">Layout</th>
+        <th style="width: 25%;">Eje / Disposición</th>
+        <th style="width: 30%;">Parámetros Principales</th>
+        <th style="width: 30%;">Sintaxis de Código</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Column</strong></td>
+        <td>Vertical (hijos uno debajo de otro).</td>
+        <td>
+          &bull; <code>horizontalAlignment</code>: <code>Alignment.Start</code>, <code>CenterHorizontally</code>, <code>End</code>.<br>
+          &bull; <code>verticalArrangement</code>: <code>Top</code>, <code>Center</code>, <code>Bottom</code>, <code>SpaceBetween</code>, <code>SpaceEvenly</code>, <code>SpaceAround</code>, <code>spacedBy(X.dp)</code>.
+        </td>
+        <td>
+          <pre><code>Column(
+    modifier = Modifier.fillMaxSize(),
+    horizontalAlignment = Alignment.CenterHorizontally,
+    verticalArrangement = Arrangement.Center
+) { ... }</code></pre>
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Row</strong></td>
+        <td>Horizontal (hijos uno al lado del otro).</td>
+        <td>
+          &bull; <code>horizontalArrangement</code>: <code>Start</code>, <code>Center</code>, <code>End</code>, <code>SpaceBetween</code>, <code>SpaceEvenly</code>, <code>spacedBy(X.dp)</code>.<br>
+          &bull; <code>verticalAlignment</code>: <code>Top</code>, <code>CenterVertically</code>, <code>Bottom</code>.
+        </td>
+        <td>
+          <pre><code>Row(
+    modifier = Modifier.fillMaxWidth(),
+    horizontalArrangement = Arrangement.SpaceBetween,
+    verticalAlignment = Alignment.CenterVertically
+) { ... }</code></pre>
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Box</strong></td>
+        <td>Profundidad / Capas superpuestas (Eje Z).</td>
+        <td>
+          &bull; <code>contentAlignment</code>: <code>TopStart</code>, <code>Center</code>, <code>BottomEnd</code>, etc.<br>
+          &bull; Hijos individuales admiten <code>Modifier.align(...)</code>.
+        </td>
+        <td>
+          <pre><code>Box(
+    modifier = Modifier.fillMaxSize(),
+    contentAlignment = Alignment.Center
+) { ... }</code></pre>
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Card / ElevatedCard</strong></td>
+        <td>Contenedor de agrupación con relieve, sombra y bordes redondeados.</td>
+        <td>
+          &bull; <code>elevation</code>: <code>CardDefaults.cardElevation(8.dp)</code>.<br>
+          &bull; <code>shape</code>: <code>RoundedCornerShape(12.dp)</code>.<br>
+          &bull; <code>colors</code>: <code>CardDefaults.cardColors(...)</code>.<br>
+          &bull; <code>border</code>: <code>BorderStroke(1.dp, color)</code>.
+        </td>
+        <td>
+          <pre><code>Card(
+    modifier = Modifier.fillMaxWidth().padding(16.dp),
+    elevation = CardDefaults.cardElevation(8.dp)
+) {
+    Column { ... }
+}</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Modificadores Espaciales y de Aspecto (Modifier)</h3>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 28%;">Método Modifier</th>
+        <th style="width: 37%;">Función Técnica</th>
+        <th style="width: 35%;">Ejemplo de Uso</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>.fillMaxSize()</code></td>
+        <td>Ocupa el 100% del alto y ancho disponible.</td>
+        <td><code>Modifier.fillMaxSize()</code></td>
+      </tr>
+      <tr>
+        <td><code>.fillMaxWidth()</code> / <code>.fillMaxHeight()</code></td>
+        <td>Ocupa el 100% del ancho o alto respectivamente.</td>
+        <td><code>Modifier.fillMaxWidth()</code></td>
+      </tr>
+      <tr>
+        <td><code>.size(w, h)</code> / <code>.size(X.dp)</code></td>
+        <td>Fija dimensiones exactas del componente.</td>
+        <td><code>Modifier.size(100.dp)</code></td>
+      </tr>
+      <tr>
+        <td><code>.padding(...)</code></td>
+        <td>Margen/relleno interior o exterior según su posición relativa.</td>
+        <td><code>Modifier.padding(all = 16.dp)</code></td>
+      </tr>
+      <tr>
+        <td><code>.background(color)</code></td>
+        <td>Pinta el fondo del elemento con un color o brocha.</td>
+        <td><code>Modifier.background(Color.Red)</code></td>
+      </tr>
+      <tr>
+        <td><code>.border(width, color, shape)</code></td>
+        <td>Dibuja una línea de contorno perimetral.</td>
+        <td><code>Modifier.border(2.dp, Color.Blue, CircleShape)</code></td>
+      </tr>
+      <tr>
+        <td><code>.clip(shape)</code></td>
+        <td>Recorta visualmente el componente con una figura geométrica.</td>
+        <td><code>Modifier.clip(RoundedCornerShape(8.dp))</code></td>
+      </tr>
+      <tr>
+        <td><code>.weight(factorFloat)</code></td>
+        <td>Distribución proporcional del espacio en <code>Row</code> o <code>Column</code>.</td>
+        <td><code>Modifier.weight(1f)</code></td>
+      </tr>
+      <tr>
+        <td><code>.clickable { ... }</code></td>
+        <td>Convierte cualquier componente en elemento interactivo táctil.</td>
+        <td><code>Modifier.clickable { accion() }</code></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Funciones de Estado y Reactividad (State Management)</h3>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 25%;">Función</th>
+        <th style="width: 35%;">Ámbito y Retención</th>
+        <th style="width: 40%;">Ejemplo de Código</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>remember { mutableStateOf() }</code></td>
+        <td>Mantiene el valor en memoria durante recomposiciones simples dentro de la misma Activity. <em>Se reinicia si se rota la pantalla</em>.</td>
+        <td><pre><code>var texto by remember { 
+    mutableStateOf("") 
+}</code></pre></td>
+      </tr>
+      <tr>
+        <td><code>rememberSaveable { mutableStateOf() }</code></td>
+        <td>Guarda el valor en un <code>Bundle</code> de persistencia. <strong>Sobrevive a la destrucción por rotación de pantalla</strong> o recreación del proceso.</td>
+        <td><pre><code>var activo by rememberSaveable { 
+    mutableStateOf(false) 
+}</code></pre></td>
+      </tr>
+      <tr>
+        <td><code>mutableIntStateOf(0)</code></td>
+        <td>Optimizado para enteros primitivos <code>Int</code> evitando operaciones de autoboxing.</td>
+        <td><pre><code>var contador by rememberSaveable { 
+    mutableIntStateOf(0) 
+}</code></pre></td>
+      </tr>
+      <tr>
+        <td><code>mutableFloatStateOf()</code> / <code>mutableDoubleStateOf()</code></td>
+        <td>Optimizado para tipos numéricos decimales primitivos.</td>
+        <td><pre><code>var precio by remember { 
+    mutableDoubleStateOf(0.0) 
+}</code></pre></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ========================================== -->
+  <!-- TEMA 3: DESARROLLO TEÓRICO COMPLETO        -->
+  <!-- ========================================== -->
+  <div class="page-break"></div>
+  <div class="pdf-section">TEMA 3: Introducción al Lenguaje de Programación Kotlin</div>
+
+  <h2>1. Fundamentos e Historia de Kotlin</h2>
+  <p>Kotlin es un lenguaje de programación moderno, conciso y fuertemente tipado desarrollado por JetBrains a partir de 2010. Surgió ante la necesidad de JetBrains de optimizar la inmensa base de código de sus propios IDEs (como IntelliJ IDEA, escrito en Java), buscando un lenguaje más limpio y productivo sin abandonar el entorno de la Máquina Virtual de Java (JVM). Tras descartar Scala por cuestiones de eficiencia y tiempos de compilación, crearon su propia solución, presentada como lenguaje oficial para Android por Google en Google I/O 2017.</p>
+  <ul>
+    <li><strong>Multiplataforma:</strong> Compila para JVM, JavaScript y código binario nativo (Kotlin/Native).</li>
+    <li><strong>Sintaxis concisa:</strong> Reduce drásticamente el código repetitivo (<em>boilerplate</em>) en comparación con Java.</li>
+    <li><strong>Interoperabilidad 100%:</strong> Puede convivir e interactuar perfectamente con proyectos y librerías en Java.</li>
+    <li><strong>Null Safety:</strong> Mecanismo integrado a nivel de tipos para erradicar las excepciones <code>NullPointerException</code>.</li>
+    <li><strong>Empresas que lo utilizan:</strong> Google, Netflix, Twitter/X, Pinterest, Uber, Airbnb, Expedia, American Express, Slack, Trello, Evernote, Reddit, etc.</li>
+  </ul>
+
+  <h3>Comparativa de Sintaxis: Kotlin vs Java</h3>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 50%;">Java</th>
+        <th style="width: 50%;">Kotlin</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><pre><code>public static void main(final String[] args) {
+    System.out.println("Hello world!");
+}</code></pre></td>
+        <td><pre><code>fun main() {
+    println("Hello world!")
+}</code></pre></td>
+      </tr>
+      <tr>
+        <td><pre><code>final int x;
+final int y = 1;</code></pre></td>
+        <td><pre><code>val x: Int
+val y = 1</code></pre></td>
+      </tr>
+      <tr>
+        <td><pre><code>int w;
+int z = 2;
+z = 3;
+w = 1;</code></pre></td>
+        <td><pre><code>var w: Int
+var z = 2
+z = 3
+w = 1</code></pre></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>2. Uso de Logcat en Android Studio</h2>
+  <p>Logcat es la herramienta de consola de Android Studio encargada de volcar el registro de mensajes del sistema y de las aplicaciones. Se abre desde <em>View &rarr; Tool Windows &rarr; Logcat</em>. La emisión de mensajes se realiza mediante la clase <code>android.util.Log</code>, pasando dos parámetros obligatorios: la etiqueta o identificador (<code>tag: String?</code>) y el texto (<code>msg: String</code>).</p>
+  <ul>
+    <li><code>Log.v("TAG", "Verbose")</code>: Nivel de depuración minuciosa (prioridad más baja).</li>
+    <li><code>Log.d("TAG", "Debug")</code>: Información relevante para depuración en desarrollo.</li>
+    <li><code>Log.i("TAG", "Info")</code>: Notificaciones habituales del ciclo operativo.</li>
+    <li><code>Log.w("TAG", "Warning")</code>: Alertas sobre posibles anomalías que no detienen la ejecución.</li>
+    <li><code>Log.e("TAG", "Error")</code>: Errores críticos y excepciones en tiempo de ejecución.</li>
+    <li><code>Log.wtf("TAG", "Fatal")</code>: Fallo gravísimo ("What a Terrible Failure").</li>
+    <li><strong>Filtros y Búsqueda:</strong> En la barra de Logcat se puede filtrar por paquete (<code>package:mine</code> o <code>com.example.app</code>), por nivel (<code>level:debug</code>) o buscar con <code>Ctrl + F</code>.</li>
+  </ul>
+
+  <h2>3. Sintaxis Básica de Kotlin</h2>
+  <h3>Comentarios, Variables y Constantes</h3>
+  <p>Se comenta una línea con <code>//</code> y bloques con <code>/* ... */</code>. Las variables mutables se declaran con <code>var</code> y las constantes (inmutables una vez asignadas) con <code>val</code>. Permiten inferencia estática de tipos:</p>
+  <pre><code>val nombre: String = "Pepe" // Constante inmutable con tipo explícito
+var edad = 25                // Variable mutable con inferencia de tipo Int
+Log.d("TAG", "Nombre: $nombre, Edad: $edad") // String templates con interpolación $
+Log.d("TAG", "Edad en texto: ${edad.toString()}")</code></pre>
+
+  <h3>Plantillas de Cadenas (String Templates) e Interpolación con $ y ${...}</h3>
+  <p>En Kotlin no es necesario concatenar con el operador <code>+</code> para incrustar variables o expresiones calculadas dentro de un texto. Se utiliza el símbolo <strong><code>$</code></strong> (<em>String Templates</em>):</p>
+  <ul>
+    <li><strong>Variable directa (<code>$variable</code>):</strong> Sustituye el identificador por el valor actual de la variable. Ejemplo: <code>"Hola $nombre"</code> o <code>"Contador: $count"</code>.</li>
+    <li><strong>Expresiones y cálculos (<code>${expresión}</code>):</strong> Cuando queremos realizar un cálculo aritmético, acceder a propiedades, llamar a funciones o evaluar expresiones lógicas directamente dentro del texto, se encierra entre llaves precedidas del dólar <code>${...}</code> para que se compute y muestre el resultado evaluado.</li>
+  </ul>
+  <pre><code>val num1 = 10
+val num2 = 5
+
+// 1. Interpolación simple de variables:
+Log.d("TAG", "Primer número: $num1, Segundo número: $num2")
+
+// 2. Interpolación con operaciones y cálculos directos dentro de ${}:
+Log.d("TAG", "La suma calculada es: ${num1 + num2}")         // Muestra: 15
+Log.d("TAG", "El doble del primer número es: ${num1 * 2}")    // Muestra: 20
+Log.d("TAG", "La longitud del nombre es: ${nombre.length}")   // Muestra: 4
+Log.d("TAG", "Resultado condicional: ${if (num1 > num2) "Mayor" else "Menor"}")
+
+// 3. Uso en Text de Jetpack Compose:
+Text(text = "El total calculado es: ${precio * 1.21} €")
+Text(text = "${stringResource(id = R.string.seleccionado_text)}: $seleccion")</code></pre>
+
+  <h3>Tipos de Datos Primitivos</h3>
+  <ul>
+    <li><strong>Enteros:</strong> <code>Byte</code> (8 bits, -128 a 127), <code>Short</code> (16 bits, -32768 a 32767), <code>Int</code> (32 bits), <code>Long</code> (64 bits, ej. <code>100L</code>).</li>
+    <li><strong>Decimales:</strong> <code>Float</code> (32 bits, sufijo <code>f</code> o <code>F</code>, ej. <code>1.73f</code>), <code>Double</code> (64 bits, hasta 16 decimales).</li>
+    <li><strong>Otros:</strong> <code>Boolean</code> (<code>true</code> / <code>false</code>), <code>Char</code> (carácter entre comillas simples, ej. <code>'A'</code>), <code>String</code> (cadenas de texto).</li>
+  </ul>
+
+  <h3>Operadores</h3>
+  <ul>
+    <li><strong>Aritméticos:</strong> <code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>, <code>%</code> (módulo).</li>
+    <li><strong>Incremento y Decremento:</strong> <code>++</code>, <code>--</code>.</li>
+    <li><strong>Relacionales:</strong> <code>==</code>, <code>!=</code>, <code>&lt;</code>, <code>&gt;</code>, <code>&lt;=</code>, <code>&gt;=</code>.</li>
+    <li><strong>Lógicos:</strong> <code>&amp;&amp;</code> (AND), <code>||</code> (OR), <code>!</code> (NOT).</li>
+  </ul>
+
+  <h3>Null Safety (Seguridad frente a Nulos)</h3>
+  <p>Por defecto, ningún tipo admite valores <code>null</code>. Para permitir que una variable contenga null se añade el modificador <code>?</code> detrás de su tipo. Para operar de forma segura con variables nulables se emplea el operador de llamada segura <code>?.</code> combinado con <code>let</code> y el operador Elvis <code>?:</code>:</p>
+  <pre><code>var password: String? = null
+
+password?.let {
+    Log.d("TAG", "Password introducido: $it")
+} ?: run {
+    Log.d("TAG", "La variable password no tiene valor o es nula")
+}</code></pre>
+
+  <h3>Funciones</h3>
+  <p>Se definen con <code>fun</code>. Los parámetros siguen la estructura <code>nombre: Tipo</code>. Si no devuelven nada retornan <code>Unit</code> (omisible). Si constan de una sola expresión, admiten sintaxis en línea:</p>
+  <pre><code>// Sintaxis tradicional
+private fun calcularDoble(numero: Int): Int {
+    return numero * 2
+}
+
+// Sintaxis de expresión única simplificada
+private fun calcularDobleSimple(numero: Int): Int = numero * 2</code></pre>
+
+  <h3>Clases, Propiedades, Getters/Setters y Constructores</h3>
+  <p>Kotlin genera automáticamente los métodos <em>getter</em> y <em>setter</em> entre bastidores (utilizando la palabra clave interna <code>field</code> para evitar recursión infinita). Admite constructores primarios en la cabecera y secundarios dentro del cuerpo con <code>constructor(...) : this(...)</code>:</p>
+  <pre><code>class Persona(var nombre: String, var edad: Int) {
+    var telefono: Int = 111222333
+
+    // Constructor secundario delegando en el primario mediante this
+    constructor(nombre: String, edad: Int, nuevoTelefono: Int) : this(nombre, edad) {
+        this.telefono = nuevoTelefono
+    }
+
+    // Personalización de setter
+    var salario: Double = 1000.0
+        set(value) {
+            field = if (value >= 1000.0) value else 1000.0
+        }
+
+    fun presentacion() {
+        Log.d("TAG", "Soy $nombre, tengo $edad años y teléfono $telefono")
+    }
+}</code></pre>
+
+  <h3>Data Classes e Interfaces</h3>
+  <p>Las <code>data class</code> están diseñadas para transportar datos; generan automáticamente métodos <code>equals()</code>, <code>hashCode()</code>, <code>toString()</code> y <code>copy()</code>. Las <code>interface</code> definen contratos de comportamiento que las clases implementan con <code>override</code>:</p>
+  <pre><code>data class ProgrammerData(val name: String, val age: Int, val language: String)
+
+interface ProgramadorInterface {
+    fun getProgrammerData(): ProgrammerData
+}
+
+class Programador(private val nom: String, private val ed: Int, private val lang: String) : ProgramadorInterface {
+    override fun getProgrammerData(): ProgrammerData {
+        return ProgrammerData(nom, ed, lang)
+    }
+}</code></pre>
+
+  <h2>4. Colecciones en Kotlin</h2>
+  <ul>
+    <li><strong>Listas Inmutables (<code>List</code>):</strong> Creadas con <code>listOf("A", "B", "C")</code>. Métodos: <code>size</code>, <code>get(index)</code> o <code>[index]</code>, <code>indexOf(elem)</code>, <code>contains(elem)</code>.</li>
+    <li><strong>Listas Mutables (<code>ArrayList</code> / <code>MutableList</code>):</strong> Creadas con <code>arrayListOf(...)</code> o <code>mutableListOf(...)</code>. Métodos adicionales: <code>add(elem)</code>, <code>add(index, elem)</code>, <code>remove(elem)</code>, <code>removeAt(index)</code>, <code>set(index, elem)</code>, <code>isEmpty()</code>.</li>
+  </ul>
+
+  <h2>5. Estructuras de Control</h2>
+  <h3>Condicionales: if, if-else y when</h3>
+  <p>En Kotlin, tanto <code>if-else</code> como <code>when</code> son expresiones que pueden retornar un valor y asignarse directamente a una variable. La estructura <code>when</code> sustituye y amplía con creces al clásico <code>switch</code> de Java:</p>
+  <pre><code>val nota = 8
+val calificacion = when (nota) {
+    in 0..4 -> "Suspenso"
+    5, 6 -> "Bien"
+    7, 8 -> "Notable"
+    9, 10 -> "Sobresaliente"
+    else -> "Nota inválida"
+}</code></pre>
+
+  <h3>Bucles: for, while y do-while</h3>
+  <pre><code>// for-each sobre colecciones
+for (nombre in listaNombres) { Log.d("TAG", nombre) }
+
+// Rangos numéricos cerrados (0..5 incluye el 5)
+for (i in 0..5) { ... }
+
+// Intervalo semiabierto con until (de 0 hasta size - 1)
+for (i in 0 until lista.size) { ... }
+
+// Con saltos personalizados mediante step
+for (i in 0..10 step 2) { ... }
+
+// Hacia atrás mediante downTo
+for (i in 10 downTo 0) { ... }
+
+// while y do-while convencionales
+var cont = 0
+while (cont < 5) { cont++ }
+do { cont-- } while (cont > 0)</code></pre>
+
+  <h2>6. Lambdas y Funciones de Orden Superior</h2>
+  <p>Una expresión lambda es una función anónima definida entre llaves <code>{ a, b -> a + b }</code>. Si solo recibe un parámetro, se puede omitir su declaración explícita y referenciarlo con la palabra clave implícita <code>it</code>. Las funciones de orden superior son aquellas que reciben funciones o lambdas por parámetro:</p>
+  <ul>
+    <li><code>filter { condición }</code>: Devuelve los elementos que cumplen un predicado booleano.</li>
+    <li><code>find { condición }</code>: Retorna el primer elemento coincidente, o <code>null</code> si ninguno cumple.</li>
+    <li><code>map { transformación }</code>: Transforma cada elemento devolviendo una nueva colección transformada.</li>
+    <li><code>forEach { acción }</code>: Itera ejecutando un bloque sobre cada ítem.</li>
+  </ul>
+  <pre><code>val precios = listOf(8.5, 15.0, 4.5, 20.0, 12.0, 7.0)
+// Encadenamiento fluido: filtrar >= 10, aplicar 10% de descuento e imprimir
+precios.filter { it >= 10.0 }
+       .map { it * 0.9 }
+       .forEach { Log.d("TAG", "Precio con descuento: $it") }</code></pre>
+
+  <h2>7. Control de Errores (Manejo de Excepciones)</h2>
+  <pre><code>try {
+    val array = arrayListOf(1, 2, 3)
+    val dato = array[10] // Provoca IndexOutOfBoundsException
+} catch (e: IndexOutOfBoundsException) {
+    Log.e("TAG", "Error capturado: ${e.message}")
+} finally {
+    Log.d("TAG", "Bloque finally: se ejecuta siempre para limpieza de recursos")
+}</code></pre>
+
+  <!-- ========================================== -->
+  <!-- TEMA 4: PRIMER CONTACTO Y CICLO DE VIDA   -->
+  <!-- ========================================== -->
+  <div class="page-break"></div>
+  <div class="pdf-section">TEMA 4: Primer Contacto Con el Código y Ciclo de Vida de una Aplicación</div>
+
+  <h2>1. Componentes de Arquitectura del Sistema Android</h2>
+  <p>En el sistema operativo Android no existe una función <code>main()</code> convencional para arrancar el programa. Las aplicaciones se ejecutan en procesos independientes en un espacio aislado (<em>sandbox</em>). Los componentes fundamentales son:</p>
+  <ul>
+    <li><strong>Activity:</strong> Punto de entrada con ventana gráfica. En desarrollos con Jetpack Compose se implementa la arquitectura <em>Single-Activity Architecture</em>, en la cual una única actividad aloja la navegación entre múltiples funciones composables sin necesidad de destruir o recrear actividades.</li>
+    <li><strong>Composable:</strong> Funciones declarativas marcadas con <code>@Composable</code> que representan elementos de la pantalla (Text, Button, Row, Column, etc.).</li>
+    <li><strong>Service:</strong> Procesos en segundo plano sin UI que realizan operaciones continuas (descargas, reproducción multimedia, sincronización).</li>
+    <li><strong>Content Provider:</strong> Proveedor para compartir datos de manera estructurada y segura entre aplicaciones bajo control de permisos (contactos, galería).</li>
+    <li><strong>Broadcast Receiver:</strong> Receptor de avisos globales del sistema u otras apps (batería baja, cable de red, modo avión).</li>
+    <li><strong>Widget:</strong> Vistas ligeras e interactivas empotradas en la pantalla de inicio del lanzador del dispositivo (reloj, calendario).</li>
+    <li><strong>Intent:</strong> Objeto de mensajería utilizado para solicitar acciones a otros componentes o invocar aplicaciones externas (marcar un teléfono, abrir un mapa o navegador).</li>
+  </ul>
+
+  <h2>2. El Componente Activity y Pila de Navegación</h2>
+  <p>La actividad principal de la app extiende de <code>ComponentActivity</code>. El punto de entrada se gestiona en el método <code>onCreate()</code>, asociando la interfaz mediante la función <code>setContent { ... }</code>. En una arquitectura de actividad única, las pantallas se apilan conceptualmente en una <em>pila de navegación (back stack)</em> según el principio LIFO (Last-In, First-Out): al navegar hacia adelante se realiza un <em>push</em> a la cima de la pila; al pulsar el botón "Atrás", se produce un <em>pop</em> que destruye la pantalla actual y revela la inmediata inferior.</p>
+
+  <h2>3. Ciclo de Vida de una Activity (Lifecycle)</h2>
+  <p>Una actividad pasa por diversos estados según su presencia en memoria RAM, su visibilidad y su capacidad de interactuar con el usuario:</p>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 18%;">Estado</th>
+        <th style="width: 14%;">¿En memoria?</th>
+        <th style="width: 16%;">¿Visible al usuario?</th>
+        <th style="width: 16%;">¿En primer plano?</th>
+        <th style="width: 36%;">Transición / Métodos Callback</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Inexistente</strong></td>
+        <td>No</td>
+        <td>No</td>
+        <td>No</td>
+        <td>Llamada a <code>onCreate()</code> para crearse o eliminada tras <code>onDestroy()</code>.</td>
+      </tr>
+      <tr>
+        <td><strong>Detenida</strong></td>
+        <td>Sí</td>
+        <td>No</td>
+        <td>No</td>
+        <td>Se alcanza tras <code>onStop()</code>. Vuelve a iniciarse mediante <code>onRestart() &rarr; onStart()</code>.</td>
+      </tr>
+      <tr>
+        <td><strong>Pausada</strong></td>
+        <td>Sí</td>
+        <td>Sí</td>
+        <td>No</td>
+        <td>Alcanzada tras <code>onStart()</code> o cuando pierde el foco en <code>onPause()</code> (p. ej. diálogo superpuesto).</td>
+      </tr>
+      <tr>
+        <td><strong>En Marcha</strong></td>
+        <td>Sí</td>
+        <td>Sí</td>
+        <td>Sí</td>
+        <td>Alcanzada tras <code>onResume()</code>. La app interactúa plenamente con el usuario.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>4. Acceso a Recursos (Clase R) e Internacionalización</h2>
+  <p>Android genera automáticamente la clase <code>R</code>, que almacena identificadores enteros para acceder a los recursos del directorio <code>res/</code>:</p>
+  <ul>
+    <li><strong>Cadenas (<code>res/values/strings.xml</code>):</strong> Se obtienen en Compose con <code>stringResource(id = R.string.nombre)</code>.</li>
+    <li><strong>Imágenes (<code>res/drawable/</code>):</strong> Se obtienen con <code>painterResource(id = R.drawable.nombre)</code> para formatos PNG, JPG o XML vectorial.</li>
+    <li><strong>Unidades de Medida:</strong>
+      <ul>
+        <li><code>dp</code> (<em>density-independent pixels</em>): Para dimensiones, márgenes, paddings y tamaños de contenedores.</li>
+        <li><code>sp</code> (<em>scale-independent pixels</em>): Exclusivo para texto; escala según las preferencias de accesibilidad del usuario en el sistema.</li>
+        <li><code>px</code> (<em>pixels</em>): Píxeles físicos del panel; no recomendado para diseño adaptable.</li>
+      </ul>
+    </li>
+    <li><strong>Internacionalización (i18n):</strong> Se configura mediante el <em>Translations Editor</em> (botón derecho sobre <code>strings.xml &rarr; Open Translations Editor</code>), añadiendo locales como Spanish (es). Compose cargará dinámicamente la traducción según el idioma configurado en el terminal.</li>
+  </ul>
+
+  <!-- ========================================== -->
+  <!-- TEMA 5: DISEÑO DE INTERFACES EN COMPOSE   -->
+  <!-- ========================================== -->
+  <div class="page-break"></div>
+  <div class="pdf-section">TEMA 5: Diseño de Interfaces de Usuario con Jetpack Compose</div>
+
+  <h2>1. Paradigma Declarativo vs Imperativo</h2>
+  <p>Frente al desarrollo imperativo clásico en XML (donde se declaraba una vista y se debía buscar con <code>findViewById</code> para mutarla paso a paso), Jetpack Compose adopta un modelo <strong>declarativo en Kotlin puro</strong>: se describe qué debe mostrar la pantalla en función del estado actual. Cuando los datos cambian, Compose ejecuta una <strong>recomposición inteligente</strong>, redibujando únicamente los componentes que leen esos datos.</p>
+
+  <h3>Buenas Prácticas para Funciones @Composable</h3>
+  <ol>
+    <li>Nombrado en <strong>PascalCase</strong> (ej. <code>PantallaPrincipal</code>, <code>TarjetaProducto</code>), nunca en camelCase.</li>
+    <li>El nombre debe ser un <strong>sustantivo o sintagma nominal</strong> (ej. <code>BotonAceptar</code>), nunca un verbo de acción (evitar <code>GetTexto</code>).</li>
+    <li>Deben ser públicas para favorecer la reutilización modular en distintos paquetes de la aplicación.</li>
+  </ol>
+
+  <h2>2. Material Design 3 y API MaterialTheme</h2>
+  <p>Material Design 3 (Material You) enfatiza la accesibilidad, paletas dinámicas basadas en el fondo de pantalla (Android 12+) y consistencia visual en el ecosistema Android. Se estructura en el paquete <code>ui.theme</code> con tres archivos Kotlin:</p>
+  <ul>
+    <li><strong><code>Color.kt</code>:</strong> Define constantes cromáticas en formato hexadecimal (ej. <code>val DarkRed = Color(0xFF800000)</code>).</li>
+    <li><strong><code>Type.kt</code>:</strong> Configura la tipografía con instancias de <code>TextStyle</code> (fuente, peso, tamaño, espaciado).</li>
+    <li><strong><code>Theme.kt</code>:</strong> Combina esquemas claros y oscuros (<code>LightColorScheme</code> y <code>DarkColorScheme</code>) con soporte para <code>dynamicDarkColorScheme()</code> y <code>dynamicLightColorScheme()</code>.</li>
+  </ul>
+
+  <h3>Propiedades de MaterialTheme.colorScheme</h3>
+  <ul>
+    <li><code>primary</code> / <code>onPrimary</code>: Color primario predominante y color del contenido sobre él.</li>
+    <li><code>secondary</code> / <code>onSecondary</code>: Color complementario de acento.</li>
+    <li><code>tertiary</code> / <code>onTertiary</code>: Color de contraste secundario.</li>
+    <li><code>background</code> / <code>onBackground</code>: Color del fondo general de la pantalla y su texto.</li>
+    <li><code>surface</code> / <code>onSurface</code> / <code>surfaceVariant</code>: Color para superficies elevadas (tarjetas, modales).</li>
+    <li><code>error</code> / <code>onError</code>: Indicador de error (habitualmente tonos rojizos).</li>
+  </ul>
+
+  <h3>Propiedades de MaterialTheme.typography</h3>
+  <ul>
+    <li><strong>Display:</strong> <code>displayLarge</code>, <code>displayMedium</code>, <code>displaySmall</code> (titulares de gran escala en pantallas destacadas).</li>
+    <li><strong>Headline:</strong> <code>headlineLarge</code>, <code>headlineMedium</code>, <code>headlineSmall</code> (títulos intermedios de sección).</li>
+    <li><strong>Title:</strong> <code>titleLarge</code>, <code>titleMedium</code>, <code>titleSmall</code> (encabezados de tarjetas y barras de herramientas).</li>
+    <li><strong>Body:</strong> <code>bodyLarge</code>, <code>bodyMedium</code>, <code>bodySmall</code> (párrafos y lectura de texto continuo).</li>
+    <li><strong>Label:</strong> <code>labelLarge</code>, <code>labelMedium</code>, <code>labelSmall</code> (etiquetas de botones y textos auxiliares).</li>
+  </ul>
+
+  <h2>3. Modificadores (Modifier)</h2>
+  <p>Son objetos inmutables encadenables mediante el operador punto <code>.</code> que transforman el diseño, tamaño, bordes y comportamiento táctil. <strong>El orden de encadenamiento es estricto</strong> y se evalúa de arriba hacia abajo:</p>
+  <pre><code>Modifier
+    .fillMaxSize()                           // 100% de la pantalla
+    .fillMaxWidth()                          // 100% de la anchura
+    .fillMaxHeight()                         // 100% de la altura
+    .size(100.dp)                            // Dimensiones cuadradas
+    .width(200.dp).height(50.dp)             // Anchura y altura independientes
+    .padding(horizontal = 16.dp, vertical = 8.dp) // Márgenes interiores
+    .background(Color.Yellow)                // Fondo de color
+    .border(width = 2.dp, color = Color.Black, shape = RoundedCornerShape(4.dp))
+    .clip(CircleShape)                       // Recorte con forma
+    .weight(1f)                              // Reparto proporcional en Row/Column
+    .clickable { /* Acción táctil */ }</code></pre>
+
+  <h2>4. Contenedores de Diseño (Layouts)</h2>
+  <ul>
+    <li><strong>Column:</strong> Organiza verticalmente. Parámetros: <code>horizontalAlignment</code> (<code>Alignment.Start</code>, <code>CenterHorizontally</code>, <code>End</code>) y <code>verticalArrangement</code> (<code>Arrangement.Top</code>, <code>Center</code>, <code>Bottom</code>, <code>SpaceEvenly</code>, <code>SpaceBetween</code>, <code>SpaceAround</code>, <code>spacedBy(X.dp)</code>).</li>
+    <li><strong>Row:</strong> Organiza horizontalmente. Parámetros: <code>verticalAlignment</code> (<code>Alignment.Top</code>, <code>CenterVertically</code>, <code>Bottom</code>) y <code>horizontalArrangement</code> (<code>Arrangement.Start</code>, <code>Center</code>, <code>End</code>, <code>SpaceEvenly</code>, <code>SpaceBetween</code>, <code>spacedBy(X.dp)</code>).</li>
+    <li><strong>Box:</strong> Apila en el eje Z (profundidad). Parámetros: <code>contentAlignment</code> (<code>Alignment.Center</code>, <code>TopStart</code>, <code>BottomCenter</code>, etc.). Los hijos admiten <code>Modifier.align(...)</code> individual.</li>
+  </ul>
+
+  <!-- ========================================== -->
+  <!-- TEMA 6: COMPONENTES BÁSICOS Y ESTADOS     -->
+  <!-- ========================================== -->
+  <div class="page-break"></div>
+  <div class="pdf-section">TEMA 6: Componentes Básicos, Gestión de Estados y Formularios</div>
+
+  <h2>1. Catálogo Detallado de Componentes de Interfaz</h2>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 20%;">Componente</th>
+        <th style="width: 35%;">Descripción y Propósito</th>
+        <th style="width: 45%;">Parámetros Principales y Ejemplo</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Text</strong></td>
+        <td>Muestra texto y etiquetas accesibles.</td>
+        <td>
+          <code>text</code>, <code>modifier</code>, <code>color</code>, <code>fontSize</code>, <code>fontWeight</code>, <code>fontStyle</code>, <code>textAlign</code>, <code>maxLines</code>, <code>style</code>.
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Image</strong></td>
+        <td>Imágenes locales o remotas en la UI.</td>
+        <td>
+          <code>painter</code>, <code>contentDescription</code>, <code>modifier</code>, <code>contentScale</code> (<code>Fit</code>, <code>Crop</code>, <code>Inside</code>), <code>alignment</code>.
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Icon</strong></td>
+        <td>Iconos vectoriales de navegación y action.</td>
+        <td>
+          <code>imageVector</code>, <code>painter</code>, <code>contentDescription</code>, <code>modifier</code>, <code>tint</code>.
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Spacer</strong></td>
+        <td>Separación dimensional vacía sin dibujo visual.</td>
+        <td>
+          <code>modifier = Modifier.height(X.dp)</code> o <code>Modifier.width(X.dp)</code>.
+        </td>
+      </tr>
+      <tr>
+        <td><strong>HorizontalDivider</strong></td>
+        <td>Línea divisoria horizontal entre bloques.</td>
+        <td>
+          <code>thickness</code>, <code>color</code>, <code>modifier</code>.
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Button</strong></td>
+        <td>Botón interactivo de fondo relleno. Variantes: <code>OutlinedButton</code>, <code>TextButton</code>, <code>IconButton</code>.</td>
+        <td>
+          <code>onClick: () -&gt; Unit</code>, <code>enabled</code>, <code>colors</code>, <code>contentPadding</code>, <code>shape</code>, <code>content</code>.
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Toast</strong></td>
+        <td>Mensaje flotante temporal informativo. Requiere contexto mediante <code>LocalContext.current</code>.</td>
+        <td>
+          <code>Toast.makeText(context, text, Toast.LENGTH_SHORT).show()</code>
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Card / ElevatedCard</strong></td>
+        <td>Contenedor con relieve, sombra y elevación.</td>
+        <td>
+          <code>modifier</code>, <code>shape</code>, <code>colors</code> (<code>cardColors</code> / <code>elevatedCardColors</code>), <code>elevation</code>, <code>border</code>, <code>content</code>.
+        </td>
+      </tr>
+      <tr>
+        <td><strong>TextField / OutlinedTextField</strong></td>
+        <td>Entrada de datos editables por el usuario.</td>
+        <td>
+          <code>value</code>, <code>onValueChange</code>, <code>label</code>, <code>placeholder</code>, <code>enabled</code>, <code>isError</code>, <code>leadingIcon</code>, <code>trailingIcon</code>, <code>readOnly</code>, <code>singleLine</code>.
+        </td>
+      </tr>
+      <tr>
+        <td><strong>RadioButton</strong></td>
+        <td>Selección única en listas mutuamente excluyentes.</td>
+        <td>
+          <code>selected: Boolean</code>, <code>onClick: () -&gt; Unit</code>, <code>enabled</code>, <code>colors</code>.
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Checkbox</strong></td>
+        <td>Casilla de selección booleana (selección múltiple).</td>
+        <td>
+          <code>checked: Boolean</code>, <code>onCheckedChange: (Boolean) -&gt; Unit</code>, <code>enabled</code>, <code>colors</code>.
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Switch</strong></td>
+        <td>Interruptor deslizante binario (on/off).</td>
+        <td>
+          <code>checked: Boolean</code>, <code>onCheckedChange: (Boolean) -&gt; Unit</code>, <code>thumbContent</code>, <code>colors</code>.
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>2. Reutilización y Modularización de Composables</h2>
+  <p>Para construir interfaces limpias y escalables se extraen componentes a funciones reutilizables con parámetros personalizables y valores por defecto. Estas funciones no necesitan residir en <code>MainActivity.kt</code>; se organizan en archivos Kotlin independientes (como <code>Componentes.kt</code>):</p>
+  <pre><code>@Composable
+fun MiTextoPersonalizado(
+    mensaje: String,
+    colorTexto: Color = Color.Blue,
+    tamanoTexto: TextUnit = 20.sp
+) {
+    Text(
+        text = mensaje,
+        color = colorTexto,
+        fontSize = tamanoTexto
+    )
+}</code></pre>
+
+  <h2>3. Estados en Jetpack Compose (State Management)</h2>
+  <p>Un <strong>estado</strong> es cualquier valor mutable que incide directamente sobre la representación visual de la pantalla. Al modificarse, Compose dispara una <strong>recomposición</strong>, volviendo a renderizar únicamente los Composables que leen la variable alterada.</p>
+  <ul>
+    <li><strong>remember { mutableStateOf() }:</strong> Conserva el valor en memoria durante sucesivas recomposiciones de la UI. Sin embargo, <em>se reinicia a su valor por defecto si la actividad es destruida y recreada</em> (por ejemplo, al rotar el dispositivo).</li>
+    <li><strong>rememberSaveable { mutableStateOf() }:</strong> Almacena internamente el dato en un <code>Bundle</code> de Android, por lo que <strong>persiste frente a cambios de configuración</strong> como giros de pantalla.</li>
+    <li><strong>Primitivas optimizadas:</strong> Para evitar sobrecostes de autoboxing se recomienda usar <code>mutableIntStateOf(0)</code>, <code>mutableLongStateOf(0L)</code>, <code>mutableFloatStateOf(0f)</code> y <code>mutableDoubleStateOf(0.0)</code>.</li>
+    <li><strong>Delegación con la palabra clave <code>by</code>:</strong> Al declarar <code>var valor by rememberSaveable { mutableStateOf("") }</code>, se delega el <em>getter</em> y <em>setter</em> al objeto <code>MutableState</code>, permitiendo leer y escribir directamente la variable sin usar <code>.value</code>.</li>
+  </ul>
+
+  <!-- ========================================== -->
+  <!-- TEMA 7: COMPONENTES AVANZADOS              -->
+  <!-- ========================================== -->
+  <div class="page-break"></div>
+  <div class="pdf-section">TEMA 7: Componentes Avanzados, Listas Dinámicas y Scaffolding</div>
+
+  <h2>1. Listas y Rendimiento (Lazy)</h2>
+  <p>Las listas se emplean para mostrar múltiples elementos de forma ordenada (contactos, películas, productos). Jetpack Compose proporciona componentes <strong>Lazy</strong> que optimizan el rendimiento creando y renderizando en memoria <em>únicamente los elementos visibles en la pantalla</em> (bajo demanda). Esto minimiza el consumo de recursos al hacer scroll en conjuntos de datos masivos.</p>
+  <ul>
+    <li><strong>LazyColumn:</strong> Muestra los elementos en una lista vertical, permitiendo desplazamiento de arriba a abajo. Parámetros clave: <code>modifier</code>, <code>contentPadding</code>, <code>horizontalAlignment</code> y <code>verticalArrangement</code> (ej. <code>Arrangement.spacedBy(10.dp)</code>).</li>
+    <li><strong>LazyRow:</strong> Muestra los elementos en una lista horizontal, permitiendo desplazamiento de izquierda a derecha. Parámetros análogos enfocados en el eje contrario: <code>verticalAlignment</code> y <code>horizontalArrangement</code>.</li>
+  </ul>
+
+  <h3>Elementos internos: item e items</h3>
+  <p>Dentro del bloque de contenido de un Lazy layout, se estructura la lista usando funciones específicas:</p>
+  <ul>
+    <li><strong><code>items(lista) { elemento -> ... }</code>:</strong> Itera sobre una colección de datos generando el bloque composable repetidamente para cada elemento de la lista.</li>
+    <li><strong><code>item { ... }</code>:</strong> Añade un único elemento estático en una posición concreta, ideal para añadir encabezados, títulos o espacios extra.</li>
+  </ul>
+  <div class="diagram-box">
+    <div class="diagram-title">Sintaxis Básica de LazyColumn</div>
+    <pre><code>LazyColumn(
+    modifier = Modifier.fillMaxSize(),
+    verticalArrangement = Arrangement.spacedBy(8.dp)
+) {
+    item { Text("Encabezado de la lista") } // Elemento estático único
+    
+    items(elementList) { element ->         // Generación dinámica
+        Text(text = element)
+    }
+}</code></pre>
+  </div>
+
+  <h2>2. Dropdown Menu</h2>
+  <p>El <code>DropdownMenu</code> es un menú desplegable de opciones oculto por defecto que se hace visible mediante la interacción con un control (como un botón o icono). Depende obligatoriamente de una variable de estado booleana para controlar su apertura/cierre.</p>
+  <ul>
+    <li><strong><code>DropdownMenu</code>:</strong> Contenedor padre. Parámetros principales: <code>expanded</code> (estado booleano) y <code>onDismissRequest</code> (acción al hacer clic fuera, habitualmente cambiar el estado a <code>false</code>).</li>
+    <li><strong><code>DropdownMenuItem</code>:</strong> Cada opción seleccionable del menú. Parámetros: <code>text</code>, <code>onClick</code>, <code>leadingIcon</code> y <code>trailingIcon</code>.</li>
+  </ul>
+  <div class="diagram-box">
+    <div class="diagram-title">Implementación de DropdownMenu</div>
+    <pre><code>var estaDesplegado by remember { mutableStateOf(false) }
+
+Button(onClick = { estaDesplegado = true }) {
+    Text("Desplegar Menú")
+}
+
+DropdownMenu(
+    expanded = estaDesplegado,
+    onDismissRequest = { estaDesplegado = false }
+) {
+    DropdownMenuItem(
+        text = { Text("Opción 1") },
+        onClick = { estaDesplegado = false /* lógica extra */ }
+    )
+}</code></pre>
+  </div>
+
+  <h2>3. Estados con Listas (mutableStateListOf)</h2>
+  <p>Cuando una aplicación requiere gestionar listas de las que se puedan agregar, editar o eliminar elementos en tiempo real y reflejar dichos cambios en la interfaz, se debe utilizar <strong><code>mutableStateListOf</code></strong>.</p>
+  <ul>
+    <li>Debe declararse combinándolo exclusivamente con <code>remember</code> (nunca con <code>rememberSaveable</code>).</li>
+    <li>Notifica automáticamente las mutaciones al motor de Compose para redibujar <code>LazyColumn</code> o <code>LazyRow</code>.</li>
+    <li><strong>Operaciones permitidas:</strong> <code>add(elemento)</code>, <code>add(posicion, elemento)</code>, <code>remove(elemento)</code>, <code>removeAt(posicion)</code>, <code>set(posicion, elemento)</code>, <code>clear()</code>.</li>
+  </ul>
+
+  <h2>4. Scaffold y Estructuras Base</h2>
+  <p><code>Scaffold</code> es un layout contenedor que implementa de forma automática y estandarizada la estructura visual canónica de Material Design para una pantalla. Administra el espacio para las barras de herramientas y menús sin que el desarrollador deba alinearlos manualmente.</p>
+  
+  <h3>Componentes y Parámetros del Scaffold</h3>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 25%;">Componente Scaffold</th>
+        <th style="width: 75%;">Descripción Técnica</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>topBar</strong></td>
+        <td>Recibe habitualmente un <code>TopAppBar</code>, proporcionando título, un <code>navigationIcon</code> (botón de atrás o menú) y botones de acción (<code>actions</code>) a la derecha.</td>
+      </tr>
+      <tr>
+        <td><strong>bottomBar</strong></td>
+        <td>Recibe un <code>BottomAppBar</code> o <code>NavigationBar</code>. Aloja acciones frecuentes en la base de la pantalla.</td>
+      </tr>
+      <tr>
+        <td><strong>floatingActionButton</strong></td>
+        <td>Botón circular destacado (FAB) que representa la acción principal (ej. añadir un elemento nuevo). Flota sobre el contenido en la esquina inferior derecha.</td>
+      </tr>
+      <tr>
+        <td><strong>content</strong></td>
+        <td>Cuerpo principal de la pantalla. Recibe un parámetro <code>paddingValues</code> que <strong>debe ser aplicado obligatoriamente</strong> al contenedor interno (como un <code>Box</code> o <code>Column</code>) para evitar que el contenido se superponga detrás de las barras.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>5. Patrón de Diseño: State Hoisting</h2>
+  <p><strong>State Hoisting</strong> (Elevación de Estado) es un patrón de arquitectura en Compose que consiste en mover (elevar) el estado interno de un componente hacia su Composable padre. Esto favorece la reutilización y el principio de responsabilidad única.</p>
+  <ul>
+    <li>El componente hijo (*Stateless*) <strong>no almacena el estado internamente</strong>.</li>
+    <li>El hijo recibe el valor actual del estado por parámetro.</li>
+    <li>El hijo recibe una <strong>función lambda (callback)</strong> por parámetro, que invoca cuando necesita notificar una mutación del dato, dejando que el padre actualice la variable.</li>
+  </ul>
+  <div class="diagram-box">
+    <div class="diagram-title">Implementación de State Hoisting</div>
+    <pre><code>// 1. Componente Padre (Mantiene el Estado)
+@Composable
+fun PantallaPrincipal() {
+    var nombre by remember { mutableStateOf("") }
+    // Pasa el estado y el callback
+    TextFieldNombre(nombre = nombre, onTextChange = { nombre = it })
+}
+
+// 2. Componente Hijo (Stateless / Reutilizable)
+@Composable
+fun TextFieldNombre(nombre: String, onTextChange: (String) -> Unit) {
+    OutlinedTextField(
+        value = nombre,
+        onValueChange = onTextChange, // Propaga el cambio al padre
+        label = { Text("Escribe tu nombre") }
+    )
+}</code></pre>
+  </div>
+</body>
+</html>

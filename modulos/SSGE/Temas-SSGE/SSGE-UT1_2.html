@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>SGE - Bloque 1: Identificación de sistemas ERP-CRM -- Bloque 2: Instalación y Configuración ERP-CRM - Tipos de Instalación</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 1.8cm 1.5cm 2cm 1.5cm;
+      @bottom-right {
+        content: counter(page);
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        font-size: 9pt;
+        color: #64748b;
+      }
+      @bottom-left {
+        content: "SGE - Bloque 2 | Tipos de Instalación ERP-CRM";
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        font-size: 9pt;
+        color: #64748b;
+      }
+    }
+
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 10pt;
+      line-height: 1.5;
+      color: #1e293b;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1.doc-title {
+      font-size: 17pt;
+      font-weight: 700;
+      color: #0f172a;
+      text-align: center;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    p.doc-subtitle {
+      text-align: center;
+      font-size: 10.5pt;
+      color: #15803d;
+      font-weight: 600;
+      margin-top: 0;
+      margin-bottom: 25px;
+      border-bottom: 2px solid #16a34a;
+      padding-bottom: 10px;
+    }
+
+    .pdf-section {
+      background-color: #0f172a;
+      color: #ffffff;
+      padding: 8px 14px;
+      font-size: 11.5pt;
+      font-weight: 700;
+      border-radius: 4px;
+      margin-top: 25px;
+      margin-bottom: 15px;
+      page-break-after: avoid;
+    }
+
+    .page-break {
+      page-break-before: always;
+    }
+
+    h2 {
+      font-size: 11.5pt;
+      color: #15803d;
+      border-bottom: 1.5px solid #e2e8f0;
+      padding-bottom: 4px;
+      margin-top: 18px;
+      margin-bottom: 10px;
+      page-break-after: avoid;
+    }
+
+    h3 {
+      font-size: 10pt;
+      color: #334155;
+      margin-top: 12px;
+      margin-bottom: 6px;
+      page-break-after: avoid;
+    }
+
+    p {
+      margin: 0 0 8px 0;
+      text-align: justify;
+    }
+
+    ul, ol {
+      margin: 0 0 10px 0;
+      padding-left: 20px;
+    }
+
+    li {
+      margin-bottom: 4px;
+    }
+
+    .diagram-box {
+      background-color: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-left: 4px solid #16a34a;
+      padding: 10px 14px;
+      margin: 10px 0;
+      font-size: 9pt;
+      border-radius: 2px;
+      page-break-inside: avoid;
+    }
+
+    .diagram-title {
+      font-weight: bold;
+      color: #0f172a;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      font-size: 8.5pt;
+      letter-spacing: 0.5px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+      font-size: 8.5pt;
+      page-break-inside: avoid;
+    }
+
+    th, td {
+      border: 1px solid #cbd5e1;
+      padding: 6px 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background-color: #f1f5f9;
+      color: #0f172a;
+      font-weight: 700;
+    }
+
+    tr:nth-child(even) td {
+      background-color: #f8fafc;
+    }
+
+    pre, code {
+      font-family: 'Consolas', 'Courier New', monospace;
+    }
+
+    pre {
+      background-color: #0f172a;
+      color: #f8fafc;
+      padding: 10px 12px;
+      border-radius: 4px;
+      font-size: 8.5pt;
+      line-height: 1.4;
+      overflow-x: auto;
+      margin: 10px 0;
+      page-break-inside: avoid;
+    }
+
+    p code, li code, td code {
+      background-color: #f1f5f9;
+      color: #15803d;
+      padding: 1px 4px;
+      border-radius: 3px;
+      font-size: 8.5pt;
+      border: 1px solid #e2e8f0;
+    }
+
+    .enlace-bonito {
+    display: block;
+    width: fit-content;
+    margin: 0 auto;
+    text-decoration: none;
+    background-color: #0f172a;
+    color: white;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(52, 152, 219, 0.2);
+    transition: all 0.3s ease;
+    }
+
+    .enlace-bonito:hover {
+    background-color: #14213f;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(41, 128, 185, 0.3);
+    }
+
+    .enlace-bonito:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(41, 128, 185, 0.2);
+    }
+  </style>
+</head>
+<body>
+
+  <h1 class="doc-title">Sistemas de Gestión Empresarial</h1>
+  <p class="doc-subtitle">Bloque 1: Identificación de sistemas ERP-CRM</p>
+
+  <!-- SECCIÓN 1 -->
+  <div class="pdf-section">1. Introducción a los sistemas ERP-CRM</div>
+  <p>Los sistemas ERP y CRM son soluciones integrales para la gestión empresarial y la relación con los clientes. Integran y optimizan los procesos de negocio aportando tres beneficios esenciales:</p>
+  <ul>
+    <li>Optimización de operaciones.</li>
+    <li>Mejora en la toma de decisiones.</li>
+    <li>Visión completa y centralizada de la empresa.</li>
+  </ul>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Descripción de elementos visuales (Diapositivas 1 y 2)</div>
+    <p>Portada con fondo corporativo azul marino y verde azulado. Se incluye el icono vectorial de un engranaje con el texto "ERP" en su interior y flechas en degradado turquesa.</p>
+  </div>
+
+  <!-- SECCIÓN 2 -->
+  <h2>2. ¿Qué es un sistema ERP?</h2>
+  <p>Un ERP (Enterprise Resource Planning) es una solución de software que integra y centraliza los procesos y datos de una empresa en un único sistema. Permite gestionar coordinadamente todas las áreas operativas, eliminando silos de información y mejorando la eficiencia global.</p>
+  <p>Abarca los siguientes módulos clave:</p>
+  <ul>
+    <li>Gestión financiera y contabilidad.</li>
+    <li>Recursos humanos y nóminas.</li>
+    <li>Cadena de suministro y logística.</li>
+    <li>Producción y operaciones.</li>
+    <li>Compras y ventas.</li>
+  </ul>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Descripción de elementos visuales (Diapositiva 3)</div>
+    <p>Diagrama conceptual en estrella: un núcleo central con el rótulo "ERP" conectado a nodos perimetrales que representan las distintas áreas funcionales: Finance, Human Resources, Sales, ERP y módulo de tesorería/moneda (巴造币).</p>
+  </div>
+
+  <!-- SECCIÓN 3 -->
+  <h2>3. Características principales de un ERP</h2>
+  <ul>
+    <li><strong>Gestión de datos integrada:</strong> Conexión y coherencia entre todos los departamentos.</li>
+    <li><strong>Automatización:</strong> Ejecución automática de tareas repetitivas para maximizar la eficiencia.</li>
+    <li><strong>Apoyo a la toma de decisiones:</strong> Acceso a información actualizada en tiempo real.</li>
+    <li><strong>Pilares del sistema:</strong> Integración, modularidad, escalabilidad y seguridad.</li>
+  </ul>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Descripción de elementos visuales (Diapositiva 4)</div>
+    <p>Fotografía de doble monitor de puesto de control mostrando paneles con gráficos circulares, diagramas de barras de rendimiento y tablas de indicadores de negocio; acompañado de un icono de engranaje con cuatro conectores internos.</p>
+  </div>
+
+  <!-- SECCIÓN 4 -->
+  <div class="page-break"></div>
+  <h2>4. Ejemplos prácticos de uso de ERP</h2>
+  <ul>
+    <li><strong>Gestión de inventario:</strong> Control, trazabilidad y optimización del stock en almacén en tiempo real.</li>
+    <li><strong>Gestión de compras:</strong> Automatización del aprovisionamiento, pedidos y relación con proveedores.</li>
+    <li><strong>Gestión de ventas:</strong> Emisión de facturas automatizadas y atención al cliente integrada.</li>
+    <li><strong>Integración interdepartamental:</strong> Flujo continuo de datos entre áreas operativas.</li>
+  </ul>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Descripción de elementos visuales (Diapositiva 5)</div>
+    <p>Fotografía de una operaria en el pasillo de un almacén logístico industrial gestionando el inventario en tiempo real con una tablet frente a estanterías de mercancía paletizada.</p>
+  </div>
+
+  <!-- SECCIÓN 5 -->
+  <h2>5. Ventajas de los sistemas ERP</h2>
+  <ul>
+    <li>Eficiencia y automatización de procesos repetitivos.</li>
+    <li>Reducción de costes operativos y eliminación de desperdicios.</li>
+    <li>Toma de decisiones fundamentada en métricas precisas y en tiempo real.</li>
+    <li>Minimización de errores humanos derivados de la gestión manual.</li>
+  </ul>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Descripción de elementos visuales (Diapositiva 6)</div>
+    <p>Fotografía de un monitor de oficina exhibiendo una interfaz de Business Analytics con gráficos de barras ascendentes, diagramas circulares y tablas de métricas. Icono verde de engranaje superpuesto con flecha de crecimiento económico y un check de validación.</p>
+  </div>
+
+  <!-- SECCIÓN 6 -->
+  <h2>6. Soluciones ERP en el mercado</h2>
+  
+  <h3>A. ERP Comerciales más utilizados</h3>
+  <ul>
+    <li><strong>SAP ERP:</strong> Plataforma líder del mercado global, flexible y diseñada prioritariamente para grandes corporaciones.</li>
+    <li><strong>Oracle ERP Cloud:</strong> Plataforma moderna desplegada 100% en la nube, caracterizada por su alta escalabilidad e innovación continua.</li>
+    <li><strong>Microsoft Dynamics 365:</strong> Destaca por su integración nativa con el ecosistema y herramientas ofimáticas/empresariales de Microsoft; orientada a empresas en crecimiento.</li>
+  </ul>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Descripción de elementos visuales (Diapositiva 7)</div>
+    <p>Fotografía de un analista frente a una pantalla de sobremesa revisando cuadros de mando con gráficos de barras e indicadores contables.</p>
+  </div>
+
+  <h3>B. ERP de Código Abierto más populares</h3>
+  <ul>
+    <li><strong>Odoo:</strong> Sistema modular y altamente personalizable que cuenta con una amplia comunidad de desarrollo mundial. Dispone de módulos para ventas, inventario, contabilidad, recursos humanos, etc.</li>
+    <li><strong>ERPNext:</strong> Solución de código abierto, robusta y accesible, orientada a empresas que buscan escalar sin grandes desembolsos de licencias. Posee una interfaz web intuitiva y soporte multisectorial.</li>
+  </ul>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Descripción de elementos visuales (Diapositiva 8)</div>
+    <p>Esquema tecnológico abstracto que simula una placa de circuito impreso uniendo bloques modulares de ERP de código abierto.</p>
+  </div>
+
+  <!-- SECCIÓN 7 -->
+  <div class="page-break"></div>
+  <h2>7. Comparativa: ERP Comercial vs. Código Abierto</h2>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 25%;">Criterio</th>
+        <th style="width: 37%;">ERP Comercial</th>
+        <th style="width: 38%;">ERP Código Abierto</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Puntos fuertes (Ventajas)</strong></td>
+        <td>Soporte técnico garantizado, seguridad normativa y actualizaciones periódicas del fabricante.</td>
+        <td>Bajo coste inicial en licencias, flexibilidad total del código fuente y comunidad de soporte activa.</td>
+      </tr>
+      <tr>
+        <td><strong>Puntos débiles (Desventajas)</strong></td>
+        <td>Coste inicial elevado, menor margen de personalización y dependencia directa del proveedor (vendor lock-in).</td>
+        <td>Mayor coste técnico de implantación/adaptación y ausencia de soporte técnico oficial directo.</td>
+      </tr>
+      <tr>
+        <td><strong>Ejemplos destacados</strong></td>
+        <td>SAP, Oracle ERP Cloud, Microsoft Dynamics 365.</td>
+        <td>Odoo, ERPNext, Dolibarr.</td>
+      </tr>
+    </tbody>
+  </table>
+  <p><strong>Criterio de elección:</strong> El tamaño de la organización, el presupuesto y la cualificación del equipo técnico interno determinarán la conveniencia de cada modelo.</p>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Descripción de elementos visuales (Diapositivas 9 a 12)</div>
+    <ul>
+      <li><strong>Diapositiva 9:</strong> Iconografía comparativa: escudo de seguridad corporativa y operador con auriculares (Commercial Software) frente a engranajes y nodos interconectados en red (Open Source).</li>
+      <li><strong>Diapositiva 10:</strong> Imagen de puesto de trabajo de un empleado operando una aplicación ERP comercial en el navegador.</li>
+      <li><strong>Diapositiva 11:</strong> Esquema de engranajes interconectados rodeando un candado abierto, simbolizando la apertura y accesibilidad del software libre.</li>
+      <li><strong>Diapositiva 12:</strong> Fotografía de un consultor de perfil ejecutivo revisando especificaciones de selección técnica en una tableta.</li>
+    </ul>
+  </div>
+
+  <!-- SECCIÓN 8 -->
+  <h2>8. ¿Qué es un sistema CRM?</h2>
+  <p>Un CRM (Customer Relationship Management) es una solución tecnológica diseñada para registrar, gestionar y analizar todas las interacciones de una organización con sus clientes actuales y potenciales.</p>
+  <ul>
+    <li><strong>Áreas de impacto directo:</strong> Optimización de ventas, potenciación de campañas de marketing, agilización del soporte al cliente e incremento de la fidelización.</li>
+    <li><strong>Propósito nuclear:</strong> Ofrecer una visión 360° del cliente centralizando todo el historial en un repositorio accesible para la empresa.</li>
+  </ul>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Descripción de elementos visuales (Diapositiva 13)</div>
+    <p>Ilustración infográfica circular con un icono de usuario en el centro enlazado con múltiples clientes y perfiles comerciales alrededor, simbolizando la visión unificada 360°.</p>
+  </div>
+
+  <!-- SECCIÓN 9 -->
+  <div class="page-break"></div>
+  <h2>9. Tipos y funcionalidades clave de un CRM</h2>
+  
+  <h3>Tipos de CRM según su función</h3>
+  <ul>
+    <li><strong>CRM Operativo:</strong> Automatización directa de los procesos de cara al cliente (fuerza de ventas, campañas de marketing y servicio de atención).</li>
+    <li><strong>CRM Analítico:</strong> Explotación y análisis de los datos comerciales para la toma de decisiones estratégicas de negocio.</li>
+    <li><strong>CRM Colaborativo:</strong> Coordinación y compartición de la información del cliente entre las distintas divisiones y empleados de la empresa.</li>
+    <li><strong>Enfoque integral:</strong> La conjunción de los tres tipos proporciona una gestión de clientes completa.</li>
+  </ul>
+
+  <h3>Funcionalidades y beneficios principales</h3>
+  <ul>
+    <li>Gestión unificada de agendas, contactos y cuentas de clientes.</li>
+    <li>Automatización de flujos de marketing y campañas segmentadas.</li>
+    <li>Monitorización del ciclo completo del pipeline de ventas.</li>
+    <li>Análisis de tendencias, comportamiento del consumidor y retención a largo plazo.</li>
+  </ul>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Descripción de elementos visuales (Diapositivas 14 a 16)</div>
+    <ul>
+      <li><strong>Diapositiva 14:</strong> Cuatro iconos temáticos: engranaje (operativo), lupa sobre gráfico (analítico), grupo conversando con bocadillos de diálogo (colaborativo) y matriz de módulos integrados.</li>
+      <li><strong>Diapositiva 15:</strong> Portátil abierto con la pantalla de un panel de CRM mostrando tablas de prospectos y gráficos de conversión.</li>
+      <li><strong>Diapositiva 16:</strong> Fotografía de una trabajadora interactuando con la interfaz de gestión de clientes en un entorno corporativo, acompañada del icono de un apretón de manos.</li>
+    </ul>
+  </div>
+
+  <!-- SECCIÓN 10 -->
+  <h2>10. Soluciones CRM comerciales destacadas</h2>
+  <ul>
+    <li><strong>Salesforce:</strong> Plataforma de referencia global, escalable y con capacidad de integración con aplicaciones empresariales externas.</li>
+    <li><strong>HubSpot:</strong> Destaca por su facilidad de uso y por sus módulos de inbound marketing automatizado.</li>
+    <li><strong>Zoho CRM:</strong> Solución de precio competitivo, modular y de administración ágil para pymes.</li>
+    <li><strong>Microsoft Dynamics CRM:</strong> Integración nativa dentro del entorno ofimático y de productividad de Microsoft.</li>
+  </ul>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Descripción de elementos visuales (Diapositivas 17 y 18)</div>
+    <ul>
+      <li><strong>Diapositiva 17:</strong> Espacio de trabajo corporativo con varios monitores de sobremesa mostrando paneles de seguimiento y tablas de clientes con códigos de color.</li>
+      <li><strong>Diapositiva 18:</strong> Fotografía en plano medio de un profesional validando parámetros de selección de CRM con puntero sobre pantalla táctil.</li>
+    </ul>
+  </div>
+
+  <!-- SECCIÓN 11 -->
+  <h2>11. Integración de sistemas ERP-CRM</h2>
+  <p>La integración de ambos sistemas fusiona la gestión de clientes (CRM) con los procesos de producción, stock y contabilidad interna (ERP):</p>
+  <ul>
+    <li>Visión empresarial unificada y global para la directiva.</li>
+    <li>Eliminación de duplicidades y errores derivados de la discrepancia de datos.</li>
+    <li>Sincronización en tiempo real entre el área comercial, logística y finanzas.</li>
+    <li>Mejora del soporte al cliente mediante el acceso directo al inventario, envíos y estado de facturación desde la ficha comercial.</li>
+  </ul>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Descripción de elementos visuales (Diapositiva 19)</div>
+    <p>Diagrama de flujo bidireccional mediante dos engranajes centrales enlazados con dos círculos ("ERP" y "CRM") que intercambian datos de clientes y registros empresariales en un ciclo cerrado continuo.</p>
+  </div>
+
+  <!-- SECCIÓN 12 -->
+  <div class="page-break"></div>
+  <h2>12. Modelos de licenciamiento y despliegue</h2>
+  
+  <h3>Tipos de Licencias</h3>
+  <ul>
+    <li><strong>Software Privativo:</strong> Código fuente cerrado. Sujeto a licencias comerciales propietarias (ej. Windows, Adobe).</li>
+    <li><strong>Software Libre:</strong> Garantiza libertades de modificación, redistribución y acceso al código bajo licencias como GPL, LGPL o AGPL (ej. GNU/Linux).</li>
+    <li><strong>Código Abierto:</strong> Licencias permisivas enfocadas en el desarrollo colaborativo como MIT o Apache (ej. Mozilla Firefox).</li>
+    <li><strong>Criterios de elección:</strong> Balance entre coste, nivel de libertad/adaptabilidad y soporte disponible.</li>
+  </ul>
+
+  <h3>Modelos de Despliegue de Infraestructura</h3>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 35%;">Modelo de Despliegue</th>
+        <th style="width: 65%;">Nivel de Control e Infraestructura Gestionada</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>On-Premise</strong></td>
+        <td>Instalación local en los servidores de la empresa. La gestión del hardware, mantenimiento y sistema operativo recae en la organización.</td>
+      </tr>
+      <tr>
+        <td><strong>Cloud - IaaS</strong><br>(Infrastructure as a Service)</td>
+        <td>Proveedor en la nube suministra hardware (servidores, redes, almacenamiento). La empresa gestiona el sistema operativo y el software.</td>
+      </tr>
+      <tr>
+        <td><strong>Cloud - PaaS</strong><br>(Platform as a Service)</td>
+        <td>Infraestructura y plataforma gestionadas en la nube. La empresa solo despliega y administra su software y bases de datos.</td>
+      </tr>
+      <tr>
+        <td><strong>Cloud - SaaS</strong><br>(Software as a Service)</td>
+        <td>Acceso directo a la aplicación mediante navegador/red. El proveedor externo asume la infraestructura, actualizaciones y mantenimiento técnico integral.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Descripción de elementos visuales (Diapositivas 20 y 21)</div>
+    <ul>
+      <li><strong>Diapositiva 20:</strong> Cuatro iconos: candado cerrado de privativo, candado de código abierto, diagrama de bloques estructural y lista con lupa de criterios.</li>
+      <li><strong>Diapositiva 21:</strong> Fotografía de un técnico de sistemas comprobando racks de servidores en sala de telecomunicaciones con un portátil.</li>
+    </ul>
+  </div>
+
+  <!-- SECCIÓN 13 -->
+  <h2>13. Implantación técnica y factores organizativos</h2>
+  <pre>
+Fases de la Implantación Técnica:
+[Instalación del software] ➔ [Configuración y parametrización] ➔ [Pruebas y verificación funcional] ➔ [Documentación y puesta en marcha]
+(Esquema extraído de las fases de la diapositiva 22)
+  </pre>
+
+  <h3>Aspectos organizativos críticos (Diapositiva 23)</h3>
+  <ul>
+    <li><strong>Migración de datos:</strong> Extracción, limpieza y validación exhaustiva de los registros desde los sistemas heredados.</li>
+    <li><strong>Seguridad y roles:</strong> Diseño de perfiles, permisos de acceso segmentados y cumplimiento de normativas de protección de datos.</li>
+    <li><strong>Coordinación interna:</strong> Trabajo conjunto y soporte técnico continuo de la mano del equipo de IT.</li>
+    <li><strong>Gestión del cambio:</strong> Capacitación y formación continua de los usuarios finales mediante manuales y sesiones guiadas.</li>
+  </ul>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Descripción de elementos visuales (Diapositivas 22 y 23)</div>
+    <p>Fotografías de administradores de sistemas y analistas trabajando conjuntamente dentro de un centro de procesamiento de datos frente a servidores en rack.</p>
+  </div>
+
+  <!-- SECCIÓN 14 -->
+  <div class="page-break"></div>
+  <h2>14. Inteligencia de Negocios (Business Intelligence - BI)</h2>
+  <p>El BI es el conjunto de metodologías, procesos y herramientas tecnológicas para recopilar, depurar y transformar datos corporativos brutos en información estructurada para la toma de decisiones estratégicas.</p>
+  
+  <h3>Objetivos clave del BI</h3>
+  <ul>
+    <li>Cuadros de mando e informes con visualizaciones interactivas.</li>
+    <li>Toma de decisiones basada en métricas empíricas.</li>
+    <li>Pronósticos y modelos analíticos predictivos.</li>
+    <li>Detección de patrones de compra y tendencias del mercado.</li>
+  </ul>
+
+  <h3>Conceptos Fundamentales en BI</h3>
+  <ul>
+    <li><strong>OLTP vs. OLAP:</strong> Distinción entre sistemas orientados al procesamiento de transacciones operativas diarias (Online Transaction Processing) y sistemas orientados al análisis agregado y consultas analíticas complejas (Online Analytical Processing).</li>
+    <li><strong>Data Warehouse:</strong> Base de datos centralizada que almacena información histórica consolidada proveniente de toda la empresa.</li>
+    <li><strong>ETL:</strong> Procesos de Extracción, Transformación y Carga de datos procedentes de fuentes dispersas hacia el almacén analítico.</li>
+    <li><strong>Data Mining y KPIs:</strong> Minería de datos para descubrir tendencias y definición de Indicadores Clave de Desempeño (Key Performance Indicators).</li>
+  </ul>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Descripción de elementos visuales (Diapositivas 24 y 25)</div>
+    <ul>
+      <li><strong>Diapositiva 24:</strong> Pantalla completa de Business Intelligence con curvas de evolución temporal, gráficos de barras de distribución y métricas clave en tiempo real.</li>
+      <li><strong>Diapositiva 25:</strong> Diagramas conceptuales de bases de datos comparativas (OLTP vs OLAP), bloque de disco de Data Warehouse, esquema circular de extracción ETL y gráfica con estrella indicando minería de datos y KPIs.</li>
+    </ul>
+  </div>
+
+  <!-- SECCIÓN 15 -->
+  <h2>15. Niveles de ERP según el tamaño de empresa</h2>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 20%;">Nivel de Clasificación</th>
+        <th style="width: 25%;">Tamaño de la Empresa</th>
+        <th style="width: 20%;">Número de Usuarios</th>
+        <th style="width: 35%;">Particularidades del Sistema</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Nivel 1 (Tier 1)</strong></td>
+        <td>Grandes corporaciones</td>
+        <td><strong>&gt; 100 usuarios</strong></td>
+        <td>Alta complejidad, desarrollos a medida, alcance multinacional y funcionalidades operativas avanzadas.</td>
+      </tr>
+      <tr>
+        <td><strong>Nivel 2 (Tier 2)</strong></td>
+        <td>Medianas empresas</td>
+        <td><strong>Hasta 100 usuarios</strong></td>
+        <td>Equilibrio óptimo entre coste de licencia e implantación y cobertura funcional.</td>
+      </tr>
+      <tr>
+        <td><strong>Nivel 3 (Tier 3)</strong></td>
+        <td>Pequeñas empresas</td>
+        <td><strong>&lt; 30 usuarios</strong></td>
+        <td>Soluciones económicas, fáciles de configurar, con parametrización estándar y mantenimiento simple.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Descripción de elementos visuales (Diapositiva 26)</div>
+    <p>Tres iconos en secuencia vertical representando la escala: rascacielos corporativo (Nivel 1), complejo de edificios medianos (Nivel 2) y un comercio pequeño con toldo (Nivel 3).</p>
+  </div>
+
+  <!-- SECCIÓN 16 -->
+  <h2>16. Tendencias tecnológicas actuales</h2>
+  <ul>
+    <li><strong>ERP y CRM en la nube:</strong> Despliegue SaaS con acceso remoto universal, costes variables por suscripción y supresión de servidores físicos locales.</li>
+    <li><strong>Inteligencia Artificial integrada:</strong> Procesamiento inteligente de información, personalización en atención al cliente y analítica predictiva.</li>
+    <li><strong>Automatización avanzada (RPA):</strong> Reducción de la carga administrativa manual mediante workflows inteligentes.</li>
+    <li><strong>Movilidad completa:</strong> Acceso y operativa multidispositivo (smartphones, tablets, portátiles) en cualquier ubicación.</li>
+  </ul>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Descripción de elementos visuales (Diapositiva 27)</div>
+    <p>Ilustración tridimensional isométrica de una nube central conectada en anillo a múltiples terminales móviles, tabletas, servidores de rack e iconos de redes neuronales.</p>
+  </div>
+
+  <!-- CONCLUSIONES -->
+  <div class="diagram-box">
+    <div class="diagram-title">Conclusiones del Bloque 1</div>
+    <ul>
+      <li>Los sistemas ERP y CRM son complementarios: el primero organiza la operativa interna y el segundo potencia las relaciones comerciales externas.</li>
+      <li>Su integración elimina redundancias y proporciona una visión integral para la toma de decisiones.</li>
+      <li>El éxito de la implantación depende tanto de la adecuación técnica y del presupuesto como de la capacitación del personal y la migración de datos.</li>
+      <li>La incorporación de Business Intelligence maximiza el valor estratégico de los datos corporativos.</li>
+    </ul>
+  </div>
+
+  <!-- Bloque02 -->
+   <p class="doc-subtitle">Bloque 2: Instalación y Configuración ERP-CRM | 1. Tipos de instalación de sistemas ERP-CRM</p>
+
+  <!-- INTRODUCCIÓN GENERAL -->
+  <div class="pdf-section">1. Introducción a los Tipos de Instalación</div>
+  <p>Existen cuatro modalidades principales para instalar sistemas ERP-CRM. Cada una responde a necesidades específicas de infraestructura, seguridad y escalabilidad. El objetivo de este bloque es detallar requisitos, pasos, ventajas y casos de uso de cada modalidad:</p>
+  <ul>
+    <li><strong>Monopuesto:</strong> Sistema instalado en un único equipo, de uso autónomo y local.</li>
+    <li><strong>Cliente/Servidor:</strong> Servidor centralizado con acceso concurrente desde clientes vía LAN o VPN.</li>
+    <li><strong>En la Nube:</strong> Software y datos alojados en servidores remotos con acceso a través de internet.</li>
+    <li><strong>Híbrida:</strong> Combina infraestructura local y nube para aportar la máxima flexibilidad operativa.</li>
+  </ul>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Descripción de elementos visuales (Diapositivas 1 y 2)</div>
+    <p>Portada con fotografía de un técnico instalando y verificando cableado en un rack de servidores de un centro de datos, acompañada por flechas chevron en degradado turquesa. En la diapositiva 2 se muestra a otro operario manipulando servidores en bastidor junto a cuatro iconos representativos de los cuatro modelos de instalación.</p>
+  </div>
+
+  <!-- SECCIÓN 2: MONOPUESTO -->
+  <div class="pdf-section">2. Instalación Monopuesto (On-Premise)</div>
+  
+  <h2>2.1. Definición y Contexto de Uso</h2>
+  <p>Consiste en un sistema ERP-CRM instalado y ejecutado en un único equipo local de forma autónoma e independiente. Está indicado para pequeñas empresas con recursos limitados, entornos de desarrollo o pruebas de TI y organizaciones con requisitos estrictos de seguridad y privacidad sobre sus datos internos.</p>
+
+  <h2>2.2. Requisitos Técnicos</h2>
+  <ul>
+    <li><strong>Hardware:</strong> Procesador Intel Core i5 o superior (o equivalente), 8 a 16 GB de memoria RAM y 500 GB SSD como mínimo.</li>
+    <li><strong>Sistema Operativo:</strong> Windows 10/11, distribuciones Linux (Ubuntu, Debian) o macOS compatible.</li>
+    <li><strong>Base de Datos Local:</strong> MySQL, PostgreSQL o SQLite, según la solución ERP-CRM elegida.</li>
+    <li><strong>Conectividad:</strong> Acceso puntual a internet para descargas de actualizaciones, validación de licencias y soporte técnico remoto.</li>
+  </ul>
+
+  <h2>2.3. Pasos de Instalación</h2>
+  <ol>
+    <li>Revisión de requisitos y descarga del software ERP-CRM (ej. Odoo, Dolibarr).</li>
+    <li>Instalación y configuración del gestor de base de datos local (MySQL, PostgreSQL o SQLite).</li>
+    <li>Instalación del sistema ERP-CRM sobre la base de datos previamente preparada.</li>
+    <li>Configuración inicial del usuario administrador, activación de módulos necesarios y verificación funcional.</li>
+  </ol>
+
+  <h2>2.4. Escenarios de Uso y Ejemplos de Software</h2>
+  <ul>
+    <li><strong>Casos de uso:</strong> Tienda de artesanía o comercio con un único puesto de trabajo, equipos de TI para entornos de laboratorio y pruebas, empresas con máxima prioridad en el control local de la información y autónomos o microempresas sin infraestructura de red local.</li>
+    <li><strong>Software destacado:</strong> Odoo Community Edition, Dolibarr ERP-CRM y ERPNext (soluciones de código abierto y gratuitas).</li>
+  </ul>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Ventajas y Desventajas: Monopuesto</div>
+    <ul>
+      <li><strong>Ventajas:</strong> Coste reducido y fácil instalación sin necesidad de infraestructura de red adicional; control total sobre los datos sin requerir conexión continua a internet.</li>
+      <li><strong>Desventajas:</strong> Escalabilidad limitada y dependencia absoluta de un único equipo físico; riesgo crítico de pérdida de datos por avería y acceso estrictamente local.</li>
+    </ul>
+  </div>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Descripción de elementos visuales (Diapositivas 3 a 8)</div>
+    <ul>
+      <li><strong>Diapositiva 3:</strong> Icono de engranaje sobre fondo turquesa con el título del apartado on-premise.</li>
+      <li><strong>Diapositiva 4:</strong> Fotografía de torre de ordenador personal junto a monitor de sobremesa mostrando código y paneles de configuración, con icono de chip/microprocesador.</li>
+      <li><strong>Diapositiva 5:</strong> Secuencia gráfica circular con 4 pasos de despliegue numerados.</li>
+      <li><strong>Diapositiva 6:</strong> Fotografía de una dependienta trabajando en un equipo de sobremesa en una tienda física de artesanía.</li>
+      <li><strong>Diapositiva 7:</strong> Icono de ordenador con monitor y torre junto a marcas de verificación y aspas de advertencia.</li>
+      <li><strong>Diapositiva 8:</strong> Iconos temáticos de software: piezas de puzzle (modularidad), carpeta documental, servidor centralizado y sello de verificación de software gratuito.</li>
+    </ul>
+  </div>
+
+  <!-- SECCIÓN 3: CLIENTE/SERVIDOR -->
+  <div class="page-break"></div>
+  <div class="pdf-section">3. Instalación Cliente/Servidor (On-Premise)</div>
+
+  <h2>3.1. Definición y Características</h3>
+  <p>Modelo centralizado donde la aplicación ERP-CRM y la base de datos residen en un servidor principal. Los puestos cliente acceden a él a través de la red local corporativa (LAN) o mediante una red privada virtual (VPN), asegurando centralización, control directo y seguridad de la información.</p>
+
+  <h2>3.2. Requisitos Técnicos</h2>
+  <ul>
+    <li><strong>Servidor Central:</strong> Procesador multinúcleo Intel Xeon o AMD EPYC orientado a alta concurrencia; almacenamiento SSD en configuraciones RAID con fuentes de alimentación redundantes/duales y opción de servidor espejo; memoria RAM de 16 a 32 GB o superior según el número de usuarios simultáneos; sistema operativo Windows Server, Linux (Ubuntu/CentOS) o macOS Server.</li>
+    <li><strong>Equipos Cliente:</strong> PCs estándar con un mínimo de 8 GB de RAM que acceden mediante un software cliente instalado o a través de navegador web.</li>
+    <li><strong>Infraestructura de Red y Seguridad:</strong> Red local cableada con ancho de banda mínimo de 1 Gbps; VPN para acceso remoto seguro de trabajadores externos; cortafuegos perimetrales y cifrado de comunicaciones SSL/TLS.</li>
+  </ul>
+
+  <h2>3.3. Pasos de Instalación</h2>
+  <ol>
+    <li>Preparar el servidor instalando el sistema operativo del servidor y el motor de base de datos (MySQL, PostgreSQL, Oracle o SQL Server).</li>
+    <li>Instalar el aplicativo ERP-CRM en el servidor y verificar el correcto arranque de sus servicios.</li>
+    <li>Conectar los equipos cliente mediante la instalación del cliente dedicado o mediante acceso web.</li>
+    <li>Configurar los parámetros de seguridad: túneles VPN, autenticación multifactor (MFA) y certificados SSL.</li>
+  </ol>
+
+  <h2>3.4. Casos de Uso y Ejemplos de Software</h2>
+  <ul>
+    <li><strong>Casos de uso:</strong> Empresas medianas y grandes con múltiples usuarios simultáneos, corporaciones con varias sedes enlazadas por LAN o VPN y plantillas con personal remoto que requiere acceso seguro a la base de datos central.</li>
+    <li><strong>Software destacado:</strong> SAP Business One, Odoo Enterprise y Microsoft Dynamics 365.</li>
+  </ul>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Ventajas y Desventajas: Cliente/Servidor</div>
+    <ul>
+      <li><strong>Ventajas:</strong> Alta escalabilidad y centralización completa de datos con copias de seguridad automáticas; seguridad avanzada y acceso remoto securizado mediante VPN y MFA.</li>
+      <li><strong>Desventajas:</strong> Costes iniciales muy elevados y dependencia crítica de la disponibilidad del servidor central; necesidad obligatoria de personal técnico cualificado para el mantenimiento y riesgos en caso de caída del nodo central.</li>
+    </ul>
+  </div>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Descripción de elementos visuales (Diapositivas 9 a 14)</div>
+    <ul>
+      <li><strong>Diapositiva 9:</strong> Título sobre fondo corporativo con icono de servidor en red.</li>
+      <li><strong>Diapositiva 10:</strong> Fotografía de armario rack de servidores cerrado con luces LED azules indicadoras de estado.</li>
+      <li><strong>Diapositiva 11:</strong> Diagrama de red de 4 cuadrantes con iconos de monitor de cliente, conmutador de red LAN, candado de VPN y escudo perimetral.</li>
+      <li><strong>Diapositiva 12:</strong> Diagrama secuencial de 4 pasos para la configuración e interconexión de clientes y servidores.</li>
+      <li><strong>Diapositiva 13:</strong> Fotografía de sala CPD con racks de servidores iluminados en tonos azulados y verde.</li>
+      <li><strong>Diapositiva 14:</strong> Vista panorámica de centro de procesamiento de datos con múltiples armarios de servidores en línea.</li>
+    </ul>
+  </div>
+
+  <!-- SECCIÓN 4: EN LA NUBE -->
+  <div class="page-break"></div>
+  <div class="pdf-section">4. Instalación en la Nube (Cloud-Based)</div>
+
+  <h2>4.1. Definición y Modelos de Servicio</h2>
+  <p>El software y las bases de datos se ejecutan en servidores remotos gestionados por proveedores especializados. El acceso es universal a través de internet desde cualquier dispositivo. Se apoya en tres modelos cloud:</p>
+  <ul>
+    <li><strong>IaaS (Infraestructura como Servicio):</strong> Provisión de máquinas virtuales, red y almacenamiento.</li>
+    <li><strong>PaaS (Plataforma como Servicio):</strong> Entorno de ejecución y base de datos gestionados en la nube.</li>
+    <li><strong>SaaS (Software como Servicio):</strong> Consumo directo de la aplicación vía web sin gestionar capas inferiores.</li>
+  </ul>
+
+  <h2>4.2. Requisitos Técnicos y de Conectividad</h2>
+  <ul>
+    <li>Conexión a internet estable y de alta velocidad (fibra óptica o redes móviles 4G/5G).</li>
+    <li>Dispositivo cliente con navegador web compatible (Google Chrome, Mozilla Firefox, Microsoft Edge) o apps oficiales (ordenador, portátil, tablet o smartphone).</li>
+    <li>Uso opcional de VPN corporativa para reforzar la seguridad en accesos desde redes públicas.</li>
+  </ul>
+
+  <h2>4.3. Proveedores, Seguridad y Pasos de Instalación</h3>
+  <ul>
+    <li><strong>Proveedores líderes:</strong> Amazon Web Services (AWS), Microsoft Azure, Google Cloud Platform, Salesforce, NetSuite (Oracle) y Odoo Cloud.</li>
+    <li><strong>Seguridad y cumplimiento:</strong> Escalabilidad dinámica en tiempo real según demanda; certificaciones ISO 27001, SOC 2 Tipo II y cumplimiento del RGPD/GDPR; cifrado de datos en reposo y en tránsito (TLS/SSL) junto a autenticación de doble factor (2FA/MFA).</li>
+    <li><strong>Pasos de despliegue:</strong> 1) Selección del proveedor de nube &rarr; 2) Configuración del entorno (servidores virtuales y base de datos) &rarr; 3) Instalación según modelo IaaS, PaaS o alta en SaaS &rarr; 4) Configuración de seguridad (2FA, SSL) y pruebas funcionales.</li>
+  </ul>
+
+  <h2>4.4. Casos de Uso y Ejemplos de Software</h3>
+  <ul>
+    <li><strong>Casos de uso:</strong> Empresas con equipos de trabajo distribuidos geográficamente, startups y negocios en fase de rápido crecimiento y organizaciones con requerimientos críticos de alta disponibilidad ininterrumpida 24/7.</li>
+    <li><strong>Software destacado:</strong> Salesforce, Oracle NetSuite y Odoo Cloud.</li>
+  </ul>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Ventajas y Desventajas: En la Nube</div>
+    <ul>
+      <li><strong>Ventajas:</strong> Escalabilidad prácticamente ilimitada y alta disponibilidad garantizada; reducción drástica de costes de infraestructura física local; accesibilidad global, mantenimiento simplificado y actualizaciones gestionadas por el proveedor.</li>
+      <li><strong>Desventajas:</strong> Dependencia constante y crítica de una conexión a internet estable; costes periódicos acumulativos por suscripción; menor control sobre la infraestructura física con posibles inquietudes sobre privacidad de datos; limitaciones de personalización en modelos SaaS.</li>
+    </ul>
+  </div>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Descripción de elementos visuales (Diapositivas 15 a 20)</div>
+    <ul>
+      <li><strong>Diapositiva 15:</strong> Icono representativo de nube enlazada a terminales informáticos.</li>
+      <li><strong>Diapositiva 16:</strong> Diagrama de 4 elementos con iconos de señal Wi-Fi/red, ordenador personal, navegador web y escudo de red VPN.</li>
+      <li><strong>Diapositiva 17:</strong> Racks de servidores con iluminación azul junto al icono de un escudo con candado de seguridad.</li>
+      <li><strong>Diapositiva 18:</strong> Flujo de 4 pasos numerados para la contratación y configuración del entorno cloud.</li>
+      <li><strong>Diapositiva 19:</strong> Composición con una nube brillante conectada a bastidores de servidores mediante cables luminosos, acompañada por un icono de nube con flecha ascendente.</li>
+      <li><strong>Diapositiva 20:</strong> Fotografía de una oficina moderna con empleados trabajando de forma colaborativa con portátiles, pantallas y tablets conectados al ERP-CRM.</li>
+    </ul>
+  </div>
+
+  <!-- SECCIÓN 5: INSTALACIÓN HÍBRIDA -->
+  <div class="page-break"></div>
+  <div class="pdf-section">5. Instalación Híbrida (Hybrid ERP-CRM)</div>
+
+  <h2>5.1. Definición y Arquitectura</h2>
+  <p>Modelo combinado que integra infraestructura local propia con servicios desplegados en la nube. Los datos críticos o sensibles se gestionan en servidores locales bajo control directo de la empresa, mientras que otros módulos operativos (ventas externas, CRM móvil, reporting) operan en la nube. Constituye la solución ideal para procesos de migración progresiva o para empresas con sistemas heredados (*legacy*) que requieren continuidad.</p>
+
+  <h2>5.2. Requisitos Técnicos de Integración</h3>
+  <ul>
+    <li><strong>Cliente:</strong> Conexión a internet estable, red local corporativa, túnel VPN y navegadores modernos actualizados.</li>
+    <li><strong>Servidor Local:</strong> Hardware dedicado en las instalaciones, cortafuegos perimetrales, puertas de enlace VPN y almacenamiento protegido en RAID.</li>
+    <li><strong>Entorno Cloud:</strong> Conectores y APIs de integración, recursos con escalabilidad dinámica y cumplimiento normativo (ISO 27001, SOC 2, RGPD).</li>
+    <li><strong>Integración y Sincronización:</strong> Mecanismos de sincronización de datos continua, canales VPN dedicados y cifrado de extremo a extremo.</li>
+  </ul>
+
+  <h2>5.3. Pasos de Instalación</h2>
+  <ol>
+    <li>Evaluación y selección de módulos: definir qué áreas van a la nube y cuáles permanecen en servidores locales.</li>
+    <li>Selección del proveedor de nube (Microsoft Azure, AWS, Google Cloud) e instalación de las instancias en ambos entornos.</li>
+    <li>Configuración de la seguridad: políticas de acceso unificadas, túneles VPN seguros, cifrado global de datos y autenticación multifactor (MFA).</li>
+    <li>Pruebas de conectividad: validación de la comunicación bidireccional entre entornos, sincronización de bases de datos, backups cruzados y planes de recuperación ante desastres.</li>
+  </ol>
+
+  <h2>5.4. Casos de Uso y Ejemplos de Software</h2>
+  <ul>
+    <li><strong>Casos de uso:</strong> Sector financiero y sanitario con requisitos estrictos de custodia de datos confidenciales en local, empresas con sedes internacionales distribuidas y organizaciones con sistemas informáticos heredados que no pueden migrarse por completo a la nube.</li>
+    <li><strong>Software destacado:</strong> Microsoft Dynamics 365, SAP S/4HANA y Oracle ERP Cloud (versiones híbridas).</li>
+  </ul>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Ventajas y Desventajas: Instalación Híbrida</div>
+    <ul>
+      <li><strong>Ventajas:</strong> Flexibilidad operativa y control local absoluto sobre datos confidenciales; escalabilidad en módulos seleccionados y optimización de costes de infraestructura; compatibilidad con sistemas informáticos legados ya existentes.</li>
+      <li><strong>Desventajas:</strong> Elevada complejidad técnica de integración; duplicidad de costes de gestión por mantener un doble entorno (local y nube); diseño de seguridad más complejo y mantenimiento de actualizaciones distribuidas en ambas plataformas.</li>
+    </ul>
+  </div>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Descripción de elementos visuales (Diapositivas 21 a 25)</div>
+    <ul>
+      <li><strong>Diapositiva 21:</strong> Título sobre fondo corporativo con icono de sincronización híbrida.</li>
+      <li><strong>Diapositiva 22:</strong> Diagrama de 4 bloques con iconos de pantalla, servidor local, nube conectada y engranajes de integración.</li>
+      <li><strong>Diapositiva 23:</strong> Secuencia de 4 pasos para planificar e implantar entornos híbridos.</li>
+      <li><strong>Diapositiva 24:</strong> Fotografía de racks de servidores físicos conectados a dos iconos de nubes (IT), con un icono de nube superpuesto a un servidor de almacenamiento.</li>
+      <li><strong>Diapositiva 25:</strong> Fotografía de un equipo directivo y técnico analizando un diagrama de arquitectura y flujos en una pantalla interactiva.</li>
+    </ul>
+  </div>
+
+  <!-- SECCIÓN 6: COMPARATIVA GENERAL Y CONCLUSIÓN -->
+  <div class="page-break"></div>
+  <div class="pdf-section">6. Comparativa General y Factores de Elección</div>
+
+  <h3>Tabla: Comparativa Global de Tipos de Instalación ERP-CRM</h3>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 20%;">Criterio</th>
+        <th style="width: 20%;">Monopuesto</th>
+        <th style="width: 20%;">Cliente/Servidor</th>
+        <th style="width: 20%;">En la Nube (Cloud)</th>
+        <th style="width: 20%;">Híbrida</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Escalabilidad</strong></td>
+        <td>Muy limitada (un solo equipo)</td>
+        <td>Media (sujeta al servidor local)</td>
+        <td>Muy alta e inmediata</td>
+        <td>Alta (según módulo seleccionado)</td>
+      </tr>
+      <tr>
+        <td><strong>Coste Inicial</strong></td>
+        <td>Mínimo / Muy bajo</td>
+        <td>Elevado (hardware y licencias)</td>
+        <td>Bajo (modelo suscripción)</td>
+        <td>Medio-Alto (doble entorno)</td>
+      </tr>
+      <tr>
+        <td><strong>Seguridad y Control</strong></td>
+        <td>Control local total; sin cifrado avanzado</td>
+        <td>Alto control interno (requiere VPN/MFA)</td>
+        <td>Delegada en certificaciones del proveedor</td>
+        <td>Máximo control en datos locales críticos</td>
+      </tr>
+      <tr>
+        <td><strong>Accesibilidad</strong></td>
+        <td>Únicamente acceso físico local</td>
+        <td>Local (LAN) o remoto mediante VPN</td>
+        <td>Global desde cualquier lugar vía web</td>
+        <td>Combinada (local y acceso remoto web)</td>
+      </tr>
+      <tr>
+        <td><strong>Mantenimiento</strong></td>
+        <td>A cargo del propio usuario</td>
+        <td>Requiere personal de IT especializado</td>
+        <td>Mantenimiento asumido por el proveedor</td>
+        <td>Complejo (mantenimiento distribuido)</td>
+      </tr>
+      <tr>
+        <td><strong>Dependencia Red</strong></td>
+        <td>No requiere conexión constante</td>
+        <td>Imprescindible red LAN o VPN activa</td>
+        <td>Crítica y continua de internet</td>
+        <td>Crítica para los módulos cloud</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>6.1. Reglas de Decisión del Bloque (Diapositiva 26)</h2>
+  <ul>
+    <li><strong>Escalabilidad:</strong> Nube &gt; Híbrida &gt; Cliente/Servidor &gt; Monopuesto.</li>
+    <li><strong>Coste inicial:</strong> Cliente/Servidor (alto) &gt; Nube (bajo) &gt; Monopuesto (mínimo).</li>
+    <li><strong>Seguridad y control:</strong> Monopuesto y Cliente/Servidor ofrecen mayor control local directo; la Nube delega en las políticas del proveedor.</li>
+    <li><strong>Accesibilidad y mantenimiento:</strong> La Nube y la opción Híbrida destacan en acceso remoto y actualizaciones continuas simplificadas.</li>
+  </ul>
+
+  <h2>6.2. Factores Clave para la Elección del Modelo (Diapositiva 27)</h2>
+  <ul>
+    <li>Tamaño y estructura funcional de la empresa.</li>
+    <li>Presupuesto disponible e inversión inicial inicial estimada.</li>
+    <li>Nivel de accesibilidad remota y movilidad que demandan los empleados.</li>
+    <li>Requisitos de seguridad, normativas de privacidad e infraestructura informática previa.</li>
+  </ul>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Descripción de elementos visuales (Diapositivas 26 a 28)</div>
+    <ul>
+      <li><strong>Diapositiva 26:</strong> Pantalla de monitor que muestra una matriz de evaluación comparativa de costes y seguridad, con un icono de gráfica de barras ascendente.</li>
+      <li><strong>Diapositiva 27:</strong> Infografía resumen organizada en 4 cuadrantes que sintetiza los factores estratégicos de elección del tipo de instalación.</li>
+      <li><strong>Diapositiva 28:</strong> Cierre de la unidad con el icono del engranaje ERP sobre fondo corporativo oscuro.</li>
+    </ul>
+  </div>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Conclusiones del Bloque 2.1</div>
+    <p>Cada modalidad de instalación (Monopuesto, Cliente/Servidor, Nube e Híbrida) aporta ventajas operativas y presenta limitaciones específicas según el escenario de implantación. La correcta elección no depende de adoptar la tecnología más compleja, sino de analizar con rigor el volumen de usuarios, el presupuesto económico, la infraestructura heredada y los niveles de protección que demandan los datos de la organización.</p>
+  </div>
+
+  <a href="Cuestionario-2.1.html" class="enlace-bonito">Cuestionario-2.1</a>
+  <br>
+  <p class="doc-subtitle">Bloque 2: Instalación y Configuración ERP-CRM | 2. Módulos de un sistema ERP-CRM</p>
+
+  <!-- SECCIÓN 1: INTRODUCCIÓN -->
+  <div class="pdf-section">1. Introducción y Tipología Modular</div>
+  <p>Los sistemas ERP planifican y optimizan los recursos internos corporativos, mientras que los sistemas CRM gestionan de forma estructurada las relaciones con los clientes. Ambos entornos se dividen en módulos funcionales interoperables que comparten datos para eliminar silos de información y duplicidades operativas.</p>
+  
+  <div class="diagram-box">
+    <div class="diagram-title">Principio Clave de Modularización</div>
+    <p><em>"Un ERP-CRM bien modularizado convierte los datos en decisiones y las decisiones en resultados."</em></p>
+  </div>
+
+  <h2>1.1. Clasificación en Dos Grandes Bloques</h2>
+  <ul>
+    <li><strong>Módulos ERP (Enterprise Resource Planning):</strong> Finanzas y Contabilidad, Recursos Humanos, Compras, Producción e Inventario.</li>
+    <li><strong>Módulos CRM (Customer Relationship Management):</strong> Ventas y Marketing, Servicio al Cliente y Gestión de Contactos.</li>
+  </ul>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Descripción de elementos visuales (Diapositivas 1 a 3)</div>
+    <p>Portada con fondo azul marino con el título de la unidad temática. La diapositiva 2 introduce los fundamentos mediante iconos circulares de proceso. La diapositiva 3 muestra una ilustración isométrica con cubos de cristal iluminados en tonos azul y dorado conectados en red, simbolizando la arquitectura modular e interoperable de ambos sistemas.</p>
+  </div>
+
+  <!-- SECCIÓN 2: MÓDULOS ERP -->
+  <div class="pdf-section">2. Módulos de un Sistema ERP</div>
+
+  <h2>2.1. Finanzas y Recursos Humanos</h2>
+  <ul>
+    <li><strong>Finanzas y Contabilidad (Núcleo económico):</strong> Gestión financiera integral, emisión de informes, conciliación bancaria automatizada, control de presupuestos y cumplimiento estricto de la normativa fiscal y legal.</li>
+    <li><strong>Recursos Humanos (Personas y talento):</strong> Cálculo y emisión de nóminas, evaluación continua del desempeño laboral, planes de capacitación y formación, y administración integral de la plantilla.</li>
+  </ul>
+
+  <h2>2.2. Compras y Producción</h2>
+  <ul>
+    <li><strong>Compras (Cadena de suministro):</strong> Homologación y gestión de proveedores, emisión y control de órdenes de compra, seguimiento de inventarios de entrada y gestión de contratos y negociaciones comerciales.</li>
+    <li><strong>Producción (Manufactura y calidad):</strong> Planificación de líneas de producción (MRP), aseguramiento y control de calidad, seguimiento detallado de órdenes de fabricación y optimización sistemática de materias primas y recursos fabriles.</li>
+  </ul>
+
+  <h2>2.3. Inventario (Corazón Logístico)</h2>
+  <p>Conecta de manera transversal los departamentos de compras, fabricación y ventas a través del control riguroso de existencias en tiempo real:</p>
+  <ul>
+    <li><strong>Control de stock:</strong> Monitorización instantánea de entradas, salidas y existencias con disparadores de alerta por stock mínimo de seguridad.</li>
+    <li><strong>Gestión de pedidos:</strong> Reaprovisionamiento automatizado y coordinación directa entre almacenes centrales y proveedores.</li>
+    <li><strong>Análisis de rotación:</strong> Cálculo de ratios de rotación de producto para reducir costes por obsolescencia y minimizar capital inmovilizado.</li>
+  </ul>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Descripción de elementos visuales (Diapositivas 4 a 6)</div>
+    <p>Diapositivas 4 y 5 con esquemas de distribución de funciones operativas. Diapositiva 6 con fotografía de una operaria de logística consultando datos de inventario en una tablet en el pasillo central de un almacén industrial con carretillas elevadoras.</p>
+  </div>
+
+  <!-- SECCIÓN 3: MÓDULOS CRM -->
+  <div class="page-break"></div>
+  <div class="pdf-section">3. Módulos de un Sistema CRM</div>
+
+  <h2>3.1. Ventas y Marketing</h2>
+  <ul>
+    <li><strong>Ventas (Cierre y conversión):</strong> Gestión de <em>leads</em> (contactos que han manifestado interés en un producto o servicio), confección ágil de cotizaciones y propuestas comerciales, supervisión del <em>pipeline</em> de oportunidades (representación visual del ciclo: captación &rarr; seguimiento &rarr; conversión) y seguimiento posventa.</li>
+    <li><strong>Marketing (Atracción y engagement):</strong> Segmentación avanzada de audiencias, automatización del lanzamiento de campañas personalizadas, analítica cuantitativa de resultados y gestión omnicanal integrada.</li>
+  </ul>
+
+  <h2>3.2. Servicio al Cliente y Gestión de Contactos</h2>
+  <ul>
+    <li><strong>Servicio al Cliente (Soporte y atención):</strong> Registro y gestión de tickets de incidencias, trazabilidad de casos abiertos, cuestionarios de satisfacción y control de Acuerdos de Nivel de Servicio (<em>SLA - Service Level Agreement</em>), que garantizan que el soporte cumple los estándares y plazos comprometidos.</li>
+    <li><strong>Gestión de Contactos (Visión 360° del cliente):</strong> Repositorio único de datos de clientes, histórico de interacciones multicanal, analítica de patrones de comportamiento y segmentación dinámica.</li>
+  </ul>
+
+  <!-- SECCIÓN 4: INTERCONEXIÓN Y DETALLE OPERATIVO -->
+  <div class="pdf-section">4. Interconexión de Módulos y Flujo de Procesos</div>
+
+  <h2>4.1. Flujo Transversal de Información</h2>
+  <pre>
+                    ┌──────────────┐    ┌──────────────┐    ┌──────────────┐    ┌──────────────┐
+                    │  MARKETING   ├────│    VENTAS    │────│  INVENTARIO  │────│    FIANZAS   │
+                    └──────────────┘    └──────────────┘    └──────────────┘    └──────────────┘
+  </pre>
+  <ul>
+    <li><strong>Flujo transversal:</strong> Cada evento operativo impacta en cascada; el cierre de una venta descuenta automáticamente unidades del módulo de inventario y genera el apunte contable y fiscal en finanzas sin intervención manual.</li>
+    <li><strong>Integración de procesos:</strong> Marketing y ventas comparten el ciclo del lead, mientras compras y producción sincronizan los aprovisionamientos sin fricciones operativas.</li>
+    <li><strong>Visibilidad en tiempo real:</strong> Los comités de dirección supervisan información consolidada para tomar decisiones con agilidad.</li>
+  </ul>
+
+  <h2>4.2. Beneficios de la Integración</h2>
+  <ol>
+    <li><strong>Colaboración interna:</strong> Elimina el trabajo en departamentos aislados favoreciendo la coordinación entre equipos.</li>
+    <li><strong>Capacidad de respuesta rápida:</strong> Identificación temprana de incidencias técnicas, fluctuaciones imprevistas en la demanda y ajustes en la cadena operativa.</li>
+    <li><strong>Calidad y consistencia del dato:</strong> Fuente única y coherente para el cálculo de Indicadores Clave de Desempeño (<em>KPIs - Key Performance Indicators</em>).</li>
+  </ol>
+
+  <h2>4.3. Detalle Operativo de Tres Módulos Clave</h2>
+  <ul>
+    <li><strong>Módulo de Finanzas y Contabilidad:</strong> Control del flujo de caja diario (entradas, salidas y previsión de tesorería para evitar tensiones de liquidez), generación de balances, estados de resultados e informes gerenciales, y cumplimiento normativo fiscal mediante modelos tributarios locales.</li>
+    <li><strong>Módulo de Ventas:</strong> Estructuración integral del pipeline y cotizaciones, seguimiento del pedido desde la confirmación hasta el albarán y facturación, y análisis de rendimiento mediante KPIs segmentados por agente, territorio o línea de producto.</li>
+    <li><strong>Módulo de Servicio al Cliente:</strong> Gestión y priorización de tickets sujetos a SLA, base de conocimiento (FAQ/repositorio de resoluciones para soporte ágil y autoservicio) y encuestas de satisfacción para mejora continua.</li>
+  </ul>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Descripción de elementos visuales (Diapositivas 7 a 13)</div>
+    <p>Diapositiva 9 con diagrama de flujo de cuatro nodos interconectados (Marketing &rarr; Ventas &rarr; Inventario &rarr; Finanzas). Diapositiva 10 con infografía numerada de beneficios. Diapositivas 11 a 13 con listas estructuradas y numeradas sobre detalles funcionales de finanzas, ventas y soporte.</p>
+  </div>
+
+  <!-- SECCIÓN 5: VENTAJAS -->
+  <div class="page-break"></div>
+  <div class="pdf-section">5. Cuatro Grandes Ventajas del Sistema Integrado</div>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 10%;">Ventaja</th>
+        <th style="width: 25%;">Mecanismos y Factores</th>
+        <th style="width: 50%;">Impacto Empresarial</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>01. Eficiencia Operativa</strong></td>
+        <td>Procesos automatizados eliminan tareas repetitivas y liberam tiempo para actividades de mayor valor.</td>
+        <td>Automatización de procesos: Flujos de trabajo digitales que reducen intervención manual <br>
+        Reducción de duplicidades: Un único origen de datos evita re-trabajo y
+        errores <br>
+        Uso eficiente de recursos: Asignación óptima de personas, tiempo y materiales
+        </td>
+      </tr>
+      <tr>
+        <td><strong>02. Mejora en la Toma de Decisiones</strong></td>
+        <td>La información integrada convierte los datos operativos en inteligencia de negocio.</td>
+        <td>Datos en tiempo real: Indicadores actualizados desde todas las áreas del negocio <br>
+        Apoyo estratégico: Escenarios y proyecciones que fundamentan las decisiones <br>
+        Respuesta al cambio: Detección temprana de desviaciones y oportunidades</td>
+      </tr>
+      <tr>
+        <td><strong>03. Aumento en la Satisfacción del Cliente</strong></td>
+        <td>El conocimiento del cliente y la coordinación interna se traducen en mejor experiencia.</td>
+        <td>Comunicación coherente: Mensajes alineados en todos los puntos de contacto <br>
+        Atención personalizada: Historial y preferencias disponibles para cada agente <br>
+        Fidelización y lealtad: Relaciones duraderas basadas en confianza y valor</td>
+      </tr>
+      <tr>
+        <td><strong>04. Escalabilidad</strong></td>
+        <td>Un sistema modular crece con la empresa: se incorporan nuevas funcionalidades sin romper lo existente, adaptándose al ritmo del negocio.</td>
+        <td>Crecimiento modular: Incorporación progresiva según necesidades y madurez del negocio <br>
+        Flexibilidad: Nuevos módulos, integraciones y extensiones sin interrumpir la operación <br>
+        Adaptación al cambio: Evolución continua ante nuevas regulaciones mercados o modelos de negocio</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Descripción de elementos visuales (Diapositivas 14 a 19)</div>
+    <ul>
+      <li><strong>Diapositiva 14:</strong> Fotografía de un comité directivo en una sala de reuniones analizando paneles con gráficos en tiempo real proyectados sobre una mesa táctil digital.</li>
+      <li><strong>Diapositivas 15 a 18:</strong> Fichas descriptivas de gran formato encabezadas por numeraciones tipográficas destacadas en naranja (01 a 04) detallando las ventajas clave.</li>
+      <li><strong>Diapositiva 19:</strong> Composición abstracta de paneles de cristal traslúcidos escalonados en altura sobre fondo oscuro iluminados en tonos naranja y azul, simbolizando la solidez del crecimiento modular escalonado.</li>
+    </ul>
+  </div>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Ideas Clave para Llevar (Resumen del Bloque)</div>
+    <ol>
+      <li><strong>Conocer los módulos:</strong> Identificar y mapear las piezas ERP y CRM permite diseñar una arquitectura adaptada exactamente a las necesidades de la empresa.</li>
+      <li><strong>Integrar aporta valor:</strong> La conexión transversal entre módulos multiplica los beneficios competitivos y suprime los cuellos de botella.</li>
+      <li><strong>Base para el Bloque 2:</strong> Comprender la función de cada módulo constituye el fundamento para abordar con éxito las fases de instalación y configuración técnica.</li>
+    </ol>
+  </div>
+
+  <a href="Cuestionario-2.2.html" class="enlace-bonito">Cuestionario-2.2</a> <br>
+
+  <p class="doc-subtitle">Bloque 2: Instalación y Configuración ERP-CRM | 3. Entornos de desarrollo, pruebas y explotación</p>
+
+  <!-- SECCIÓN 1: INTRODUCCIÓN -->
+  <div class="pdf-section">1. Introducción: Tres Entornos, un Mismo Ciclo de Vida</div>
+  <p>La implantación y evolución de un sistema ERP-CRM se sustenta sobre tres entornos diferenciados que garantizan calidad, seguridad y continuidad del servicio a lo largo de todo el ciclo de vida del software:</p>
+  <ul>
+    <li><strong>01. Desarrollo:</strong> Se construyen y modifican las funcionalidades sin impactar la operación real.</li>
+    <li><strong>02. Pruebas:</strong> Se valida el software con datos representativos antes de su despliegue.</li>
+    <li><strong>03. Explotación:</strong> El sistema opera en producción para los usuarios finales del negocio.</li>
+  </ul>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Descripción de elementos visuales (Diapositiva 1)</div>
+    <p>Portada corporativa con fondo azul oscuro y tipografía clara indicando la tercera unidad del Bloque 2: «3 Entornos de desarrollo, pruebas y explotación».</p>
+  </div>
+
+  <!-- SECCIÓN 2: ENTORNO DE DESARROLLO -->
+  <div class="pdf-section">2. Entorno de Desarrollo</div>
+
+  <h2>2.1. Definición y Propósito</h2>
+  <p>Es el espacio aislado en el que nacen las funcionalidades del ERP-CRM. En él se crean, modifican y prueban nuevos módulos y personalizaciones sin comprometer la operación real. Cada desarrollador dispone de una copia funcional del sistema donde puede iterar libremente.</p>
+  <p>Este entorno actúa absorbiendo la incertidumbre: los errores, la experimentación y el aprendizaje ocurren en este nivel, blindando por completo las etapas posteriores del ciclo.</p>
+
+  <h2>2.2. Características Principales</h2>
+  <ul>
+    <li><strong>01. Aislamiento:</strong> Pruebas y cambios técnicos que nunca afectan al entorno productivo ni a los usuarios finales.</li>
+    <li><strong>02. Herramientas:</strong> Entornos de desarrollo integrados (IDEs), sistemas de control de versiones (Git) y gestores de proyecto integrados en el flujo diario.</li>
+    <li><strong>03. Flexibilidad:</strong> Ciclos rápidos de iteración y experimentación para innovar con riesgo controlado.</li>
+  </ul>
+
+  <h2>2.3. Configuración Esencial</h2>
+  <ol>
+    <li><strong>Software base:</strong> Instalación del stack completo de desarrollo con SDKs, dependencias y frameworks del ERP-CRM.</li>
+    <li><strong>Bases de datos:</strong> Conjuntos de datos de prueba anonimizados; nunca debe emplearse información sensible o confidencial de clientes ni registros reales de producción.</li>
+    <li><strong>Control de versiones:</strong> Repositorios Git estructurados con ramas por funcionalidad, revisiones de código y trazabilidad completa de cambios.</li>
+  </ol>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Descripción de elementos visuales (Diapositivas 2 a 4)</div>
+    <p>La diapositiva 2 muestra una fotografía de un puesto de trabajo en penumbra con teclado mecánico, ratón e interfaces en doble monitor con código de programación. Las diapositivas 3 y 4 presentan esquemas modulares numerados con las características y la configuración técnica esencial.</p>
+  </div>
+
+  <!-- SECCIÓN 3: ENTORNO DE PRUEBAS -->
+  <div class="page-break"></div>
+  <div class="pdf-section">3. Entorno de Pruebas (Test / Preproducción)</div>
+
+  <h2>3.1. Propósito de Validación</h2>
+  <p>Su objetivo fundamental es validar la funcionalidad, el rendimiento y la experiencia de usuario antes de que las modificaciones alcancen el entorno de producción.</p>
+
+  <h2>3.2. Tipología de Pruebas</h2>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 20%;">Tipo de Prueba</th>
+        <th style="width: 40%;">Alcance y Objetivo</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Unitarias</strong></td>
+        <td>Validan piezas de código de forma aislada.</td>
+      </tr>
+      <tr>
+        <td><strong>Integración</strong></td>
+        <td>Comprueban la interacción entre módulos</td>
+      </tr>
+      <tr>
+        <td><strong>Funcionales</strong></td>
+        <td>Verifican los requisitos del negocio</td>
+      </tr>
+      <tr>
+        <td><strong>Rendimiento</strong></td>
+        <td>Miden carga, latencia y estabilidad</td>
+      </tr>
+      <tr>
+        <td><strong>UAT (User Acceptance Testing)</strong></td>
+        <td>Aceptación final por parte del usuario</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>3.3. Configuración para Asegurar Fiabilidad</h2>
+  <ul>
+    <li><strong>Clonación del entorno:</strong> Se replica de forma exacta la infraestructura de producción para conseguir resultados comparables y representativos.</li>
+    <li><strong>Datos simulados:</strong> Creación de conjuntos que imitan los escenarios de producción sin comprometer la seguridad ni la confidencialidad de la información.</li>
+    <li><strong>Automatización:</strong> Implementación de herramientas como Selenium para ejecutar pruebas repetibles y plataformas de seguimiento y reporte de defectos.</li>
+  </ul>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Descripción de elementos visuales (Diapositivas 5 y 6)</div>
+    <p>La diapositiva 5 sintetiza visualmente los 5 tipos de pruebas en columnas de verificación. La diapositiva 6 incluye una fotografía de una mesa de trabajo con un calibre, engranajes mecánicos, cuadernos de notas y un portátil, representando la precisión y medición requerida en las pruebas.</p>
+  </div>
+
+  <!-- SECCIÓN 4: ENTORNO DE EXPLOTACIÓN -->
+  <div class="page-break"></div>
+  <div class="pdf-section">4. Entorno de Explotación (Producción)</div>
+
+  <h2>4.1. Definición</h2>
+  <p>Es el entorno en producción donde el ERP-CRM opera en el día a día del negocio junto a los usuarios finales. Exige niveles máximos de estabilidad y una fiabilidad probada, ya que cualquier incidente técnico afecta de forma inmediata a la continuidad operativa de la empresa.</p>
+
+  <h2>4.2. Características Esenciales</h2>
+  <ul>
+    <li><strong>01. Estabilidad:</strong> Control exhaustivo de cambios mediante planificación, aprobación formal y registro de cada actualización.</li>
+    <li><strong>02. Seguridad:</strong> Gestión restrictiva de accesos, cifrado de información y protección integral de datos personales y de negocio.</li>
+    <li><strong>03. Monitoreo:</strong> Vigilancia activa y continua del rendimiento para la detección temprana de incidencias.</li>
+  </ul>
+
+  <h2>4.3. Configuración Robusta</h2>
+  <ul>
+    <li><strong>01. Infraestructura:</strong> Servidores, redes de datos y balanceadores de carga dimensionados para soportar la operativa habitual y absorber picos transaccionales.</li>
+    <li><strong>02. Copias y recuperación:</strong> Automatización de copias de seguridad (backups) y planes de recuperación ante desastres (DRP) evaluados de forma periódica.</li>
+    <li><strong>03. Actualizaciones:</strong> Despliegue de parches y versiones planificados estrictamente en ventanas de mantenimiento de bajo impacto operativo.</li>
+  </ul>
+
+  <!-- SECCIÓN 5: MEJORES PRÁCTICAS -->
+  <div class="pdf-section">5. Mejores Prácticas Operativas</div>
+
+  <h2>5.1. Gestión del Cambio</h2>
+  <p>Cualquier modificación sobre el sistema debe ser trazable, revisable y reversible:</p>
+  <ul>
+    <li><strong>Documentación clara:</strong> Registro pormenorizado del qué, el por qué y el cómo de cada ajuste, especificando fechas y responsables.</li>
+    <li><strong>Control de versiones:</strong> Uso sistemático de repositorios Git para la colaboración, auditoría y capacidad de marcha atrás (rollback) inmediata.</li>
+  </ul>
+
+  <h2>5.2. Automatización de Procesos</h2>
+  <ul>
+    <li><strong>(CI/CD):</strong> Integración y entrega continuas para desplegar cambios de forma automática, frecuente y segura.</li>
+    <li><strong>Pruebas automatizadas:</strong> Validación de cambios en cuestión de minutos, reduciendo los errores humanos y recortando los ciclos de entrega.</li>
+  </ul>
+
+  <h2>5.3. Monitoreo y Evaluación Continua</h2>
+  <ul>
+    <li><strong>Herramientas de monitoreo:</strong> Supervisión de métricas de rendimiento, generación de alertas proactivas y análisis de trazas (logs) para resolver incidencias de forma anticipada.</li>
+    <li><strong>Evaluación periódica:</strong> Revisiones constantes para optimizar configuraciones, costes de infraestructura y la experiencia de usuario final.</li>
+  </ul>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Descripción de elementos visuales (Diapositivas 7 a 13)</div>
+    <ul>
+      <li><strong>Diapositiva 8:</strong> Módulos descriptivos de estabilidad, seguridad y monitoreo en producción.</li>
+      <li><strong>Diapositiva 10:</strong> Fotografía en detalle de engranajes metálicos de precisión interconectados, simbolizando la sincronía técnica requerida.</li>
+      <li><strong>Diapositiva 11:</strong> Fotografía de un monitor mostrando curvas de rendimiento y paneles de telemetría de monitoreo continuo.</li>
+    </ul>
+  </div>
+
+  <!-- SECCIÓN 6: REFLEXIÓN FINAL -->
+  <div class="diagram-box">
+    <div class="diagram-title">Reflexión Final: Cadena de Responsabilidad</div>
+    <p><em>"Cada entorno protege la calidad del siguiente."</em></p>
+    <p>Desarrollo, pruebas y explotación no operan como compartimentos aislados, sino que constituyen una cadena de responsabilidad técnica. Su gestión rigurosa determina de forma directa la fiabilidad, la seguridad y el éxito de cualquier solución ERP-CRM.</p>
+  </div>
+
+  <a href="Cuestionario-2.3.html" class="enlace-bonito">Cuestionario-2.3</a>
+  <br>
+
+</body>
+</html>
