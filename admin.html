@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Admin - Apuntes 2º DAM</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230d1117' stroke='%2338bdf8' stroke-width='3'/%3E%3Crect x='14' y='16' width='36' height='24' rx='3' fill='none' stroke='%2338bdf8' stroke-width='3.5'/%3E%3Cpath d='M26 48h12M32 40v8' fill='none' stroke='%2338bdf8' stroke-width='3.5' stroke-linecap='round'/%3E%3C/svg%3E">
+    <style>
+        :root {
+            --bg-main: #0d1117;
+            --bg-card: #161b22;
+            --border: #30363d;
+            --text-main: #e6edf3;
+            --text-muted: #8b949e;
+            --accent: #38bdf8;
+            --accent-glow: rgba(56, 189, 248, 0.15);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 2rem 1rem;
+        }
+
+        /* Pantalla de Login para el Admin */
+        #login-screen {
+            max-width: 400px;
+            margin: 12vh auto;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2.5rem 2rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+
+        #login-screen h2 {
+            margin-bottom: 0.5rem;
+            color: var(--text-main);
+            font-size: 1.8rem;
+        }
+
+        #login-screen p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+        }
+
+        .input-group {
+            margin-bottom: 1.25rem;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 0.4rem;
+        }
+
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .input-group input:focus, .input-group select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+
+        .btn-login {
+            width: 100%;
+            padding: 0.8rem;
+            background: linear-gradient(90deg, #38bdf8, #818cf8);
+            border: none;
+            border-radius: 8px;
+            color: #0d1117;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .btn-login:hover {
+            opacity: 0.9;
+        }
+
+        #error-msg {
+            font-size: 0.85rem;
+            margin-top: 1rem;
+            min-height: 1.2rem;
+        }
+
+        /* Contenedor del Panel (Oculto hasta loguearse como admin) */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            display: none; 
+        }
+
+        .card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+        }
+
+        h1, h2 {
+            margin-bottom: 0.5rem;
+            background: linear-gradient(90deg, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        h1 { font-size: 1.8rem; }
+        h2 { font-size: 1.3rem; margin-bottom: 1rem; }
+
+        p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .top-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            text-decoration: none;
+            transition: border-color 0.2s;
+        }
+
+        .btn:hover {
+            border-color: var(--accent);
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, #38bdf8, #818cf8);
+            color: #0d1117;
+            font-weight: 600;
+            border: none;
+            width: 100%;
+            padding: 0.8rem;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. PANTALLA DE LOGIN DEL PANEL ADMIN -->
+    <div id="login-screen">
+        <h2>Panel Admin</h2>
+        <p>Introduce tu correo de administrador</p>
+        
+        <div class="input-group">
+            <label for="admin-email-input">Correo electrónico</label>
+            <input type="email" id="admin-email-input" placeholder="admin@correo.com">
+        </div>
+        
+        <div class="input-group">
+            <label for="admin-pass-input">Contraseña</label>
+            <input type="password" id="admin-pass-input" placeholder="••••••••">
+        </div>
+        
+        <button class="btn-login" onclick="iniciarSesionAdmin()">Acceder al Panel</button>
+        <div id="error-msg"></div>
+        
+        <div style="margin-top: 1.5rem;">
+            <a href="index.html" style="color: var(--text-muted); font-size: 0.85rem; text-decoration: none;">← Volver a la web principal</a>
+        </div>
+    </div>
+
+    <!-- 2. PANEL DE ADMINISTRACIÓN (Protegido y oculto por defecto) -->
+    <div class="container" id="admin-container">
+        <div class="top-nav">
+            <div>
+                <h1>Panel de Control</h1>
+                <p>Admin conectado: <span id="admin-email-display" style="color: var(--accent);"></span></p>
+            </div>
+            <div>
+                <a href="index.html" class="btn" style="margin-right: 0.5rem;">Ver Web</a>
+                <button class="btn" onclick="cerrarSesionAdmin()">Cerrar Sesión</button>
+            </div>
+        </div>
+
+        <!-- FORMULARIO PARA SUBIR APUNTES -->
+        <div class="card">
+            <h2>Subir Nuevos Apuntes</h2>
+            <p>Rellena los datos para generar el código del nuevo apunte.</p>
+            
+            <div class="input-group">
+                <label for="moduloSelect">Asignatura / Módulo</label>
+                <select id="moduloSelect">
+                    <option value="AD">Acceso a Datos (AD)</option>
+                    <option value="PMYDM">Programación Multimedia (PMYDM)</option>
+                    <option value="DI">Desarrollo de Interfaces (DI)</option>
+                    <option value="PSP">Servicios y Procesos (PSP)</option>
+                    <option value="SSGE">Sistemas de Gestión Empresarial (SSGE)</option>
+                    <option value="DIGIT">Digitalización (DIGIT)</option>
+                    <option value="SOST">Sostenibilidad (SOST)</option>
+                    <option value="OPTATIVA">Optativa</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label for="tituloApunte">Título del Apunte</label>
+                <input type="text" id="tituloApunte" placeholder="Ej. UT 04 · Programación de sockets">
+            </div>
+
+            <div class="input-group">
+                <label for="enlaceApunte">Enlace del Archivo (Google Drive, Mega, etc.)</label>
+                <input type="text" id="enlaceApunte" placeholder="https://...">
+            </div>
+
+            <div class="input-group">
+                <label for="tipoApunte">Formato</label>
+                <select id="tipoApunte">
+                    <option value="PDF">PDF</option>
+                    <option value="HTML">HTML</option>
+                </select>
+            </div>
+
+            <button class="btn-primary" onclick="publicarApunte()">Generar Código de Apunte</button>
+            <div id="status-msg" style="font-size: 0.85rem; margin-top: 1rem; text-align: center;"></div>
+        </div>
+
+        <div class="card">
+            <h2>Gestión de Usuarios</h2>
+            <p>Para dar de alta nuevos correos de alumnos, recuerda hacerlo desde la consola oficial de Firebase.</p>
+            <a href="https://console.firebase.google.com/" target="_blank" class="btn" style="background: var(--accent); color: #0d1117; font-weight: 600; display: inline-block;">Abrir Consola de Firebase</a>
+        </div>
+    </div>
+
+    <!-- Script de autenticación y lógica -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBFZam148XYpCwQCY95HrxLXW1lG5mhOWk",
+            authDomain: "webapuntes-53c06.firebaseapp.com",
+            projectId: "webapuntes-53c06",
+            storageBucket: "webapuntes-53c06.firebasestorage.app",
+            messagingSenderId: "753987489106",
+            appId: "1:753987489106:web:7021e3b276d3cef8053e8b"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // ⚠️ CAMBIA ESTOS DOS CORREOS POR LOS VUESTROS (LOS DOS ADMINS)
+        const ADMINS = [
+            "jatarrerom01@informatica.iesvalledeljerteplasencia.es",
+            "descuderoc03@informatica.iesvalledeljerteplasencia.es"
+        ];
+
+        // Función para Iniciar Sesión en el Panel Admin
+        window.iniciarSesionAdmin = function() {
+            const email = document.getElementById('admin-email-input').value.trim();
+            const password = document.getElementById('admin-pass-input').value;
+            const errorMsg = document.getElementById('error-msg');
+
+            errorMsg.style.color = "#f87171";
+            errorMsg.innerText = "";
+
+            if (!email || !password) {
+                errorMsg.innerText = "Por favor, rellena todos los campos.";
+                return;
+            }
+
+            // Comprobar si el correo está en la lista de admins antes de dejar pasar
+            if (!ADMINS.includes(email)) {
+                errorMsg.innerText = "Acceso denegado: Este correo no tiene privilegios de administrador.";
+                return;
+            }
+
+            signInWithEmailAndPassword(auth, email, password)
+                .catch((error) => {
+                    errorMsg.innerText = "Contraseña incorrecta o usuario no encontrado.";
+                });
+        };
+
+        // Función para Cerrar Sesión
+        window.cerrarSesionAdmin = function() {
+            signOut(auth).then(() => {
+                window.location.reload();
+            });
+        };
+
+        // Vigilar estado de la sesión
+        onAuthStateChanged(auth, (user) => {
+            const loginScreen = document.getElementById('login-screen');
+            const adminContainer = document.getElementById('admin-container');
+
+            if (user && ADMINS.includes(user.email)) {
+                // Es un admin válido: Ocultar login, mostrar panel
+                loginScreen.style.display = 'none';
+                adminContainer.style.display = 'block';
+                document.getElementById('admin-email-display').innerText = user.email;
+            } else {
+                // No autenticado o no es admin: Mostrar login, ocultar panel
+                loginScreen.style.display = 'block';
+                adminContainer.style.display = 'none';
+            }
+        });
+
+        // Función para generar el código del apunte
+        window.publicarApunte = function() {
+            const modulo = document.getElementById('moduloSelect').value;
+            const titulo = document.getElementById('tituloApunte').value.trim();
+            const enlace = document.getElementById('enlaceApunte').value.trim();
+            const tipo = document.getElementById('tipoApunte').value;
+            const statusMsg = document.getElementById('status-msg');
+
+            statusMsg.style.color = "#f87171";
+            statusMsg.innerText = "";
+
+            if (!titulo || !enlace) {
+                statusMsg.innerText = "Por favor, rellena el título y el enlace.";
+                return;
+            }
+
+            statusMsg.style.color = "#38bdf8";
+            statusMsg.innerText = `¡Apunte listo! Copia este bloque HTML en tu index.html dentro de la tarjeta de ${modulo}:`;
+
+            console.log(`
+<li class="pdf-item">
+    <a href="${enlace}" target="_blank">
+        <span>${titulo}</span>
+        <span class="pdf-tag">${tipo}</span>
+    </a>
+</li>
+            `);
+
+            alert("Apunte procesado. Revisa la consola del navegador (F12) para copiar el código HTML generado.");
+        };
+    </script>
+</body>
+</html>
