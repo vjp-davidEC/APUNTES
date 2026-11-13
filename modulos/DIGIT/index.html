@@ -68,6 +68,16 @@
             item.style.display = item.textContent.toLowerCase().includes(term) ? 'block' : 'none';
         });
     });
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || window.matchMedia('(max-width: 768px)').matches;
+    if (isMobile && window.location.protocol !== 'file:') {
+        document.querySelectorAll('.pdf-item a[href$=".pdf" i]').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const fullUrl = new URL(link.getAttribute('href'), window.location.href).href;
+                window.location.href = '../../visor.html?file=' + encodeURIComponent(fullUrl);
+            });
+        });
+    }
 </script>
 </body>
 </html>

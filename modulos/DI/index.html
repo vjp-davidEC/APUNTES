@@ -55,7 +55,7 @@
     </header>
     <main class="card">
         <ul class="pdf-list">
-            <li class="pdf-item"><a href="./Temas-DI/DI-UT1.html"><span>UT 01-02 · Interfaces y Swing</span><span class="pdf-tag">HTML</span></a></li>
+            <li class="pdf-item"><a href="./Temas-DI/DI-UT01.html"><span>UT 01-02 · Interfaces y Swing</span><span class="pdf-tag">HTML</span></a></li>
             <li class="pdf-item"><a href="./Temas-DI/DI-UT3.pdf"><span>UT 03 · Creación de componentes visuales</span><span class="pdf-tag">PDF</span></a></li>
         </ul>
     </main>
@@ -69,6 +69,16 @@
             item.style.display = item.textContent.toLowerCase().includes(term) ? 'block' : 'none';
         });
     });
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || window.matchMedia('(max-width: 768px)').matches;
+    if (isMobile && window.location.protocol !== 'file:') {
+        document.querySelectorAll('.pdf-item a[href$=".pdf" i]').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const fullUrl = new URL(link.getAttribute('href'), window.location.href).href;
+                window.location.href = '../../visor.html?file=' + encodeURIComponent(fullUrl);
+            });
+        });
+    }
 </script>
 </body>
 </html>

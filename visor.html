@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visor de PDF · Apuntes 2º DAM</title>
+    <style>
+        :root {
+            --bg-main: #0d1117;
+            --bg-card: #161b22;
+            --bg-hover: #1f242c;
+            --border: #30363d;
+            --text-main: #e6edf3;
+            --text-muted: #8b949e;
+            --accent: #38bdf8;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
+        body { background-color: var(--bg-main); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; }
+
+        .toolbar {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            background-color: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.5rem 0.85rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 0.9rem;
+            cursor: pointer;
+            touch-action: manipulation;
+        }
+
+        .btn:hover { border-color: var(--accent); background-color: var(--bg-hover); }
+        .btn-primary { border-color: var(--accent); color: var(--accent); }
+
+        .title {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        #status {
+            text-align: center;
+            padding: 1.5rem 1rem;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        #pdfContainer {
+            width: 100%;
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0.75rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        #pdfContainer canvas {
+            width: 100% !important;
+            height: auto !important;
+            border-radius: 6px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+            background: #fff;
+        }
+
+        #fallbackFrame {
+            display: none;
+            width: 100%;
+            height: calc(100vh - 60px);
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="toolbar">
+        <button type="button" class="btn" id="backBtn">⬅ Volver</button>
+        <span class="title" id="fileTitle">Cargando PDF...</span>
+        <a class="btn btn-primary" id="downloadBtn" href="#" download>⬇ PDF</a>
+    </div>
+
+    <div id="status">Cargando documento...</div>
+    <div id="pdfContainer"></div>
+    <iframe id="fallbackFrame" title="Visor PDF"></iframe>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const fileUrl = params.get('file');
+        const statusEl = document.getElementById('status');
+        const container = document.getElementById('pdfContainer');
+        const fallbackFrame = document.getElementById('fallbackFrame');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const fileTitle = document.getElementById('fileTitle');
+
+        document.getElementById('backBtn').addEventListener('click', () => {
+            if (window.history.length > 1) {
+                window.history.back();
+            } else {
+                window.location.href = './index.html';
+            }
+        });
+
+        function showFallback(url) {
+            statusEl.innerHTML = `Si tu navegador no muestra el PDF automáticamente, pulsa en <a href="${url}" style="color:#38bdf8;">abrir/descargar PDF</a>.`;
+            fallbackFrame.src = url;
+            fallbackFrame.style.display = 'block';
+        }
+
+        if (!fileUrl) {
+            statusEl.textContent = 'No se ha especificado ningún archivo PDF.';
+        } else {
+            const fileName = decodeURIComponent(fileUrl.split('/').pop());
+            fileTitle.textContent = fileName;
+            document.title = fileName + ' · Apuntes 2º DAM';
+            downloadBtn.href = fileUrl;
+
+            if (window.pdfjsLib && window.location.protocol !== 'file:') {
+                pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+                pdfjsLib.getDocument(fileUrl).promise.then(async (pdf) => {
+                    statusEl.style.display = 'none';
+                    for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+                        const page = await pdf.getPage(pageNum);
+                        const viewport = page.getViewport({ scale: 1.6 });
+                        const canvas = document.createElement('canvas');
+                        const ctx = canvas.getContext('2d');
+                        canvas.width = viewport.width;
+                        canvas.height = viewport.height;
+                        container.appendChild(canvas);
+                        await page.render({ canvasContext: ctx, viewport }).promise;
+                    }
+                }).catch(() => {
+                    showFallback(fileUrl);
+                });
+            } else {
+                showFallback(fileUrl);
+            }
+        }
+    </script>
+</body>
+</html>
