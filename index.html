@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apuntes 2º DAM - Hub de Resúmenes</title>
+    <style>
+        :root {
+            --bg-main: #0d1117;
+            --bg-card: #161b22;
+            --bg-hover: #1f242c;
+            --border: #30363d;
+            --text-main: #e6edf3;
+            --text-muted: #8b949e;
+            --accent: #38bdf8;
+            --accent-glow: rgba(56, 189, 248, 0.15);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(90deg, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        .hero-image {
+            display: block;
+            max-width: 520px;
+            width: 100%;
+            height: auto;
+            margin: 1.25rem auto 0;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+        }
+
+        /* Buscador */
+        .search-box {
+            max-width: 500px;
+            margin: 1.5rem auto 0;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 0.8rem 1.2rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background-color: var(--bg-card);
+            color: var(--text-main);
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .search-box input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+
+        /* Grid de Asignaturas */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .badge {
+            background-color: var(--accent-glow);
+            color: var(--accent);
+            padding: 0.2rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            text-decoration: none;
+            border: 1px solid transparent;
+            transition: border-color 0.2s, transform 0.15s, background-color 0.2s;
+        }
+
+        .badge:hover {
+            border-color: var(--accent);
+            background-color: rgba(56, 189, 248, 0.25);
+            transform: scale(1.05);
+        }
+
+        .pdf-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+
+        .pdf-item a {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.7rem 0.9rem;
+            background-color: var(--bg-main);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+
+        .pdf-item a:hover {
+            background-color: var(--bg-hover);
+            border-color: var(--accent);
+        }
+
+        .pdf-tag {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            background: var(--bg-card);
+            padding: 0.15rem 0.45rem;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 3rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Resúmenes 2º DAM</h1>
+        <p>Acceso directo a apuntes, esquemas y material de estudio en PDF</p>
+        <img class="hero-image" src="img/apuntes_dam.jpg" alt="Apuntes DAM">
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Buscar tema o palabra clave (ej. Kotlin, DOM, Swing)...">
+        </div>
+    </header>
+
+    <main class="grid" id="cardsContainer">
+        <!-- AD -->
+        <section class="card" data-module="AD Acceso a Datos">
+            <div class="card-header">
+                <h2 class="card-title">Acceso a Datos</h2>
+                <a class="badge" href="./modulos/AD/index.html" title="Abrir todos los PDFs de AD">AD</a>
+            </div>
+            <ul class="pdf-list">
+                <li class="pdf-item">
+                    <a href="./modulos/AD/UT1_Resumen.pdf" target="_blank">
+                        <span>UT 01 · Ficheros y XML (DOM/SAX)</span>
+                        <span class="pdf-tag">PDF</span>
+                    </a>
+                </li>
+                <li class="pdf-item">
+                    <a href="./modulos/AD/UT2_Resumen.pdf" target="_blank">
+                        <span>UT 02 · Conectores y JDBC</span>
+                        <span class="pdf-tag">PDF</span>
+                    </a>
+                </li>
+            </ul>
+        </section>
+
+        <!-- PMYDM -->
+        <section class="card" data-module="PMYDM Multimedia y Móviles">
+            <div class="card-header">
+                <h2 class="card-title">Multimedia y Móviles</h2>
+                <a class="badge" href="./modulos/PMYDM/index.html" title="Abrir todos los PDFs de PMYDM">PMYDM</a>
+            </div>
+            <ul class="pdf-list">
+                <li class="pdf-item">
+                    <a href="./modulos/PMYDM/UT1_UT2_Resumen.pdf" target="_blank">
+                        <span>UT 01-02 · Android y Kotlin</span>
+                        <span class="pdf-tag">PDF</span>
+                    </a>
+                </li>
+                <li class="pdf-item">
+                    <a href="./modulos/PMYDM/UT3_Resumen.pdf" target="_blank">
+                        <span>UT 03 · Gestión de Ficheros</span>
+                        <span class="pdf-tag">PDF</span>
+                    </a>
+                </li>
+            </ul>
+        </section>
+
+        <!-- DI -->
+        <section class="card" data-module="DI Desarrollo de Interfaces">
+            <div class="card-header">
+                <h2 class="card-title">Desarrollo de Interfaces</h2>
+                <a class="badge" href="./modulos/DI/index.html" title="Abrir todos los PDFs de DI">DI</a>
+            </div>
+            <ul class="pdf-list">
+                <li class="pdf-item">
+                    <a href="./modulos/DI/UT1_Resumen.pdf" target="_blank">
+                        <span>UT 01 · Interfaces y Swing</span>
+                        <span class="pdf-tag">PDF</span>
+                    </a>
+                </li>
+            </ul>
+        </section>
+
+        <!-- PSP -->
+        <section class="card" data-module="PSP Servicios y Procesos">
+            <div class="card-header">
+                <h2 class="card-title">Servicios y Procesos</h2>
+                <a class="badge" href="./modulos/PSP/index.html" title="Abrir todos los PDFs de PSP">PSP</a>
+            </div>
+            <ul class="pdf-list">
+                <li class="pdf-item">
+                    <a href="./modulos/PSP/UT1_Resumen.pdf" target="_blank">
+                        <span>UT 01 · Programación Multiproceso</span>
+                        <span class="pdf-tag">PDF</span>
+                    </a>
+                </li>
+            </ul>
+        </section>
+
+        <!-- SSGE -->
+        <section class="card" data-module="SSGE Sistemas de Gestión Empresarial">
+            <div class="card-header">
+                <h2 class="card-title">Sistemas de Gestión Empresarial</h2>
+                <a class="badge" href="./modulos/SSGE/index.html" title="Abrir todos los PDFs de SSGE">SSGE</a>
+            </div>
+            <ul class="pdf-list">
+                <li class="pdf-item">
+                    <a href="./modulos/SSGE/UT1_Resumen.pdf" target="_blank">
+                        <span>UT 01 · Sistemas ERP y CRM</span>
+                        <span class="pdf-tag">PDF</span>
+                    </a>
+                </li>
+            </ul>
+        </section>
+
+        <!-- DIGIT -->
+        <section class="card" data-module="DIGIT Digitalización">
+            <div class="card-header">
+                <h2 class="card-title">Digitalización</h2>
+                <a class="badge" href="./modulos/DIGIT/index.html" title="Abrir todos los PDFs de DIGIT">DIGIT</a>
+            </div>
+            <ul class="pdf-list">
+                <li class="pdf-item">
+                    <a href="./modulos/DIGIT/UT1_Resumen.pdf" target="_blank">
+                        <span>UT 01 · Digitalización y Sectores Productivos</span>
+                        <span class="pdf-tag">PDF</span>
+                    </a>
+                </li>
+            </ul>
+        </section>
+
+        <!-- SOST -->
+        <section class="card" data-module="SOST Sostenibilidad">
+            <div class="card-header">
+                <h2 class="card-title">Sostenibilidad</h2>
+                <a class="badge" href="./modulos/SOST/index.html" title="Abrir todos los PDFs de SOST">SOST</a>
+            </div>
+            <ul class="pdf-list">
+                <li class="pdf-item">
+                    <a href="./modulos/SOST/UT1_Resumen.pdf" target="_blank">
+                        <span>UT 01 · Desarrollo Sostenible y ODS</span>
+                        <span class="pdf-tag">PDF</span>
+                    </a>
+                </li>
+            </ul>
+        </section>
+
+        <!-- OPTATIVA -->
+        <section class="card" data-module="OPTATIVA Asignatura Optativa">
+            <div class="card-header">
+                <h2 class="card-title">Asignatura Optativa</h2>
+                <a class="badge" href="./modulos/OPTATIVA/index.html" title="Abrir todos los PDFs de OPTATIVA">OPTATIVA</a>
+            </div>
+            <ul class="pdf-list">
+                <li class="pdf-item">
+                    <a href="./modulos/OPTATIVA/UT1_Resumen.pdf" target="_blank">
+                        <span>UT 01 · Contenidos Iniciales</span>
+                        <span class="pdf-tag">PDF</span>
+                    </a>
+                </li>
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <p>Repositorio de estudio · C.F.G.S. Desarrollo de Aplicaciones Multiplataforma</p>
+    </footer>
+</div>
+
+<script>
+    // Filtro en tiempo real por tema o asignatura
+    const searchInput = document.getElementById('searchInput');
+    const cards = document.querySelectorAll('.card');
+
+    searchInput.addEventListener('input', (e) => {
+        const term = e.target.value.trim().toLowerCase();
+
+        cards.forEach(card => {
+            const moduleText = (card.dataset.module || '').toLowerCase();
+            const moduleMatches = term === '' || moduleText.includes(term);
+
+            const items = card.querySelectorAll('.pdf-item');
+            let visibleCount = 0;
+
+            items.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                const show = moduleMatches || text.includes(term);
+                item.style.display = show ? 'block' : 'none';
+                if (show) visibleCount++;
+            });
+
+            card.style.display = visibleCount > 0 ? 'block' : 'none';
+        });
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SSGE · Sistemas de Gestión Empresarial - PDFs</title>
+    <style>
+        :root {
+            --bg-main: #0d1117;
+            --bg-card: #161b22;
+            --bg-hover: #1f242c;
+            --border: #30363d;
+            --text-main: #e6edf3;
+            --text-muted: #8b949e;
+            --accent: #38bdf8;
+            --accent-glow: rgba(56, 189, 248, 0.15);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
+        body { background-color: var(--bg-main); color: var(--text-main); line-height: 1.6; padding: 2rem 1rem; }
+        .container { max-width: 820px; margin: 0 auto; }
+
+        .top-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; }
+        .back-link { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.45rem 0.9rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; color: var(--text-main); text-decoration: none; font-size: 0.9rem; transition: border-color 0.2s, background-color 0.2s; }
+        .back-link:hover { border-color: var(--accent); background: var(--bg-hover); }
+        .badge { background-color: var(--accent-glow); color: var(--accent); padding: 0.25rem 0.7rem; border-radius: 6px; font-size: 0.85rem; font-weight: 700; letter-spacing: 0.5px; }
+
+        header { margin-bottom: 1.75rem; }
+        header h1 { font-size: 1.9rem; margin-bottom: 0.35rem; background: linear-gradient(90deg, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        header p { color: var(--text-muted); font-size: 0.95rem; }
+
+        .search-box { margin-top: 1.25rem; }
+        .search-box input { width: 100%; padding: 0.75rem 1.1rem; border-radius: 8px; border: 1px solid var(--border); background-color: var(--bg-card); color: var(--text-main); font-size: 0.95rem; outline: none; transition: border-color 0.2s, box-shadow 0.2s; }
+        .search-box input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+
+        .card { background-color: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; }
+        .pdf-list { list-style: none; display: flex; flex-direction: column; gap: 0.65rem; }
+        .pdf-item a { display: flex; align-items: center; justify-content: space-between; padding: 0.8rem 1rem; background-color: var(--bg-main); border: 1px solid var(--border); border-radius: 8px; color: var(--text-main); text-decoration: none; font-size: 0.95rem; transition: background-color 0.2s, border-color 0.2s; }
+        .pdf-item a:hover { background-color: var(--bg-hover); border-color: var(--accent); }
+        .pdf-tag { font-size: 0.75rem; color: var(--text-muted); background: var(--bg-card); padding: 0.15rem 0.5rem; border-radius: 4px; border: 1px solid var(--border); }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="top-bar">
+        <a class="back-link" href="../../index.html">⬅ Volver al inicio</a>
+        <span class="badge">SSGE</span>
+    </div>
+    <header>
+        <h1>Sistemas de Gestión Empresarial</h1>
+        <p>Todos los apuntes y resúmenes en PDF del módulo SSGE</p>
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Buscar PDF en Sistemas de Gestión Empresarial...">
+        </div>
+    </header>
+    <main class="card">
+        <ul class="pdf-list">
+            <li class="pdf-item"><a href="./UT1_Resumen.pdf" target="_blank"><span>UT 01 · Sistemas ERP y CRM en la Empresa</span><span class="pdf-tag">PDF</span></a></li>
+            <li class="pdf-item"><a href="./UT2_Resumen.pdf" target="_blank"><span>UT 02 · Implantación y Configuración de ERP (Odoo)</span><span class="pdf-tag">PDF</span></a></li>
+            <li class="pdf-item"><a href="./UT3_Resumen.pdf" target="_blank"><span>UT 03 · Organización y Consulta de Información (BI)</span><span class="pdf-tag">PDF</span></a></li>
+            <li class="pdf-item"><a href="./UT4_Resumen.pdf" target="_blank"><span>UT 04 · Desarrollo de Módulos y Adaptación de ERP</span><span class="pdf-tag">PDF</span></a></li>
+        </ul>
+    </main>
+</div>
+<script>
+    const searchInput = document.getElementById('searchInput');
+    const items = document.querySelectorAll('.pdf-item');
+    searchInput.addEventListener('input', (e) => {
+        const term = e.target.value.trim().toLowerCase();
+        items.forEach(item => {
+            item.style.display = item.textContent.toLowerCase().includes(term) ? 'block' : 'none';
+        });
+    });
+</script>
+</body>
+</html>
