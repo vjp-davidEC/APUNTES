@@ -23,7 +23,8 @@
         .top-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; }
         .back-link { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.45rem 0.9rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; color: var(--text-main); text-decoration: none; font-size: 0.9rem; transition: border-color 0.2s, background-color 0.2s; }
         .back-link:hover { border-color: var(--accent); background: var(--bg-hover); }
-        .badge { background-color: var(--accent-glow); color: var(--accent); padding: 0.25rem 0.7rem; border-radius: 6px; font-size: 0.85rem; font-weight: 700; letter-spacing: 0.5px; }
+        .badge { background-color: var(--accent-glow); color: var(--accent); padding: 0.25rem 0.7rem; border-radius: 6px; font-size: 0.85rem; font-weight: 700; letter-spacing: 0.5px; border: none; cursor: pointer; user-select: none; }
+        .badge.active { box-shadow: 0 0 0 2px var(--accent); }
 
         header { margin-bottom: 1.75rem; }
         header h1 { font-size: 1.9rem; margin-bottom: 0.35rem; background: linear-gradient(90deg, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
@@ -38,32 +39,51 @@
         .pdf-item a { display: flex; align-items: center; justify-content: space-between; padding: 0.8rem 1rem; background-color: var(--bg-main); border: 1px solid var(--border); border-radius: 8px; color: var(--text-main); text-decoration: none; font-size: 0.95rem; transition: background-color 0.2s, border-color 0.2s; }
         .pdf-item a:hover { background-color: var(--bg-hover); border-color: var(--accent); }
         .pdf-tag { font-size: 0.75rem; color: var(--text-muted); background: var(--bg-card); padding: 0.15rem 0.5rem; border-radius: 4px; border: 1px solid var(--border); }
+
+        .hidden-section { display: none; margin-top: 1.25rem; padding-top: 1.25rem; border-top: 1px dashed var(--border); }
+        .hidden-section.visible { display: block; }
+        .hidden-title { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.6px; }
     </style>
 </head>
 <body>
 <div class="container">
     <div class="top-bar">
         <a class="back-link" href="../../index.html">⬅ Volver al inicio</a>
-        <span class="badge">OPTATIVA</span>
+        <button type="button" class="badge" id="toggleHiddenBtn">OPTATIVA</button>
     </div>
     <header>
-        <h1>Asignatura Optativa</h1>
-        <p>Todos los apuntes y resúmenes en PDF de Optativa</p>
+        <h1>Optativa</h1>
+        <p>Todos los apuntes y resúmenes en PDF o HTML de Optativa</p>
         <div class="search-box">
-            <input type="text" id="searchInput" placeholder="Buscar PDF en Optativa...">
+            <input type="text" id="searchInput" placeholder="Buscar tema en Optativa...">
         </div>
     </header>
     <main class="card">
         <ul class="pdf-list">
-            <li class="pdf-item"><a href="./UT1_Resumen.pdf"><span>UT 01 · Contenidos y Fundamentos Iniciales</span><span class="pdf-tag">PDF</span></a></li>
-            <li class="pdf-item"><a href="./UT2_Resumen.pdf"><span>UT 02 · Desarrollo y Prácticas Aplicadas</span><span class="pdf-tag">PDF</span></a></li>
-            <li class="pdf-item"><a href="./UT3_Resumen.pdf"><span>UT 03 · Proyecto y Ampliación de Contenidos</span><span class="pdf-tag">PDF</span></a></li>
+            <li class="pdf-item"><a href="./Temas-OPTATIVA/OPTATIVA-UT1.html"><span>UT 01 · Gestión y configuración de Sistemas Operativos mediante comandos</span><span class="pdf-tag">HTML</span></a></li>
+            <li class="pdf-item"><a href="./Temas-OPTATIVA/OPTATIVA-UT2.html"><span>UT 02 · Instalación, configuración y uso de servicios de acceso y administración remota -- SSH</span><span class="pdf-tag">HTML</span></a></li>
         </ul>
+
+        <section class="hidden-section" id="hiddenSection">
+            <p class="hidden-title">🔒 PDFs ocultos</p>
+            <ul class="pdf-list">
+                <li class="pdf-item"><a href="./Temas-OPTATIVA/PDF/Cuestionario_de_Comandos_y_Sistemas.pdf"><span>Tema01</span><span class="pdf-tag">PDF</span></a></li>
+                <li class="pdf-item"><a href="./Temas-OPTATIVA/PDF/Cuestionario_Administracion_Remota_y_SSH.pdf"><span>Tema02</span><span class="pdf-tag">PDF</span></a></li>
+            </ul>
+        </section>
     </main>
 </div>
 <script>
     const searchInput = document.getElementById('searchInput');
     const items = document.querySelectorAll('.pdf-item');
+    const toggleHiddenBtn = document.getElementById('toggleHiddenBtn');
+    const hiddenSection = document.getElementById('hiddenSection');
+
+    toggleHiddenBtn.addEventListener('click', () => {
+        hiddenSection.classList.toggle('visible');
+        toggleHiddenBtn.classList.toggle('active');
+    });
+
     searchInput.addEventListener('input', (e) => {
         const term = e.target.value.trim().toLowerCase();
         items.forEach(item => {
