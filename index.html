@@ -5,6 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Apuntes 2º DAM - Hub de Resúmenes</title>
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230d1117' stroke='%2338bdf8' stroke-width='3'/%3E%3Crect x='14' y='16' width='36' height='24' rx='3' fill='none' stroke='%2338bdf8' stroke-width='3.5'/%3E%3Cpath d='M26 48h12M32 40v8' fill='none' stroke='%2338bdf8' stroke-width='3.5' stroke-linecap='round'/%3E%3C/svg%3E">
+    <script>
+        (function() {
+            try {
+                if (localStorage.getItem('tema_apuntes') === 'light') {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                }
+            } catch(e) {}
+        })();
+    </script>
     <style>
         :root {
             --bg-main: #0d1117;
@@ -15,6 +24,21 @@
             --text-muted: #8b949e;
             --accent: #38bdf8;
             --accent-glow: rgba(56, 189, 248, 0.15);
+            --shadow: rgba(0, 0, 0, 0.4);
+            --header-grad: linear-gradient(90deg, #38bdf8, #818cf8);
+        }
+
+        :root[data-theme="light"] {
+            --bg-main: #f6f8fa;
+            --bg-card: #ffffff;
+            --bg-hover: #f3f4f6;
+            --border: #d0d7de;
+            --text-main: #1f2328;
+            --text-muted: #57606a;
+            --accent: #0284c7;
+            --accent-glow: rgba(2, 132, 199, 0.12);
+            --shadow: rgba(0, 0, 0, 0.08);
+            --header-grad: linear-gradient(90deg, #0284c7, #4f46e5);
         }
 
         * {
@@ -138,27 +162,148 @@
             min-height: 1.2rem;
         }
 
-        /* Botón de Logout superior */
+        /* Barra superior y Menú de Ajustes */
         .top-bar {
             display: flex;
             justify-content: flex-end;
             margin-bottom: 1rem;
+            position: relative;
         }
 
-        .btn-logout {
+        .settings-dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .btn-settings {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
             background-color: var(--bg-card);
             border: 1px solid var(--border);
-            color: var(--text-muted);
-            padding: 0.4rem 0.8rem;
-            border-radius: 6px;
-            font-size: 0.85rem;
+            color: var(--text-main);
+            padding: 0.45rem 0.85rem;
+            border-radius: 8px;
+            font-size: 0.88rem;
+            font-weight: 500;
             cursor: pointer;
-            transition: color 0.2s, border-color 0.2s;
+            transition: border-color 0.2s, background-color 0.2s;
         }
 
-        .btn-logout:hover {
-            color: var(--text-main);
+        .btn-settings:hover {
             border-color: var(--accent);
+            background-color: var(--bg-hover);
+        }
+
+        .settings-menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: calc(100% + 8px);
+            width: 220px;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            box-shadow: 0 10px 25px var(--shadow);
+            padding: 0.6rem;
+            z-index: 1000;
+        }
+
+        .settings-menu.show {
+            display: block;
+            animation: fadeInMenu 0.15s ease-out;
+        }
+
+        @keyframes fadeInMenu {
+            from { opacity: 0; transform: translateY(-6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .menu-title {
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            padding: 0.3rem 0.5rem 0.5rem;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 0.5rem;
+        }
+
+        .menu-subtitle {
+            font-size: 0.76rem;
+            color: var(--text-muted);
+            padding: 0 0.5rem;
+            margin-bottom: 0.3rem;
+            display: block;
+        }
+
+        .theme-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .theme-option-btn {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 0.5rem 0.6rem;
+            border-radius: 6px;
+            border: 1px solid transparent;
+            background-color: transparent;
+            color: var(--text-main);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: background-color 0.15s, border-color 0.15s;
+        }
+
+        .theme-option-btn:hover {
+            background-color: var(--bg-hover);
+        }
+
+        .theme-option-btn.active {
+            background-color: var(--accent-glow);
+            border-color: var(--accent);
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .theme-option-btn .check-icon {
+            display: none;
+            font-size: 0.85rem;
+        }
+
+        .theme-option-btn.active .check-icon {
+            display: inline-block;
+        }
+
+        .menu-divider {
+            height: 1px;
+            background-color: var(--border);
+            margin: 0.5rem 0;
+        }
+
+        .menu-btn-logout {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            width: 100%;
+            padding: 0.5rem 0.6rem;
+            border-radius: 6px;
+            border: 1px solid transparent;
+            background-color: transparent;
+            color: #f87171;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.15s, border-color 0.15s;
+        }
+
+        .menu-btn-logout:hover {
+            background-color: rgba(248, 113, 113, 0.12);
+            border-color: rgba(248, 113, 113, 0.3);
         }
 
         header {
@@ -169,7 +314,7 @@
         header h1 {
             font-size: 2.2rem;
             margin-bottom: 0.5rem;
-            background: linear-gradient(90deg, #38bdf8, #818cf8);
+            background: var(--header-grad);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -354,7 +499,42 @@
 <!-- CONTENIDO DE LA WEB (Protegido) -->
 <div class="container" id="main-container">
     <div class="top-bar">
-        <button class="btn-logout" onclick="cerrarSesion()">Cerrar Sesión</button>
+        <div class="settings-dropdown">
+            <button type="button" class="btn-settings" id="btnAjustes" onclick="toggleMenuAjustes(event)">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                </svg>
+                <span>Ajustes</span>
+            </button>
+
+            <div id="menuAjustes" class="settings-menu">
+                <div class="menu-title">⚙️ Ajustes</div>
+                
+                <span class="menu-subtitle">Tema de apariencia</span>
+                <div class="theme-options">
+                    <button type="button" class="theme-option-btn" id="btnModoOscuro" onclick="cambiarTema('dark')">
+                        <span>🌙 Modo Oscuro</span>
+                        <span class="check-icon">✓</span>
+                    </button>
+                    <button type="button" class="theme-option-btn" id="btnModoClaro" onclick="cambiarTema('light')">
+                        <span>☀️ Modo Claro</span>
+                        <span class="check-icon">✓</span>
+                    </button>
+                </div>
+
+                <div class="menu-divider"></div>
+
+                <button type="button" class="menu-btn-logout" onclick="cerrarSesion()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                        <polyline points="16 17 21 12 16 7"></polyline>
+                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
+                    <span>Cerrar Sesión</span>
+                </button>
+            </div>
+        </div>
     </div>
 
     <header>
@@ -626,6 +806,50 @@
                 errorMsg.innerText = "No se ha podido enviar. Comprueba que el correo sea correcto.";
             });
     };
+
+    // Control de Tema Claro / Oscuro con persistencia en localStorage
+    function aplicarTema(tema) {
+        if (tema === 'light') {
+            document.documentElement.setAttribute('data-theme', 'light');
+            document.getElementById('btnModoClaro')?.classList.add('active');
+            document.getElementById('btnModoOscuro')?.classList.remove('active');
+        } else {
+            document.documentElement.removeAttribute('data-theme');
+            document.getElementById('btnModoOscuro')?.classList.add('active');
+            document.getElementById('btnModoClaro')?.classList.remove('active');
+        }
+        try {
+            localStorage.setItem('tema_apuntes', tema);
+        } catch(e) {}
+    }
+
+    // Inicializar tema guardado
+    const temaInicial = localStorage.getItem('tema_apuntes') || 'dark';
+    aplicarTema(temaInicial);
+
+    window.cambiarTema = function(tema) {
+        aplicarTema(tema);
+    };
+
+    // Control del Menú de Ajustes
+    window.toggleMenuAjustes = function(event) {
+        event.stopPropagation();
+        const menu = document.getElementById('menuAjustes');
+        if (menu) {
+            menu.classList.toggle('show');
+        }
+    };
+
+    // Cerrar el menú si se hace clic fuera de él
+    document.addEventListener('click', (e) => {
+        const menu = document.getElementById('menuAjustes');
+        const btn = document.getElementById('btnAjustes');
+        if (menu && menu.classList.contains('show')) {
+            if (!menu.contains(e.target) && !btn?.contains(e.target)) {
+                menu.classList.remove('show');
+            }
+        }
+    });
 
     // Función de Cerrar Sesión
     window.cerrarSesion = function() {
