@@ -743,6 +743,19 @@
 
                         <div class="menu-divider"></div>
 
+                        <span class="menu-subtitle">📱 iPhone / Móvil (GitHub)</span>
+                        <div style="display: flex; flex-direction: column; gap: 0.45rem; padding: 0.25rem 0;" onclick="event.stopPropagation()">
+                            <input type="text" id="githubRepoInput" value="vjp-davidEC/APUNTES" placeholder="usuario/repo" style="width: 100%; padding: 0.45rem 0.6rem; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-main); color: var(--text-main); font-size: 0.8rem;">
+                            <input type="text" id="githubBranchInput" value="main" placeholder="Rama (main)" style="width: 100%; padding: 0.45rem 0.6rem; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-main); color: var(--text-main); font-size: 0.8rem;">
+                            <input type="password" id="githubTokenInput" placeholder="GitHub Token (ghp_... / github_pat_...)" style="width: 100%; padding: 0.45rem 0.6rem; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-main); color: var(--text-main); font-size: 0.8rem;">
+                            <button type="button" onclick="guardarConfigGithub()" style="padding: 0.45rem 0.6rem; border-radius: 6px; border: none; background: var(--accent); color: #0d1117; font-weight: 600; font-size: 0.8rem; cursor: pointer;">
+                                Guardar Token GitHub
+                            </button>
+                            <span id="githubStatusBadge" style="font-size: 0.75rem; color: var(--text-muted);">Sin token configurado</span>
+                        </div>
+
+                        <div class="menu-divider"></div>
+
                         <button type="button" class="menu-btn-logout" onclick="cerrarSesionAdmin()">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
@@ -790,7 +803,7 @@
                     <button type="button" class="btn" onclick="document.getElementById('archivoLocalInput').click()" style="display: inline-flex; align-items: center; gap: 0.4rem; cursor: pointer; white-space: nowrap; font-size: 0.88rem; background: var(--bg-card); border: 1px solid var(--accent); color: var(--accent); border-radius: 8px;">
                         Importar
                     </button>
-                    <input type="file" id="archivoLocalInput" accept=".pdf,.html,.htm" style="display: none;">
+                    <input type="file" id="archivoLocalInput" accept=".pdf,.html,.htm,application/pdf,text/html" style="display: none;">
                 </div>
 
                 <!-- Tarjeta informativa de archivo local seleccionado -->
@@ -1133,6 +1146,107 @@
             });
         }
 
+        function utf8ToBase64(str) {
+            const bytes = new TextEncoder().encode(str);
+            let bin = '';
+            for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+            return btoa(bin);
+        }
+
+        function base64ToUtf8(b64) {
+            const bin = atob(b64.replace(/\s/g, ''));
+            const bytes = new Uint8Array(bin.length);
+            for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+            return new TextDecoder().decode(bytes);
+        }
+
+        function getGithubConfig() {
+            return {
+                repo: (localStorage.getItem('gh_repo') || 'vjp-davidEC/APUNTES').trim(),
+                branch: (localStorage.getItem('gh_branch') || 'main').trim(),
+                token: (localStorage.getItem('gh_token') || '').trim()
+            };
+        }
+
+        function actualizarEstadoGithubUI() {
+            const cfg = getGithubConfig();
+            const rIn = document.getElementById('githubRepoInput');
+            const bIn = document.getElementById('githubBranchInput');
+            const tIn = document.getElementById('githubTokenInput');
+            const badge = document.getElementById('githubStatusBadge');
+            if (rIn) rIn.value = cfg.repo;
+            if (bIn) bIn.value = cfg.branch;
+            if (tIn && cfg.token) tIn.value = cfg.token;
+            if (badge) {
+                badge.style.color = cfg.token ? '#4ade80' : 'var(--text-muted)';
+                badge.innerText = cfg.token ? `✓ Listo para iPhone (${cfg.repo})` : 'Sin token configurado';
+            }
+        }
+        actualizarEstadoGithubUI();
+
+        window.guardarConfigGithub = function() {
+            const repo = (document.getElementById('githubRepoInput')?.value || 'vjp-davidEC/APUNTES').trim();
+            const branch = (document.getElementById('githubBranchInput')?.value || 'main').trim();
+            const token = (document.getElementById('githubTokenInput')?.value || '').trim();
+            localStorage.setItem('gh_repo', repo);
+            localStorage.setItem('gh_branch', branch);
+            localStorage.setItem('gh_token', token);
+            actualizarEstadoGithubUI();
+        };
+
+        async function githubGetFile(path, cfg) {
+            const resp = await fetch(`https://api.github.com/repos/${cfg.repo}/contents/${path}?ref=${encodeURIComponent(cfg.branch)}`, {
+                headers: {
+                    'Authorization': `Bearer ${cfg.token}`,
+                    'Accept': 'application/vnd.github+json'
+                },
+                cache: 'no-store'
+            });
+            if (!resp.ok) {
+                if (resp.status === 404) return null;
+                const err = await resp.json().catch(() => ({}));
+                throw new Error(err.message || `Error GitHub ${resp.status}`);
+            }
+            const data = await resp.json();
+            return { sha: data.sha, text: base64ToUtf8(data.content || '') };
+        }
+
+        async function githubPutFile(path, base64Content, message, cfg, sha = null) {
+            const body = { message, content: base64Content, branch: cfg.branch };
+            if (sha) body.sha = sha;
+            const resp = await fetch(`https://api.github.com/repos/${cfg.repo}/contents/${path}`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${cfg.token}`,
+                    'Accept': 'application/vnd.github+json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(body)
+            });
+            if (!resp.ok) {
+                const err = await resp.json().catch(() => ({}));
+                throw new Error(err.message || `Error subiendo ${path} (${resp.status})`);
+            }
+            return resp.json();
+        }
+
+        async function githubDeleteFile(path, message, cfg, sha) {
+            const resp = await fetch(`https://api.github.com/repos/${cfg.repo}/contents/${path}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${cfg.token}`,
+                    'Accept': 'application/vnd.github+json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ message, sha, branch: cfg.branch })
+            });
+            if (!resp.ok) {
+                const err = await resp.json().catch(() => ({}));
+                throw new Error(err.message || `Error eliminando ${path} (${resp.status})`);
+            }
+            return resp.json();
+        }
+
         // Función para guardar el archivo en su carpeta y ponerlo automáticamente en index.html
         window.publicarApunte = async function() {
             const modulo = document.getElementById('moduloSelect').value;
@@ -1268,9 +1382,56 @@
                 }
             }
 
-            // Fallback si el navegador no soporta showDirectoryPicker
-            statusMsg.style.color = "#f87171";
-            statusMsg.innerText = "Tu navegador no permite guardar archivos directamente en carpetas locales. Abre esta página en Google Chrome o Microsoft Edge.";
+            // 2. Modo iPhone / Móvil (Safari, Chrome, Firefox en iOS) usando API de GitHub
+            const ghCfg = getGithubConfig();
+            if (ghCfg.token) {
+                try {
+                    statusMsg.style.color = "#38bdf8";
+                    statusMsg.innerText = "Subiendo apunte a GitHub y actualizando los index.html...";
+
+                    if (localFile) {
+                        const filePath = `modulos/${modulo}/Temas-${modulo}/${localFile.name}`;
+                        const existingFile = await githubGetFile(filePath, ghCfg);
+                        const fileB64 = await fileToBase64(localFile);
+                        await githubPutFile(filePath, fileB64, `Subir ${localFile.name} a ${modulo}`, ghCfg, existingFile?.sha || null);
+                    }
+
+                    const ghIndex = await githubGetFile('index.html', ghCfg);
+                    if (!ghIndex) throw new Error('No se encontró index.html en el repositorio de GitHub.');
+                    const resIndex = insertarApunteEnIndexHtml(ghIndex.text, modulo, enlace, titulo, tipo);
+                    if (!resIndex.updated) throw new Error(`No se encontró la sección de ${modulo} en index.html.`);
+                    if (!resIndex.alreadyExists) {
+                        await githubPutFile('index.html', utf8ToBase64(resIndex.updated), `Añadir ${titulo} a index.html`, ghCfg, ghIndex.sha);
+                    }
+
+                    let modActualizado = false;
+                    try {
+                        const modPath = `modulos/${modulo}/index.html`;
+                        const ghMod = await githubGetFile(modPath, ghCfg);
+                        if (ghMod) {
+                            const enlaceMod = localFile ? `./Temas-${modulo}/${localFile.name}` : enlace.replace(`./modulos/${modulo}/`, './');
+                            const modUpdated = insertarApunteEnModuloHtml(ghMod.text, enlaceMod, titulo, tipo);
+                            if (modUpdated !== ghMod.text) {
+                                await githubPutFile(modPath, utf8ToBase64(modUpdated), `Añadir ${titulo} a ${modPath}`, ghCfg, ghMod.sha);
+                            }
+                            modActualizado = true;
+                        }
+                    } catch (_) {}
+
+                    statusMsg.style.color = "#4ade80";
+                    statusMsg.innerText = `✓ ¡Subido a GitHub! Fichero guardado en modulos/${modulo}/Temas-${modulo}/ y añadido a index.html${modActualizado ? ` y modulos/${modulo}/index.html` : ''}.`;
+                    return;
+                } catch (errGh) {
+                    console.error("Error GitHub:", errGh);
+                    statusMsg.style.color = "#f87171";
+                    statusMsg.innerText = "Error con GitHub: " + errGh.message;
+                    return;
+                }
+            }
+
+            // Fallback si el navegador no soporta showDirectoryPicker ni hay token/servidor
+            statusMsg.style.color = "#fbbf24";
+            statusMsg.innerText = "Para subir ficheros directo desde iPhone (Safari, Chrome o Firefox), configura tu Token de GitHub en ⚙️ Ajustes (arriba a la derecha), o abre iniciar_admin.bat en tu PC.";
         };
 
         // ==========================================
@@ -1780,7 +1941,76 @@
 
             if (!localProjectHandle) {
                 if (typeof window.showDirectoryPicker !== 'function') {
-                    alert("Tu navegador no permite guardar cambios locales directamente. Usa Google Chrome o Microsoft Edge.");
+                    const ghCfg = getGithubConfig();
+                    if (!ghCfg.token) {
+                        alert("Para eliminar apuntes desde iPhone (Safari, Chrome o Firefox), configura tu Token de GitHub en ⚙️ Ajustes, o usa iniciar_admin.bat en tu PC.");
+                        return;
+                    }
+                    if (!confirm(`¿Estás seguro de que deseas eliminar este apunte en GitHub?\n\nSe quitará el <li> de index.html, de modulos/${item.modulo}/index.html y se borrará el archivo del repositorio.\n\nTítulo: ${item.titulo}\nEnlace: ${item.href}`)) {
+                        return;
+                    }
+                    try {
+                        const quitarLi = (sourceHtml, debeBorrarHref) => {
+                            let eliminado = false;
+                            const nuevoHtml = sourceHtml.replace(
+                                /[ \t]*<li class="pdf-item">(?:(?!<\/li>)[\s\S])*?<\/li>[ \t]*\r?\n?/gi,
+                                (bloqueLi) => {
+                                    const m = bloqueLi.match(/href=["']([^"']+)["']/i);
+                                    if (m && debeBorrarHref(m[1])) {
+                                        eliminado = true;
+                                        return '';
+                                    }
+                                    return bloqueLi;
+                                }
+                            );
+                            return { nuevoHtml, eliminado };
+                        };
+
+                        const targetHrefNorm = decodeURIComponent(item.href).trim();
+                        const ghIndex = await githubGetFile('index.html', ghCfg);
+                        let quitadoPrincipal = false;
+                        if (ghIndex) {
+                            const resP = quitarLi(ghIndex.text, (h) => h.trim() === item.href.trim() || decodeURIComponent(h).trim() === targetHrefNorm);
+                            if (resP.eliminado) {
+                                await githubPutFile('index.html', utf8ToBase64(resP.nuevoHtml), `Quitar ${item.titulo} de index.html`, ghCfg, ghIndex.sha);
+                                quitadoPrincipal = true;
+                            }
+                        }
+
+                        const cleanHref = item.href.replace(/^\.\//, '');
+                        const fileName = decodeURIComponent(cleanHref.split('/').pop() || '');
+                        const moduloTarget = item.modulo.trim();
+                        let modActualizado = false;
+                        if (moduloTarget) {
+                            const modPath = `modulos/${moduloTarget}/index.html`;
+                            const ghMod = await githubGetFile(modPath, ghCfg);
+                            if (ghMod) {
+                                const resM = quitarLi(ghMod.text, (h) => {
+                                    const dec = decodeURIComponent(h).trim();
+                                    return h.trim() === item.href.trim() || (fileName !== '' && (dec.split('/').pop() || '') === fileName);
+                                });
+                                if (resM.eliminado) {
+                                    await githubPutFile(modPath, utf8ToBase64(resM.nuevoHtml), `Quitar ${item.titulo} de ${modPath}`, ghCfg, ghMod.sha);
+                                    modActualizado = true;
+                                }
+                            }
+                        }
+
+                        let archivoBorrado = false;
+                        if (!/^https?:\/\//i.test(item.href)) {
+                            const repoFilePath = cleanHref.split('/').filter(Boolean).map(p => decodeURIComponent(p)).join('/');
+                            const ghFile = await githubGetFile(repoFilePath, ghCfg);
+                            if (ghFile) {
+                                await githubDeleteFile(repoFilePath, `Eliminar ${fileName}`, ghCfg, ghFile.sha);
+                                archivoBorrado = true;
+                            }
+                        }
+
+                        alert(`✓ Eliminado en GitHub:\n${quitadoPrincipal ? '• Quitada entrada de index.html\n' : ''}${modActualizado ? `• Quitada entrada de modulos/${moduloTarget}/index.html\n` : ''}${archivoBorrado ? `• Archivo "${fileName}" borrado del repositorio` : ''}`);
+                        await cargarApuntesDeIndexHtml();
+                    } catch (errGh) {
+                        alert("Error al eliminar en GitHub: " + errGh.message);
+                    }
                     return;
                 }
                 try {
