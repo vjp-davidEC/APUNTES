@@ -1108,6 +1108,31 @@
             return htmlText.replace(/(<ul class=["']pdf-list["']>[\s\S]*?)([ \t]*<\/ul>)/i, (_, g1, g2) => `${g1}${bloqueLi}\n${g2}`);
         }
 
+        async function detectarServidorLocal() {
+            if (!window.location.protocol.startsWith('http')) return false;
+            try {
+                const resp = await fetch('/api/ping', { cache: 'no-store' });
+                if (!resp.ok) return false;
+                const data = await resp.json();
+                return data && data.ok === true;
+            } catch (_) {
+                return false;
+            }
+        }
+
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => {
+                    const res = String(reader.result || '');
+                    const idx = res.indexOf(',');
+                    resolve(idx >= 0 ? res.slice(idx + 1) : res);
+                };
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+
         // Función para guardar el archivo en su carpeta y ponerlo automáticamente en index.html
         window.publicarApunte = async function() {
             const modulo = document.getElementById('moduloSelect').value;
@@ -1123,6 +1148,40 @@
             if (!titulo || !enlace) {
                 statusMsg.innerText = "Por favor, rellena el título y el enlace o importa un archivo.";
                 return;
+            }
+
+            // 0. Si el servidor local PowerShell esta activo (Firefox / cualquier navegador), guardar directo en disco
+            if (await detectarServidorLocal()) {
+                try {
+                    statusMsg.style.color = "#38bdf8";
+                    statusMsg.innerText = "Guardando fichero y actualizando index.html...";
+                    const payload = {
+                        modulo,
+                        titulo,
+                        enlace,
+                        tipo,
+                        fileName: localFile ? localFile.name : '',
+                        fileBase64: localFile ? await fileToBase64(localFile) : ''
+                    };
+                    const resp = await fetch('/api/publicar', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    const resApi = await resp.json();
+                    if (!resp.ok || !resApi.ok) {
+                        throw new Error(resApi.error || 'Error del servidor local');
+                    }
+                    statusMsg.style.color = "#4ade80";
+                    statusMsg.innerText = resApi.alreadyExists
+                        ? `✓ Fichero guardado en modulos/${modulo}/Temas-${modulo}/ y el enlace ya existía en index.html${resApi.modActualizado ? ` y en modulos/${modulo}/index.html` : ''}.`
+                        : `✓ ¡Fichero guardado en modulos/${modulo}/Temas-${modulo}/ y <li> creado automáticamente en index.html${resApi.modActualizado ? ` y en modulos/${modulo}/index.html` : ''}!`;
+                    return;
+                } catch (errApi) {
+                    statusMsg.style.color = "#f87171";
+                    statusMsg.innerText = "Error al guardar mediante servidor local: " + errApi.message;
+                    return;
+                }
             }
 
             if (typeof window.showDirectoryPicker === 'function') {
@@ -1690,6 +1749,34 @@
         window.eliminarApunteDeIndex = async function(idx) {
             const item = apuntesIndexFiltrados[idx];
             if (!item) return;
+
+            // Si el servidor local PowerShell esta activo (Firefox / cualquier navegador), borrar directo en disco
+            if (await detectarServidorLocal()) {
+                if (!confirm(`¿Estás seguro de que deseas eliminar este apunte?\n\nSe quitará el <li> de index.html, de los index.html de módulos y se borrará el archivo físico.\n\nTítulo: ${item.titulo}\nEnlace: ${item.href}`)) {
+                    return;
+                }
+                try {
+                    const resp = await fetch('/api/eliminar', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ href: item.href, modulo: item.modulo })
+                    });
+                    const resApi = await resp.json();
+                    if (!resp.ok || !resApi.ok) {
+                        throw new Error(resApi.error || 'Error del servidor local');
+                    }
+                    const detalles = [
+                        resApi.quitadoPrincipal ? '✓ Quitada entrada de index.html' : null,
+                        resApi.modulosActualizados > 0 ? `✓ Quitada entrada en ${resApi.modulosActualizados} index.html de módulo` : null,
+                        resApi.archivoEliminado ? `✓ Archivo "${resApi.fileName}" borrado del disco` : 'ℹ El archivo físico no existía o era un enlace externo'
+                    ].filter(Boolean).join('\n');
+                    alert(`Apunte "${item.titulo}" eliminado:\n\n${detalles}`);
+                    await cargarApuntesDeIndexHtml();
+                } catch (errApi) {
+                    alert("Error al eliminar mediante servidor local: " + errApi.message);
+                }
+                return;
+            }
 
             if (!localProjectHandle) {
                 if (typeof window.showDirectoryPicker !== 'function') {
