@@ -1214,12 +1214,12 @@
                     el.innerText = `🦊 Firefox (PC) detectado · Configura tu Token en Ajustes`;
                 }
             } else {
-                if (typeof window.showDirectoryPicker === 'function') {
-                    el.style.color = '#38bdf8';
-                    el.innerText = `💻 ${navegador} (PC) detectado · Acceso directo a carpeta APUNTES`;
-                } else if (tieneToken) {
+                if (tieneToken) {
                     el.style.color = '#4ade80';
-                    el.innerText = `💻 ${navegador} detectado · Modo GitHub activo`;
+                    el.innerText = `💻 ${navegador} (PC) detectado · Modo GitHub activo`;
+                } else {
+                    el.style.color = '#38bdf8';
+                    el.innerText = `💻 ${navegador} (PC) detectado · Configura tu Token en Ajustes`;
                 }
             }
         }
@@ -1306,7 +1306,7 @@
                 return;
             }
 
-            if (typeof window.showDirectoryPicker === 'function') {
+            if (!getGithubConfig().token && typeof window.showDirectoryPicker === 'function') {
                 try {
                     if (!localProjectHandle) {
                         localProjectHandle = await window.showDirectoryPicker({
@@ -1931,80 +1931,81 @@
             const item = apuntesIndexFiltrados[idx];
             if (!item) return;
 
-            if (!localProjectHandle) {
-                if (typeof window.showDirectoryPicker !== 'function') {
-                    const ghCfg = getGithubConfig();
-                    if (!ghCfg.token) {
-                        alert("Para eliminar apuntes desde iPhone o Firefox, configura tu Token de GitHub en ⚙️ Ajustes.");
-                        return;
-                    }
-                    if (!confirm(`¿Estás seguro de que deseas eliminar este apunte en GitHub?\n\nSe quitará el <li> de index.html, de modulos/${item.modulo}/index.html y se borrará el archivo del repositorio.\n\nTítulo: ${item.titulo}\nEnlace: ${item.href}`)) {
-                        return;
-                    }
-                    try {
-                        const quitarLi = (sourceHtml, debeBorrarHref) => {
-                            let eliminado = false;
-                            const nuevoHtml = sourceHtml.replace(
-                                /[ \t]*<li class="pdf-item">(?:(?!<\/li>)[\s\S])*?<\/li>[ \t]*\r?\n?/gi,
-                                (bloqueLi) => {
-                                    const m = bloqueLi.match(/href=["']([^"']+)["']/i);
-                                    if (m && debeBorrarHref(m[1])) {
-                                        eliminado = true;
-                                        return '';
-                                    }
-                                    return bloqueLi;
-                                }
-                            );
-                            return { nuevoHtml, eliminado };
-                        };
-
-                        const targetHrefNorm = decodeURIComponent(item.href).trim();
-                        const ghIndex = await githubGetFile('index.html', ghCfg);
-                        let quitadoPrincipal = false;
-                        if (ghIndex) {
-                            const resP = quitarLi(ghIndex.text, (h) => h.trim() === item.href.trim() || decodeURIComponent(h).trim() === targetHrefNorm);
-                            if (resP.eliminado) {
-                                await githubPutFile('index.html', utf8ToBase64(resP.nuevoHtml), `Quitar ${item.titulo} de index.html`, ghCfg, ghIndex.sha);
-                                quitadoPrincipal = true;
-                            }
-                        }
-
-                        const cleanHref = item.href.replace(/^\.\//, '');
-                        const fileName = decodeURIComponent(cleanHref.split('/').pop() || '');
-                        const moduloTarget = item.modulo.trim();
-                        let modActualizado = false;
-                        if (moduloTarget) {
-                            const modPath = `modulos/${moduloTarget}/index.html`;
-                            const ghMod = await githubGetFile(modPath, ghCfg);
-                            if (ghMod) {
-                                const resM = quitarLi(ghMod.text, (h) => {
-                                    const dec = decodeURIComponent(h).trim();
-                                    return h.trim() === item.href.trim() || (fileName !== '' && (dec.split('/').pop() || '') === fileName);
-                                });
-                                if (resM.eliminado) {
-                                    await githubPutFile(modPath, utf8ToBase64(resM.nuevoHtml), `Quitar ${item.titulo} de ${modPath}`, ghCfg, ghMod.sha);
-                                    modActualizado = true;
-                                }
-                            }
-                        }
-
-                        let archivoBorrado = false;
-                        if (!/^https?:\/\//i.test(item.href)) {
-                            const repoFilePath = cleanHref.split('/').filter(Boolean).map(p => decodeURIComponent(p)).join('/');
-                            const ghFile = await githubGetFile(repoFilePath, ghCfg);
-                            if (ghFile) {
-                                await githubDeleteFile(repoFilePath, `Eliminar ${fileName}`, ghCfg, ghFile.sha);
-                                archivoBorrado = true;
-                            }
-                        }
-
-                        alert(`✓ Eliminado en GitHub:\n${quitadoPrincipal ? '• Quitada entrada de index.html\n' : ''}${modActualizado ? `• Quitada entrada de modulos/${moduloTarget}/index.html\n` : ''}${archivoBorrado ? `• Archivo "${fileName}" borrado del repositorio` : ''}`);
-                        await cargarApuntesDeIndexHtml();
-                    } catch (errGh) {
-                        alert("Error al eliminar en GitHub: " + errGh.message);
-                    }
+            if (getGithubConfig().token || (!localProjectHandle && typeof window.showDirectoryPicker !== 'function')) {
+                const ghCfg = getGithubConfig();
+                if (!ghCfg.token) {
+                    alert("Para eliminar apuntes desde iPhone o Firefox, configura tu Token de GitHub en ⚙️ Ajustes.");
                     return;
                 }
+                if (!confirm(`¿Estás seguro de que deseas eliminar este apunte en GitHub?\n\nSe quitará el <li> de index.html, de modulos/${item.modulo}/index.html y se borrará el archivo del repositorio.\n\nTítulo: ${item.titulo}\nEnlace: ${item.href}`)) {
+                    return;
+                }
+                try {
+                    const quitarLi = (sourceHtml, debeBorrarHref) => {
+                        let eliminado = false;
+                        const nuevoHtml = sourceHtml.replace(
+                            /[ \t]*<li class="pdf-item">(?:(?!<\/li>)[\s\S])*?<\/li>[ \t]*\r?\n?/gi,
+                            (bloqueLi) => {
+                                const m = bloqueLi.match(/href=["']([^"']+)["']/i);
+                                if (m && debeBorrarHref(m[1])) {
+                                    eliminado = true;
+                                    return '';
+                                }
+                                return bloqueLi;
+                            }
+                        );
+                        return { nuevoHtml, eliminado };
+                    };
+
+                    const targetHrefNorm = decodeURIComponent(item.href).trim();
+                    const ghIndex = await githubGetFile('index.html', ghCfg);
+                    let quitadoPrincipal = false;
+                    if (ghIndex) {
+                        const resP = quitarLi(ghIndex.text, (h) => h.trim() === item.href.trim() || decodeURIComponent(h).trim() === targetHrefNorm);
+                        if (resP.eliminado) {
+                            await githubPutFile('index.html', utf8ToBase64(resP.nuevoHtml), `Quitar ${item.titulo} de index.html`, ghCfg, ghIndex.sha);
+                            quitadoPrincipal = true;
+                        }
+                    }
+
+                    const cleanHref = item.href.replace(/^\.\//, '');
+                    const fileName = decodeURIComponent(cleanHref.split('/').pop() || '');
+                    const moduloTarget = item.modulo.trim();
+                    let modActualizado = false;
+                    if (moduloTarget) {
+                        const modPath = `modulos/${moduloTarget}/index.html`;
+                        const ghMod = await githubGetFile(modPath, ghCfg);
+                        if (ghMod) {
+                            const resM = quitarLi(ghMod.text, (h) => {
+                                const dec = decodeURIComponent(h).trim();
+                                return h.trim() === item.href.trim() || (fileName !== '' && (dec.split('/').pop() || '') === fileName);
+                            });
+                            if (resM.eliminado) {
+                                await githubPutFile(modPath, utf8ToBase64(resM.nuevoHtml), `Quitar ${item.titulo} de ${modPath}`, ghCfg, ghMod.sha);
+                                modActualizado = true;
+                            }
+                        }
+                    }
+
+                    let archivoBorrado = false;
+                    if (!/^https?:\/\//i.test(item.href)) {
+                        const repoFilePath = cleanHref.split('/').filter(Boolean).map(p => decodeURIComponent(p)).join('/');
+                        const ghFile = await githubGetFile(repoFilePath, ghCfg);
+                        if (ghFile) {
+                            await githubDeleteFile(repoFilePath, `Eliminar ${fileName}`, ghCfg, ghFile.sha);
+                            archivoBorrado = true;
+                        }
+                    }
+
+                    alert(`✓ Eliminado en GitHub:\n${quitadoPrincipal ? '• Quitada entrada de index.html\n' : ''}${modActualizado ? `• Quitada entrada de modulos/${moduloTarget}/index.html\n` : ''}${archivoBorrado ? `• Archivo "${fileName}" borrado del repositorio` : ''}`);
+                    await cargarApuntesDeIndexHtml();
+                } catch (errGh) {
+                    alert("Error al eliminar en GitHub: " + errGh.message);
+                }
+                return;
+            }
+
+            if (!localProjectHandle) {
                 try {
                     localProjectHandle = await window.showDirectoryPicker({
                         id: 'apuntes_folder',
