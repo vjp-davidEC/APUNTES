@@ -743,19 +743,6 @@
 
                         <div class="menu-divider"></div>
 
-                        <span class="menu-subtitle">Archivos y Apuntes</span>
-                        <button type="button" class="menu-btn-action" onclick="abrirModalEliminarArchivos()">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: #f87171;">
-                                <polyline points="3 6 5 6 21 6"></polyline>
-                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                                <line x1="10" y1="11" x2="10" y2="17"></line>
-                                <line x1="14" y1="11" x2="14" y2="17"></line>
-                            </svg>
-                            <span>Eliminar Ficheros (PDF / HTML)</span>
-                        </button>
-
-                        <div class="menu-divider"></div>
-
                         <button type="button" class="menu-btn-logout" onclick="cerrarSesionAdmin()">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
@@ -813,18 +800,9 @@
                             📄 Archivo detectado: <strong id="nombre-archivo-seleccionado" style="color: var(--accent);"></strong> 
                             <span id="tamano-archivo" style="color: var(--text-muted); font-size: 0.8rem;"></span>
                         </span>
-                        <button type="button" class="btn" id="btn-subir-storage" onclick="subirAFirebaseStorage()" style="font-size: 0.8rem; padding: 0.35rem 0.75rem; background: var(--accent); color: #0d1117; font-weight: 600; border: none; border-radius: 6px; cursor: pointer;">
-                            ☁️ Subir a Firebase Storage
-                        </button>
-                    </div>
-                    <div id="storage-progress-container" style="display: none; margin-top: 0.5rem;">
-                        <div style="background: var(--bg-main); border-radius: 4px; overflow: hidden; height: 6px;">
-                            <div id="storage-progress-bar" style="background: var(--accent); height: 100%; width: 0%; transition: width 0.2s;"></div>
-                        </div>
-                        <span id="storage-status-text" style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem; display: block;"></span>
                     </div>
                     <p id="aviso-carpeta-local" style="font-size: 0.8rem; color: var(--text-muted); margin: 0.5rem 0 0 0;">
-                        💡 <em>Para usarlo localmente en GitHub, guarda este archivo en la carpeta <code>modulos/[MÓDULO]/Temas-[MÓDULO]/</code></em>
+                        💡 <em>Al guardar, se colocará en <code>modulos/[MÓDULO]/Temas-[MÓDULO]/</code> y se añadirá solo a <code>index.html</code>.</em>
                     </p>
                 </div>
             </div>
@@ -837,7 +815,7 @@
                 </select>
             </div>
 
-            <button class="btn-primary" onclick="publicarApunte()">Generar Código de Apunte</button>
+            <button type="button" class="btn-primary" onclick="publicarApunte()">Generar Fichero</button>
             <div id="status-msg" style="font-size: 0.85rem; margin-top: 1rem; text-align: center;"></div>
 
             <!-- Vista previa del código generado con botón de copiar -->
@@ -854,7 +832,7 @@
 
         <div class="card">
             <h2>Gestión y Eliminación de Ficheros</h2>
-            <p>Elimina apuntes locales en formato PDF o HTML de las carpetas de módulos o de Firebase Storage sin necesidad de abrir Visual Studio Code.</p>
+            <p>Elimina apuntes locales en formato PDF o HTML de las carpetas de módulos sin necesidad de abrir Visual Studio Code</p>
             <button type="button" class="btn" onclick="abrirModalEliminarArchivos()" style="background: rgba(248, 113, 113, 0.12); border: 1px solid rgba(248, 113, 113, 0.4); color: #f87171; font-weight: 600; display: inline-flex; align-items: center; gap: 0.5rem; cursor: pointer;">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="3 6 5 6 21 6"></polyline>
@@ -891,95 +869,14 @@
 
             <!-- Tabs del Modal -->
             <div class="modal-tabs">
-                <button type="button" class="modal-tab-btn active" id="tabBtnLocal" onclick="cambiarTabEliminar('local')">
-                    💻 Archivos Locales (modulos/)
-                </button>
-                <button type="button" class="modal-tab-btn" id="tabBtnFirebase" onclick="cambiarTabEliminar('firebase')">
-                    ☁️ Firebase Storage (Nube)
-                </button>
-                <button type="button" class="modal-tab-btn" id="tabBtnIndex" onclick="cambiarTabEliminar('index')">
+                <button type="button" class="modal-tab-btn active" id="tabBtnIndex">
                     📄 Enlaces en index.html
                 </button>
             </div>
 
             <div class="modal-body">
-                <!-- PANEL 1: ARCHIVOS LOCALES -->
-                <div id="panelTabLocal">
-                    <div style="background: rgba(56, 189, 248, 0.08); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; margin-bottom: 1.25rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.75rem;">
-                        <div>
-                            <strong style="color: var(--text-main); font-size: 0.95rem; display: block;">Carpeta del Proyecto APUNTES</strong>
-                            <span id="txtEstadoCarpetaLocal" style="color: var(--text-muted); font-size: 0.85rem;">Conecta la carpeta para escanear y eliminar archivos de tus módulos sin abrir Visual Studio.</span>
-                        </div>
-                        <button type="button" class="btn" id="btnConectarCarpeta" onclick="conectarCarpetaLocal()" style="background: var(--accent); color: #0d1117; font-weight: 600; border: none; border-radius: 6px; padding: 0.5rem 1rem; cursor: pointer;">
-                            📂 Conectar Carpeta APUNTES
-                        </button>
-                    </div>
-
-                    <div id="controlesFiltroLocal" style="display: none;">
-                        <div class="files-filter-bar">
-                            <input type="text" id="filtroLocalTexto" placeholder="Buscar por nombre de archivo (ej. AD-UT1)..." oninput="filtrarArchivosLocales()">
-                            <select id="filtroLocalModulo" onchange="filtrarArchivosLocales()">
-                                <option value="">Todos los módulos</option>
-                                <option value="AD">AD</option>
-                                <option value="PMYDM">PMYDM</option>
-                                <option value="DI">DI</option>
-                                <option value="PSP">PSP</option>
-                                <option value="SSGE">SSGE</option>
-                                <option value="DIGIT">DIGIT</option>
-                                <option value="SOST">SOST</option>
-                                <option value="OPTATIVA">OPTATIVA</option>
-                            </select>
-                            <select id="filtroLocalTipo" onchange="filtrarArchivosLocales()">
-                                <option value="">Todos los formatos</option>
-                                <option value="pdf">Solo PDF</option>
-                                <option value="html">Solo HTML</option>
-                            </select>
-                        </div>
-                        <div style="margin-bottom: 0.6rem; display: flex; justify-content: space-between; align-items: center;">
-                            <span id="contadorArchivosLocales" style="font-size: 0.82rem; color: var(--text-muted);">0 archivos encontrados</span>
-                            <button type="button" class="btn" onclick="escanearArchivosLocales()" style="font-size: 0.78rem; padding: 0.25rem 0.6rem;">🔄 Volver a escanear</button>
-                        </div>
-                    </div>
-
-                    <div id="listaArchivosLocales" class="file-list-container">
-                        <div style="text-align: center; padding: 2.5rem 1rem; color: var(--text-muted);">
-                            <div style="font-size: 2rem; margin-bottom: 0.5rem;">📂</div>
-                            Haz clic arriba en <strong>"Conectar Carpeta APUNTES"</strong> para listar y eliminar archivos PDF o HTML locales directamente del disco.
-                        </div>
-                    </div>
-                </div>
-
-                <!-- PANEL 2: FIREBASE STORAGE -->
-                <div id="panelTabFirebase" style="display: none;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; flex-wrap: wrap; gap: 0.5rem;">
-                        <p style="margin: 0; color: var(--text-muted); font-size: 0.88rem;">Ficheros PDF o HTML subidos a Firebase Storage (carpeta <code>apuntes/</code>).</p>
-                        <button type="button" class="btn" onclick="cargarArchivosFirebase()" style="font-size: 0.82rem; padding: 0.4rem 0.8rem; background: var(--bg-hover);">
-                            🔄 Refrescar Firebase
-                        </button>
-                    </div>
-
-                    <div class="files-filter-bar">
-                        <input type="text" id="filtroFirebaseTexto" placeholder="Buscar en Firebase..." oninput="filtrarArchivosFirebase()">
-                        <select id="filtroFirebaseModulo" onchange="filtrarArchivosFirebase()">
-                            <option value="">Todos los módulos</option>
-                            <option value="AD">AD</option>
-                            <option value="PMYDM">PMYDM</option>
-                            <option value="DI">DI</option>
-                            <option value="PSP">PSP</option>
-                            <option value="SSGE">SSGE</option>
-                            <option value="DIGIT">DIGIT</option>
-                            <option value="SOST">SOST</option>
-                            <option value="OPTATIVA">OPTATIVA</option>
-                        </select>
-                    </div>
-
-                    <div id="listaArchivosFirebase" class="file-list-container">
-                        <div style="text-align: center; padding: 2rem; color: var(--text-muted);">Haz clic en "Refrescar Firebase" para listar los archivos de la nube.</div>
-                    </div>
-                </div>
-
-                <!-- PANEL 3: ENLACES EN INDEX.HTML -->
-                <div id="panelTabIndex" style="display: none;">
+                <!-- PANEL: ENLACES EN INDEX.HTML -->
+                <div id="panelTabIndex">
                     <div style="margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
                         <p style="margin: 0; color: var(--text-muted); font-size: 0.88rem;">
                             Gestiona y quita enlaces de apuntes que aparecen en <code>index.html</code> sin tocar el editor de código.
@@ -1192,53 +1089,35 @@
             }
         });
 
-        // Subida opcional a Firebase Storage
-        window.subirAFirebaseStorage = function() {
-            if (!archivoLocalInput.files || archivoLocalInput.files.length === 0) {
-                alert("Por favor, selecciona primero un archivo de tu ordenador.");
-                return;
+        function construirBloqueLi(enlace, titulo, tipo, indent = '                ') {
+            return `${indent}<li class="pdf-item">\n${indent}    <a href="${enlace}">\n${indent}        <span>${titulo}</span>\n${indent}        <span class="pdf-tag">${tipo}</span>\n${indent}    </a>\n${indent}</li>`;
+        }
+
+        function insertarApunteEnIndexHtml(htmlText, modulo, enlace, titulo, tipo) {
+            const escapedEnlace = enlace.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            if (new RegExp(`href=["']${escapedEnlace}["']`, 'i').test(htmlText)) {
+                return { updated: htmlText, alreadyExists: true };
             }
 
-            const file = archivoLocalInput.files[0];
-            const modulo = moduloSelect.value;
-            const progressContainer = document.getElementById('storage-progress-container');
-            const progressBar = document.getElementById('storage-progress-bar');
-            const statusText = document.getElementById('storage-status-text');
-            const btnSubir = document.getElementById('btn-subir-storage');
+            const bloqueLi = construirBloqueLi(enlace, titulo, tipo, '                ');
+            const sectionRegex = new RegExp(`(<section[^>]*data-module=["']${modulo}(?:\\s[^"']*)?["'][\\s\\S]*?<ul class=["']pdf-list["']>[\\s\\S]*?)([ \\t]*</ul>)`, 'i');
 
-            progressContainer.style.display = 'block';
-            btnSubir.disabled = true;
-            btnSubir.innerText = "Subiendo...";
-            statusText.style.color = "var(--text-muted)";
-            statusText.innerText = "Iniciando subida...";
+            if (!sectionRegex.test(htmlText)) {
+                return { updated: null, alreadyExists: false };
+            }
 
-            const storageRef = ref(storage, `apuntes/${modulo}/${file.name}`);
-            const uploadTask = uploadBytesResumable(storageRef, file);
+            const updated = htmlText.replace(sectionRegex, `$1${bloqueLi}\n$2`);
+            return { updated, alreadyExists: false };
+        }
 
-            uploadTask.on('state_changed',
-                (snapshot) => {
-                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                    progressBar.style.width = progress + '%';
-                    statusText.innerText = `Subiendo a la nube: ${Math.round(progress)}%`;
-                },
-                (error) => {
-                    console.error("Error al subir a Firebase Storage:", error);
-                    btnSubir.disabled = false;
-                    btnSubir.innerText = "☁️ Reintentar subida";
-                    statusText.style.color = "#f87171";
-                    statusText.innerText = "No se pudo subir a Firebase Storage (comprueba las reglas en Firebase Console). Puedes seguir usando la ruta local.";
-                },
-                () => {
-                    getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                        btnSubir.disabled = false;
-                        btnSubir.innerText = "✓ Subido a la nube";
-                        statusText.style.color = "#38bdf8";
-                        statusText.innerText = "¡Subida completada! Enlace actualizado con la URL de Firebase.";
-                        document.getElementById('enlaceApunte').value = downloadURL;
-                    });
-                }
-            );
-        };
+        function insertarApunteEnModuloHtml(htmlText, enlaceRelativoModulo, titulo, tipo) {
+            const escaped = enlaceRelativoModulo.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            if (new RegExp(`href=["']${escaped}["']`, 'i').test(htmlText)) {
+                return htmlText;
+            }
+            const bloqueLi = `            <li class="pdf-item"><a href="${enlaceRelativoModulo}"><span>${titulo}</span><span class="pdf-tag">${tipo}</span></a></li>`;
+            return htmlText.replace(/(<ul class=["']pdf-list["']>[\s\S]*?)([ \t]*<\/ul>)/i, `$1${bloqueLi}\n$2`);
+        }
 
         // Copiar código generado al portapapeles
         window.copiarCodigoGenerado = function() {
@@ -1254,13 +1133,14 @@
             });
         };
 
-        // Función para generar el código del apunte
-        window.publicarApunte = function() {
+        // Función para guardar el archivo en su carpeta y ponerlo automáticamente en index.html
+        window.publicarApunte = async function() {
             const modulo = document.getElementById('moduloSelect').value;
             const titulo = document.getElementById('tituloApunte').value.trim();
             const enlace = document.getElementById('enlaceApunte').value.trim();
             const tipo = document.getElementById('tipoApunte').value;
             const statusMsg = document.getElementById('status-msg');
+            const localFile = archivoLocalInput.files && archivoLocalInput.files[0];
 
             statusMsg.style.color = "#f87171";
             statusMsg.innerText = "";
@@ -1270,19 +1150,87 @@
                 return;
             }
 
-            statusMsg.style.color = "#38bdf8";
-            statusMsg.innerText = `¡Apunte preparado! Copia este bloque HTML y pégalo en tu index.html dentro de la tarjeta de ${modulo}:`;
-
             const codigoGenerado = `<li class="pdf-item">
-    <a href="${enlace}" target="_blank">
+    <a href="${enlace}">
         <span>${titulo}</span>
         <span class="pdf-tag">${tipo}</span>
     </a>
 </li>`;
 
-            console.log(codigoGenerado);
             document.getElementById('codigoGenerado').innerText = codigoGenerado;
             document.getElementById('resultado-codigo-container').style.display = 'block';
+
+            if (typeof window.showDirectoryPicker === 'function') {
+                try {
+                    if (!localProjectHandle) {
+                        localProjectHandle = await window.showDirectoryPicker({
+                            id: 'apuntes_folder',
+                            mode: 'readwrite'
+                        });
+                    }
+
+                    // 1. Si hay un archivo importado del ordenador, copiarlo a modulos/<MODULO>/Temas-<MODULO>/
+                    if (localFile) {
+                        const modulosDir = await localProjectHandle.getDirectoryHandle('modulos', { create: true });
+                        const modDir = await modulosDir.getDirectoryHandle(modulo, { create: true });
+                        const temasDir = await modDir.getDirectoryHandle(`Temas-${modulo}`, { create: true });
+                        const destHandle = await temasDir.getFileHandle(localFile.name, { create: true });
+                        const writableFile = await destHandle.createWritable();
+                        await writableFile.write(localFile);
+                        await writableFile.close();
+                    }
+
+                    // 2. Insertar el enlace en index.html
+                    const indexHandle = await localProjectHandle.getFileHandle('index.html');
+                    const indexFile = await indexHandle.getFile();
+                    const htmlText = await indexFile.text();
+                    const res = insertarApunteEnIndexHtml(htmlText, modulo, enlace, titulo, tipo);
+
+                    if (!res.updated) {
+                        statusMsg.innerText = `No se encontró la sección de ${modulo} en index.html. Puedes copiar el código generado abajo.`;
+                        return;
+                    }
+
+                    if (!res.alreadyExists) {
+                        const writableIndex = await indexHandle.createWritable();
+                        await writableIndex.write(res.updated);
+                        await writableIndex.close();
+                    }
+
+                    // 3. Intentar actualizar también modulos/<MODULO>/index.html
+                    try {
+                        const modulosDir = await localProjectHandle.getDirectoryHandle('modulos');
+                        const modDir = await modulosDir.getDirectoryHandle(modulo);
+                        const modIndexHandle = await modDir.getFileHandle('index.html');
+                        const modIndexFile = await modIndexHandle.getFile();
+                        const modHtmlText = await modIndexFile.text();
+                        const enlaceMod = localFile ? `./Temas-${modulo}/${localFile.name}` : enlace.replace(`./modulos/${modulo}/`, './');
+                        const modUpdated = insertarApunteEnModuloHtml(modHtmlText, enlaceMod, titulo, tipo);
+                        const writableMod = await modIndexHandle.createWritable();
+                        await writableMod.write(modUpdated);
+                        await writableMod.close();
+                    } catch (e) {
+                        console.warn('No se actualizó el index.html del módulo:', e);
+                    }
+
+                    statusMsg.style.color = "#4ade80";
+                    statusMsg.innerText = res.alreadyExists
+                        ? `✓ Archivo guardado y el enlace ya estaba en index.html (${modulo}).`
+                        : `✓ ¡Guardado! Se ha puesto automáticamente en index.html dentro de ${modulo}.`;
+                    return;
+                } catch (err) {
+                    if (err.name === 'AbortError') {
+                        statusMsg.style.color = "#fbbf24";
+                        statusMsg.innerText = "Operación cancelada. Puedes copiar el código generado abajo para pegarlo en index.html.";
+                        return;
+                    }
+                    console.error("Error al guardar en carpeta local:", err);
+                }
+            }
+
+            // Fallback si el navegador no soporta showDirectoryPicker
+            statusMsg.style.color = "#38bdf8";
+            statusMsg.innerText = `¡Apunte preparado! Copia este bloque HTML y pégalo en tu index.html dentro de la tarjeta de ${modulo}:`;
         };
 
         // ==========================================
@@ -1295,9 +1243,7 @@
             const modal = document.getElementById('modalEliminarArchivos');
             if (modal) {
                 modal.style.display = 'flex';
-                if (localProjectHandle) {
-                    escanearArchivosLocales();
-                }
+                cargarApuntesDeIndexHtml();
             }
         };
 
@@ -1674,7 +1620,7 @@
             if (!htmlText) {
                 if (container) {
                     container.innerHTML = `<div style="text-align: center; padding: 2rem; color: var(--text-muted);">
-                        Conecta la carpeta del proyecto en la pestaña "Archivos Locales" para gestionar y eliminar los apuntes de index.html directamente.
+                        No se pudo leer <code>index.html</code>. Pulsa en "Quitar" en cualquier enlace o asegúrate de abrir la web desde un servidor local / Live Server.
                     </div>`;
                 }
                 return;
@@ -1765,9 +1711,18 @@
             if (!item) return;
 
             if (!localProjectHandle) {
-                alert("Para guardar los cambios automáticamente en index.html, primero conecta la carpeta del proyecto en la pestaña 'Archivos Locales'.");
-                cambiarTabEliminar('local');
-                return;
+                if (typeof window.showDirectoryPicker !== 'function') {
+                    alert("Tu navegador no permite guardar cambios locales directamente. Usa Google Chrome o Microsoft Edge.");
+                    return;
+                }
+                try {
+                    localProjectHandle = await window.showDirectoryPicker({
+                        id: 'apuntes_folder',
+                        mode: 'readwrite'
+                    });
+                } catch(err) {
+                    return;
+                }
             }
 
             if (!confirm(`¿Estás seguro de que deseas quitar este apunte de index.html?\n\nTítulo: ${item.titulo}\nEnlace: ${item.href}`)) {
