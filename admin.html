@@ -817,17 +817,6 @@
 
             <button type="button" class="btn-primary" onclick="publicarApunte()">Generar Fichero</button>
             <div id="status-msg" style="font-size: 0.85rem; margin-top: 1rem; text-align: center;"></div>
-
-            <!-- Vista previa del código generado con botón de copiar -->
-            <div id="resultado-codigo-container" style="display: none; margin-top: 1.5rem; text-align: left;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-                    <span style="font-size: 0.85rem; color: var(--accent); font-weight: 600;">Código para pegar en index.html:</span>
-                    <button type="button" class="btn" onclick="copiarCodigoGenerado()" id="btn-copiar-codigo" style="font-size: 0.8rem; padding: 0.3rem 0.7rem; background: var(--accent); color: #0d1117; font-weight: 600; border: none; border-radius: 6px; cursor: pointer;">
-                        📋 Copiar Código
-                    </button>
-                </div>
-                <pre style="background: var(--bg-main); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; overflow-x: auto; color: var(--text-main); font-size: 0.88rem; line-height: 1.4;"><code id="codigoGenerado"></code></pre>
-            </div>
         </div>
 
         <div class="card">
@@ -1106,7 +1095,7 @@
                 return { updated: null, alreadyExists: false };
             }
 
-            const updated = htmlText.replace(sectionRegex, `$1${bloqueLi}\n$2`);
+            const updated = htmlText.replace(sectionRegex, (_, g1, g2) => `${g1}${bloqueLi}\n${g2}`);
             return { updated, alreadyExists: false };
         }
 
@@ -1116,22 +1105,8 @@
                 return htmlText;
             }
             const bloqueLi = `            <li class="pdf-item"><a href="${enlaceRelativoModulo}"><span>${titulo}</span><span class="pdf-tag">${tipo}</span></a></li>`;
-            return htmlText.replace(/(<ul class=["']pdf-list["']>[\s\S]*?)([ \t]*<\/ul>)/i, `$1${bloqueLi}\n$2`);
+            return htmlText.replace(/(<ul class=["']pdf-list["']>[\s\S]*?)([ \t]*<\/ul>)/i, (_, g1, g2) => `${g1}${bloqueLi}\n${g2}`);
         }
-
-        // Copiar código generado al portapapeles
-        window.copiarCodigoGenerado = function() {
-            const codigo = document.getElementById('codigoGenerado').innerText;
-            if (!codigo) return;
-            navigator.clipboard.writeText(codigo).then(() => {
-                const btn = document.getElementById('btn-copiar-codigo');
-                const originalText = btn.innerText;
-                btn.innerText = "✓ ¡Copiado!";
-                setTimeout(() => {
-                    btn.innerText = originalText;
-                }, 2000);
-            });
-        };
 
         // Función para guardar el archivo en su carpeta y ponerlo automáticamente en index.html
         window.publicarApunte = async function() {
@@ -1150,16 +1125,6 @@
                 return;
             }
 
-            const codigoGenerado = `<li class="pdf-item">
-    <a href="${enlace}">
-        <span>${titulo}</span>
-        <span class="pdf-tag">${tipo}</span>
-    </a>
-</li>`;
-
-            document.getElementById('codigoGenerado').innerText = codigoGenerado;
-            document.getElementById('resultado-codigo-container').style.display = 'block';
-
             if (typeof window.showDirectoryPicker === 'function') {
                 try {
                     if (!localProjectHandle) {
@@ -1169,25 +1134,36 @@
                         });
                     }
 
-                    // 1. Si hay un archivo importado del ordenador, copiarlo a modulos/<MODULO>/Temas-<MODULO>/
+                    // Verificar que se seleccionó la carpeta raíz APUNTES (la que contiene index.html)
+                    let indexHandle;
+                    try {
+                        indexHandle = await localProjectHandle.getFileHandle('index.html', { create: false });
+                    } catch (_) {
+                        localProjectHandle = null;
+                        statusMsg.style.color = "#fbbf24";
+                        statusMsg.innerText = "Debes seleccionar la carpeta principal 'APUNTES' (donde está index.html) para guardar el fichero y crear el <li> automáticamente.";
+                        return;
+                    }
+
+                    // 1. Si hay un archivo importado, guardarlo en modulos/<MODULO>/Temas-<MODULO>/
                     if (localFile) {
-                        const modulosDir = await localProjectHandle.getDirectoryHandle('modulos', { create: true });
-                        const modDir = await modulosDir.getDirectoryHandle(modulo, { create: true });
-                        const temasDir = await modDir.getDirectoryHandle(`Temas-${modulo}`, { create: true });
+                        const modulosDir = await localProjectHandle.getDirectoryHandle('modulos', { create: false });
+                        const modDir = await modulosDir.getDirectoryHandle(modulo, { create: false });
+                        const temasDir = await modDir.getDirectoryHandle(`Temas-${modulo}`, { create: false });
                         const destHandle = await temasDir.getFileHandle(localFile.name, { create: true });
                         const writableFile = await destHandle.createWritable();
                         await writableFile.write(localFile);
                         await writableFile.close();
                     }
 
-                    // 2. Insertar el enlace en index.html
-                    const indexHandle = await localProjectHandle.getFileHandle('index.html');
+                    // 2. Insertar el <li> en index.html principal
                     const indexFile = await indexHandle.getFile();
                     const htmlText = await indexFile.text();
                     const res = insertarApunteEnIndexHtml(htmlText, modulo, enlace, titulo, tipo);
 
                     if (!res.updated) {
-                        statusMsg.innerText = `No se encontró la sección de ${modulo} en index.html. Puedes copiar el código generado abajo.`;
+                        statusMsg.style.color = "#f87171";
+                        statusMsg.innerText = `No se encontró la sección de ${modulo} en index.html.`;
                         return;
                     }
 
@@ -1197,11 +1173,12 @@
                         await writableIndex.close();
                     }
 
-                    // 3. Intentar actualizar también modulos/<MODULO>/index.html
+                    // 3. Insertar el <li> también en modulos/<MODULO>/index.html
+                    let modActualizado = false;
                     try {
-                        const modulosDir = await localProjectHandle.getDirectoryHandle('modulos');
-                        const modDir = await modulosDir.getDirectoryHandle(modulo);
-                        const modIndexHandle = await modDir.getFileHandle('index.html');
+                        const modulosDir = await localProjectHandle.getDirectoryHandle('modulos', { create: false });
+                        const modDir = await modulosDir.getDirectoryHandle(modulo, { create: false });
+                        const modIndexHandle = await modDir.getFileHandle('index.html', { create: false });
                         const modIndexFile = await modIndexHandle.getFile();
                         const modHtmlText = await modIndexFile.text();
                         const enlaceMod = localFile ? `./Temas-${modulo}/${localFile.name}` : enlace.replace(`./modulos/${modulo}/`, './');
@@ -1209,28 +1186,32 @@
                         const writableMod = await modIndexHandle.createWritable();
                         await writableMod.write(modUpdated);
                         await writableMod.close();
+                        modActualizado = true;
                     } catch (e) {
                         console.warn('No se actualizó el index.html del módulo:', e);
                     }
 
                     statusMsg.style.color = "#4ade80";
                     statusMsg.innerText = res.alreadyExists
-                        ? `✓ Archivo guardado y el enlace ya estaba en index.html (${modulo}).`
-                        : `✓ ¡Guardado! Se ha puesto automáticamente en index.html dentro de ${modulo}.`;
+                        ? `✓ Fichero guardado en modulos/${modulo}/Temas-${modulo}/ y el enlace ya existía en index.html${modActualizado ? ` y en modulos/${modulo}/index.html` : ''}.`
+                        : `✓ ¡Fichero guardado en modulos/${modulo}/Temas-${modulo}/ y <li> creado automáticamente en index.html${modActualizado ? ` y en modulos/${modulo}/index.html` : ''}!`;
                     return;
                 } catch (err) {
                     if (err.name === 'AbortError') {
                         statusMsg.style.color = "#fbbf24";
-                        statusMsg.innerText = "Operación cancelada. Puedes copiar el código generado abajo para pegarlo en index.html.";
+                        statusMsg.innerText = "Operación cancelada. Selecciona la carpeta APUNTES para guardar el fichero y añadir el <li>.";
                         return;
                     }
                     console.error("Error al guardar en carpeta local:", err);
+                    statusMsg.style.color = "#f87171";
+                    statusMsg.innerText = "Error al guardar: " + err.message;
+                    return;
                 }
             }
 
             // Fallback si el navegador no soporta showDirectoryPicker
-            statusMsg.style.color = "#38bdf8";
-            statusMsg.innerText = `¡Apunte preparado! Copia este bloque HTML y pégalo en tu index.html dentro de la tarjeta de ${modulo}:`;
+            statusMsg.style.color = "#f87171";
+            statusMsg.innerText = "Tu navegador no permite guardar archivos directamente en carpetas locales. Abre esta página en Google Chrome o Microsoft Edge.";
         };
 
         // ==========================================
@@ -1725,31 +1706,118 @@
                 }
             }
 
-            if (!confirm(`¿Estás seguro de que deseas quitar este apunte de index.html?\n\nTítulo: ${item.titulo}\nEnlace: ${item.href}`)) {
+            if (!confirm(`¿Estás seguro de que deseas eliminar este apunte?\n\nSe quitará el <li> de index.html, de los index.html de módulos y se borrará el archivo físico.\n\nTítulo: ${item.titulo}\nEnlace: ${item.href}`)) {
                 return;
             }
 
             try {
+                // 1. Quitar <li> de index.html principal
+                function quitarSoloEsteLi(sourceHtml, debeBorrarHref) {
+                    let eliminado = false;
+                    const nuevoHtml = sourceHtml.replace(
+                        /[ \t]*<li class="pdf-item">(?:(?!<\/li>)[\s\S])*?<\/li>[ \t]*\r?\n?/gi,
+                        (bloqueLi) => {
+                            const m = bloqueLi.match(/href=["']([^"']+)["']/i);
+                            if (m && debeBorrarHref(m[1])) {
+                                eliminado = true;
+                                return '';
+                            }
+                            return bloqueLi;
+                        }
+                    );
+                    return { nuevoHtml, eliminado };
+                }
+
+                // 1. Quitar solo ese <li> de index.html principal
                 const handle = await localProjectHandle.getFileHandle('index.html');
                 const f = await handle.getFile();
-                let html = await f.text();
+                const html = await f.text();
 
-                const escapedHref = item.href.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-                const regex = new RegExp(`[ \\t]*<li class="pdf-item">[\\s\\S]*?href=["']${escapedHref}["'][\\s\\S]*?<\\/li>\\s*`, 'i');
+                const targetHrefNorm = decodeURIComponent(item.href).trim();
+                const resPrincipal = quitarSoloEsteLi(html, (hrefActual) => {
+                    return hrefActual.trim() === item.href.trim() || decodeURIComponent(hrefActual).trim() === targetHrefNorm;
+                });
 
-                if (regex.test(html)) {
-                    html = html.replace(regex, '\n');
+                let quitadoPrincipal = false;
+                if (resPrincipal.eliminado) {
                     const writable = await handle.createWritable();
-                    await writable.write(html);
+                    await writable.write(resPrincipal.nuevoHtml);
                     await writable.close();
-                    alert(`✓ Apunte "${item.titulo}" retirado con éxito de index.html.`);
+                    quitadoPrincipal = true;
+                }
+
+                // 2. Quitar solo ese <li> del index.html dentro de modulos/<MODULO>/index.html
+                const cleanHref = item.href.replace(/^\.\//, '');
+                const fileName = decodeURIComponent(cleanHref.split('/').pop() || '');
+                const moduloTarget = item.modulo.trim();
+
+                let modulosActualizados = 0;
+                try {
+                    const modulosDir = await localProjectHandle.getDirectoryHandle('modulos', { create: false });
+                    const modDirs = [];
+                    if (moduloTarget) {
+                        try {
+                            modDirs.push(await modulosDir.getDirectoryHandle(moduloTarget, { create: false }));
+                        } catch (_) {}
+                    }
+                    if (modDirs.length === 0) {
+                        for await (const [, entryHandle] of modulosDir.entries()) {
+                            if (entryHandle.kind === 'directory') modDirs.push(entryHandle);
+                        }
+                    }
+
+                    for (const entryHandle of modDirs) {
+                        try {
+                            const modIndexHandle = await entryHandle.getFileHandle('index.html', { create: false });
+                            const modFile = await modIndexHandle.getFile();
+                            const modHtml = await modFile.text();
+                            const resMod = quitarSoloEsteLi(modHtml, (hrefActual) => {
+                                const hrefDec = decodeURIComponent(hrefActual).trim();
+                                const fileActual = hrefDec.split('/').pop() || '';
+                                return hrefActual.trim() === item.href.trim() || (fileName !== '' && fileActual === fileName);
+                            });
+                            if (resMod.eliminado) {
+                                const writableMod = await modIndexHandle.createWritable();
+                                await writableMod.write(resMod.nuevoHtml);
+                                await writableMod.close();
+                                modulosActualizados++;
+                            }
+                        } catch (_) {}
+                    }
+                } catch (_) {}
+
+                // 3. Eliminar el fichero físico si es una ruta local del proyecto
+                let archivoEliminado = false;
+                if (!/^https?:\/\//i.test(item.href)) {
+                    try {
+                        const parts = cleanHref.split('/').filter(Boolean).map(p => decodeURIComponent(p));
+                        if (parts.length > 0) {
+                            let dirCursor = localProjectHandle;
+                            for (let i = 0; i < parts.length - 1; i++) {
+                                dirCursor = await dirCursor.getDirectoryHandle(parts[i], { create: false });
+                            }
+                            await dirCursor.removeEntry(parts[parts.length - 1]);
+                            archivoEliminado = true;
+                        }
+                    } catch (errFile) {
+                        console.warn("No se pudo eliminar el archivo físico (puede que ya no exista):", errFile);
+                    }
+                }
+
+                if (quitadoPrincipal || modulosActualizados > 0 || archivoEliminado) {
+                    const detalles = [
+                        quitadoPrincipal ? '✓ Quitada entrada de index.html' : null,
+                        modulosActualizados > 0 ? `✓ Quitada entrada en ${modulosActualizados} index.html de módulo` : null,
+                        archivoEliminado ? `✓ Archivo "${fileName}" borrado del disco` : 'ℹ El archivo físico no existía o era un enlace externo'
+                    ].filter(Boolean).join('\n');
+                    alert(`Apunte "${item.titulo}" eliminado:\n\n${detalles}`);
                     await cargarApuntesDeIndexHtml();
                 } else {
                     alert("No se pudo localizar el bloque HTML exacto en index.html.");
                 }
             } catch(err) {
-                console.error("Error al actualizar index.html:", err);
-                alert("Error al actualizar index.html: " + err.message);
+                console.error("Error al eliminar el apunte:", err);
+                alert("Error al eliminar el apunte: " + err.message);
             }
         };
     </script>
