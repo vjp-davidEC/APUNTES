@@ -306,6 +306,28 @@
             border-color: rgba(248, 113, 113, 0.3);
         }
 
+        .menu-btn-admin {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            width: 100%;
+            padding: 0.55rem 0.7rem;
+            border-radius: 6px;
+            border: 1px solid transparent;
+            background-color: transparent;
+            color: var(--accent);
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.15s, border-color 0.15s;
+        }
+
+        .menu-btn-admin:hover {
+            background-color: var(--accent-glow);
+            border-color: rgba(56, 189, 248, 0.35);
+        }
+
         /* Botón de cambio de tema flotante en la esquina inferior derecha de la ventana */
         .theme-toggle-window-btn {
             position: fixed;
@@ -554,6 +576,16 @@
                         <span>☀️ Modo Claro</span>
                         <span class="check-icon">✓</span>
                     </button>
+                </div>
+
+                <div id="adminMenuSection" style="display: none;">
+                    <div class="menu-divider"></div>
+                    <a href="admin.html" class="menu-btn-admin">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                        </svg>
+                        <span>Panel Admin</span>
+                    </a>
                 </div>
 
                 <div class="menu-divider"></div>
@@ -910,17 +942,30 @@
         signOut(auth);
     };
 
+    const ADMINS_PERMITIDOS = [
+        "descuderoc03@informatica.iesvalledeljerteplasencia.es",
+        "jatarrerom01@informatica.iesvalledeljerteplasencia.es"
+    ];
+
     // Escucha el estado de la sesión de manera automática
     onAuthStateChanged(auth, (user) => {
         const loginScreen = document.getElementById('login-screen');
         const mainContainer = document.getElementById('main-container');
+        const adminMenuSection = document.getElementById('adminMenuSection');
 
         if (user) {
             loginScreen.style.display = 'none';
             mainContainer.style.display = 'block';
+            const email = (user.email || '').toLowerCase();
+            if (adminMenuSection) {
+                adminMenuSection.style.display = ADMINS_PERMITIDOS.includes(email) ? 'block' : 'none';
+            }
         } else {
             loginScreen.style.display = 'block';
             mainContainer.style.display = 'none';
+            if (adminMenuSection) {
+                adminMenuSection.style.display = 'none';
+            }
         }
     });
 
