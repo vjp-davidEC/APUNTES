@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Acceso a Datos - RA3: Herramientas ORM (Hibernate y JPA)</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 1.8cm 1.5cm 2cm 1.5cm;
+      @bottom-right {
+        content: counter(page);
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        font-size: 9pt;
+        color: #64748b;
+      }
+      @bottom-left {
+        content: "Acceso a Datos - RA3: ORM, Hibernate y JPA";
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        font-size: 9pt;
+        color: #64748b;
+      }
+    }
+
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 10pt;
+      line-height: 1.5;
+      color: #1e293b;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1.doc-title {
+      font-size: 17pt;
+      font-weight: 700;
+      color: #0f172a;
+      text-align: center;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    p.doc-subtitle {
+      text-align: center;
+      font-size: 10.5pt;
+      color: #15803d;
+      font-weight: 600;
+      margin-top: 0;
+      margin-bottom: 25px;
+      border-bottom: 2px solid #16a34a;
+      padding-bottom: 10px;
+    }
+
+    .pdf-section {
+      background-color: #0f172a;
+      color: #ffffff;
+      padding: 8px 14px;
+      font-size: 11.5pt;
+      font-weight: 700;
+      border-radius: 4px;
+      margin-top: 25px;
+      margin-bottom: 15px;
+      page-break-after: avoid;
+    }
+
+    .page-break {
+      page-break-before: always;
+    }
+
+    h2 {
+      font-size: 11.5pt;
+      color: #15803d;
+      border-bottom: 1.5px solid #e2e8f0;
+      padding-bottom: 4px;
+      margin-top: 18px;
+      margin-bottom: 10px;
+      page-break-after: avoid;
+    }
+
+    h3 {
+      font-size: 10pt;
+      color: #334155;
+      margin-top: 12px;
+      margin-bottom: 6px;
+      page-break-after: avoid;
+    }
+
+    p {
+      margin: 0 0 8px 0;
+      text-align: justify;
+    }
+
+    ul, ol {
+      margin: 0 0 10px 0;
+      padding-left: 20px;
+    }
+
+    li {
+      margin-bottom: 4px;
+    }
+
+    .diagram-box {
+      background-color: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-left: 4px solid #16a34a;
+      padding: 10px 14px;
+      margin: 10px 0;
+      font-size: 9pt;
+      border-radius: 2px;
+      page-break-inside: avoid;
+    }
+
+    .diagram-title {
+      font-weight: bold;
+      color: #0f172a;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      font-size: 8.5pt;
+      letter-spacing: 0.5px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+      font-size: 8.5pt;
+      page-break-inside: avoid;
+    }
+
+    th, td {
+      border: 1px solid #cbd5e1;
+      padding: 6px 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background-color: #f1f5f9;
+      color: #0f172a;
+      font-weight: 700;
+    }
+
+    tr:nth-child(even) td {
+      background-color: #f8fafc;
+    }
+
+    pre, code {
+      font-family: 'Consolas', 'Courier New', monospace;
+    }
+
+    pre {
+      background-color: #0f172a;
+      color: #f8fafc;
+      padding: 10px 12px;
+      border-radius: 4px;
+      font-size: 8.5pt;
+      line-height: 1.4;
+      overflow-x: auto;
+      margin: 10px 0;
+      page-break-inside: avoid;
+    }
+
+    p code, li code, td code {
+      background-color: #f1f5f9;
+      color: #15803d;
+      padding: 1px 4px;
+      border-radius: 3px;
+      font-size: 8.5pt;
+      border: 1px solid #e2e8f0;
+    }
+  </style>
+</head>
+<body>
+
+  <h1 class="doc-title">Acceso a Datos - RA3: Herramientas ORM</h1>
+  <p class="doc-subtitle">Mapeo Objeto-Relacional: Arquitectura y Configuración con Hibernate y JPA</p>
+
+  <!-- SECCIÓN 1: INTRODUCCIÓN Y CONCEPTO ORM -->
+  <div class="pdf-section">1. Introducción y Concepto de Mapeo Objeto-Relacional (ORM)</div>
+  <p><strong>El Desfase Objeto-Relacional:</strong> Hace referencia a la diferencia en el tratamiento de la información entre una aplicación orientada a objetos (que trabaja con instancias de clases y sus relaciones) y una base de datos relacional (que opera con tablas, relaciones y conjuntos). Para leer o escribir información entre ambos paradigmas se requiere un proceso de adaptación continuo.</p>
+  <p><strong>Definición de ORM:</strong> El Mapeo Objeto-Relacional es una técnica de programación que convierte datos entre el sistema de tipos de un lenguaje orientado a objetos y el de una base de datos relacional mediante un <strong>motor de persistencia</strong>. En la práctica, crea una base de datos orientada a objetos virtual que actúa de interfaz intermedia.</p>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Esquema Conceptual del Mapeo Objeto-Relacional</div>
+    <pre><code>[ Objetos (Aplicación OO) ] &lt;===&gt; [ Motor de Persistencia (ORM) ] &lt;===&gt; [ Tablas (SGBDR) ]</code></pre>
+  </div>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Código Comparativo: Mapeo Manual Tradicional con JDBC</div>
+    <pre><code>public List&lt;Alumno&gt; findAll() throws ClassNotFoundException, SQLException {
+    String sql = "SELECT ID_ALUMNO, NOMBRE, APELLIDOS, "
+               + "TO_CHAR(FECHA_NACIMIENTO, 'DD/MM/YYYY') AS FEC_NAC, "
+               + "CORREO_ELECTRONICO, HORAS_FALTAS FROM ALUM";
+    List&lt;Alumno&gt; result = null;
+    
+    PreparedStatement ps = DBConnection.getPreparedStatement(sql);
+    ResultSet rs = ps.executeQuery();
+    while (rs.next()) {
+        if (result == null) result = new ArrayList&lt;Alumno&gt;();
+        result.add(new Alumno(
+            rs.getInt("ID_ALUMNO"),
+            rs.getString("NOMBRE"),
+            rs.getString("APELLIDOS"),
+            rs.getString("FEC_NAC"),
+            rs.getString("CORREO_ELECTRONICO"),
+            rs.getInt("HORAS_FALTAS")
+        ));
+    }
+    rs.close();
+    ps.close();
+    return result;
+}</code></pre>
+  </div>
+
+  <!-- SECCIÓN 2: HERRAMIENTAS ORM, HIBERNATE Y JPA -->
+  <div class="pdf-section">2. Herramientas ORM: Hibernate y la Especificación JPA</div>
+  <p>Las herramientas ORM permiten crear una capa de acceso a datos mapeando una clase por cada tabla de la base de datos. Aportan un lenguaje de consultas propio e independiente del SGBD, permitiendo migrar de motor de base de datos con cambios mínimos en el archivo de configuración.</p>
+
+  <ul>
+    <li><strong>Ventajas de los ORM:</strong> Reducen el tiempo de desarrollo, abstraen de la base de datos, fomentan la reutilización y portabilidad, producen código más limpio y ofrecen un lenguaje de consulta propio.</li>
+    <li><strong>Principal Inconveniente:</strong> Pérdida de control directo sobre el SQL generado; si no se comprende cómo opera el ORM, puede lanzar muchas más consultas de las necesarias.</li>
+    <li><strong>Ejemplos en el mercado:</strong> Hibernate y EclipseLink (Java), Doctrine (PHP), NHibernate (C#/.NET), Django ORM y SQLAlchemy (Python).</li>
+  </ul>
+
+  <h2>2.1. Comparativa: JDBC vs. Hibernate</h2>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 16%;">Tecnología</th>
+        <th style="width: 42%;">Ventajas</th>
+        <th style="width: 42%;">Desventajas</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>JDBC</strong></td>
+        <td>Mayor control sobre el SQL, mejor rendimiento general y aprovechamiento total de las funciones específicas del SGBD.</td>
+        <td>Desarrollo y mantenimiento mucho más costosos; alta propensión a errores manuales durante el mapeo.</td>
+      </tr>
+      <tr>
+        <td><strong>Hibernate</strong></td>
+        <td>Desarrollo más rápido usando entidades en lugar de consultas SQL, menor código repetitivo y mantenimiento más sencillo.</td>
+        <td>Curva de aprendizaje mayor y rendimiento ligeramente inferior al acceso nativo directo.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="page-break"></div>
+  <h2>2.2. Relación entre JPA (Jakarta Persistence) e Hibernate</h2>
+  <p><strong>JPA (Jakarta Persistence):</strong> Es la especificación estándar de Java para la persistencia que independiza la capa de negocio de la de almacenamiento, pero carece de implementación propia. Define tres pilares:</p>
+  <ol>
+    <li>Mecanismos para relacionar objetos Java con el esquema relacional mediante anotaciones o XML.</li>
+    <li>Una API sencilla para operaciones CRUD a través de <code>jakarta.persistence.EntityManager</code>.</li>
+    <li>El lenguaje de consultas orientado a objetos <strong>JPQL</strong> (<em>Java Persistence Query Language</em>).</li>
+  </ol>
+  <p><strong>Hibernate:</strong> Es un framework real que implementa en su módulo central (<code>hibernate-core</code>) toda la especificación JPA, añadiendo además capacidades propias como el lenguaje <strong>HQL</strong> (<em>Hibernate Query Language</em>, que amplía JPQL).</p>
+  <p><em>Nota sobre paquetes:</em> Desde Jakarta EE 9 (2020) el paquete oficial es <code>jakarta.persistence</code>. Si un código utiliza <code>javax.persistence</code> corresponde a versiones antiguas (Hibernate 5 o anterior) y no deben mezclarse.</p>
+
+  <!-- SECCIÓN 3: ARQUITECTURA DE HIBERNATE Y JPA -->
+  <div class="pdf-section">3. Arquitectura de Hibernate y Equivalencias con JPA</div>
+  <p>Hibernate mapea objetos Java estándar conocidos como <strong>POJOs</strong> (<em>Plain Old Java Objects</em>). Para interactuar con la base de datos utiliza una <strong>Sesión</strong> (<code>Session</code> en Hibernate nativo o <code>EntityManager</code> en JPA), que equivale a una conexión JDBC pero mantiene además el <strong>contexto de persistencia</strong> (una caché de primer nivel con los objetos cargados o guardados en una unidad de trabajo). Crear y destruir sesiones es computacionalmente muy barato.</p>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Flujo de Arquitectura JPA / Hibernate</div>
+    <pre><code>1. Configuración: new PersistenceConfiguration("plantillaORM") &lt;--- [ jpa.properties ]
+         │
+         ▼
+2. EntityManagerFactory (SessionFactory): config.createEntityManagerFactory() [Una por aplicación - JPAUtil]
+         │
+         ▼
+3. EntityManager (Session): emf.createEntityManager() [Uno por unidad de trabajo]
+         │
+         ├──► EntityTransaction tx = em.getTransaction()
+         ├──► tx.begin()
+         ├──► Operaciones sobre objetos: persist() | find() | merge() | remove()
+         ├──► tx.commit() o tx.rollback()
+         └──► em.close()
+         │
+         ▼
+4. Conector JDBC (mysql-connector-j) ===&gt; [ Base de Datos ]</code></pre>
+  </div>
+
+  <h3>Tabla de Equivalencias: Hibernate Nativo vs. JPA</h3>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 30%;">Hibernate Nativo</th>
+        <th style="width: 35%;">JPA (Jakarta Persistence)</th>
+        <th style="width: 35%;">Función Principal</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>hibernate.cfg.xml</code></td>
+        <td><code>persistence.xml</code> o <code>PersistenceConfiguration</code></td>
+        <td>Configuración del entorno y conexión.</td>
+      </tr>
+      <tr>
+        <td><code>SessionFactory</code></td>
+        <td><code>EntityManagerFactory</code></td>
+        <td>Factoría pesada (una única instancia por aplicación).</td>
+      </tr>
+      <tr>
+        <td><code>Session</code></td>
+        <td><code>EntityManager</code></td>
+        <td>Unidad de trabajo y contexto de persistencia.</td>
+      </tr>
+      <tr>
+        <td><code>Transaction</code></td>
+        <td><code>EntityTransaction</code></td>
+        <td>Gestión de transacciones atómicas.</td>
+      </tr>
+      <tr>
+        <td><code>org.hibernate.query.Query</code></td>
+        <td><code>TypedQuery</code> / <code>Query</code></td>
+        <td>Ejecución de consultas.</td>
+      </tr>
+      <tr>
+        <td><code>HQL</code></td>
+        <td><code>JPQL</code></td>
+        <td>Lenguaje de consulta orientado a objetos.</td>
+      </tr>
+      <tr>
+        <td><code>save()</code> <em>(eliminado en v7)</em></td>
+        <td><code>persist()</code></td>
+        <td>Hacer persistente un objeto nuevo en la BD.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- SECCIÓN 4: CONFIGURACIÓN CON MAVEN Y PROPIEDADES -->
+  <div class="page-break"></div>
+  <div class="pdf-section">4. Gestión de Dependencias con Maven y Configuración</div>
+  <p>Para evitar conflictos de versiones e incompatibilidades entre librerías (el llamado <em>infierno de los JAR</em>), se emplea <strong>Maven</strong> mediante el archivo <code>pom.xml</code>.</p>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Dependencias en pom.xml (Hibernate 7 y MySQL Connector)</div>
+    <pre><code>&lt;dependencies&gt;
+    &lt;!-- Núcleo de Hibernate ORM --&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;org.hibernate.orm&lt;/groupId&gt;
+        &lt;artifactId&gt;hibernate-core&lt;/artifactId&gt;
+        &lt;version&gt;7.4.2.Final&lt;/version&gt;
+    &lt;/dependency&gt;
+    &lt;!-- Conector JDBC de MySQL usado internamente por Hibernate --&gt;
+    &lt;dependency&gt;
+        &lt;groupId&gt;com.mysql&lt;/groupId&gt;
+        &lt;artifactId&gt;mysql-connector-j&lt;/artifactId&gt;
+        &lt;version&gt;9.7.0&lt;/version&gt;
+        &lt;scope&gt;runtime&lt;/scope&gt;
+    &lt;/dependency&gt;
+&lt;/dependencies&gt;</code></pre>
+  </div>
+
+  <h2>4.1. Fichero de Propiedades (src/main/resources/jpa.properties)</h2>
+  <div class="diagram-box">
+    <div class="diagram-title">Configuración clave=valor en jpa.properties</div>
+    <pre><code>jakarta.persistence.jdbc.url=jdbc:mysql://localhost:3306/hibernate?createDatabaseIfNotExist=true
+jakarta.persistence.jdbc.user=root
+jakarta.persistence.jdbc.password=
+jakarta.persistence.schema-generation.database.action=drop-and-create
+hibernate.show_sql=true
+hibernate.format_sql=true</code></pre>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 38%;">Propiedad</th>
+        <th style="width: 32%;">Propósito</th>
+        <th style="width: 30%;">Valores Habituales</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>jakarta.persistence.jdbc.url</code></td>
+        <td>Dirección de conexión (protocolo, host, puerto y BD).</td>
+        <td><code>createDatabaseIfNotExist=true</code> crea la BD si no existe en MySQL.</td>
+      </tr>
+      <tr>
+        <td><code>jakarta.persistence.jdbc.user</code></td>
+        <td>Usuario de conexión a la BD.</td>
+        <td><code>root</code> (o usuario configurado).</td>
+      </tr>
+      <tr>
+        <td><code>jakarta.persistence.jdbc.password</code></td>
+        <td>Contraseña del usuario.</td>
+        <td>Vacía si no tiene contraseña.</td>
+      </tr>
+      <tr>
+        <td><code>jakarta.persistence.schema-generation.database.action</code></td>
+        <td>Acción de Hibernate sobre las tablas al iniciar.</td>
+        <td><code>drop-and-create</code> (desarrollo), <code>create</code>, <code>none</code> (producción).</td>
+      </tr>
+      <tr>
+        <td><code>hibernate.show_sql</code></td>
+        <td>Muestra por consola el SQL generado.</td>
+        <td><code>true</code> durante el aprendizaje.</td>
+      </tr>
+      <tr>
+        <td><code>hibernate.format_sql</code></td>
+        <td>Formatea el SQL con saltos de línea y sangría.</td>
+        <td><code>true</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- SECCIÓN 5: IMPLEMENTACIÓN DE ENTIDADES Y REGISTRO -->
+  <div class="page-break"></div>
+  <div class="pdf-section">5. Creación de Entidades JPA y Registro en la Unidad de Persistencia</div>
+
+  <h2>5.1. Anotaciones Fundamentales de Mapeo en la Entidad</h2>
+  <ul>
+    <li><code>@Entity</code>: Declara que la clase es una entidad gestionada por el motor de persistencia.</li>
+    <li><code>@Table(name = "...")</code>: Especifica el nombre de la tabla física en la base de datos.</li>
+    <li><code>@Id</code>: Marca el atributo que actuará como clave primaria.</li>
+    <li><code>@GeneratedValue(strategy = GenerationType.IDENTITY)</code>: Delega en la base de datos la generación automática del ID (<code>AUTO_INCREMENT</code> en MySQL).</li>
+    <li><code>@Column(...)</code>: Define las características de la columna asociada al atributo (nombre, longitud, nulabilidad).</li>
+  </ul>
+  <p><em>Requisito obligatorio:</em> Toda clase entidad de JPA debe importar de <code>jakarta.persistence</code> y contar con un <strong>constructor sin argumentos</strong> (vacío).</p>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Código: Clase Entidad Usuario.java</div>
+    <pre><code>import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "usuarios")
+public class Usuario {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // AUTO_INCREMENT en MySQL
+    private Long id;
+
+    @Column(name = "nombre", nullable = false, length = 50)
+    private String nombre;
+
+    @Column(name = "mensaje", length = 255)
+    private String mensaje;
+
+    /** Constructor vacío obligatorio para JPA. */
+    protected Usuario() {
+    }
+
+    public Usuario(String nombre, String mensaje) {
+        this.nombre = nombre;
+        this.mensaje = mensaje;
+    }
+}</code></pre>
+  </div>
+
+  <h2>5.2. Registro de la Entidad y Control de Logs</h2>
+  <p>Cada nueva clase anotada con <code>@Entity</code> debe registrarse programáticamente en la configuración mediante <code>.managedClass()</code> (equivalente a las antiguas etiquetas <code>&lt;class&gt;</code> de <code>persistence.xml</code>).</p>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Código: Registro en JPAUtil y Reducción de Logs en App.java</div>
+    <pre><code>// 1. Registro de la entidad en JPAUtil.java
+private static EntityManagerFactory crearEntityManagerFactory() {
+    PersistenceConfiguration config = new PersistenceConfiguration(UNIDAD_PERSISTENCIA)
+        .provider("org.hibernate.jpa.HibernatePersistenceProvider")
+        .transactionType(PersistenceUnitTransactionType.RESOURCE_LOCAL)
+        // Añadir aquí cada clase @Entity nueva:
+        .managedClass(Usuario.class);
+    return config.createEntityManagerFactory();
+}
+
+// 2. Ajuste de nivel de log en App.java para ocultar mensajes INFO de arranque
+private static final Logger LOG_HIBERNATE = Logger.getLogger("org.hibernate");
+
+public static void main(String[] args) {
+    LOG_HIBERNATE.setLevel(Level.WARNING); // El SQL se sigue mostrando por consola
+}</code></pre>
+  </div>
+
+  <!-- SECCIÓN 6: PROBLEMAS FRECUENTES -->
+  <div class="pdf-section">6. Resolución de Problemas Frecuentes</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 35%;">Error / Síntoma</th>
+        <th style="width: 65%;">Causa y Solución</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Import de <code>javax.persistence</code></strong></td>
+        <td>Código copiado de versiones antiguas. Sustituir siempre por <code>jakarta.persistence</code>.</td>
+      </tr>
+      <tr>
+        <td><strong>Communications link failure</strong></td>
+        <td>El servicio de MySQL está detenido o la URL en <code>jpa.properties</code> es incorrecta.</td>
+      </tr>
+      <tr>
+        <td><strong>Access denied for user</strong></td>
+        <td>Credenciales (usuario o contraseña) mal configuradas en <code>jpa.properties</code>.</td>
+      </tr>
+      <tr>
+        <td><strong>Entidad desconocida al operar</strong></td>
+        <td>Falta registrar la clase entidad mediante <code>.managedClass(MiClase.class)</code> en <code>JPAUtil</code>.</td>
+      </tr>
+      <tr>
+        <td><strong>PackageNotFoundException (...jakarta.ee/xml/ns/persistence)</strong></td>
+        <td>El proyecto tiene activada la faceta JPA de Eclipse. Desactivarla o reimportar el proyecto limpio (sin <code>.project</code> ni <code>.settings</code>).</td>
+      </tr>
+      <tr>
+        <td><strong>Clave primaria duplicada</strong></td>
+        <td>Se está asignando el <code>id</code> manualmente en vez de delegarlo con <code>@GeneratedValue</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ========================================================================= -->
+  <!-- NUEVO BLOQUE: ENTIDADES, VALORES Y CICLO DE VIDA (PDF 02)                 -->
+  <!-- ========================================================================= -->
+  <div class="page-break"></div>
+  <p class="doc-subtitle">Entidades, Valores y Ciclo de Vida en JPA e Hibernate</p>
+
+  <!-- SECCIÓN 7: ENTIDADES VS VALORES -->
+  <div class="pdf-section">7. Entidades, Valores e Identidad en JPA</div>
+  <p><strong>Entidad vs. Valor:</strong> En JPA, una <strong>entidad</strong> es una clase del modelo que se almacena en su propia tabla y posee identidad propia (su clave primaria) y un ciclo de vida independiente de otros objetos. Por el contrario, un <strong>valor</strong> es un dato que pertenece a una entidad, se guarda junto a ella y carece de ciclo de vida propio. Los valores se dividen en tres categorías: <em>tipos básicos</em>, <em>tipos embeddable (embebidos)</em> y <em>tipos colección</em>.</p>
+  <p><strong>Identidad e Igualdad:</strong> En Java, dos referencias tienen la misma <em>identidad</em> si apuntan al mismo objeto en memoria (<code>a == b</code> devuelve <code>true</code>), mientras que son <em>iguales</em> o equivalentes si su estado coincide (<code>a.equals(b)</code>). Dentro de un mismo <code>EntityManager</code>, JPA hace coincidir ambas: si buscamos dos veces el mismo identificador, obtenemos exactamente la misma instancia en memoria.</p>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Código Ejemplo: Garantía de Identidad en el EntityManager</div>
+    <pre><code>Estudiante a = em.find(Estudiante.class, 1L);
+Estudiante b = em.find(Estudiante.class, 1L);
+System.out.println(a == b); // true (ambas referencias apuntan al mismo objeto en memoria)</code></pre>
+  </div>
+
+  <!-- SECCIÓN 8: MAPEO DE ENTIDADES Y CLAVE PRIMARIA -->
+  <div class="pdf-section">8. Mapeo de Entidades y Estrategias de Clave Primaria</div>
+  <p>Para que una clase Java sea una entidad persistente válida en JPA debe cumplir los siguientes requisitos:</p>
+  <ul>
+    <li>Estar anotada con <code>@Entity</code> y poseer un atributo identificador anotado con <code>@Id</code>.</li>
+    <li>Disponer de un constructor sin argumentos con visibilidad <code>public</code> o <code>protected</code> (puede tener constructores adicionales).</li>
+    <li>Ni la clase ni sus atributos persistentes pueden declararse como <code>final</code>.</li>
+    <li>Sus atributos deben ser <code>private</code> y accesibles mediante métodos <em>getters</em> y <em>setters</em>.</li>
+    <li>Para fijar el nombre de la tabla física independientemente del sistema operativo (Windows convierte a minúsculas en MySQL, mientras que Linux distingue mayúsculas), se emplea <code>@Table(name = "...")</code>.</li>
+  </ul>
+
+  <h2>8.1. Tipos Envoltorio y Estrategias de Autogeneración (@GeneratedValue)</h2>
+  <p>Se recomienda utilizar tipos envoltorio como <code>Long</code> o <code>Integer</code> en lugar de tipos primitivos (<code>long</code>, <code>int</code>) para la clave primaria. Un valor <code>null</code> indica inequívocamente que el objeto aún no ha sido guardado en la base de datos, mientras que un primitivo inicializaría a <code>0</code>, pudiendo confundirse con un identificador real.</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 28%;">Estrategia</th>
+        <th style="width: 72%;">Funcionamiento y Comportamiento en MySQL</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>GenerationType.IDENTITY</code></td>
+        <td>Utiliza una columna autonumérica especial (<code>AUTO_INCREMENT</code>). <strong>Es la opción recomendada para MySQL.</strong> Como la BD genera el ID al insertar, Hibernate ejecuta el <code>INSERT</code> inmediatamente al invocar <code>persist()</code> sin esperar al <code>commit()</code> (impidiendo agrupar inserciones por lotes).</td>
+      </tr>
+      <tr>
+        <td><code>GenerationType.SEQUENCE</code></td>
+        <td>Utiliza una secuencia SQL para obtener el ID antes de insertar, permitiendo retrasar el <code>INSERT</code> hasta el <code>commit()</code> y agrupar en lotes. En MySQL (que no usa secuencias nativas) la simula creando una tabla <code>Entidad_SEQ</code> reservando bloques de 50 en 50.</td>
+      </tr>
+      <tr>
+        <td><code>GenerationType.AUTO</code></td>
+        <td>Hibernate selecciona la estrategia automáticamente. Para identificadores numéricos aplica <code>SEQUENCE</code> (creando la tabla <code>_SEQ</code> en MySQL).</td>
+      </tr>
+      <tr>
+        <td><code>GenerationType.TABLE</code></td>
+        <td>Emplea una tabla adicional en la base de datos con una fila por cada tipo de entidad para almacenar el siguiente valor disponible.</td>
+      </tr>
+      <tr>
+        <td><code>GenerationType.UUID</code></td>
+        <td>Genera un identificador único universal. El atributo identificador debe ser de tipo <code>java.util.UUID</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- SECCIÓN 9: MAPEO DE VALORES, FECHAS Y EMBEBIDOS -->
+  <div class="page-break"></div>
+  <div class="pdf-section">9. Mapeo de Valores, Fechas y Tipos Embebidos</div>
+  <p>En una entidad, todos los atributos se consideran persistentes por defecto si pertenecen a los tipos soportados: primitivos y sus envoltorios, <code>String</code>, <code>BigInteger</code>, <code>BigDecimal</code>, clases de fecha/hora de <code>java.time</code>, <code>UUID</code>, <code>byte[]</code>, enumerados (<code>enum</code>) y clases anotadas con <code>@Embeddable</code>.</p>
+  <p><strong>Ubicación de las anotaciones:</strong> Las anotaciones de mapeo (<code>@Id</code>, <code>@Column</code>, etc.) pueden situarse sobre los atributos o sobre los métodos <em>getter</em> (nunca sobre los <em>setter</em>). La ubicación elegida para <code>@Id</code> marca la estrategia que seguirá Hibernate en toda la clase.</p>
+
+  <h2>9.1. Propiedades de la Anotación @Column y Tipos de Fecha (java.time)</h2>
+  <ul>
+    <li><code>name</code>: Modifica el nombre de la columna en la tabla.</li>
+    <li><code>nullable</code>: Indica si la columna admite valores <code>NULL</code> (<code>false</code> equivale a campo obligatorio <code>NOT NULL</code>).</li>
+    <li><code>length</code>: Define la longitud máxima en caracteres para columnas de texto.</li>
+    <li><code>unique</code>: Crea una restricción <code>UNIQUE</code> impidiendo valores duplicados en esa columna.</li>
+    <li><code>insertable</code> / <code>updatable</code>: Determinan si la columna se incluye en las sentencias <code>INSERT</code> o <code>UPDATE</code> generadas (por defecto <code>true</code>).</li>
+  </ul>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 30%;">Tipo en Java (java.time)</th>
+        <th style="width: 40%;">Qué Representa</th>
+        <th style="width: 30%;">Tipo de Columna en MySQL</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>LocalDate</code></td>
+        <td>Fecha sin hora</td>
+        <td><code>DATE</code></td>
+      </tr>
+      <tr>
+        <td><code>LocalTime</code></td>
+        <td>Hora sin fecha</td>
+        <td><code>TIME</code></td>
+      </tr>
+      <tr>
+        <td><code>LocalDateTime</code></td>
+        <td>Fecha y hora</td>
+        <td><code>DATETIME</code></td>
+      </tr>
+      <tr>
+        <td><code>Instant</code></td>
+        <td>Instante exacto en UTC</td>
+        <td><code>DATETIME</code></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>9.2. Tipos Embebidos (@Embeddable, @Embedded y @AttributeOverride)</h2>
+  <p>Cuando interesa agrupar varios atributos en una clase reutilizable (por ejemplo, <code>Direccion</code>) sin crear una tabla separada, se anota la clase componente con <code>@Embeddable</code> y el atributo en la entidad contenedora con <code>@Embedded</code>. Hibernate vuelca las columnas del objeto embebido directamente dentro de la tabla de la entidad principal.</p>
+  <p>Si una entidad contiene <strong>dos atributos del mismo tipo embebido</strong> (ej. dirección habitual y dirección de facturación), se produciría un error por duplicidad de columnas (<em>"Column 'via' is duplicated"</em>). Para evitarlo, se renombran las columnas del segundo atributo usando <code>@AttributeOverride</code>.</p>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Código Ejemplo: Clase @Embeddable y Sobrescritura con @AttributeOverride</div>
+    <pre><code>// 1. Clase componente embebible
+@Embeddable
+public class Direccion {
+    @Column(nullable = false)
+    private String via;
+    @Column(nullable = false, length = 5)
+    private String codigoPostal;
+    @Column(nullable = false)
+    private String poblacion;
+    @Column(nullable = false)
+    private String provincia;
+
+    protected Direccion() {}
+    // Constructor con parámetros, getters y setters...
+}
+
+// 2. Uso en una entidad con dos direcciones distintas
+@Entity
+@Table(name = "usuarios_sistema")
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Embedded
+    private Direccion direccion; // Usa las columnas: via, codigoPostal, poblacion, provincia
+
+    @Embedded
+    @AttributeOverride(name = "via", column = @Column(name = "via_facturacion"))
+    @AttributeOverride(name = "codigoPostal", column = @Column(name = "cp_facturacion", length = 5))
+    @AttributeOverride(name = "poblacion", column = @Column(name = "poblacion_facturacion"))
+    @AttributeOverride(name = "provincia", column = @Column(name = "provincia_facturacion"))
+    private Direccion direccionFacturacion;
+}</code></pre>
+  </div>
+
+  <!-- SECCIÓN 10: CICLO DE VIDA Y OPERACIONES CRUD -->
+  <div class="page-break"></div>
+  <div class="pdf-section">10. Contexto de Persistencia, Estados del Ciclo de Vida y Operaciones</div>
+  <p>Cada <code>EntityManager</code> posee un <strong>contexto de persistencia</strong> que actúa como caché de primer nivel: si se solicita con <code>find()</code> un objeto que ya reside en el contexto, lo devuelve inmediatamente sin lanzar otra consulta <code>SELECT</code> a la base de datos. Al cerrar el <code>EntityManager</code> (<code>em.close()</code>), el contexto desaparece.</p>
+
+  <h2>10.1. Los Cuatro Estados de una Entidad</h2>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 22%;">Estado</th>
+        <th style="width: 78%;">Descripción y Comportamiento</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Transient</strong> (Nueva)</td>
+        <td>Recién instanciada con <code>new</code>. El <code>EntityManager</code> no la conoce, no existe fila en la BD y su <code>id</code> autogenerado es <code>null</code>.</td>
+      </tr>
+      <tr>
+        <td><strong>Managed</strong> (Gestionada)</td>
+        <td>Asociada al contexto de persistencia activo. Cualquier modificación realizada mediante sus <em>setters</em> es detectada y sincronizada automáticamente con la BD al confirmar la transacción.</td>
+      </tr>
+      <tr>
+        <td><strong>Detached</strong> (Separada)</td>
+        <td>Posee <code>id</code> y estuvo gestionada previamente, pero su <code>EntityManager</code> se cerró (<code>close()</code>), se limpió (<code>clear()</code>) o se desvinculó con <code>detach()</code>. Sus cambios en memoria no se guardan en la BD.</td>
+      </tr>
+      <tr>
+        <td><strong>Removed</strong> (Eliminada)</td>
+        <td>Entidad gestionada que ha sido marcada para su eliminación con <code>remove()</code>. El <code>DELETE</code> físico se ejecutará al hacer <code>commit()</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Diagrama de Transición de Estados en JPA</div>
+    <pre><code>                      [ Base de Datos ]
+                              │
+                         find() (SELECT)
+                              ▼
+[ No existe ] ──new──► [ TRANSIENT ] ──persist() (INSERT)──► [  MANAGED  ] ◄──setter (UPDATE al confirmar)─┐
+                                                              │   ▲   │   └───┐                           │
+                                       remove() (DELETE)──────┘   │   │       └───────────────────────────┘
+                                              │          persist()│   ├──close() / clear() / detach()──► [ DETACHED ]
+                                              ▼                   │   │                                       │
+                                         [ REMOVED ] ─────────────┘   └──────merge() (SELECT + UPDATE)────────┘</code></pre>
+  </div>
+
+  <h2>10.2. Operaciones del EntityManager y Transacciones</h2>
+  <ul>
+    <li><strong>Guardar (<code>persist(entidad)</code>):</strong> Pasa un objeto <em>transient</em> a <em>managed</em>. Solo admite objetos nuevos; si se le pasa un objeto que ya tiene <code>id</code> o está <em>detached</em> lanza el error <code>detached entity passed to persist</code>.</li>
+    <li><strong>Recuperar (<code>find(Clase.class, id)</code> y <code>getReference()</code>):</strong> <code>find()</code> busca por clave primaria y devuelve la entidad <em>managed</em> o <code>null</code> si no existe (no requiere transacción porque solo lee). Por su parte, <code>getReference()</code> devuelve un proxy sin consultar la BD hasta que se accede a sus datos, lanzando <code>EntityNotFoundException</code> si no existe.</li>
+    <li><strong>Modificar (<em>Dirty Checking</em>):</strong> JPA <strong>no tiene método <code>update()</code></strong>. Si el objeto está en estado <em>managed</em> dentro de una transacción, basta con modificar sus atributos mediante sus <em>setters</em>; al hacer <code>commit()</code>, Hibernate compara el estado actual con el original y lanza el <code>UPDATE</code> automáticamente si detecta cambios.</li>
+    <li><strong>Reincorporar (<code>merge(entidadDetached)</code>):</strong> Permite guardar los cambios de un objeto <em>detached</em>. Carga o busca en el contexto la entidad con ese <code>id</code>, copia en ella los valores del objeto separado y <strong>devuelve una nueva referencia <em>managed</em></strong>. El objeto original pasado como argumento sigue estando <em>detached</em>.</li>
+    <li><strong>Eliminar (<code>remove(entidadManaged)</code>):</strong> Marca un objeto <em>managed</em> como <em>removed</em> para lanzar su <code>DELETE</code> al confirmar la transacción. Si se intenta borrar un objeto <em>detached</em> lanza el error <code>Removing a detached instance</code> (para borrar por ID se debe hacer primero <code>find()</code> y luego <code>remove()</code>).</li>
+    <li><strong>Comprobar estado (<code>contains(objeto)</code>):</strong> Devuelve <code>true</code> si la instancia se encuentra actualmente gestionada en el contexto de persistencia.</li>
+  </ul>
+
+  <div class="page-break"></div>
+  <div class="diagram-box">
+    <div class="diagram-title">Código Ejemplo: Plantilla Segura de Transacción y Operaciones del Ciclo de Vida</div>
+    <pre><code>EntityManager em = JPAUtil.getEntityManager();
+EntityTransaction tx = em.getTransaction();
+
+try {
+    tx.begin();
+
+    // 1. PERSIST: Guardar nuevo objeto (Transient -> Managed)
+    Estudiante nuevo = new Estudiante("Ana", "Ruiz");
+    em.persist(nuevo); // Con IDENTITY ejecuta INSERT inmediatamente y asigna ID
+
+    // 2. FIND + DIRTY CHECKING: Recuperar y modificar sin llamar a ningún update()
+    Estudiante existente = em.find(Estudiante.class, 1L);
+    if (existente != null) {
+        existente.setNombre("Ana María"); // Al estar Managed, hará UPDATE en el commit
+    }
+
+    // 3. MERGE: Guardar cambios de un objeto Detached
+    // IMPORTANTE: recoger y usar la referencia devuelta por merge()
+    Estudiante gestionado = em.merge(objetoDetached);
+
+    // 4. REMOVE: Buscar primero para asegurar estado Managed y luego eliminar
+    Estudiante aBorrar = em.find(Estudiante.class, 3L);
+    if (aBorrar != null) {
+        em.remove(aBorrar); // Ejecutará DELETE en el commit
+    }
+
+    tx.commit();
+} catch (RuntimeException ex) {
+    if (tx.isActive()) {
+        tx.rollback(); // Deshace cambios en la BD (pero no revierte los objetos en memoria)
+    }
+    System.out.println("Operación cancelada: " + ex.getMessage());
+} finally {
+    em.close(); // Cierra el contexto; todos los objetos Managed pasan a Detached
+}</code></pre>
+  </div>
+
+  <!-- SECCIÓN 11: ERRORES DEL CICLO DE VIDA -->
+  <div class="pdf-section">11. Diagnóstico de Errores del Ciclo de Vida</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 32%;">Error o Síntoma</th>
+        <th style="width: 34%;">Causa</th>
+        <th style="width: 34%;">Solución</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>"detached entity passed to persist"</code></td>
+        <td>Se invoca <code>persist()</code> sobre un objeto que ya posee <code>id</code> (está <em>detached</em> o se le asignó el <code>id</code> manualmente).</td>
+        <td>Utilizar <code>merge()</code> para objetos existentes, o dejar que el <code>id</code> lo asigne <code>@GeneratedValue</code> en objetos nuevos.</td>
+      </tr>
+      <tr>
+        <td><code>"Removing a detached instance"</code></td>
+        <td>Se invoca <code>remove()</code> pasándole un objeto perteneciente a un <code>EntityManager</code> que ya fue cerrado.</td>
+        <td>Recuperar primero la entidad en el <code>EntityManager</code> activo mediante <code>find()</code> y pasar esa instancia a <code>remove()</code>.</td>
+      </tr>
+      <tr>
+        <td><strong>Los cambios no se guardan en la BD y no salta ningún error</strong></td>
+        <td>Se modificó un objeto en estado <em>detached</em>, o se modificó sin abrir y confirmar una transacción (<code>tx.begin()</code> / <code>tx.commit()</code>).</td>
+        <td>Sincronizar con <code>merge()</code> o realizar los cambios con los <em>setters</em> dentro de una transacción activa del <code>EntityManager</code> que cargó la entidad.</td>
+      </tr>
+      <tr>
+        <td><strong>Se pierden cambios realizados después de llamar a <code>merge()</code></strong></td>
+        <td>Se continúa modificando la variable original (que permanece en estado <em>detached</em>) en lugar de la copia devuelta.</td>
+        <td>Asignar y trabajar siempre con la referencia gestionada que retorna el método: <code>entidad = em.merge(entidad);</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+
+</body>
+</html>
