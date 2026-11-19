@@ -1891,7 +1891,7 @@
 
             apuntesIndexFiltrados = apuntesIndexList.filter(item => {
                 const coincideTexto = !texto || item.titulo.toLowerCase().includes(texto) || item.href.toLowerCase().includes(texto);
-                const coincideModulo = !modulo || item.modulo.toUpperCase().includes(modulo);
+                const coincideModulo = !modulo || item.modulo.trim().toUpperCase() === modulo;
                 return coincideTexto && coincideModulo;
             });
 
