@@ -54,7 +54,7 @@
                 document.documentElement.setAttribute('data-theme', 'light');
                 document.getElementById('btnModoClaro')?.classList.add('active');
                 document.getElementById('btnModoOscuro')?.classList.remove('active');
-                if (loginIcon) loginIcon.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a485ff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`;
+                if (loginIcon) loginIcon.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`;
             } else {
                 document.documentElement.removeAttribute('data-theme');
                 document.getElementById('btnModoOscuro')?.classList.add('active');

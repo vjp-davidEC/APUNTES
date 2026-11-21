@@ -267,30 +267,30 @@
    ========================================================================== */
 @media screen {
   :root {
-    --bg-main: #0c0c14;
-    --bg-card: #151523;
-    --bg-panel2: #1d1d30;
-    --border: #292840;
-    --text-main: #f0effa;
-    --text-muted: #a5a3c2;
-    --kt-purple: #7F52FF;
-    --kt-light: #a485ff;
-    --kt-magenta: #C711E1;
-    --kt-orange: #F88909;
-    --and-green: #3DDC84;
-    --code-bg: #090910;
+    --bg-main: #070d19;
+    --bg-card: #0f172a;
+    --bg-panel2: #1e293b;
+    --border: #1e3a5f;
+    --text-main: #f0f6ff;
+    --text-muted: #94a3b8;
+    --kt-purple: #3b82f6;
+    --kt-light: #38bdf8;
+    --kt-magenta: #2563eb;
+    --kt-orange: #06b6d4;
+    --and-green: #60a5fa;
+    --code-bg: #050912;
   }
 
   :root[data-theme="light"] {
-    --bg-main: #f5f6fb;
+    --bg-main: #f0f6ff;
     --bg-card: #ffffff;
-    --bg-panel2: #eef0f8;
-    --border: #dce0ef;
-    --text-main: #171625;
-    --text-muted: #55536e;
-    --kt-light: #6839e8;
-    --and-green: #0b8a47;
-    --code-bg: #151421;
+    --bg-panel2: #e2eeff;
+    --border: #c7dbf7;
+    --text-main: #0f172a;
+    --text-muted: #475569;
+    --kt-light: #1d4ed8;
+    --and-green: #0284c7;
+    --code-bg: #0f172a;
   }
 
   html, body {
@@ -299,17 +299,14 @@
   }
 
   body {
-    background-image:
-      radial-gradient(850px 450px at 8% -5%, rgba(127, 82, 255, 0.14), transparent 65%),
-      radial-gradient(800px 420px at 95% 105%, rgba(61, 220, 132, 0.10), transparent 65%) !important;
-    background-attachment: fixed;
+    background-image: none !important;
   }
 
   h1, h1.doc-title {
-    background: linear-gradient(90deg, #7F52FF, #C711E1, #F88909);
+    background: linear-gradient(90deg, #60a5fa, #38bdf8, #818cf8);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    color: #f0effa !important;
+    color: #f0f6ff !important;
   }
 
   p.doc-subtitle {
@@ -318,11 +315,11 @@
   }
 
   .pdf-section {
-    background: linear-gradient(135deg, #7F52FF 0%, #C711E1 52%, #F88909 100%) !important;
+    background: linear-gradient(135deg, #2563eb 0%, #3b82f6 52%, #06b6d4 100%) !important;
     color: #ffffff !important;
     border: 1px solid rgba(255, 255, 255, 0.15);
     border-radius: 10px !important;
-    box-shadow: 0 6px 20px -4px rgba(127, 82, 255, 0.35);
+    box-shadow: 0 6px 20px -4px rgba(37, 99, 235, 0.35);
   }
 
   h2 {
@@ -340,7 +337,7 @@
 
   .diagram-box, .math-formula {
     background-color: var(--bg-card) !important;
-    background-image: linear-gradient(135deg, rgba(127, 82, 255, 0.12) 0%, rgba(199, 17, 225, 0.07) 45%, rgba(61, 220, 132, 0.10) 100%) !important;
+    background-image: linear-gradient(135deg, rgba(59, 130, 246, 0.10) 0%, rgba(6, 182, 212, 0.06) 100%) !important;
     border: 1px solid var(--border) !important;
     border-left: 4px solid var(--kt-purple) !important;
     color: var(--text-main) !important;
@@ -353,7 +350,7 @@
 
   .exercise-box {
     background-color: var(--bg-card) !important;
-    background-image: linear-gradient(135deg, rgba(61, 220, 132, 0.12) 0%, rgba(127, 82, 255, 0.10) 100%) !important;
+    background-image: linear-gradient(135deg, rgba(56, 189, 248, 0.10) 0%, rgba(37, 99, 235, 0.08) 100%) !important;
     border: 1px solid var(--border) !important;
     border-left: 4px solid var(--and-green) !important;
     color: var(--text-main) !important;
@@ -423,14 +420,14 @@
     width: 46px;
     height: 46px;
     border-radius: 14px;
-    background-color: var(--bg-card, #151523);
-    border: 1px solid var(--border, #292840);
-    color: var(--text-main, #f0effa);
+    background-color: var(--bg-card, #0f172a);
+    border: 1px solid var(--border, #1e3a5f);
+    color: var(--text-main, #f0f6ff);
     display: inline-flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(127, 82, 255, 0.2);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(56, 189, 248, 0.25);
     z-index: 9999;
     transition: transform 0.18s ease, border-color 0.18s ease, background-color 0.18s ease, box-shadow 0.18s ease;
     padding: 0;
@@ -438,9 +435,9 @@
 
   .ut-floating-theme-btn:hover {
     transform: scale(1.08);
-    border-color: #7F52FF;
-    background-color: var(--bg-panel2, #1d1d30);
-    box-shadow: 0 8px 25px rgba(127, 82, 255, 0.35);
+    border-color: #38bdf8;
+    background-color: var(--bg-panel2, #1e293b);
+    box-shadow: 0 8px 25px rgba(37, 99, 235, 0.35);
   }
 
   .ut-floating-theme-btn:active {
@@ -475,13 +472,13 @@
     gap: 0.45rem;
     padding: 0.55rem 1.05rem;
     border-radius: 11px;
-    background: linear-gradient(135deg, #7F52FF 0%, #C711E1 52%, #F88909 100%) !important;
+    background: linear-gradient(135deg, #2563eb 0%, #3b82f6 52%, #06b6d4 100%) !important;
     color: #ffffff !important;
     font-family: 'Times New Roman', Times, serif;
     font-size: 0.88rem;
     font-weight: 700;
     text-decoration: none !important;
-    box-shadow: 0 8px 22px -5px rgba(127, 82, 255, 0.45);
+    box-shadow: 0 8px 22px -5px rgba(37, 99, 235, 0.45);
     transition: transform 0.18s ease, filter 0.18s ease, box-shadow 0.18s ease;
   }
 
@@ -489,7 +486,7 @@
   .ut-floating-back-btn:hover {
     transform: translateY(-2px);
     filter: brightness(1.08);
-    box-shadow: 0 10px 26px -5px rgba(127, 82, 255, 0.65);
+    box-shadow: 0 10px 26px -5px rgba(37, 99, 235, 0.6);
   }
 
   .ut-floating-back-btn {
@@ -503,6 +500,7 @@
 /* ==========================================================================
    Tipografía unificada: Times New Roman en toda la web
    ========================================================================== */
-html, body, button, input, select, textarea {
-  font-family: 'Times New Roman', Times, serif !important;
+html, body, button, input, select, textarea,
+body *:not(code):not(pre):not(pre *):not(kbd):not(samp):not(i[class*="fa-"]):not(span[class^="ff"]) {
+  font-family: "Times New Roman", Times, "Liberation Serif", Georgia, serif !important;
 }

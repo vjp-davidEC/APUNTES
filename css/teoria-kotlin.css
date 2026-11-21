@@ -2,27 +2,27 @@
        Variables y Paleta Oficial Kotlin + Android + Jetpack Compose
        ========================================================================== */
     :root {
-      --kt-purple: #7F52FF;
-      --kt-magenta: #C711E1;
-      --kt-orange: #F88909;
-      --and-green: #3DDC84;
+      --kt-purple: #2563eb;
+      --kt-magenta: #3b82f6;
+      --kt-orange: #06b6d4;
+      --and-green: #38bdf8;
       --and-navy: #073042;
       --cmp-blue: #4285F4;
 
-      --grad-kt: linear-gradient(135deg, #7F52FF 0%, #C711E1 52%, #F88909 100%);
+      --grad-kt: linear-gradient(135deg, #2563eb 0%, #3b82f6 52%, #06b6d4 100%);
       --grad-and: linear-gradient(135deg, #3DDC84 0%, #00BFA5 55%, #4285F4 100%);
-      --grad-hero: linear-gradient(135deg, rgba(127,82,255,0.18) 0%, rgba(199,17,225,0.12) 45%, rgba(61,220,132,0.16) 100%);
+      --grad-hero: linear-gradient(135deg, rgba(37,99,235,0.15) 0%, rgba(56,189,248,0.10) 100%);
 
-      --bg: #f5f6fb;
+      --bg: #f0f6ff;
       --bg-elev: #ffffff;
       --panel: #ffffff;
-      --panel2: #eef0f8;
-      --panel3: #e3e6f3;
-      --line: #dce0ef;
-      --txt: #171625;
-      --txt2: #55536e;
+      --panel2: #e2eeff;
+      --panel3: #d2e4fc;
+      --line: #c7dbf7;
+      --txt: #0f172a;
+      --txt2: #475569;
       --txt3: #7c7996;
-      --accent: #7F52FF;
+      --accent: #2563eb;
       --accent-soft: rgba(127, 82, 255, 0.12);
       --and-soft: rgba(61, 220, 132, 0.14);
       --and-txt: #0b8a47;
@@ -46,16 +46,16 @@
     }
 
     [data-theme="dark"] {
-      --bg: #0c0c14;
-      --bg-elev: #131320;
-      --panel: #151523;
-      --panel2: #1d1d30;
-      --panel3: #272740;
-      --line: #292840;
-      --txt: #f0effa;
-      --txt2: #a5a3c2;
+      --bg: #070d19;
+      --bg-elev: #0b1324;
+      --panel: #0f172a;
+      --panel2: #1e293b;
+      --panel3: #28374f;
+      --line: #1e3a5f;
+      --txt: #f0f6ff;
+      --txt2: #94a3b8;
       --txt3: #6e6c8a;
-      --accent: #a485ff;
+      --accent: #38bdf8;
       --accent-soft: rgba(127, 82, 255, 0.18);
       --and-soft: rgba(61, 220, 132, 0.15);
       --and-txt: #3DDC84;
@@ -77,11 +77,7 @@
       line-height: 1.68;
       font-size: 16px;
       overflow-x: hidden;
-      background-image:
-        radial-gradient(900px 450px at 8% -5%, rgba(127, 82, 255, 0.11), transparent 65%),
-        radial-gradient(800px 400px at 95% 5%, rgba(61, 220, 132, 0.08), transparent 65%);
-      background-attachment: fixed;
-    }
+      }
 
     a { color: var(--accent); text-decoration: none; }
     a:hover { text-decoration: underline; }
@@ -454,7 +450,7 @@
       letter-spacing: -.03em;
     }
     .grad-text {
-      background: linear-gradient(90deg, #7F52FF, #C711E1, #F88909);
+      background: linear-gradient(90deg, #60a5fa, #38bdf8, #818cf8);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
     }
@@ -1055,7 +1051,7 @@
       background: var(--grad-kt);
       color: #fff;
       border: 1px solid rgba(255, 255, 255, 0.22);
-      box-shadow: 0 8px 24px -4px rgba(127, 82, 255, 0.55);
+      box-shadow: 0 8px 24px -4px rgba(37, 99, 235, 0.5);
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -1074,7 +1070,7 @@
     }
     #btn-top:hover {
       transform: translateY(-2px) scale(1.06);
-      box-shadow: 0 12px 28px -4px rgba(127, 82, 255, 0.75);
+      box-shadow: 0 12px 28px -4px rgba(37, 99, 235, 0.7);
     }
     #btn-top.show { opacity: 1; pointer-events: auto; transform: translateY(0) scale(1); }
 
@@ -1213,7 +1209,7 @@
   background: var(--panel);
   border: 1px solid var(--line);
   color: var(--txt);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(127, 82, 255, 0.24);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(56, 189, 248, 0.24);
   z-index: 65;
   padding: 0;
   display: inline-flex;
@@ -1237,7 +1233,7 @@
   background: var(--panel);
   border: 1px solid var(--line);
   color: var(--txt);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(127, 82, 255, 0.24);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(56, 189, 248, 0.24);
   z-index: 65;
   padding: 0;
   display: inline-flex;
@@ -1250,6 +1246,7 @@
 /* ==========================================================================
    Tipografía unificada: Times New Roman en toda la web
    ========================================================================== */
-html, body, button, input, select, textarea {
-  font-family: 'Times New Roman', Times, serif !important;
+html, body, button, input, select, textarea,
+body *:not(code):not(pre):not(pre *):not(kbd):not(samp):not(i[class*="fa-"]):not(span[class^="ff"]) {
+  font-family: "Times New Roman", Times, "Liberation Serif", Georgia, serif !important;
 }

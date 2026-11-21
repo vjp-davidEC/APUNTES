@@ -86,7 +86,7 @@
             const inner = mod.mode === 'fill'
                 ? `<g transform="translate(6,6) scale(0.833)">${mod.svgInner}</g>`
                 : `<g transform="translate(6,6) scale(0.833)" fill="none" stroke="${mod.color}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">${mod.svgInner}</g>`;
-            const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><defs><linearGradient id='g' x1='0' y1='1' x2='1' y2='0'><stop offset='0%' stop-color='#7F52FF'/><stop offset='52%' stop-color='#C711E1'/><stop offset='100%' stop-color='#F88909'/></linearGradient></defs><rect width='32' height='32' rx='8' fill='#151523' stroke='url(#g)' stroke-width='1.8'/>${inner}</svg>`;
+            const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><defs><linearGradient id='g' x1='0' y1='1' x2='1' y2='0'><stop offset='0%' stop-color='#2563eb'/><stop offset='52%' stop-color='#3b82f6'/><stop offset='100%' stop-color='#06b6d4'/></linearGradient></defs><rect width='32' height='32' rx='8' fill='#0f172a' stroke='url(#g)' stroke-width='1.8'/>${inner}</svg>`;
             return 'data:image/svg+xml,' + encodeURIComponent(svg);
         }
 
