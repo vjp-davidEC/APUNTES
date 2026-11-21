@@ -404,7 +404,7 @@
     .content {
       margin-left: var(--side);
       padding: calc(var(--top) + 2.2rem) clamp(1.2rem, 4.5vw, 4rem) 5rem;
-      max-width: calc(var(--side) + 1080px);
+      max-width: none;
       outline: none;
     }
 
@@ -1047,8 +1047,8 @@
     /* Botón flotante subir arriba */
     #btn-top {
       position: fixed;
-      bottom: 1.5rem;
-      right: 1.5rem;
+      bottom: 4.75rem;
+      right: 1.35rem;
       width: 44px;
       height: 44px;
       border-radius: 50%;
@@ -1190,4 +1190,30 @@
       body { background: #fff; color: #000; }
       .section-card, .sec-header, .tema-banner { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; }
     }
-  
+
+/* Botón de tema flotante abajo a la izquierda (solo icono) */
+#btn-tema {
+  position: fixed;
+  bottom: 1.35rem;
+  right: 1.35rem;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  color: var(--txt);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(127, 82, 255, 0.22);
+  z-index: 65;
+  font-size: 1.15rem;
+  display: grid;
+  place-items: center;
+  transition: transform 0.18s ease, border-color 0.18s ease, background-color 0.18s ease;
+}
+#btn-tema:hover {
+  transform: scale(1.08);
+  border-color: var(--kt-purple);
+  background: var(--panel2);
+}
+@media print {
+  #btn-tema { display: none !important; }
+}
