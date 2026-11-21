@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#7F52FF">
+  <meta name="description" content="Manual completo de Teoría de Kotlin, Android y Jetpack Compose (Temas 3 al 7).">
+  <title>Teoría Kotlin & Android · Jetpack Compose (Temas 3-7)</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><defs><linearGradient id='g' x1='0' y1='1' x2='1' y2='0'><stop offset='0' stop-color='%237F52FF'/><stop offset='.5' stop-color='%23C711E1'/><stop offset='1' stop-color='%23F88909'/></linearGradient></defs><rect width='32' height='32' rx='8' fill='%2313121b'/><polygon fill='url(%23g)' points='6,6 26,6 16,16 26,26 6,26'/></svg>">
+  <link rel="stylesheet" href="../../../css/teoria-kotlin.css">
+</head>
+<body>
+
+  <div id="progress-bar"></div>
+
+  <!-- ============================ TOPBAR ============================ -->
+  <header class="topbar">
+    <button id="btn-menu" class="icon-btn only-mobile" aria-label="Abrir índice">☰</button>
+
+    <a class="brand" href="#/inicio">
+      <div class="brand-logos" title="Kotlin + Android + Jetpack Compose">
+        <!-- Icono Oficial Kotlin -->
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <defs>
+            <linearGradient id="top-kt-g" x1="0" y1="1" x2="1" y2="0">
+              <stop offset="0%" stop-color="#7F52FF"/>
+              <stop offset="50%" stop-color="#C711E1"/>
+              <stop offset="100%" stop-color="#F88909"/>
+            </linearGradient>
+          </defs>
+          <polygon fill="url(#top-kt-g)" points="2,2 22,2 12,12 22,22 2,22"/>
+        </svg>
+        <span class="sep">+</span>
+        <!-- Icono Oficial Android -->
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path fill="#3DDC84" d="M17.6 11.48 L19.44 8.3 a0.63 0.63 0 0 0 -1.09 -0.63 l-1.88 3.24 a11.43 11.43 0 0 0 -8.94 0 L5.65 7.67 a0.63 0.63 0 0 0 -1.09 0.63 L6.4 11.48 A10.81 10.81 0 0 0 1 20 h22 A10.81 10.81 0 0 0 17.6 11.48 Z M7 17.25 A1.25 1.25 0 1 1 8.25 16 A1.25 1.25 0 0 1 7 17.25 Z M17 17.25 A1.25 1.25 0 1 1 18.25 16 A1.25 1.25 0 0 1 17 17.25 Z"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <span>Teoría Kotlin & Android</span>
+        <small>PMYDM · Temas 3 al 7 · Jetpack Compose</small>
+      </div>
+    </a>
+
+    <div class="search" id="caja-buscar">
+      <div class="search-input-wrap">
+        <svg class="s-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input id="buscador" type="search" placeholder="Buscar en toda la teoría (ej. LazyColumn, remember, when, Logcat)…" autocomplete="off" enterkeyhint="search">
+        <span class="kbd-hint hide-mobile">Ctrl+K</span>
+        <button type="button" id="cerrar-buscar" class="icon-btn only-mobile" aria-label="Cerrar búsqueda">✕</button>
+      </div>
+      <div id="resultados" class="search-results" hidden></div>
+    </div>
+
+    <div class="top-actions">
+      <button type="button" id="btn-buscar-movil" class="icon-btn only-mobile" title="Buscar en los apuntes" aria-label="Buscar">🔍</button>
+      <a class="btn primary" href="../Varios/Ejercicios_PMYDM.html" title="Abrir Ejercicios Seleccionados (Temas 3-7)">
+        <svg class="ic-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        <span>Ejercicios</span>
+      </a>
+      <a class="btn primary" href="PMYDM-UT3_4_5_6_7.html" title="Abrir Guía de Estudio y Catálogo Técnico (UT 3-7)">
+        <svg class="ic-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
+        <span class="btn-label-full">Guía UT 3-7</span>
+        <span class="only-mobile-inline">Guía</span>
+      </a>
+      <a class="btn and-pill hide-mobile" href="#/todo" title="Ver los 5 temas seguidos en una sola página">
+        <svg class="ic-svg" viewBox="0 0 24 24"><path fill="currentColor" d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        <span>Modo Todo Continuo</span>
+      </a>
+      <button id="btn-print" class="icon-btn hide-mobile" title="Imprimir / Guardar en PDF" aria-label="Imprimir">🖨️</button>
+      <button id="btn-tema" class="icon-btn" title="Cambiar modo claro / oscuro" aria-label="Cambiar tema">🌙</button>
+    </div>
+  </header>
+
+  <!-- ============================ SIDEBAR ============================ -->
+  <aside id="sidebar" class="sidebar"></aside>
+  <div id="overlay" class="overlay"></div>
+
+  <!-- ============================ CONTENT ============================ -->
+  <main id="contenido" class="content" tabindex="-1"></main>
+
+  <button id="btn-top" title="Volver arriba" aria-label="Volver arriba">↑</button>
+
+  <!-- ============================ DATOS Y LÓGICA ============================ -->
+  <script src="../../../script/teoria-kotlin-1.js"></script>
+  <script src="../../../script/teoria-kotlin-2.js"></script>
+</body>
+</html>

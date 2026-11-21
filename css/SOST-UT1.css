@@ -1,0 +1,390 @@
+    @page {
+      size: A4;
+      margin: 1.8cm 1.5cm 2cm 1.5cm;
+      @bottom-right {
+        content: counter(page);
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        font-size: 9pt;
+        color: #64748b;
+      }
+      @bottom-left {
+        content: "UD 1: La sostenibilidad en las organizaciones empresariales";
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        font-size: 9pt;
+        color: #64748b;
+      }
+    }
+
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 10pt;
+      line-height: 1.5;
+      color: #1e293b;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1.doc-title {
+      font-size: 17pt;
+      font-weight: 700;
+      color: #0f172a;
+      text-align: center;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    p.doc-subtitle {
+      text-align: center;
+      font-size: 10.5pt;
+      color: #15803d;
+      font-weight: 600;
+      margin-top: 0;
+      margin-bottom: 25px;
+      border-bottom: 2px solid #16a34a;
+      padding-bottom: 10px;
+    }
+
+    .pdf-section {
+      background-color: #0f172a;
+      color: #ffffff;
+      padding: 8px 14px;
+      font-size: 11.5pt;
+      font-weight: 700;
+      border-radius: 4px;
+      margin-top: 25px;
+      margin-bottom: 15px;
+      page-break-after: avoid;
+    }
+
+    .page-break {
+      page-break-before: always;
+    }
+
+    h2 {
+      font-size: 11.5pt;
+      color: #15803d;
+      border-bottom: 1.5px solid #e2e8f0;
+      padding-bottom: 4px;
+      margin-top: 18px;
+      margin-bottom: 10px;
+      page-break-after: avoid;
+    }
+
+    h3 {
+      font-size: 10pt;
+      color: #334155;
+      margin-top: 12px;
+      margin-bottom: 6px;
+      page-break-after: avoid;
+    }
+
+    p {
+      margin: 0 0 8px 0;
+      text-align: justify;
+    }
+
+    ul {
+      margin: 0 0 10px 0;
+      padding-left: 20px;
+    }
+
+    li {
+      margin-bottom: 4px;
+    }
+
+    .diagram-box {
+      background-color: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-left: 4px solid #16a34a;
+      padding: 10px 14px;
+      margin: 10px 0;
+      font-size: 9pt;
+      border-radius: 2px;
+      page-break-inside: avoid;
+    }
+
+    .diagram-title {
+      font-weight: bold;
+      color: #0f172a;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      font-size: 8.5pt;
+      letter-spacing: 0.5px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+      font-size: 8.5pt;
+      page-break-inside: avoid;
+    }
+
+    th, td {
+      border: 1px solid #cbd5e1;
+      padding: 6px 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background-color: #f1f5f9;
+      color: #0f172a;
+      font-weight: 700;
+    }
+
+    tr:nth-child(even) td {
+      background-color: #f8fafc;
+    }
+
+    pre, code {
+      font-family: 'Consolas', 'Courier New', monospace;
+    }
+
+    pre {
+      background-color: #0f172a;
+      color: #f8fafc;
+      padding: 10px 12px;
+      border-radius: 4px;
+      font-size: 8.5pt;
+      line-height: 1.4;
+      overflow-x: auto;
+      margin: 10px 0;
+      page-break-inside: avoid;
+    }
+
+    p code, li code, td code {
+      background-color: #f1f5f9;
+      color: #15803d;
+      padding: 1px 4px;
+      border-radius: 3px;
+      font-size: 8.5pt;
+      border: 1px solid #e2e8f0;
+    }
+
+    .math-formula {
+      text-align: center;
+      background-color: #f8fafc;
+      border: 1px dashed #94a3b8;
+      padding: 8px;
+      margin: 10px 0;
+      font-weight: bold;
+      color: #0f172a;
+      border-radius: 4px;
+      page-break-inside: avoid;
+    }
+
+/* ==========================================================================
+   Adaptación para pantallas de móvil y tablet
+   ========================================================================== */
+@media screen {
+  body {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 1.5rem 1.25rem;
+    box-sizing: border-box;
+    overflow-x: hidden;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  body {
+    padding: 1rem 0.75rem;
+    font-size: 10.5pt;
+    line-height: 1.55;
+  }
+
+  h1.doc-title {
+    font-size: 14pt;
+    line-height: 1.25;
+  }
+
+  p.doc-subtitle {
+    font-size: 9.5pt;
+    margin-bottom: 16px;
+  }
+
+  .pdf-section {
+    font-size: 10.5pt;
+    padding: 8px 10px;
+  }
+
+  h2 {
+    font-size: 11pt;
+  }
+
+  h3 {
+    font-size: 10pt;
+  }
+
+  p {
+    text-align: left;
+  }
+
+  table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    font-size: 8.5pt;
+  }
+
+  pre {
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    font-size: 8pt;
+    padding: 8px 10px;
+  }
+
+  p code, li code, td code {
+    word-break: break-word;
+  }
+
+  .diagram-box, .exercise-box {
+    padding: 8px 10px;
+    overflow-x: auto;
+  }
+}
+
+/* ==========================================================================
+   Paleta de Colores Unificada (idéntica a explicacion_Kotlin.html)
+   ========================================================================== */
+@media screen {
+  :root {
+    --bg-main: #0c0c14;
+    --bg-card: #151523;
+    --bg-panel2: #1d1d30;
+    --border: #292840;
+    --text-main: #f0effa;
+    --text-muted: #a5a3c2;
+    --kt-purple: #7F52FF;
+    --kt-light: #a485ff;
+    --kt-magenta: #C711E1;
+    --kt-orange: #F88909;
+    --and-green: #3DDC84;
+    --code-bg: #090910;
+  }
+
+  :root[data-theme="light"] {
+    --bg-main: #f5f6fb;
+    --bg-card: #ffffff;
+    --bg-panel2: #eef0f8;
+    --border: #dce0ef;
+    --text-main: #171625;
+    --text-muted: #55536e;
+    --kt-light: #7F52FF;
+    --code-bg: #151421;
+  }
+
+  html, body {
+    background-color: var(--bg-main) !important;
+    color: var(--text-main) !important;
+  }
+
+  body {
+    background-image:
+      radial-gradient(850px 450px at 8% -5%, rgba(127, 82, 255, 0.14), transparent 65%),
+      radial-gradient(800px 420px at 95% 105%, rgba(61, 220, 132, 0.10), transparent 65%) !important;
+    background-attachment: fixed;
+  }
+
+  h1, h1.doc-title {
+    background: linear-gradient(90deg, #7F52FF, #C711E1, #F88909);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: #f0effa !important;
+  }
+
+  p.doc-subtitle {
+    color: var(--and-green) !important;
+    border-bottom-color: var(--kt-purple) !important;
+  }
+
+  .pdf-section {
+    background: linear-gradient(135deg, #7F52FF 0%, #C711E1 52%, #F88909 100%) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 10px !important;
+    box-shadow: 0 6px 20px -4px rgba(127, 82, 255, 0.35);
+  }
+
+  h2 {
+    color: var(--kt-light) !important;
+    border-bottom-color: var(--border) !important;
+  }
+
+  h3, h4 {
+    color: var(--and-green) !important;
+  }
+
+  p, li, td {
+    color: var(--text-main) !important;
+  }
+
+  .diagram-box, .math-formula {
+    background-color: var(--bg-card) !important;
+    background-image: linear-gradient(135deg, rgba(127, 82, 255, 0.12) 0%, rgba(199, 17, 225, 0.07) 45%, rgba(61, 220, 132, 0.10) 100%) !important;
+    border: 1px solid var(--border) !important;
+    border-left: 4px solid var(--kt-purple) !important;
+    color: var(--text-main) !important;
+    border-radius: 10px !important;
+  }
+
+  .diagram-title {
+    color: var(--kt-light) !important;
+  }
+
+  .exercise-box {
+    background-color: var(--bg-card) !important;
+    background-image: linear-gradient(135deg, rgba(61, 220, 132, 0.12) 0%, rgba(127, 82, 255, 0.10) 100%) !important;
+    border: 1px solid var(--border) !important;
+    border-left: 4px solid var(--and-green) !important;
+    color: var(--text-main) !important;
+    border-radius: 10px !important;
+  }
+
+  .exercise-title {
+    color: var(--and-green) !important;
+  }
+
+  table {
+    background-color: var(--bg-card) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  th {
+    background-color: var(--bg-panel2) !important;
+    color: var(--kt-light) !important;
+    border-color: var(--border) !important;
+  }
+
+  td {
+    background-color: var(--bg-card) !important;
+    border-color: var(--border) !important;
+  }
+
+  tr:nth-child(even) td {
+    background-color: var(--bg-panel2) !important;
+  }
+
+  pre {
+    background-color: var(--code-bg) !important;
+    color: #eae8f5 !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 10px !important;
+  }
+
+  p code, li code, td code {
+    background-color: var(--bg-panel2) !important;
+    color: var(--kt-light) !important;
+    border-color: var(--border) !important;
+  }
+
+  a {
+    color: var(--and-green) !important;
+  }
+}

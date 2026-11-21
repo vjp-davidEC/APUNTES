@@ -1,0 +1,85 @@
+        :root {
+            --bg-main: #0c0c14;
+            --bg-card: #151523;
+            --bg-hover: #1d1d30;
+            --border: #292840;
+            --text-main: #f0effa;
+            --text-muted: #a5a3c2;
+            --accent: #a485ff;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
+        body { background-color: var(--bg-main); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; }
+
+        .toolbar {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            background-color: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.5rem 0.85rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 0.9rem;
+            cursor: pointer;
+            touch-action: manipulation;
+        }
+
+        .btn:hover { border-color: var(--accent); background-color: var(--bg-hover); }
+        .btn-primary { border-color: var(--accent); color: var(--accent); }
+
+        .title {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        #status {
+            text-align: center;
+            padding: 1.5rem 1rem;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        #pdfContainer {
+            width: 100%;
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0.75rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        #pdfContainer canvas {
+            width: 100% !important;
+            height: auto !important;
+            border-radius: 6px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+            background: #fff;
+        }
+
+        #fallbackFrame {
+            display: none;
+            width: 100%;
+            height: calc(100vh - 60px);
+            border: none;
+        }
+    

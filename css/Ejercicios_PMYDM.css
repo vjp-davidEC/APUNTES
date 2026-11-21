@@ -1,0 +1,28 @@
+/* Estilos extraídos de Ejercicios_PMYDM.html */
+.hero-kotlin-gradient {
+  background-image: linear-gradient(135deg, rgba(127, 82, 255, 0.16) 0%, rgba(199, 17, 225, 0.10) 45%, rgba(61, 220, 132, 0.14) 100%);
+}
+
+.btn-top-kotlin-gradient {
+  background: linear-gradient(135deg, #7F52FF 0%, #C711E1 52%, #F88909 100%);
+}
+
+/* Comportamiento de ocultar/mostrar el sidebar en escritorio al pasar por el icono de Android */
+@media (min-width: 1024px) {
+  #sidebar.desktop-collapsed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    transform: translateX(-100%);
+    box-shadow: none;
+  }
+
+  #sidebar.desktop-hover-open {
+    position: fixed;
+    top: 0;
+    left: 0;
+    transform: translateX(0);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
+  }
+}
+

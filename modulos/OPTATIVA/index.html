@@ -4,86 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OPTATIVA · Asignatura Optativa - PDFs</title>
-    <script>
-        (function() {
-            try {
-                if (localStorage.getItem('tema_apuntes') === 'light') {
-                    document.documentElement.setAttribute('data-theme', 'light');
-                }
-            } catch(e) {}
-        })();
-    </script>
-    <style>
-        :root {
-            --bg-main: #0d1117;
-            --bg-card: #161b22;
-            --bg-hover: #1f242c;
-            --border: #30363d;
-            --text-main: #e6edf3;
-            --text-muted: #8b949e;
-            --accent: #38bdf8;
-            --accent-glow: rgba(56, 189, 248, 0.15);
-            --header-grad: linear-gradient(90deg, #38bdf8, #818cf8);
-        }
-
-        :root[data-theme="light"] {
-            --bg-main: #f6f8fa;
-            --bg-card: #ffffff;
-            --bg-hover: #f3f4f6;
-            --border: #d0d7de;
-            --text-main: #1f2328;
-            --text-muted: #57606a;
-            --accent: #0284c7;
-            --accent-glow: rgba(2, 132, 199, 0.12);
-            --header-grad: linear-gradient(90deg, #0284c7, #4f46e5);
-        }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
-        body { background-color: var(--bg-main); color: var(--text-main); line-height: 1.6; padding: 2rem 1rem; }
-        .container { max-width: 820px; margin: 0 auto; }
-
-        .top-bar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; }
-        .back-link { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.45rem 0.9rem; background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; color: var(--text-main); text-decoration: none; font-size: 0.9rem; transition: border-color 0.2s, background-color 0.2s; }
-        .back-link:hover { border-color: var(--accent); background: var(--bg-hover); }
-        .badge { background-color: var(--accent-glow); color: var(--accent); padding: 0.25rem 0.7rem; border-radius: 6px; font-size: 0.85rem; font-weight: 700; letter-spacing: 0.5px; border: none; cursor: pointer; user-select: none; }
-        .badge.active { box-shadow: 0 0 0 2px var(--accent); }
-
-        .theme-toggle-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.4rem;
-            padding: 0.4rem 0.75rem;
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            color: var(--text-main);
-            font-size: 0.85rem;
-            cursor: pointer;
-            transition: border-color 0.2s, background-color 0.2s;
-        }
-        .theme-toggle-btn:hover {
-            border-color: var(--accent);
-            background: var(--bg-hover);
-        }
-
-        header { margin-bottom: 1.75rem; }
-        header h1 { font-size: 1.9rem; margin-bottom: 0.35rem; background: var(--header-grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        header p { color: var(--text-muted); font-size: 0.95rem; }
-
-        .search-box { margin-top: 1.25rem; }
-        .search-box input { width: 100%; padding: 0.75rem 1.1rem; border-radius: 8px; border: 1px solid var(--border); background-color: var(--bg-card); color: var(--text-main); font-size: 0.95rem; outline: none; transition: border-color 0.2s, box-shadow 0.2s; }
-        .search-box input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
-
-        .card { background-color: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; }
-        .pdf-list { list-style: none; display: flex; flex-direction: column; gap: 0.65rem; }
-        .pdf-item a { display: flex; align-items: center; justify-content: space-between; padding: 0.8rem 1rem; background-color: var(--bg-main); border: 1px solid var(--border); border-radius: 8px; color: var(--text-main); text-decoration: none; font-size: 0.95rem; transition: background-color 0.2s, border-color 0.2s; }
-        .pdf-item a:hover { background-color: var(--bg-hover); border-color: var(--accent); }
-        .pdf-tag { font-size: 0.75rem; color: var(--text-muted); background: var(--bg-card); padding: 0.15rem 0.5rem; border-radius: 4px; border: 1px solid var(--border); }
-
-        .hidden-section { display: none; margin-top: 1.25rem; padding-top: 1.25rem; border-top: 1px dashed var(--border); }
-        .hidden-section.visible { display: block; }
-        .hidden-title { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.6px; }
-    </style>
+    <script src="../../script/modulo-OPTATIVA-1.js"></script>
+    <link rel="stylesheet" href="../../css/modulo-OPTATIVA.css">
 </head>
 <body>
 <div class="container">
@@ -118,56 +40,6 @@
         </section>
     </main>
 </div>
-<script>
-    const searchInput = document.getElementById('searchInput');
-    const items = document.querySelectorAll('.pdf-item');
-    const toggleHiddenBtn = document.getElementById('toggleHiddenBtn');
-    const hiddenSection = document.getElementById('hiddenSection');
-
-    toggleHiddenBtn.addEventListener('click', () => {
-        hiddenSection.classList.toggle('visible');
-        toggleHiddenBtn.classList.toggle('active');
-    });
-
-    searchInput.addEventListener('input', (e) => {
-        const term = e.target.value.trim().toLowerCase();
-        items.forEach(item => {
-            item.style.display = item.textContent.toLowerCase().includes(term) ? 'block' : 'none';
-        });
-    });
-    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || window.matchMedia('(max-width: 768px)').matches;
-    if (isMobile && window.location.protocol !== 'file:') {
-        document.querySelectorAll('.pdf-item a[href$=".pdf" i]').forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const fullUrl = new URL(link.getAttribute('href'), window.location.href).href;
-                window.location.href = '../../visor.html?file=' + encodeURIComponent(fullUrl);
-            });
-        });
-    }
-    // Control de Tema Claro / Oscuro sincronizado
-    function aplicarTema(tema) {
-        const btnIcon = document.getElementById('theme-icon');
-        const btnText = document.getElementById('theme-text');
-        if (tema === 'light') {
-            document.documentElement.setAttribute('data-theme', 'light');
-            if (btnIcon) btnIcon.textContent = '☀️';
-            if (btnText) btnText.textContent = 'Claro';
-        } else {
-            document.documentElement.removeAttribute('data-theme');
-            if (btnIcon) btnIcon.textContent = '🌙';
-            if (btnText) btnText.textContent = 'Oscuro';
-        }
-        try { localStorage.setItem('tema_apuntes', tema); } catch(e) {}
-    }
-
-    function alternarTema() {
-        const actual = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
-        const nuevo = actual === 'light' ? 'dark' : 'light';
-        aplicarTema(nuevo);
-    }
-
-    aplicarTema(localStorage.getItem('tema_apuntes') || 'dark');
-</script>
+<script src="../../script/modulo-OPTATIVA-2.js"></script>
 </body>
 </html>

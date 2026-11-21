@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="es" class="dark scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ejercicios Seleccionados — Android & Jetpack Compose (Temas 03-07)</title>
+
+  <!-- Google Fonts: Inter y JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="../../../script/Ejercicios_PMYDM-1.js"></script>
+  <link rel="stylesheet" href="../../../css/Ejercicios_PMYDM.css" />
+</head>
+
+<body class="bg-lightBg text-lightText dark:bg-ideBg dark:text-ideText font-sans antialiased selection:bg-kotlin/30 transition-colors duration-200 overflow-x-hidden">
+
+  <!-- Toast de notificación (sin alert) -->
+  <div id="toast-notification" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 pointer-events-none opacity-0 translate-y-4 transition-all duration-300">
+    <div class="flex items-center gap-2.5 px-4 py-2.5 rounded-xl bg-slate-900 dark:bg-emerald-950 text-white border border-android/40 shadow-2xl text-sm font-medium">
+      <svg class="w-4 h-4 text-android shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="20 6 9 17 4 12"></polyline>
+      </svg>
+      <span id="toast-text">Código copiado al portapapeles</span>
+    </div>
+  </div>
+
+  <!-- Overlay móvil para Sidebar -->
+  <div id="mobile-overlay" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-40 hidden lg:hidden" onclick="toggleMobileSidebar(false)"></div>
+
+  <!-- Barra superior móvil -->
+  <header class="lg:hidden sticky top-0 z-30 flex items-center justify-between px-4 py-3 bg-white/90 dark:bg-ideSurface/95 backdrop-blur-md border-b border-slate-200 dark:border-ideBorder">
+    <div class="flex items-center gap-2.5">
+      <button onclick="toggleMobileSidebar(true)" class="p-2 rounded-lg text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-ideCard transition" aria-label="Abrir índice">
+        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+      <div class="flex items-center gap-2">
+        <!-- Mini Bugdroid -->
+        <svg class="w-6 h-6 text-android" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M17.6 9.48l1.84-3.18c.16-.31.04-.69-.26-.85-.29-.15-.65-.06-.83.22l-1.88 3.24a11.463 11.463 0 0 0-8.94 0L5.65 5.67c-.19-.28-.54-.37-.83-.22-.3.16-.42.54-.26.85l1.84 3.18C4.08 10.94 2.5 13.3 2.5 16h19c0-2.7-1.58-5.06-3.9-6.52zM8.5 13.75a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm7 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+        </svg>
+        <span class="font-bold text-sm tracking-tight text-slate-900 dark:text-white">PMYDM · Temas 03–07</span>
+      </div>
+    </div>
+    <button onclick="toggleTheme()" class="p-2 rounded-lg bg-slate-100 dark:bg-ideCard border border-slate-200 dark:border-ideBorder text-slate-700 dark:text-slate-300" aria-label="Cambiar tema">
+      <svg class="w-5 h-5 hidden dark:block text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="5"></circle>
+        <line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+        <line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+      </svg>
+      <svg class="w-5 h-5 block dark:hidden text-indigo-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+      </svg>
+    </button>
+  </header>
+
+  <div class="flex min-h-screen">
+    <!-- GATILLO FLOTANTE DE ANDROID (visible cuando el menú lateral está escondido) -->
+    <button
+      id="sidebar-android-trigger"
+      type="button"
+      onmouseenter="showSidebarFromHover()"
+      onclick="toggleDesktopSidebar(false)"
+      title="Pasa el ratón o haz clic para mostrar el índice"
+      aria-label="Mostrar índice de ejercicios"
+      class="hidden fixed top-4 left-4 z-40 w-11 h-11 rounded-xl bg-lightCard/95 dark:bg-ideSurface/95 backdrop-blur-md border border-android/40 shadow-lg shadow-android/15 items-center justify-center hover:scale-105 hover:border-android transition-all duration-200 cursor-pointer"
+    >
+      <svg class="w-6 h-6 text-android" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M17.6 9.48l1.84-3.18c.16-.31.04-.69-.26-.85-.29-.15-.65-.06-.83.22l-1.88 3.24a11.463 11.463 0 0 0-8.94 0L5.65 5.67c-.19-.28-.54-.37-.83-.22-.3.16-.42.54-.26.85l1.84 3.18C4.08 10.94 2.5 13.3 2.5 16h19c0-2.7-1.58-5.06-3.9-6.52zM8.5 13.75a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm7 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+      </svg>
+    </button>
+
+    <!-- BARRA LATERAL (Índice completo) -->
+    <aside
+      id="sidebar"
+      onmouseleave="handleSidebarMouseLeave()"
+      class="fixed lg:sticky top-0 left-0 z-50 lg:z-30 h-screen w-72 xl:w-80 shrink-0 bg-white dark:bg-ideSurface border-r border-slate-200 dark:border-ideBorder flex flex-col -translate-x-full lg:translate-x-0 transition-all duration-300 ease-out"
+    >
+      <!-- Cabecera Sidebar -->
+      <div class="p-4 border-b border-slate-200 dark:border-ideBorder flex items-center justify-between gap-2">
+        <a href="#top" onclick="toggleMobileSidebar(false)" class="flex items-center gap-3 group min-w-0">
+          <div class="w-10 h-10 shrink-0 rounded-xl bg-android/15 border border-android/30 flex items-center justify-center group-hover:scale-105 transition">
+            <!-- Android Bugdroid SVG -->
+            <svg class="w-6 h-6 text-android" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M17.6 9.48l1.84-3.18c.16-.31.04-.69-.26-.85-.29-.15-.65-.06-.83.22l-1.88 3.24a11.463 11.463 0 0 0-8.94 0L5.65 5.67c-.19-.28-.54-.37-.83-.22-.3.16-.42.54-.26.85l1.84 3.18C4.08 10.94 2.5 13.3 2.5 16h19c0-2.7-1.58-5.06-3.9-6.52zM8.5 13.75a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm7 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+            </svg>
+          </div>
+          <div class="truncate">
+            <div class="text-sm font-bold text-slate-900 dark:text-white leading-tight truncate">Android Studio Docs</div>
+            <div class="text-xs text-slate-500 dark:text-slate-400 truncate">45 archivos · Temas 03–07</div>
+          </div>
+        </a>
+        <button onclick="toggleMobileSidebar(false)" class="lg:hidden p-1.5 rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-ideCard" aria-label="Cerrar índice">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Leyenda rápida -->
+      <div class="px-4 py-2.5 border-b border-slate-200 dark:border-ideBorder bg-slate-50/70 dark:bg-ideBg/50 flex items-center justify-between text-[11px] font-medium">
+        <span class="flex items-center gap-1.5 text-emerald-600 dark:text-android">
+          <span class="w-2 h-2 rounded-full bg-android"></span>MainActivity
+        </span>
+        <span class="flex items-center gap-1.5 text-violet-600 dark:text-kotlin">
+          <span class="w-2 h-2 rounded-full bg-kotlin"></span>Color.kt
+        </span>
+        <span class="flex items-center gap-1.5 text-amber-600 dark:text-amberData">
+          <span class="w-2 h-2 rounded-full bg-amberData"></span>data class
+        </span>
+      </div>
+
+      <!-- Índice navegable generado por JS -->
+      <nav id="sidebar-nav" class="flex-1 overflow-y-auto p-3 space-y-4">
+        <!-- Se rellena dinámicamente -->
+      </nav>
+
+      <!-- Pie del Sidebar -->
+      <div class="p-3 border-t border-slate-200 dark:border-ideBorder text-[11px] text-slate-500 dark:text-slate-400 flex items-center justify-between">
+        <span class="flex items-center gap-1.5">
+          <!-- Icono Kotlin -->
+          <svg class="w-3.5 h-3.5 text-kotlin" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M2 2h20L12 12l10 10H2V2z"/>
+          </svg>
+          Kotlin & Jetpack Compose
+        </span>
+        <span class="px-2 py-0.5 rounded-md bg-android/15 text-emerald-700 dark:text-android font-semibold">Material 3</span>
+      </div>
+    </aside>
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main id="top" class="flex-1 min-w-0">
+      <!-- HERO SECTION -->
+      <section
+        class="hero-kotlin-gradient relative overflow-hidden border-b border-lightBorder dark:border-ideBorder bg-lightCard dark:bg-ideCard"
+      >
+        <!-- Decoración de fondo sutil -->
+        <div class="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-kotlin/15 blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-24 -left-24 w-80 h-80 rounded-full bg-android/10 blur-3xl pointer-events-none"></div>
+
+        <div class="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div class="flex items-start sm:items-center gap-5">
+              <!-- Robot de Android animado -->
+              <div class="shrink-0 w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-lightCard/90 dark:bg-ideCard/90 border border-lightBorder dark:border-ideBorder flex items-center justify-center shadow-lg shadow-kotlin/15 animate-floatSlow">
+                <svg class="w-11 h-11 sm:w-13 sm:h-13 text-android drop-shadow" viewBox="0 0 48 48" fill="currentColor">
+                  <!-- Cabeza y antenas Bugdroid -->
+                  <path d="M35.2 18.96l3.68-6.36a1.1 1.1 0 0 0-.4-1.5 1.1 1.1 0 0 0-1.5.4l-3.74 6.48a22.9 22.9 0 0 0-18.48 0l-3.74-6.48a1.1 1.1 0 0 0-1.5-.4 1.1 1.1 0 0 0-.4 1.5l3.68 6.36C8.16 21.88 5 26.6 5 32h38c0-5.4-3.16-10.12-7.8-13.04zM17 27.5a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm14 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"/>
+                  <rect x="11" y="34" width="26" height="4" rx="2" opacity="0.45"/>
+                </svg>
+              </div>
+              <div>
+                <div class="flex flex-wrap items-center gap-2 mb-2">
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-android/15 text-emerald-700 dark:text-android border border-android/30">
+                    <span class="w-1.5 h-1.5 rounded-full bg-android"></span>
+                    Android Studio
+                  </span>
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-kotlin/15 text-kotlin dark:text-[#a485ff] border border-kotlin/30">
+                    <svg class="w-3 h-3" viewBox="0 0 24 24" aria-hidden="true">
+                      <defs>
+                        <linearGradient id="kt-hero-g" x1="0" y1="1" x2="1" y2="0">
+                          <stop offset="0%" stop-color="#7F52FF"/>
+                          <stop offset="50%" stop-color="#C711E1"/>
+                          <stop offset="100%" stop-color="#F88909"/>
+                        </linearGradient>
+                      </defs>
+                      <polygon fill="url(#kt-hero-g)" points="2,2 22,2 12,12 22,22 2,22"/>
+                    </svg>
+                    Kotlin
+                  </span>
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-compose/15 text-blue-700 dark:text-blue-300 border border-compose/30">
+                    Jetpack Compose
+                  </span>
+                </div>
+                <h1 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-lightText dark:text-ideText">
+                  Ejercicios Seleccionados — <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#7F52FF] via-[#C711E1] to-[#F88909]">Kotlin</span> & <span class="text-transparent bg-clip-text bg-gradient-to-r from-[#3DDC84] to-[#4285F4]">Android</span>
+                </h1>
+                <p class="mt-1.5 text-sm sm:text-base font-medium text-lightMuted dark:text-ideMuted">
+                  Temas 03, 04, 05, 06 y 07 (PMYDM)
+                </p>
+              </div>
+            </div>
+
+            <!-- Botón de tema en escritorio -->
+            <div class="hidden lg:flex items-center gap-2 shrink-0">
+              <button onclick="toggleTheme()" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white dark:bg-ideCard border border-slate-200 dark:border-ideBorder hover:border-android/50 text-sm font-medium text-slate-700 dark:text-slate-200 shadow-xs transition">
+                <svg class="w-4 h-4 hidden dark:block text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="5"></circle>
+                  <line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line>
+                  <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                  <line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line>
+                  <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                </svg>
+                <svg class="w-4 h-4 block dark:hidden text-indigo-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                </svg>
+                <span class="dark:hidden">Modo Oscuro</span>
+                <span class="hidden dark:inline">Modo Claro</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Nota explicativa fiel al PDF -->
+          <div class="mt-6 p-4 rounded-xl bg-white/80 dark:bg-ideCard/80 border border-slate-200 dark:border-ideBorder flex items-start gap-3 text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+            <svg class="w-5 h-5 text-compose shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="16" x2="12" y2="12"></line>
+              <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+            <p>
+              Incluye únicamente <strong class="text-slate-900 dark:text-white font-semibold">MainActivity</strong>, <strong class="text-slate-900 dark:text-white font-semibold">Color.kt</strong> cuando contiene colores añadidos y archivos que declaran <strong class="text-slate-900 dark:text-white font-semibold">class</strong> o <strong class="text-slate-900 dark:text-white font-semibold">data class</strong>. Se excluyen <code class="font-mono text-xs px-1.5 py-0.5 rounded bg-slate-100 dark:bg-ideBg">ExampleInstrumentedTest.kt</code>, <code class="font-mono text-xs px-1.5 py-0.5 rounded bg-slate-100 dark:bg-ideBg">ExampleUnitTest.kt</code> y los <code class="font-mono text-xs px-1.5 py-0.5 rounded bg-slate-100 dark:bg-ideBg">Color.kt</code> estándar.
+            </p>
+          </div>
+
+          <!-- Tarjetas de estadísticas -->
+          <div id="stats-grid" class="mt-6 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+            <!-- Rellenadas dinámicamente para precisión exacta -->
+          </div>
+        </div>
+      </section>
+
+      <!-- BARRA DE BÚSQUEDA Y FILTROS (Sticky) -->
+      <section class="sticky top-[57px] lg:top-0 z-20 bg-white/90 dark:bg-ideBg/90 backdrop-blur-md border-b border-slate-200 dark:border-ideBorder">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 space-y-3">
+          <div class="flex flex-col md:flex-row gap-3 items-stretch md:items-center justify-between">
+            <!-- Buscador -->
+            <div class="relative flex-1 max-w-xl">
+              <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <input
+                id="search-input"
+                type="text"
+                placeholder="Buscar por ejercicio, archivo, tema o código (ej. LazyColumn, Toast, Dorado)..."
+                class="w-full pl-10 pr-9 py-2.5 rounded-xl bg-slate-100 dark:bg-ideCard border border-slate-200 dark:border-ideBorder focus:outline-none focus:ring-2 focus:ring-android/50 focus:border-android text-sm text-slate-800 dark:text-slate-100 placeholder:text-slate-400 transition"
+              />
+              <button id="clear-search" onclick="clearSearch()" class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 p-1 rounded-md text-slate-400 hover:text-slate-600 dark:hover:text-slate-200" aria-label="Limpiar búsqueda">
+                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+              </button>
+            </div>
+
+            <!-- Controles globales -->
+            <div class="flex items-center justify-between md:justify-end gap-2">
+              <span id="results-counter" class="text-xs font-medium text-slate-500 dark:text-slate-400 px-2">
+                Mostrando 45 de 45
+              </span>
+              <button id="toggle-all-btn" onclick="toggleAllCards()" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-100 dark:bg-ideCard border border-slate-200 dark:border-ideBorder hover:border-android/50 text-xs font-semibold text-slate-700 dark:text-slate-200 transition">
+                <svg id="toggle-all-icon" class="w-4 h-4 text-android" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="4 14 10 14 10 20"></polyline>
+                  <polyline points="20 10 14 10 14 4"></polyline>
+                  <line x1="14" y1="10" x2="21" y2="3"></line>
+                  <line x1="3" y1="21" x2="10" y2="14"></line>
+                </svg>
+                <span id="toggle-all-text">Colapsar todo</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Fila de filtros por Tipo y por Tema -->
+          <div class="flex flex-col sm:flex-row gap-2.5 sm:items-center justify-between">
+            <!-- Filtros por Tipo -->
+            <div class="flex flex-wrap items-center gap-1.5" id="type-filters">
+              <span class="text-[11px] uppercase tracking-wider font-semibold text-slate-400 mr-1">Tipo:</span>
+              <button data-type="all" onclick="setTypeFilter('all')" class="type-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition">Todos</button>
+              <button data-type="main" onclick="setTypeFilter('main')" class="type-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition">MainActivity</button>
+              <button data-type="color" onclick="setTypeFilter('color')" class="type-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition">Color.kt</button>
+              <button data-type="class" onclick="setTypeFilter('class')" class="type-btn px-3 py-1.5 rounded-lg text-xs font-semibold transition">data class</button>
+            </div>
+
+            <!-- Filtros por Tema -->
+            <div class="flex flex-wrap items-center gap-1.5" id="topic-filters">
+              <span class="text-[11px] uppercase tracking-wider font-semibold text-slate-400 mr-1">Tema:</span>
+              <button data-topic="all" onclick="setTopicFilter('all')" class="topic-btn px-2.5 py-1.5 rounded-lg text-xs font-semibold transition">Todos</button>
+              <button data-topic="Tema 03" onclick="setTopicFilter('Tema 03')" class="topic-btn px-2.5 py-1.5 rounded-lg text-xs font-semibold transition">Tema 03</button>
+              <button data-topic="Tema 04" onclick="setTopicFilter('Tema 04')" class="topic-btn px-2.5 py-1.5 rounded-lg text-xs font-semibold transition">Tema 04</button>
+              <button data-topic="Tema 05" onclick="setTopicFilter('Tema 05')" class="topic-btn px-2.5 py-1.5 rounded-lg text-xs font-semibold transition">Tema 05</button>
+              <button data-topic="Tema 06" onclick="setTopicFilter('Tema 06')" class="topic-btn px-2.5 py-1.5 rounded-lg text-xs font-semibold transition">Tema 06</button>
+              <button data-topic="Tema 07" onclick="setTopicFilter('Tema 07')" class="topic-btn px-2.5 py-1.5 rounded-lg text-xs font-semibold transition">Tema 07</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CONTENEDOR DE ARCHIVOS -->
+      <section class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div id="files-container" class="space-y-10">
+          <!-- Generado dinámicamente -->
+        </div>
+
+        <!-- Estado vacío -->
+        <div id="empty-state" class="hidden text-center py-16 px-4 rounded-2xl border border-dashed border-slate-300 dark:border-ideBorder bg-white/50 dark:bg-ideCard/40">
+          <svg class="w-12 h-12 mx-auto text-slate-400 mb-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <h3 class="text-base font-bold text-slate-800 dark:text-white">No se encontraron archivos</h3>
+          <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Prueba con otro término de búsqueda o restablece los filtros.</p>
+          <button onclick="resetAllFilters()" class="mt-4 px-4 py-2 rounded-xl bg-android text-slate-950 font-semibold text-xs hover:brightness-110 transition">
+            Restablecer filtros
+          </button>
+        </div>
+      </section>
+
+      <!-- FOOTER -->
+      <footer class="border-t border-slate-200 dark:border-ideBorder py-8 text-center text-xs text-slate-500 dark:text-slate-400">
+        <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <div class="flex items-center gap-2">
+            <svg class="w-4 h-4 text-android" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M17.6 9.48l1.84-3.18c.16-.31.04-.69-.26-.85-.29-.15-.65-.06-.83.22l-1.88 3.24a11.463 11.463 0 0 0-8.94 0L5.65 5.67c-.19-.28-.54-.37-.83-.22-.3.16-.42.54-.26.85l1.84 3.18C4.08 10.94 2.5 13.3 2.5 16h19c0-2.7-1.58-5.06-3.9-6.52zM8.5 13.75a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm7 0a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+            </svg>
+            <span>Ejercicios Seleccionados · PMYDM (Temas 03, 04, 05, 06 y 07)</span>
+          </div>
+          <span>45 archivos Kotlin · Jetpack Compose & Material 3</span>
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <!-- BOTÓN FLOTANTE VOLVER ARRIBA -->
+  <button id="back-to-top" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })" class="btn-top-kotlin-gradient fixed bottom-6 right-6 z-30 p-3 rounded-2xl text-white shadow-lg shadow-kotlin/30 hover:scale-105 active:scale-95 transition-all duration-300 opacity-0 pointer-events-none translate-y-4" aria-label="Volver arriba">
+    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="18 15 12 9 6 15"></polyline>
+    </svg>
+  </button>
+
+  <!-- DATOS COMPLETOS DE LOS 45 ARCHIVOS Y LÓGICA INTERACTIVA -->
+  <script src="../../../script/Ejercicios_PMYDM-2.js"></script>
+</body>
+</html>
