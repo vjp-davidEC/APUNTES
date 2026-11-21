@@ -7,3 +7,10 @@
   background: linear-gradient(135deg, #7F52FF 0%, #C711E1 52%, #F88909 100%);
   box-shadow: 0 10px 30px -5px rgba(127, 82, 255, 0.35);
 }
+
+/* ==========================================================================
+   Tipografía unificada: Times New Roman en toda la web
+   ========================================================================== */
+html, body, button, input, select, textarea {
+  font-family: 'Times New Roman', Times, serif !important;
+}

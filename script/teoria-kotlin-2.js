@@ -15,15 +15,15 @@
     const THEME_KEY = "teoriaKotlin.theme";
     function applyTheme(t) {
       document.documentElement.dataset.theme = t;
-      $("#btn-tema").textContent = t === "dark" ? "☀️" : "🌙";
+      $("#btn-tema").innerHTML = t === "dark" ? `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>` : `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a485ff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`;
+      try { localStorage.setItem("tema_apuntes", t); } catch (e) {}
     }
-    applyTheme(localStorage.getItem(THEME_KEY) || "dark");
+    applyTheme(localStorage.getItem("tema_apuntes") || localStorage.getItem(THEME_KEY) || "dark");
     $("#btn-tema").addEventListener("click", () => {
       const t = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
       localStorage.setItem(THEME_KEY, t);
       applyTheme(t);
     });
-    $("#btn-print").addEventListener("click", () => window.print());
 
     /* ---------------- Progreso de lectura y botón arriba ---------------- */
     window.addEventListener("scroll", () => {
@@ -54,7 +54,7 @@
           <button type="button">
             <span class="t-icon-box">${ic}<span class="t-num">${t.numero}</span></span>
             <span class="t-title">Tema ${t.numero}: ${esc(t.titulo)}</span>
-            <span class="chev">›</span>
+            <span class="chev"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px"><polyline points="9 18 15 12 9 6"></polyline></svg></span>
           </button>
           <ul>
             ${t.secciones.map((s) => `
@@ -199,8 +199,8 @@
         </article>
 
         <nav class="pager">
-          ${prev ? `<a class="prev" href="#/${prev.t.id}/${prev.s.id}"><small>← Apartado anterior (Tema ${prev.t.numero})</small><strong>${esc(prev.s.titulo)}</strong></a>` : "<span></span>"}
-          ${next ? `<a class="next" href="#/${next.t.id}/${next.s.id}"><small>Siguiente apartado (Tema ${next.t.numero}) →</small><strong>${esc(next.s.titulo)}</strong></a>` : ""}
+          ${prev ? `<a class="prev" href="#/${prev.t.id}/${prev.s.id}"><small><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px"><polyline points="15 18 9 12 15 6"></polyline></svg> Apartado anterior (Tema ${prev.t.numero})</small><strong>${esc(prev.s.titulo)}</strong></a>` : "<span></span>"}
+          ${next ? `<a class="next" href="#/${next.t.id}/${next.s.id}"><small>Siguiente apartado (Tema ${next.t.numero}) <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px"><polyline points="9 18 15 12 9 6"></polyline></svg></small><strong>${esc(next.s.titulo)}</strong></a>` : ""}
         </nav>
       `;
     }

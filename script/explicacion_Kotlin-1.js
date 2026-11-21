@@ -3,7 +3,7 @@
       theme: {
         extend: {
           fontFamily: {
-            sans: ['Inter', 'system-ui', 'sans-serif'],
+            sans: ['"Times New Roman"', 'Times', 'serif'],
             mono: ['JetBrains Mono', 'ui-monospace', 'SFMono-Regular', 'monospace'],
           },
           colors: {

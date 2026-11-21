@@ -8,8 +8,28 @@
             --accent: #a485ff;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
-        body { background-color: var(--bg-main); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; }
+        :root[data-theme="light"] {
+            --bg-main: #f5f6fb;
+            --bg-card: #ffffff;
+            --bg-hover: #eef0f8;
+            --border: #dce0ef;
+            --text-main: #171625;
+            --text-muted: #55536e;
+            --accent: #7F52FF;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Times New Roman', Times, serif; }
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-image:
+              radial-gradient(850px 450px at 8% -5%, rgba(127, 82, 255, 0.14), transparent 65%),
+              radial-gradient(800px 420px at 95% 105%, rgba(61, 220, 132, 0.10), transparent 65%);
+            background-attachment: fixed;
+        }
 
         .toolbar {
             position: sticky;
@@ -19,7 +39,7 @@
             align-items: center;
             justify-content: space-between;
             gap: 0.75rem;
-            padding: 0.75rem 1rem;
+            padding: 0.75rem 1.25rem;
             background-color: var(--bg-card);
             border-bottom: 1px solid var(--border);
         }
@@ -27,24 +47,84 @@
         .btn {
             display: inline-flex;
             align-items: center;
-            gap: 0.4rem;
-            padding: 0.5rem 0.85rem;
-            border-radius: 8px;
+            gap: 0.45rem;
+            padding: 0.55rem 1rem;
+            border-radius: 10px;
             border: 1px solid var(--border);
             background-color: var(--bg-main);
             color: var(--text-main);
             text-decoration: none;
             font-size: 0.9rem;
+            font-weight: 600;
             cursor: pointer;
             touch-action: manipulation;
+            transition: transform 0.18s ease, filter 0.18s ease, border-color 0.18s ease;
         }
 
         .btn:hover { border-color: var(--accent); background-color: var(--bg-hover); }
+        .btn-back-home {
+            background: linear-gradient(135deg, #7F52FF 0%, #C711E1 52%, #F88909 100%);
+            color: #ffffff !important;
+            border: none;
+            box-shadow: 0 8px 22px -5px rgba(127, 82, 255, 0.45);
+        }
+        .btn-back-home:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.08);
+        }
         .btn-primary { border-color: var(--accent); color: var(--accent); }
 
+        .ut-floating-theme-btn {
+            position: fixed;
+            bottom: 1.35rem;
+            right: 1.35rem;
+            width: 46px;
+            height: 46px;
+            border-radius: 14px;
+            background-color: var(--bg-card, #151523);
+            border: 1px solid var(--border, #292840);
+            color: var(--text-main, #f0effa);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(127, 82, 255, 0.2);
+            z-index: 9999;
+            transition: transform 0.18s ease, border-color 0.18s ease, background-color 0.18s ease;
+            padding: 0;
+        }
+        .ut-floating-theme-btn:hover {
+            transform: scale(1.08);
+            border-color: #7F52FF;
+        }
+
+        .title-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            min-width: 0;
+            flex: 1;
+        }
+
+        .module-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.3rem 0.65rem;
+            border-radius: 9px;
+            border: 1px solid var(--border);
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 0.03em;
+            flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+        }
+
         .title {
-            font-size: 0.9rem;
-            color: var(--text-muted);
+            font-size: 0.95rem;
+            color: var(--text-main);
+            font-weight: 600;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -82,4 +162,10 @@
             height: calc(100vh - 60px);
             border: none;
         }
-    
+
+/* ==========================================================================
+   Tipografía unificada: Times New Roman en toda la web
+   ========================================================================== */
+html, body, button, input, select, textarea {
+  font-family: 'Times New Roman', Times, serif !important;
+}

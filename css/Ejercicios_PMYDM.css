@@ -26,3 +26,9 @@
   }
 }
 
+/* ==========================================================================
+   Tipografía unificada: Times New Roman en toda la web
+   ========================================================================== */
+html, body, button, input, select, textarea {
+  font-family: 'Times New Roman', Times, serif !important;
+}

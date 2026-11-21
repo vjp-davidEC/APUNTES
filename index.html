@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Apuntes 2º DAM - Hub de Resúmenes</title>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230d1117' stroke='%2338bdf8' stroke-width='3'/%3E%3Crect x='14' y='16' width='36' height='24' rx='3' fill='none' stroke='%2338bdf8' stroke-width='3.5'/%3E%3Cpath d='M26 48h12M32 40v8' fill='none' stroke='%2338bdf8' stroke-width='3.5' stroke-linecap='round'/%3E%3C/svg%3E">
+    <title>Apuntes 2º DAM</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='1' x2='1' y2='0'%3E%3Cstop offset='0%25' stop-color='%237F52FF'/%3E%3Cstop offset='52%25' stop-color='%23C711E1'/%3E%3Cstop offset='100%25' stop-color='%23F88909'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='14' fill='%23151523' stroke='url(%23g)' stroke-width='3'/%3E%3Crect x='14' y='16' width='36' height='24' rx='3' fill='none' stroke='url(%23g)' stroke-width='3.5'/%3E%3Cpath d='M26 48h12M32 40v8' fill='none' stroke='url(%23g)' stroke-width='3.5' stroke-linecap='round'/%3E%3C/svg%3E">
     <script src="script/index-1.js"></script>
     <link rel="stylesheet" href="css/index.css">
 </head>
@@ -14,7 +14,7 @@
 <div id="login-screen">
     <!-- Botón de cambio de tema en el lateral de la ventana -->
     <button type="button" class="theme-toggle-window-btn" id="btnLoginToggleTema" onclick="alternarTema()" aria-label="Cambiar modo claro / oscuro" title="Cambiar tema claro / oscuro">
-        <span id="theme-login-icon">🌙</span>
+        <span id="theme-login-icon" style="display:inline-flex;align-items:center;justify-content:center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg></span>
     </button>
 
     <h2>Acceso Restringido</h2>
@@ -61,12 +61,12 @@
                 <span class="menu-subtitle">Tema de apariencia</span>
                 <div class="theme-options">
                     <button type="button" class="theme-option-btn" id="btnModoOscuro" onclick="cambiarTema('dark')">
-                        <span>🌙 Modo Oscuro</span>
-                        <span class="check-icon">✓</span>
+                        <span style="display:inline-flex;align-items:center;gap:0.45rem"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#a485ff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-3px"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg> Modo Oscuro</span>
+                        <span class="check-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
                     </button>
                     <button type="button" class="theme-option-btn" id="btnModoClaro" onclick="cambiarTema('light')">
-                        <span>☀️ Modo Claro</span>
-                        <span class="check-icon">✓</span>
+                        <span style="display:inline-flex;align-items:center;gap:0.45rem"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-3px"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg> Modo Claro</span>
+                        <span class="check-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
                     </button>
                 </div>
 
@@ -107,7 +107,7 @@
         <!-- AD -->
         <section class="card" data-module="AD Acceso a Datos">
             <div class="card-header">
-                <h2 class="card-title">Acceso a Datos</h2>
+                <h2 class="card-title"><span class="module-icon" style="background:rgba(127, 82, 255, 0.16);border-color:rgba(127, 82, 255, 0.35)"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#a485ff" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.66 3.58 3 8 3s8-1.34 8-3V5"/><path d="M4 12c0 1.66 3.58 3 8 3s8-1.34 8-3"/></svg></span><span>Acceso a Datos</span></h2>
                 <a class="badge" href="./modulos/AD/index.html" title="Abrir todos los PDFs de AD">AD</a>
             </div>
             <ul class="pdf-list">
@@ -141,7 +141,7 @@
         <!-- PMYDM -->
         <section class="card" data-module="PMYDM Multimedia y Móviles">
             <div class="card-header">
-                <h2 class="card-title">Programación Multimedia y Dispositivos Móviles</h2>
+                <h2 class="card-title"><span class="module-icon" style="background:rgba(61, 220, 132, 0.16);border-color:rgba(61, 220, 132, 0.38)"><svg width="21" height="21" viewBox="0 0 24 24" aria-hidden="true"><path fill="#3DDC84" d="M17.6 11.48 L19.44 8.3 a0.63 0.63 0 0 0 -1.09 -0.63 l-1.88 3.24 a11.43 11.43 0 0 0 -8.94 0 L5.65 7.67 a0.63 0.63 0 0 0 -1.09 0.63 L6.4 11.48 A10.81 10.81 0 0 0 1 20 h22 A10.81 10.81 0 0 0 17.6 11.48 Z M7 17.25 A1.25 1.25 0 1 1 8.25 16 A1.25 1.25 0 0 1 7 17.25 Z M17 17.25 A1.25 1.25 0 1 1 18.25 16 A1.25 1.25 0 0 1 17 17.25 Z"/></svg></span><span>Programación Multimedia y Dispositivos Móviles</span></h2>
                 <a class="badge" href="./modulos/PMYDM/index.html" title="Abrir todos los PDFs de PMYDM">PMYDM</a>
             </div>
             <ul class="pdf-list">
@@ -163,7 +163,7 @@
         <!-- DI -->
         <section class="card" data-module="DI Desarrollo de Interfaces">
             <div class="card-header">
-                <h2 class="card-title">Desarrollo de Interfaces</h2>
+                <h2 class="card-title"><span class="module-icon" style="background:rgba(199, 17, 225, 0.16);border-color:rgba(199, 17, 225, 0.35)"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#e879f9" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2.5"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg></span><span>Desarrollo de Interfaces</span></h2>
                 <a class="badge" href="./modulos/DI/index.html" title="Abrir todos los PDFs de DI">DI</a>
             </div>
             <ul class="pdf-list">
@@ -185,7 +185,7 @@
         <!-- PSP -->
         <section class="card" data-module="PSP Servicios y Procesos">
             <div class="card-header">
-                <h2 class="card-title">Programación de Servicios y Procesos</h2>
+                <h2 class="card-title"><span class="module-icon" style="background:rgba(248, 137, 9, 0.16);border-color:rgba(248, 137, 9, 0.38)"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#fb923c" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2"/><rect x="9" y="9" width="6" height="6" rx="1"/><line x1="9" y1="2" x2="9" y2="5"/><line x1="15" y1="2" x2="15" y2="5"/><line x1="9" y1="19" x2="9" y2="22"/><line x1="15" y1="19" x2="15" y2="22"/><line x1="19" y1="9" x2="22" y2="9"/><line x1="19" y1="15" x2="22" y2="15"/><line x1="2" y1="9" x2="5" y2="9"/><line x1="2" y1="15" x2="5" y2="15"/></svg></span><span>Programación de Servicios y Procesos</span></h2>
                 <a class="badge" href="./modulos/PSP/index.html" title="Abrir todos los PDFs de PSP">PSP</a>
             </div>
             <ul class="pdf-list">
@@ -207,7 +207,7 @@
         <!-- SSGE -->
         <section class="card" data-module="SSGE Sistemas de Gestión Empresarial">
             <div class="card-header">
-                <h2 class="card-title">Sistemas de Gestión Empresarial</h2>
+                <h2 class="card-title"><span class="module-icon" style="background:rgba(56, 189, 248, 0.16);border-color:rgba(56, 189, 248, 0.38)"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="3" y1="20" x2="21" y2="20"/></svg></span><span>Sistemas de Gestión Empresarial</span></h2>
                 <a class="badge" href="./modulos/SSGE/index.html" title="Abrir todos los PDFs de SSGE">SSGE</a>
             </div>
             <ul class="pdf-list">
@@ -229,7 +229,7 @@
         <!-- DIGIT -->
         <section class="card" data-module="DIGIT Digitalización">
             <div class="card-header">
-                <h2 class="card-title">Digitalización</h2>
+                <h2 class="card-title"><span class="module-icon" style="background:rgba(127, 82, 255, 0.16);border-color:rgba(127, 82, 255, 0.35)"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#a485ff" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><line x1="3" y1="12" x2="21" y2="12"/><path d="M12 3a14.5 14.5 0 0 1 4 9 14.5 14.5 0 0 1-4 9 14.5 14.5 0 0 1-4-9 14.5 14.5 0 0 1 4-9z"/></svg></span><span>Digitalización</span></h2>
                 <a class="badge" href="./modulos/DIGIT/index.html" title="Abrir todos los PDFs de DIGIT">DIGIT</a>
             </div>
             <ul class="pdf-list">
@@ -245,7 +245,7 @@
         <!-- SOST -->
         <section class="card" data-module="SOST Sostenibilidad">
             <div class="card-header">
-                <h2 class="card-title">Sostenibilidad</h2>
+                <h2 class="card-title"><span class="module-icon" style="background:rgba(61, 220, 132, 0.16);border-color:rgba(61, 220, 132, 0.38)"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#3DDC84" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg></span><span>Sostenibilidad</span></h2>
                 <a class="badge" href="./modulos/SOST/index.html" title="Abrir todos los PDFs de SOST">SOST</a>
             </div>
             <ul class="pdf-list">
@@ -267,7 +267,7 @@
         <!-- OPTATIVA -->
         <section class="card" data-module="OPTATIVA Asignatura Optativa">
             <div class="card-header">
-                <h2 class="card-title">Optativa</h2>
+                <h2 class="card-title"><span class="module-icon" style="background:rgba(248, 137, 9, 0.16);border-color:rgba(248, 137, 9, 0.38)"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#fb923c" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2.5"/><polyline points="7 9 10 12 7 15"/><line x1="12" y1="15" x2="17" y2="15"/></svg></span><span>Optativa</span></h2>
                 <a class="badge" href="./modulos/OPTATIVA/index.html" title="Abrir todos los PDFs de OPTATIVA">OPTATIVA</a>
             </div>
             <ul class="pdf-list">

@@ -39,7 +39,7 @@
       --shadow: 0 2px 6px rgba(20, 15, 45, 0.05), 0 12px 32px rgba(20, 15, 45, 0.07);
       --shadow-glow: 0 10px 30px -5px rgba(127, 82, 255, 0.25);
 
-      --font: "Inter", "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+      --font: 'Times New Roman', Times, serif;
       --mono: "JetBrains Mono", "Cascadia Code", "Fira Code", Consolas, monospace;
       --top: 66px;
       --side: 325px;
@@ -71,7 +71,7 @@
     html { scroll-behavior: smooth; }
     html, body { margin: 0; padding: 0; }
     body {
-      font-family: var(--font);
+      font-family: 'Times New Roman', Times, serif;
       background: var(--bg);
       color: var(--txt);
       line-height: 1.68;
@@ -1047,25 +1047,36 @@
     /* Botón flotante subir arriba */
     #btn-top {
       position: fixed;
-      bottom: 4.75rem;
+      bottom: 4.85rem;
       right: 1.35rem;
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
       background: var(--grad-kt);
       color: #fff;
-      border: 0;
-      box-shadow: var(--shadow-glow);
-      display: grid;
-      place-items: center;
-      font-size: 1.2rem;
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      box-shadow: 0 8px 24px -4px rgba(127, 82, 255, 0.55);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
       opacity: 0;
       pointer-events: none;
-      transform: translateY(10px);
-      transition: .2s;
-      z-index: 50;
+      transform: translateY(10px) scale(0.95);
+      transition: transform 0.2s ease, opacity 0.2s ease, box-shadow 0.2s ease;
+      z-index: 65;
     }
-    #btn-top.show { opacity: 1; pointer-events: auto; transform: translateY(0); }
+    #btn-top svg {
+      width: 22px;
+      height: 22px;
+      display: block;
+      flex: none;
+    }
+    #btn-top:hover {
+      transform: translateY(-2px) scale(1.06);
+      box-shadow: 0 12px 28px -4px rgba(127, 82, 255, 0.75);
+    }
+    #btn-top.show { opacity: 1; pointer-events: auto; transform: translateY(0) scale(1); }
 
     .overlay { display: none; }
     .only-mobile { display: none !important; }
@@ -1196,17 +1207,18 @@
   position: fixed;
   bottom: 1.35rem;
   right: 1.35rem;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
   background: var(--panel);
   border: 1px solid var(--line);
   color: var(--txt);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(127, 82, 255, 0.22);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(127, 82, 255, 0.24);
   z-index: 65;
-  font-size: 1.15rem;
-  display: grid;
-  place-items: center;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   transition: transform 0.18s ease, border-color 0.18s ease, background-color 0.18s ease;
 }
 #btn-tema:hover {
@@ -1215,5 +1227,29 @@
   background: var(--panel2);
 }
 @media print {
-  #btn-tema { display: none !important; }
+  #btn-tema {
+  position: fixed;
+  bottom: 1.35rem;
+  right: 1.35rem;
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  color: var(--txt);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(127, 82, 255, 0.24);
+  z-index: 65;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.18s ease, border-color 0.18s ease, background-color 0.18s ease;
+}
+}
+
+/* ==========================================================================
+   Tipografía unificada: Times New Roman en toda la web
+   ========================================================================== */
+html, body, button, input, select, textarea {
+  font-family: 'Times New Roman', Times, serif !important;
 }

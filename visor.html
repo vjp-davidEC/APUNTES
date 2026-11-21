@@ -4,13 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Visor de PDF · Apuntes 2º DAM</title>
+    <link id="favicon" rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='1' x2='1' y2='0'%3E%3Cstop offset='0%25' stop-color='%237F52FF'/%3E%3Cstop offset='52%25' stop-color='%23C711E1'/%3E%3Cstop offset='100%25' stop-color='%23F88909'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='14' fill='%23151523' stroke='url(%23g)' stroke-width='3'/%3E%3Crect x='14' y='16' width='36' height='24' rx='3' fill='none' stroke='url(%23g)' stroke-width='3.5'/%3E%3Cpath d='M26 48h12M32 40v8' fill='none' stroke='url(%23g)' stroke-width='3.5' stroke-linecap='round'/%3E%3C/svg%3E">
     <link rel="stylesheet" href="css/visor.css">
 </head>
 <body>
     <div class="toolbar">
-        <button type="button" class="btn" id="backBtn">⬅ Volver</button>
-        <span class="title" id="fileTitle">Cargando PDF...</span>
-        <a class="btn btn-primary" id="downloadBtn" href="#" download>⬇ PDF</a>
+        <a class="btn btn-back-home" id="backBtn" href="./index.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg> <span>Volver al inicio</span></a>
+        <div class="title-wrap">
+            <span class="module-badge" id="moduleBadge" style="display:none"></span>
+            <span class="title" id="fileTitle">Cargando PDF...</span>
+        </div>
+        <a class="btn btn-primary" id="downloadBtn" href="#" download><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> <span>Descargar PDF</span></a>
     </div>
 
     <div id="status">Cargando documento...</div>
@@ -19,5 +23,6 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <script src="script/visor.js"></script>
+    <script src="script/ut-theme.js"></script>
 </body>
 </html>

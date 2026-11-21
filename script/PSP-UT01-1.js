@@ -3,7 +3,7 @@
             theme: {
                 extend: {
                     fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
+                        sans: ['"Times New Roman"', 'Times', 'serif'],
                         mono: ['Fira Code', 'monospace'],
                     },
                     colors: {

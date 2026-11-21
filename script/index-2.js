@@ -87,12 +87,12 @@
             document.documentElement.setAttribute('data-theme', 'light');
             document.getElementById('btnModoClaro')?.classList.add('active');
             document.getElementById('btnModoOscuro')?.classList.remove('active');
-            if (loginIcon) loginIcon.textContent = '☀️';
+            if (loginIcon) loginIcon.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a485ff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`;
         } else {
             document.documentElement.removeAttribute('data-theme');
             document.getElementById('btnModoOscuro')?.classList.add('active');
             document.getElementById('btnModoClaro')?.classList.remove('active');
-            if (loginIcon) loginIcon.textContent = '🌙';
+            if (loginIcon) loginIcon.innerHTML = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>`;
         }
         try {
             localStorage.setItem('tema_apuntes', tema);
@@ -190,14 +190,11 @@
         });
     });
 
-    // Abrir PDFs en el visor integrado en móviles
-    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || window.matchMedia('(max-width: 768px)').matches;
-    if (isMobile && window.location.protocol !== 'file:') {
-        document.querySelectorAll('.pdf-item a[href$=".pdf" i]').forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const fullUrl = new URL(link.getAttribute('href'), window.location.href).href;
-                window.location.href = './visor.html?file=' + encodeURIComponent(fullUrl);
-            });
+    // Abrir todos los PDFs en el visor integrado (tanto en ordenador como en móvil) para poder volver siempre a index.html
+    document.querySelectorAll('.pdf-item a[href$=".pdf" i]').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const rawHref = link.getAttribute('href');
+            window.location.href = './visor.html?file=' + encodeURIComponent(rawHref);
         });
-    }
+    });
