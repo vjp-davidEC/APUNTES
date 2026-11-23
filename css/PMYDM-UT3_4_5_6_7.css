@@ -267,7 +267,7 @@
    Paleta de Colores Unificada (idéntica a explicacion_Kotlin.html)
    ========================================================================== */
 @media screen {
-  :root {
+  :root, :root[data-theme="dark"], html.dark {
     --bg-main: #070d19;
     --bg-card: #0f172a;
     --bg-panel2: #1e293b;

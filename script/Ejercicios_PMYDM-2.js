@@ -4607,8 +4607,26 @@ data class Actividad(
     }
 
     // Tema claro / oscuro
+    function applyTheme(t) {
+      const isLight = t === "light";
+      if (isLight) {
+        document.documentElement.classList.remove("dark");
+        document.documentElement.classList.add("light");
+        document.documentElement.setAttribute("data-theme", "light");
+        document.documentElement.dataset.theme = "light";
+      } else {
+        document.documentElement.classList.add("dark");
+        document.documentElement.classList.remove("light");
+        document.documentElement.setAttribute("data-theme", "dark");
+        document.documentElement.dataset.theme = "dark";
+      }
+      try { localStorage.setItem("tema_apuntes", isLight ? "light" : "dark"); } catch (e) {}
+    }
+    window.applyTheme = applyTheme;
+
     function toggleTheme() {
-      document.documentElement.classList.toggle("dark");
+      const isDark = document.documentElement.classList.contains("dark");
+      applyTheme(isDark ? "light" : "dark");
     }
 
     // Sidebar móvil
@@ -4678,6 +4696,17 @@ data class Actividad(
     // 8. INICIALIZACIÓN
     // =========================================================================
     document.addEventListener("DOMContentLoaded", () => {
+      // Sincronizar tema guardado
+      const savedTheme = localStorage.getItem("tema_apuntes") || "dark";
+      applyTheme(savedTheme);
+
+      // Si está dentro de iframe (visor.html), ocultar botones de tema redundantes
+      if (window.self !== window.top) {
+        document.querySelectorAll('button[onclick*="toggleTheme"]').forEach(b => {
+          b.style.setProperty("display", "none", "important");
+        });
+      }
+
       updateDesktopSidebarUI();
       renderStats();
       renderSidebar();

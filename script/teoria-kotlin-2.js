@@ -15,15 +15,33 @@
     const THEME_KEY = "teoriaKotlin.theme";
     function applyTheme(t) {
       document.documentElement.dataset.theme = t;
-      $("#btn-tema").innerHTML = t === "dark" ? `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>` : `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`;
+      document.documentElement.setAttribute('data-theme', t);
+      if (t === "dark") {
+        document.documentElement.classList.add("dark");
+        document.documentElement.classList.remove("light");
+      } else {
+        document.documentElement.classList.remove("dark");
+        document.documentElement.classList.add("light");
+      }
+      const btnTema = $("#btn-tema");
+      if (btnTema) {
+        btnTema.innerHTML = t === "dark" ? `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>` : `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`;
+      }
       try { localStorage.setItem("tema_apuntes", t); } catch (e) {}
     }
+    window.applyTheme = applyTheme;
     applyTheme(localStorage.getItem("tema_apuntes") || localStorage.getItem(THEME_KEY) || "dark");
-    $("#btn-tema").addEventListener("click", () => {
-      const t = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
-      localStorage.setItem(THEME_KEY, t);
-      applyTheme(t);
-    });
+    const btnTemaEl = $("#btn-tema");
+    if (btnTemaEl) {
+      if (window.self !== window.top) {
+        btnTemaEl.style.setProperty("display", "none", "important");
+      }
+      btnTemaEl.addEventListener("click", () => {
+        const t = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+        localStorage.setItem(THEME_KEY, t);
+        applyTheme(t);
+      });
+    }
 
     /* ---------------- Progreso de lectura y botón arriba ---------------- */
     window.addEventListener("scroll", () => {

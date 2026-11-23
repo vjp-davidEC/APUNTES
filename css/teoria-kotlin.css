@@ -45,7 +45,7 @@
       --side: 325px;
     }
 
-    [data-theme="dark"] {
+    [data-theme="dark"], html.dark, :root.dark {
       --bg: #070d19;
       --bg-elev: #0b1324;
       --panel: #0f172a;

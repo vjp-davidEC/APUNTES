@@ -23,9 +23,11 @@
     if (isLight) {
       root.setAttribute("data-theme", "light");
       root.classList.remove("dark");
+      root.classList.add("light");
     } else {
       root.setAttribute("data-theme", "dark");
       root.classList.add("dark");
+      root.classList.remove("light");
     }
     const btn = document.getElementById("ut-floating-theme-btn");
     if (btn) {
@@ -49,6 +51,10 @@
   applyTheme(getSavedTheme());
 
   function mountButton() {
+    if (window.self !== window.top) {
+      // Si estamos dentro de un iframe (visor.html), no montar botón duplicado
+      return;
+    }
     let btn = document.getElementById("ut-floating-theme-btn");
     if (!btn) {
       btn = document.createElement("button");
@@ -68,4 +74,5 @@
   }
 
   window.toggleTheme = toggleTheme;
+  window.applyTheme = applyTheme;
 })();

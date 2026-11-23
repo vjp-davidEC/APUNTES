@@ -178,26 +178,66 @@
                     if (doc) {
                         const syncTheme = () => {
                             const curTheme = document.documentElement.getAttribute('data-theme');
-                            if (curTheme === 'light') {
+                            const isLight = curTheme === 'light' || (!curTheme && localStorage.getItem('tema_apuntes') === 'light');
+                            const targetTheme = isLight ? 'light' : 'dark';
+
+                            if (isLight) {
                                 doc.documentElement.setAttribute('data-theme', 'light');
+                                doc.documentElement.dataset.theme = 'light';
+                                doc.documentElement.classList.remove('dark');
+                                doc.documentElement.classList.add('light');
                             } else {
-                                doc.documentElement.removeAttribute('data-theme');
+                                doc.documentElement.setAttribute('data-theme', 'dark');
+                                doc.documentElement.dataset.theme = 'dark';
+                                doc.documentElement.classList.add('dark');
+                                doc.documentElement.classList.remove('light');
                             }
+
+                            try {
+                                if (typeof fallbackFrame.contentWindow.applyTheme === 'function') {
+                                    fallbackFrame.contentWindow.applyTheme(targetTheme);
+                                }
+                            } catch (_) {}
                         };
                         syncTheme();
 
-                        // Ocultar barra interna de volver al inicio si el archivo HTML tiene la suya
-                        const backBars = doc.querySelectorAll('.ut-top-bar, .top-bar');
-                        backBars.forEach(b => {
-                            b.style.display = 'none';
+                        // Inyectar estilos para ocultar botones redundantes de volver y temas
+                        let overrideStyle = doc.getElementById('visor-injected-overrides');
+                        if (!overrideStyle) {
+                            overrideStyle = doc.createElement('style');
+                            overrideStyle.id = 'visor-injected-overrides';
+                            overrideStyle.textContent = `
+                                #ut-floating-theme-btn,
+                                .ut-floating-theme-btn,
+                                #btn-tema,
+                                #theme-toggle,
+                                button[onclick*="toggleTheme"],
+                                .ut-top-bar,
+                                .top-bar {
+                                    display: none !important;
+                                }
+                            `;
+                            (doc.head || doc.documentElement).appendChild(overrideStyle);
+                        }
+
+                        // Ocultar botones y barras directamente en el DOM
+                        const hideElements = [
+                            '#ut-floating-theme-btn',
+                            '.ut-floating-theme-btn',
+                            '#btn-tema',
+                            '#theme-toggle',
+                            'button[onclick*="toggleTheme"]',
+                            '.ut-top-bar',
+                            '.top-bar'
+                        ];
+                        hideElements.forEach(selector => {
+                            doc.querySelectorAll(selector).forEach(el => {
+                                el.style.setProperty('display', 'none', 'important');
+                            });
                         });
 
-                        // Ocultar botón flotante interno de tema para usar el del visor
-                        const innerThemeBtn = doc.getElementById('ut-floating-theme-btn');
-                        if (innerThemeBtn) innerThemeBtn.style.display = 'none';
-
                         const observer = new MutationObserver(syncTheme);
-                        observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+                        observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme', 'class'] });
                     }
                 } catch (e) {
                     // Ignorar si hay restricción cross-origin
