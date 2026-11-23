@@ -4,9 +4,18 @@
         const container = document.getElementById('pdfContainer');
         const fallbackFrame = document.getElementById('fallbackFrame');
         const downloadBtn = document.getElementById('downloadBtn');
+        const downloadText = document.getElementById('downloadText');
         const fileTitle = document.getElementById('fileTitle');
         const moduleBadge = document.getElementById('moduleBadge');
         const faviconEl = document.getElementById('favicon');
+        const backBtn = document.getElementById('backBtn');
+
+        const fromParam = params.get('from');
+        if (fromParam && backBtn) {
+            backBtn.href = fromParam;
+        } else if (document.referrer && document.referrer.includes(window.location.hostname) && backBtn) {
+            backBtn.href = document.referrer;
+        }
 
         const MODULE_ICONS = {
             AD: {
@@ -91,18 +100,24 @@
         }
 
         function detectModuleFromPath(url, fileName) {
+            // 0. Si viene en los parámetros de la URL (?modulo=DI o ?mod=DI)
+            const explicitMod = (params.get('modulo') || params.get('mod') || '').toUpperCase();
+            if (explicitMod && MODULE_ICONS[explicitMod]) {
+                return explicitMod;
+            }
+
             const decoded = decodeURIComponent(url || '');
             // 1. Buscar en la ruta /modulos/<MOD>/ o Temas-<MOD>
             const pathMatch = decoded.match(/(?:modulos[\/\\]|Temas-)(AD|PMYDM|DI|PSP|SSGE|DIGIT|SOST|OPTATIVA)\b/i);
             if (pathMatch) {
                 return pathMatch[1].toUpperCase();
             }
-            // 2. Buscar por prefijo del nombre del archivo PDF (ej. DI-UT3.pdf, PSP-UT02.pdf, AD_...)
+            // 2. Buscar por prefijo del nombre del archivo (ej. DI-UT3.pdf, DI-UT01.html, PSP-UT01.html, AD-UT1.html)
             const nameMatch = (fileName || '').match(/^(AD|PMYDM|DI|PSP|SSGE|DIGIT|SOST|OPTATIVA)[\s\-_]/i);
             if (nameMatch) {
                 return nameMatch[1].toUpperCase();
             }
-            // 3. Buscar coincidencia de clave de módulo en la ruta
+            // 3. Buscar coincidencia de clave de módulo en la ruta completa
             const keys = Object.keys(MODULE_ICONS);
             for (const key of keys) {
                 const regex = new RegExp(`\\b${key}\\b`, 'i');
@@ -130,7 +145,7 @@
                 document.head.appendChild(link);
             }
 
-            // Mostrar insignia e icono del módulo en la barra superior junto al nombre del PDF
+            // Mostrar insignia e icono del módulo en la barra superior junto al nombre del fichero
             if (moduleBadge) {
                 moduleBadge.style.display = 'inline-flex';
                 moduleBadge.style.background = mod.bg;
@@ -145,46 +160,99 @@
 
         function showFallback(url) {
             statusEl.style.display = 'none';
+            if (container) container.style.display = 'none';
             fallbackFrame.src = url;
             fallbackFrame.style.display = 'block';
         }
 
+        function showHtmlDocument(url) {
+            statusEl.style.display = 'none';
+            if (container) container.style.display = 'none';
+            document.body.classList.add('html-mode');
+            fallbackFrame.src = url;
+            fallbackFrame.style.display = 'block';
+
+            fallbackFrame.addEventListener('load', () => {
+                try {
+                    const doc = fallbackFrame.contentDocument || fallbackFrame.contentWindow.document;
+                    if (doc) {
+                        const syncTheme = () => {
+                            const curTheme = document.documentElement.getAttribute('data-theme');
+                            if (curTheme === 'light') {
+                                doc.documentElement.setAttribute('data-theme', 'light');
+                            } else {
+                                doc.documentElement.removeAttribute('data-theme');
+                            }
+                        };
+                        syncTheme();
+
+                        // Ocultar barra interna de volver al inicio si el archivo HTML tiene la suya
+                        const backBars = doc.querySelectorAll('.ut-top-bar, .top-bar');
+                        backBars.forEach(b => {
+                            b.style.display = 'none';
+                        });
+
+                        // Ocultar botón flotante interno de tema para usar el del visor
+                        const innerThemeBtn = doc.getElementById('ut-floating-theme-btn');
+                        if (innerThemeBtn) innerThemeBtn.style.display = 'none';
+
+                        const observer = new MutationObserver(syncTheme);
+                        observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+                    }
+                } catch (e) {
+                    // Ignorar si hay restricción cross-origin
+                }
+            });
+        }
+
         if (!fileUrl) {
-            statusEl.textContent = 'No se ha especificado ningún archivo PDF.';
+            statusEl.textContent = 'No se ha especificado ningún archivo para visualizar.';
         } else {
-            const fileName = decodeURIComponent(fileUrl.split('/').pop());
+            const fileName = decodeURIComponent(fileUrl.split('/').pop().split('?')[0]);
             fileTitle.textContent = fileName;
-            document.title = fileName + ' · Apuntes 2º DAM';
             downloadBtn.href = fileUrl;
+            downloadBtn.setAttribute('download', fileName);
+
+            const isHtml = /\.(html|htm)($|\?)/i.test(fileUrl);
+            if (downloadText) {
+                downloadText.textContent = isHtml ? 'Descargar HTML' : 'Descargar PDF';
+            }
 
             const detectedMod = detectModuleFromPath(fileUrl, fileName);
             if (detectedMod) {
                 applyModuleBranding(detectedMod, fileName);
+            } else {
+                document.title = fileName + ' · Apuntes 2º DAM';
             }
 
-            const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || window.matchMedia('(max-width: 768px)').matches;
-            if (!isMobile) {
-                // En ordenador usamos el visor nativo de PDF integrado dentro de la página con la barra superior de "Volver al inicio"
-                showFallback(fileUrl);
-            } else if (window.pdfjsLib && window.location.protocol !== 'file:') {
-                pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-
-                pdfjsLib.getDocument(fileUrl).promise.then(async (pdf) => {
-                    statusEl.style.display = 'none';
-                    for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
-                        const page = await pdf.getPage(pageNum);
-                        const viewport = page.getViewport({ scale: 1.6 });
-                        const canvas = document.createElement('canvas');
-                        const ctx = canvas.getContext('2d');
-                        canvas.width = viewport.width;
-                        canvas.height = viewport.height;
-                        container.appendChild(canvas);
-                        await page.render({ canvasContext: ctx, viewport }).promise;
-                    }
-                }).catch(() => {
-                    showFallback(fileUrl);
-                });
+            if (isHtml) {
+                // Modo HTML: Mostrar directamente en el iframe integrado con toolbar y branding
+                showHtmlDocument(fileUrl);
             } else {
-                showFallback(fileUrl);
+                // Modo PDF: en ordenador usamos visor nativo de PDF en iframe, en móvil pdfjs
+                const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || window.matchMedia('(max-width: 768px)').matches;
+                if (!isMobile) {
+                    showFallback(fileUrl);
+                } else if (window.pdfjsLib && window.location.protocol !== 'file:') {
+                    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+                    pdfjsLib.getDocument(fileUrl).promise.then(async (pdf) => {
+                        statusEl.style.display = 'none';
+                        for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+                            const page = await pdf.getPage(pageNum);
+                            const viewport = page.getViewport({ scale: 1.6 });
+                            const canvas = document.createElement('canvas');
+                            const ctx = canvas.getContext('2d');
+                            canvas.width = viewport.width;
+                            canvas.height = viewport.height;
+                            container.appendChild(canvas);
+                            await page.render({ canvasContext: ctx, viewport }).promise;
+                        }
+                    }).catch(() => {
+                        showFallback(fileUrl);
+                    });
+                } else {
+                    showFallback(fileUrl);
+                }
             }
         }

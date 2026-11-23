@@ -190,11 +190,22 @@
         });
     });
 
-    // Abrir todos los PDFs en el visor integrado (tanto en ordenador como en móvil) para poder volver siempre a index.html
-    document.querySelectorAll('.pdf-item a[href$=".pdf" i]').forEach(link => {
+    // Abrir todos los documentos (PDF y HTML) en el visor integrado para mostrar toolbar, módulo y volver al inicio
+    document.querySelectorAll('.pdf-item a').forEach(link => {
         link.addEventListener('click', (e) => {
-            e.preventDefault();
             const rawHref = link.getAttribute('href');
-            window.location.href = './visor.html?file=' + encodeURIComponent(rawHref);
+            if (!rawHref || rawHref.startsWith('#')) return;
+
+            const isDoc = /\.(pdf|html|htm)($|\?)/i.test(rawHref) || !/^https?:\/\//i.test(rawHref);
+            if (!isDoc) return;
+
+            e.preventDefault();
+            const card = link.closest('.card');
+            const badgeText = card?.querySelector('.badge')?.textContent?.trim() || '';
+            const dataMod = (card?.getAttribute('data-module') || '').split(' ')[0];
+            const mod = badgeText || dataMod || '';
+            const modQuery = mod ? '&modulo=' + encodeURIComponent(mod) : '';
+
+            window.location.href = './visor.html?file=' + encodeURIComponent(rawHref) + modQuery + '&from=' + encodeURIComponent('./index.html');
         });
     });

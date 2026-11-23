@@ -6,12 +6,16 @@
             item.style.display = item.textContent.toLowerCase().includes(term) ? 'block' : 'none';
         });
     });
-        document.querySelectorAll('.pdf-item a[href$=".pdf" i]').forEach(link => {
+    document.querySelectorAll('.pdf-item a').forEach(link => {
         link.addEventListener('click', (e) => {
-            e.preventDefault();
-            const rawHref = link.getAttribute('href').replace(/^\.\//, '');
-            const relFromRoot = './modulos/SSGE/' + rawHref;
-            window.location.href = '../../visor.html?file=' + encodeURIComponent(relFromRoot);
+            const rawHref = link.getAttribute('href');
+            if (!rawHref || rawHref.startsWith('#')) return;
+            if (/\.(pdf|html|htm)($|\?)/i.test(rawHref) || !/^https?:\/\//i.test(rawHref)) {
+                e.preventDefault();
+                const cleanHref = rawHref.replace(/^\.\//, '');
+                const relFromRoot = './modulos/SSGE/' + cleanHref;
+                window.location.href = '../../visor.html?file=' + encodeURIComponent(relFromRoot) + '&modulo=SSGE&from=' + encodeURIComponent('./modulos/SSGE/index.html');
+            }
         });
     });
     // Control de Tema Claro / Oscuro sincronizado

@@ -997,7 +997,7 @@
                             </div>
                         </div>
                         <div class="file-actions-group">
-                            <a href="${item.href}" target="_blank" class="btn-view-file">Abrir</a>
+                            <a href="visor.html?file=${encodeURIComponent(item.href)}&modulo=${encodeURIComponent(item.modulo)}&from=admin.html" target="_blank" class="btn-view-file">Abrir en visor</a>
                             <button type="button" class="btn-delete-file" onclick="eliminarApunteDeIndex(${idx})" title="Quitar este apunte de index.html">
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <polyline points="3 6 5 6 21 6"></polyline>
