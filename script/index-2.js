@@ -165,6 +165,33 @@
         }
     });
 
+    // Ocultar en index.html cualquier documento que haya sido marcado como oculto (🔒) en su módulo
+    function sincronizarOcultosDesdeLocalStorage() {
+        document.querySelectorAll('.card').forEach(card => {
+            const badgeText = card.querySelector('.badge')?.textContent?.trim() || '';
+            const dataMod = (card.getAttribute('data-module') || '').split(' ')[0];
+            const mod = (badgeText || dataMod || '').toUpperCase();
+            if (!mod) return;
+
+            let savedMap = {};
+            try {
+                const raw = localStorage.getItem(`ocultos_${mod}`);
+                if (raw) savedMap = JSON.parse(raw);
+            } catch (_) {}
+
+            card.querySelectorAll('.pdf-item').forEach(li => {
+                const a = li.querySelector('a');
+                if (!a) return;
+                const href = (a.getAttribute('href') || '').trim();
+                const relHref = href.replace(new RegExp(`^\\.?\\/modulos\\/${mod}\\/`, 'i'), './');
+                if (savedMap[relHref] === true || savedMap[href] === true) {
+                    li.remove();
+                }
+            });
+        });
+    }
+    sincronizarOcultosDesdeLocalStorage();
+
     // Filtro en tiempo real por tema o asignatura
     const searchInput = document.getElementById('searchInput');
     const cards = document.querySelectorAll('.card');

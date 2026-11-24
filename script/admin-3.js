@@ -1480,6 +1480,39 @@
             return '<!DOCTYPE html>\n' + doc.documentElement.outerHTML;
         }
 
+        // Cuando un apunte se oculta en modulos/<MOD>/index.html, se borra del index.html principal;
+        // cuando se vuelve a mostrar, se vuelve a insertar en el index.html principal.
+        function sincronizarVisibilidadEnIndexPrincipalHtml(indexHtmlText, modulo, hrefEnModulo, titulo, tipo, ocultar) {
+            const cleanModHref = (hrefEnModulo || '').trim().replace(/^\.\//, '');
+            const fullHrefIndex = /^https?:\/\//i.test(cleanModHref)
+                ? cleanModHref
+                : `./modulos/${modulo}/${cleanModHref}`;
+            const targetFileName = decodeURIComponent(cleanModHref.split('/').pop() || '');
+            const targetNorm = decodeURIComponent(fullHrefIndex).trim();
+
+            if (ocultar) {
+                // Quitar el <li class="pdf-item"> correspondiente de index.html
+                return indexHtmlText.replace(
+                    /[ \t]*<li class="pdf-item">(?:(?!<\/li>)[\s\S])*?<\/li>[ \t]*\r?\n?/gi,
+                    (bloqueLi) => {
+                        const m = bloqueLi.match(/href=["']([^"']+)["']/i);
+                        if (!m) return bloqueLi;
+                        const h = m[1].trim();
+                        const hDec = decodeURIComponent(h).trim();
+                        const hFile = hDec.split('/').pop() || '';
+                        if (h === fullHrefIndex || hDec === targetNorm || (targetFileName && hFile === targetFileName && hDec.includes(`/${modulo}/`))) {
+                            return '';
+                        }
+                        return bloqueLi;
+                    }
+                );
+            } else {
+                // Volver a añadir el <li class="pdf-item"> a la sección de ese módulo en index.html si no estaba
+                const res = insertarApunteEnIndexHtml(indexHtmlText, modulo, fullHrefIndex, titulo, tipo);
+                return res.updated || indexHtmlText;
+            }
+        }
+
         window.alternarVisibilidadApunteModulo = async function(idx) {
             const item = apuntesVisibilidadFiltrados[idx];
             if (!item) return;
@@ -1515,10 +1548,9 @@
                 btn.innerHTML = `<span>Guardando...</span>`;
             }
 
-            // 1. Si hay Token de GitHub configurado (funciona en móvil y PC), actualizar modulos/<MOD>/index.html en el repositorio de GitHub
+            // 1. Si hay Token de GitHub configurado (funciona en móvil y PC), actualizar modulos/<MOD>/index.html Y TAMBIÉN index.html principal en GitHub
             if (ghCfg.token) {
                 try {
-                    actualizarBannerVisibilidadGithub(`⏳ Guardando cambio en GitHub (<code>modulos/${mod}/index.html</code>)...`, '#38bdf8');
                     const modPath = `modulos/${mod}/index.html`;
                     const ghMod = await githubGetFile(modPath, ghCfg);
                     if (!ghMod) {
@@ -1535,19 +1567,36 @@
                         ghCfg,
                         ghMod.sha
                     );
-                    actualizarBannerVisibilidadGithub(
-                        `✓ <strong>¡Guardado en GitHub!</strong> "${item.titulo}" ahora está <strong>${nuevoEstadoOculto ? '🔒 Oculto' : '👁️ Visible'}</strong> en <code>modulos/${mod}/index.html</code>.`,
-                        '#4ade80'
-                    );
+
+                    // Actualizar también el index.html principal (borrarlo de index.html si se oculta, o volverlo a poner si se muestra)
+                    const ghIndex = await githubGetFile('index.html', ghCfg);
+                    if (ghIndex && ghIndex.text) {
+                        const nuevoIndexHtml = sincronizarVisibilidadEnIndexPrincipalHtml(
+                            ghIndex.text,
+                            mod,
+                            item.href,
+                            item.titulo,
+                            item.tipo,
+                            nuevoEstadoOculto
+                        );
+                        if (nuevoIndexHtml !== ghIndex.text) {
+                            await githubPutFile(
+                                'index.html',
+                                utf8ToBase64(nuevoIndexHtml),
+                                `${nuevoEstadoOculto ? 'Quitar (oculto)' : 'Mostrar'} ${item.titulo} en index.html`,
+                                ghCfg,
+                                ghIndex.sha
+                            );
+                        }
+                    }
                 } catch (e) {
                     console.error("Error al sincronizar visibilidad en GitHub:", e);
-                    actualizarBannerVisibilidadGithub(`❌ Error al guardar en GitHub: ${e.message}`, '#f87171');
                     alert("Error al guardar en GitHub: " + e.message);
                     renderizarApuntesVisibilidad();
                     return;
                 }
             } else if (localProjectHandle) {
-                // 2. Si tiene la carpeta local conectada en PC, actualizar modulos/<MOD>/index.html en disco
+                // 2. Si tiene la carpeta local conectada en PC, actualizar modulos/<MOD>/index.html Y TAMBIÉN index.html principal en disco
                 try {
                     const modulosDir = await localProjectHandle.getDirectoryHandle('modulos', { create: false });
                     const modDir = await modulosDir.getDirectoryHandle(mod, { create: false });
@@ -1559,10 +1608,24 @@
                         const writable = await modIndexHandle.createWritable();
                         await writable.write(nuevoHtml);
                         await writable.close();
-                        actualizarBannerVisibilidadGithub(
-                            `✓ <strong>¡Guardado en carpeta local!</strong> "${item.titulo}" ahora está <strong>${nuevoEstadoOculto ? '🔒 Oculto' : '👁️ Visible'}</strong> en <code>modulos/${mod}/index.html</code>.`,
-                            '#4ade80'
-                        );
+                    }
+
+                    // Actualizar también index.html principal en disco
+                    const indexHandle = await localProjectHandle.getFileHandle('index.html', { create: false });
+                    const indexFile = await indexHandle.getFile();
+                    const indexHtml = await indexFile.text();
+                    const nuevoIndexHtml = sincronizarVisibilidadEnIndexPrincipalHtml(
+                        indexHtml,
+                        mod,
+                        item.href,
+                        item.titulo,
+                        item.tipo,
+                        nuevoEstadoOculto
+                    );
+                    if (nuevoIndexHtml !== indexHtml) {
+                        const writableIndex = await indexHandle.createWritable();
+                        await writableIndex.write(nuevoIndexHtml);
+                        await writableIndex.close();
                     }
                 } catch (e) {
                     console.error("No se pudo actualizar el archivo local:", e);
