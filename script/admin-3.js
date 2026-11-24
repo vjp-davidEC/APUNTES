@@ -134,7 +134,7 @@
             document.getElementById('enlaceApunte').value = ruta;
             const aviso = document.getElementById('aviso-carpeta-local');
             if (aviso) {
-                aviso.innerHTML = `💡 <em>Para usarlo localmente en GitHub, guarda este archivo en <code>modulos/${modulo}/Temas-${modulo}/${nombreArchivo}</code></em>`;
+                aviso.innerHTML = `💡 <em>Al guardar, se colocará en <code>modulos/${modulo}/Temas-${modulo}/${nombreArchivo}</code> y se añadirá automáticamente tanto a <code>index.html</code> como a <code>modulos/${modulo}/index.html</code>.</em>`;
             }
         }
 
@@ -203,7 +203,12 @@
                 return htmlText;
             }
             const bloqueLi = `            <li class="pdf-item"><a href="${enlaceRelativoModulo}"><span>${titulo}</span><span class="pdf-tag">${tipo}</span></a></li>`;
-            return htmlText.replace(/(<ul class=["']pdf-list["']>[\s\S]*?)([ \t]*<\/ul>)/i, (_, g1, g2) => `${g1}${bloqueLi}\n${g2}`);
+            // Buscar primero <ul class="pdf-list" id="visibleList"> y como fallback cualquier <ul class="pdf-list" ...>
+            const visibleUlRegex = /(<ul[^>]*id=["']visibleList["'][^>]*>[\s\S]*?)([ \t]*<\/ul>)/i;
+            if (visibleUlRegex.test(htmlText)) {
+                return htmlText.replace(visibleUlRegex, (_, g1, g2) => `${g1}${bloqueLi}\n${g2}`);
+            }
+            return htmlText.replace(/(<ul[^>]*class=["']pdf-list["'][^>]*>[\s\S]*?)([ \t]*<\/ul>)/i, (_, g1, g2) => `${g1}${bloqueLi}\n${g2}`);
         }
 
         function fileToBase64(file) {
