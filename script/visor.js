@@ -245,6 +245,150 @@
             });
         }
 
+        async function buildStandaloneHtml(htmlUrl) {
+            const absHtmlUrl = new URL(htmlUrl, window.location.href).href;
+            const res = await fetch(absHtmlUrl);
+            if (!res.ok) throw new Error('No se pudo obtener el HTML');
+            const rawHtml = await res.text();
+
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(rawHtml, 'text/html');
+
+            // Mantener el tema (oscuro/claro) activo actualmente en el visor al exportar
+            const curTheme = document.documentElement.getAttribute('data-theme');
+            const isLight = curTheme === 'light' || (!curTheme && localStorage.getItem('tema_apuntes') === 'light');
+            if (isLight) {
+                doc.documentElement.setAttribute('data-theme', 'light');
+                doc.documentElement.classList.remove('dark');
+            } else {
+                doc.documentElement.setAttribute('data-theme', 'dark');
+                doc.documentElement.classList.add('dark');
+            }
+
+            // Ocultar botones de "Volver al inicio" que apuntan a rutas relativas inexistentes fuera de la web
+            doc.querySelectorAll('.ut-top-bar, .ut-floating-back-btn').forEach(el => el.remove());
+
+            // 1. Incrustar todas las hojas de estilo locales (<link rel="stylesheet" href="...">) como <style> inline
+            const links = Array.from(doc.querySelectorAll('link[rel="stylesheet"][href]'));
+            for (const link of links) {
+                const href = link.getAttribute('href');
+                if (!href || /^https?:\/\//i.test(href)) continue;
+                try {
+                    const cssUrl = new URL(href, absHtmlUrl).href;
+                    const cssRes = await fetch(cssUrl);
+                    if (cssRes.ok) {
+                        const cssText = await cssRes.text();
+                        const styleEl = doc.createElement('style');
+                        styleEl.setAttribute('data-inlined-from', href);
+                        styleEl.textContent = cssText;
+                        link.replaceWith(styleEl);
+                    }
+                } catch (_) {}
+            }
+
+            // 2. Incrustar todos los scripts locales (<script src="...">) como <script> inline para que conserve el botón de tema e interactividad
+            const scripts = Array.from(doc.querySelectorAll('script[src]'));
+            for (const script of scripts) {
+                const src = script.getAttribute('src');
+                if (!src || /^https?:\/\//i.test(src)) continue;
+                try {
+                    const jsUrl = new URL(src, absHtmlUrl).href;
+                    const jsRes = await fetch(jsUrl);
+                    if (jsRes.ok) {
+                        const jsText = await jsRes.text();
+                        const inlineScript = doc.createElement('script');
+                        inlineScript.setAttribute('data-inlined-from', src);
+                        const typeAttr = script.getAttribute('type');
+                        if (typeAttr) inlineScript.setAttribute('type', typeAttr);
+                        // Evitar que una cadena "</script>" dentro del JS rompa el HTML
+                        inlineScript.textContent = jsText.replace(/<\/script>/gi, '<\\/script>');
+                        script.replaceWith(inlineScript);
+                    }
+                } catch (_) {}
+            }
+
+            // 3. Si no se pudo hacer fetch (p. ej. abriendo con file://), extraer las reglas CSS directamente del iframe ya cargado
+            const remainingLocalLinks = doc.querySelectorAll('link[rel="stylesheet"][href]:not([href^="http"])');
+            if (remainingLocalLinks.length > 0 && fallbackFrame.contentDocument) {
+                try {
+                    let combinedCss = '';
+                    for (const sheet of Array.from(fallbackFrame.contentDocument.styleSheets)) {
+                        if (sheet.href && !sheet.href.startsWith('http://') && !sheet.href.startsWith('https://') || sheet.href && sheet.href.startsWith(window.location.origin)) {
+                            try {
+                                for (const rule of Array.from(sheet.cssRules)) {
+                                    combinedCss += rule.cssText + '\n';
+                                }
+                            } catch (_) {}
+                        }
+                    }
+                    if (combinedCss) {
+                        const styleEl = doc.createElement('style');
+                        styleEl.textContent = combinedCss;
+                        doc.head.appendChild(styleEl);
+                        remainingLocalLinks.forEach(l => l.remove());
+                    }
+                } catch (_) {}
+            }
+
+            return '<!DOCTYPE html>\n' + doc.documentElement.outerHTML;
+        }
+
+        function setupHtmlDownload(url, fileName) {
+            if (!downloadBtn) return;
+            downloadBtn.addEventListener('click', async (e) => {
+                e.preventDefault();
+                const originalLabel = downloadText ? downloadText.textContent : 'Descargar HTML';
+                try {
+                    if (downloadText) downloadText.textContent = 'Preparando HTML...';
+                    const standaloneHtml = await buildStandaloneHtml(url);
+                    const blob = new Blob([standaloneHtml], { type: 'text/html;charset=utf-8' });
+                    const blobUrl = URL.createObjectURL(blob);
+                    const tempLink = document.createElement('a');
+                    tempLink.href = blobUrl;
+                    tempLink.download = fileName;
+                    document.body.appendChild(tempLink);
+                    tempLink.click();
+                    tempLink.remove();
+                    setTimeout(() => URL.revokeObjectURL(blobUrl), 5000);
+                } catch (_) {
+                    // Fallback: si falla fetch en protocolo file:// y tampoco hay acceso al DOM, clonar desde el iframe si está disponible
+                    try {
+                        const iframeDoc = fallbackFrame.contentDocument || fallbackFrame.contentWindow?.document;
+                        if (iframeDoc) {
+                            const clone = iframeDoc.documentElement.cloneNode(true);
+                            clone.querySelector('#visor-injected-overrides')?.remove();
+                            let cssDump = '';
+                            for (const sheet of Array.from(iframeDoc.styleSheets)) {
+                                try {
+                                    for (const rule of Array.from(sheet.cssRules)) {
+                                        cssDump += rule.cssText + '\n';
+                                    }
+                                } catch (_) {}
+                            }
+                            if (cssDump) {
+                                const st = document.createElement('style');
+                                st.textContent = cssDump;
+                                clone.querySelector('head')?.appendChild(st);
+                            }
+                            const blob = new Blob(['<!DOCTYPE html>\n' + clone.outerHTML], { type: 'text/html;charset=utf-8' });
+                            const blobUrl = URL.createObjectURL(blob);
+                            const tempLink = document.createElement('a');
+                            tempLink.href = blobUrl;
+                            tempLink.download = fileName;
+                            document.body.appendChild(tempLink);
+                            tempLink.click();
+                            tempLink.remove();
+                            setTimeout(() => URL.revokeObjectURL(blobUrl), 5000);
+                            return;
+                        }
+                    } catch (__) {}
+                    window.location.href = url;
+                } finally {
+                    if (downloadText) downloadText.textContent = originalLabel;
+                }
+            });
+        }
+
         if (!fileUrl) {
             statusEl.textContent = 'No se ha especificado ningún archivo para visualizar.';
         } else {
@@ -256,6 +400,9 @@
             const isHtml = /\.(html|htm)($|\?)/i.test(fileUrl);
             if (downloadText) {
                 downloadText.textContent = isHtml ? 'Descargar HTML' : 'Descargar PDF';
+            }
+            if (isHtml) {
+                setupHtmlDownload(fileUrl, fileName);
             }
 
             const detectedMod = detectModuleFromPath(fileUrl, fileName);
