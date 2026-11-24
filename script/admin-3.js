@@ -203,12 +203,37 @@
                 return htmlText;
             }
             const bloqueLi = `            <li class="pdf-item"><a href="${enlaceRelativoModulo}"><span>${titulo}</span><span class="pdf-tag">${tipo}</span></a></li>`;
-            // Buscar primero <ul class="pdf-list" id="visibleList"> y como fallback cualquier <ul class="pdf-list" ...>
-            const visibleUlRegex = /(<ul[^>]*id=["']visibleList["'][^>]*>[\s\S]*?)([ \t]*<\/ul>)/i;
+            // 1. Buscar <ul class="pdf-list" id="visibleList"> (sin cruzar a otros <ul>)
+            const visibleUlRegex = /(<ul[^>]*id=["']visibleList["'][^>]*>(?:(?!<\/ul>)[\s\S])*?)([ \t]*<\/ul>)/i;
             if (visibleUlRegex.test(htmlText)) {
                 return htmlText.replace(visibleUlRegex, (_, g1, g2) => `${g1}${bloqueLi}\n${g2}`);
             }
-            return htmlText.replace(/(<ul[^>]*class=["']pdf-list["'][^>]*>[\s\S]*?)([ \t]*<\/ul>)/i, (_, g1, g2) => `${g1}${bloqueLi}\n${g2}`);
+            // 2. Fallback: primer <ul class="pdf-list"...> sin cruzar su propio </ul>
+            return htmlText.replace(/(<ul[^>]*class=["']pdf-list["'][^>]*>(?:(?!<\/ul>)[\s\S])*?)([ \t]*<\/ul>)/i, (_, g1, g2) => `${g1}${bloqueLi}\n${g2}`);
+        }
+
+        // Sincronizar automáticamente a modulos/<MODULO>/index.html cualquier enlace que esté en el index.html principal pero falte en su módulo
+        function extraerApuntesPorModuloDeIndex(indexHtmlText) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(indexHtmlText, 'text/html');
+            const mapa = {};
+            doc.querySelectorAll('section.card').forEach(sec => {
+                const dataMod = (sec.getAttribute('data-module') || '').trim().split(/\s+/)[0].toUpperCase();
+                const badgeMod = (sec.querySelector('.badge')?.textContent || '').trim().toUpperCase();
+                const mod = dataMod || badgeMod;
+                if (!mod) return;
+                mapa[mod] = [];
+                sec.querySelectorAll('.pdf-item a').forEach(a => {
+                    const href = (a.getAttribute('href') || '').trim();
+                    const titulo = (a.querySelector('span:first-child')?.textContent || a.textContent || '').trim();
+                    const tipo = (a.querySelector('.pdf-tag')?.textContent || (href.toLowerCase().endsWith('.pdf') ? 'PDF' : 'HTML')).trim();
+                    if (href) {
+                        const relHref = href.replace(new RegExp(`^\\.?\\/modulos\\/${mod}\\/`, 'i'), './');
+                        mapa[mod].push({ href: relHref, titulo, tipo });
+                    }
+                });
+            });
+            return mapa;
         }
 
         function fileToBase64(file) {
@@ -443,28 +468,37 @@
                         await writableIndex.close();
                     }
 
-                    // 3. Insertar el <li> también en modulos/<MODULO>/index.html
+                    // 3. Insertar el <li> también en modulos/<MODULO>/index.html (y sincronizar cualquier otro apunte de ese módulo que estuviera en index.html)
                     let modActualizado = false;
+                    let errorModMsg = '';
                     try {
                         const modulosDir = await localProjectHandle.getDirectoryHandle('modulos', { create: false });
                         const modDir = await modulosDir.getDirectoryHandle(modulo, { create: false });
                         const modIndexHandle = await modDir.getFileHandle('index.html', { create: false });
                         const modIndexFile = await modIndexHandle.getFile();
-                        const modHtmlText = await modIndexFile.text();
-                        const enlaceMod = localFile ? `./Temas-${modulo}/${localFile.name}` : enlace.replace(`./modulos/${modulo}/`, './');
-                        const modUpdated = insertarApunteEnModuloHtml(modHtmlText, enlaceMod, titulo, tipo);
+                        let modHtmlText = await modIndexFile.text();
+                        const enlaceMod = localFile ? `./Temas-${modulo}/${localFile.name}` : enlace.replace(new RegExp(`^\\.?\\/modulos\\/${modulo}\\/`, 'i'), './');
+                        modHtmlText = insertarApunteEnModuloHtml(modHtmlText, enlaceMod, titulo, tipo);
+
+                        // Sincronizar también todos los apuntes de este módulo presentes en index.html
+                        const todosDelMod = extraerApuntesPorModuloDeIndex(res.updated)[modulo] || [];
+                        for (const ap of todosDelMod) {
+                            modHtmlText = insertarApunteEnModuloHtml(modHtmlText, ap.href, ap.titulo, ap.tipo);
+                        }
+
                         const writableMod = await modIndexHandle.createWritable();
-                        await writableMod.write(modUpdated);
+                        await writableMod.write(modHtmlText);
                         await writableMod.close();
                         modActualizado = true;
                     } catch (e) {
                         console.warn('No se actualizó el index.html del módulo:', e);
+                        errorModMsg = e.message || String(e);
                     }
 
-                    statusMsg.style.color = "#4ade80";
-                    statusMsg.innerText = res.alreadyExists
-                        ? `✓ Fichero guardado en modulos/${modulo}/Temas-${modulo}/ y el enlace ya existía en index.html${modActualizado ? ` y en modulos/${modulo}/index.html` : ''}.`
-                        : `✓ ¡Fichero guardado en modulos/${modulo}/Temas-${modulo}/ y <li> creado automáticamente en index.html${modActualizado ? ` y en modulos/${modulo}/index.html` : ''}!`;
+                    statusMsg.style.color = modActualizado ? "#4ade80" : "#fbbf24";
+                    statusMsg.innerText = modActualizado
+                        ? `✓ ¡Guardado en modulos/${modulo}/Temas-${modulo}/ y añadido tanto a index.html como a modulos/${modulo}/index.html!`
+                        : `⚠️ Se añadió a index.html pero falló al actualizar modulos/${modulo}/index.html: ${errorModMsg}`;
                     return;
                 } catch (err) {
                     if (err.name === 'AbortError') {
@@ -502,21 +536,26 @@
                     }
 
                     let modActualizado = false;
-                    try {
-                        const modPath = `modulos/${modulo}/index.html`;
-                        const ghMod = await githubGetFile(modPath, ghCfg);
-                        if (ghMod) {
-                            const enlaceMod = localFile ? `./Temas-${modulo}/${localFile.name}` : enlace.replace(`./modulos/${modulo}/`, './');
-                            const modUpdated = insertarApunteEnModuloHtml(ghMod.text, enlaceMod, titulo, tipo);
-                            if (modUpdated !== ghMod.text) {
-                                await githubPutFile(modPath, utf8ToBase64(modUpdated), `Añadir ${titulo} a ${modPath}`, ghCfg, ghMod.sha);
-                            }
-                            modActualizado = true;
+                    const modPath = `modulos/${modulo}/index.html`;
+                    const ghMod = await githubGetFile(modPath, ghCfg);
+                    if (ghMod) {
+                        const enlaceMod = localFile ? `./Temas-${modulo}/${localFile.name}` : enlace.replace(new RegExp(`^\\.?\\/modulos\\/${modulo}\\/`, 'i'), './');
+                        let modUpdated = insertarApunteEnModuloHtml(ghMod.text, enlaceMod, titulo, tipo);
+
+                        // Sincronizar también todos los apuntes de este módulo presentes en index.html
+                        const todosDelMod = extraerApuntesPorModuloDeIndex(resIndex.updated)[modulo] || [];
+                        for (const ap of todosDelMod) {
+                            modUpdated = insertarApunteEnModuloHtml(modUpdated, ap.href, ap.titulo, ap.tipo);
                         }
-                    } catch (_) {}
+
+                        if (modUpdated !== ghMod.text) {
+                            await githubPutFile(modPath, utf8ToBase64(modUpdated), `Añadir ${titulo} a ${modPath}`, ghCfg, ghMod.sha);
+                        }
+                        modActualizado = true;
+                    }
 
                     statusMsg.style.color = "#4ade80";
-                    statusMsg.innerText = `✓ ¡Subido a GitHub! Fichero guardado en modulos/${modulo}/Temas-${modulo}/ y añadido a index.html${modActualizado ? ` y modulos/${modulo}/index.html` : ''}.`;
+                    statusMsg.innerText = `✓ ¡Subido a GitHub! Fichero guardado en modulos/${modulo}/Temas-${modulo}/ y añadido tanto a index.html como a modulos/${modulo}/index.html.`;
                     return;
                 } catch (errGh) {
                     console.error("Error GitHub:", errGh);
