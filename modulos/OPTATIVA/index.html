@@ -16,7 +16,7 @@
             <button type="button" class="theme-toggle-btn" id="btnToggleTema" onclick="alternarTema()" aria-label="Cambiar tema">
                 <span id="theme-icon" style="display:inline-flex;align-items:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-3px"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></span> <span id="theme-text">Oscuro</span>
             </button>
-            <button type="button" class="badge" id="toggleHiddenBtn">OPTATIVA</button>
+            <button type="button" class="badge" id="toggleHiddenBtn" title="Mostrar u ocultar documentos ocultos">OPTATIVA</button>
         </div>
     </div>
     <header>
@@ -27,14 +27,14 @@
         </div>
     </header>
     <main class="card">
-        <ul class="pdf-list">
+        <ul class="pdf-list" id="visibleList">
             <li class="pdf-item"><a href="./Temas-OPTATIVA/OPTATIVA-UT1.html"><span>UT 01 · Gestión y configuración de Sistemas Operativos mediante comandos</span><span class="pdf-tag">HTML</span></a></li>
             <li class="pdf-item"><a href="./Temas-OPTATIVA/OPTATIVA-UT2.html"><span>UT 02 · Instalación, configuración y uso de servicios de acceso y administración remota -- SSH</span><span class="pdf-tag">HTML</span></a></li>
         </ul>
 
         <section class="hidden-section" id="hiddenSection">
-            <p class="hidden-title">🔒 PDFs ocultos</p>
-            <ul class="pdf-list">
+            <p class="hidden-title">🔒 PDFs / HTMLs ocultos</p>
+            <ul class="pdf-list" id="hiddenList">
                 <li class="pdf-item"><a href="./Temas-OPTATIVA/PDF/Cuestionario_de_Comandos_y_Sistemas.pdf"><span>Tema01</span><span class="pdf-tag">PDF</span></a></li>
                 <li class="pdf-item"><a href="./Temas-OPTATIVA/PDF/Cuestionario_Administracion_Remota_y_SSH.pdf"><span>Tema02</span><span class="pdf-tag">PDF</span></a></li>
             </ul>

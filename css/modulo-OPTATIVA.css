@@ -107,3 +107,35 @@ body *:not(code):not(pre):not(pre *):not(kbd):not(samp):not(i[class*="fa-"]):not
   flex-shrink: 0;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
 }
+
+/* ==========================================================================
+   Sección de PDFs / HTMLs ocultos (al pulsar la insignia del módulo)
+   ========================================================================== */
+.badge {
+  border: none;
+  cursor: pointer;
+  user-select: none;
+  transition: box-shadow 0.2s, transform 0.15s, background-color 0.2s;
+}
+.badge:hover {
+  transform: scale(1.04);
+}
+.badge.active {
+  box-shadow: 0 0 0 2px var(--accent);
+}
+.hidden-section {
+  display: none;
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px dashed var(--border);
+}
+.hidden-section.visible {
+  display: block;
+}
+.hidden-title {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}

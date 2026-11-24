@@ -1,11 +1,52 @@
     const searchInput = document.getElementById('searchInput');
-    const items = document.querySelectorAll('.pdf-item');
-    searchInput.addEventListener('input', (e) => {
-        const term = e.target.value.trim().toLowerCase();
-        items.forEach(item => {
-            item.style.display = item.textContent.toLowerCase().includes(term) ? 'block' : 'none';
+    const toggleHiddenBtn = document.getElementById('toggleHiddenBtn');
+    const hiddenSection = document.getElementById('hiddenSection');
+    const visibleList = document.getElementById('visibleList') || document.querySelector('main.card > ul.pdf-list');
+    const hiddenList = document.getElementById('hiddenList') || (hiddenSection ? hiddenSection.querySelector('ul.pdf-list') : null);
+    const STORAGE_HIDDEN_KEY = 'ocultos_SSGE';
+
+    function applyAdminHiddenOverrides() {
+        if (!visibleList || !hiddenList) return;
+        let savedMap = {};
+        try {
+            const raw = localStorage.getItem(STORAGE_HIDDEN_KEY);
+            if (raw) savedMap = JSON.parse(raw);
+        } catch (_) {}
+
+        document.querySelectorAll('.pdf-item').forEach(li => {
+            const link = li.querySelector('a');
+            const href = link ? (link.getAttribute('href') || '').trim() : '';
+            if (!href) return;
+            if (Object.prototype.hasOwnProperty.call(savedMap, href)) {
+                const shouldHide = Boolean(savedMap[href]);
+                if (shouldHide && !hiddenList.contains(li)) {
+                    hiddenList.appendChild(li);
+                } else if (!shouldHide && !visibleList.contains(li)) {
+                    visibleList.appendChild(li);
+                }
+            }
         });
-    });
+    }
+
+    applyAdminHiddenOverrides();
+
+    if (toggleHiddenBtn && hiddenSection) {
+        toggleHiddenBtn.addEventListener('click', () => {
+            if (hiddenList && hiddenList.querySelectorAll('.pdf-item').length === 0) return;
+            hiddenSection.classList.toggle('visible');
+            toggleHiddenBtn.classList.toggle('active');
+        });
+    }
+
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            const term = e.target.value.trim().toLowerCase();
+            document.querySelectorAll('.pdf-item').forEach(item => {
+                item.style.display = item.textContent.toLowerCase().includes(term) ? 'block' : 'none';
+            });
+        });
+    }
+
     document.querySelectorAll('.pdf-item a').forEach(link => {
         link.addEventListener('click', (e) => {
             const rawHref = link.getAttribute('href');
@@ -18,6 +59,7 @@
             }
         });
     });
+
     // Control de Tema Claro / Oscuro sincronizado
     function aplicarTema(tema) {
         const btnIcon = document.getElementById('theme-icon');
@@ -34,10 +76,10 @@
         try { localStorage.setItem('tema_apuntes', tema); } catch(e) {}
     }
 
-    function alternarTema() {
+    window.alternarTema = function() {
         const actual = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
         const nuevo = actual === 'light' ? 'dark' : 'light';
         aplicarTema(nuevo);
-    }
+    };
 
     aplicarTema(localStorage.getItem('tema_apuntes') || 'dark');

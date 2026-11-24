@@ -536,6 +536,31 @@
             const modal = document.getElementById('modalEliminarArchivos');
             if (modal) {
                 modal.style.display = 'flex';
+                cambiarTabGestor('index');
+            }
+        };
+
+        window.abrirModalVisibilidadModulos = function() {
+            const menu = document.getElementById('menuAjustes');
+            if (menu) menu.classList.remove('show');
+            const modal = document.getElementById('modalEliminarArchivos');
+            if (modal) {
+                modal.style.display = 'flex';
+                cambiarTabGestor('visibilidad');
+            }
+        };
+
+        window.cambiarTabGestor = function(tab) {
+            document.getElementById('tabBtnIndex')?.classList.toggle('active', tab === 'index');
+            document.getElementById('tabBtnVisibilidad')?.classList.toggle('active', tab === 'visibilidad');
+            const pIndex = document.getElementById('panelTabIndex');
+            const pVis = document.getElementById('panelTabVisibilidad');
+            if (pIndex) pIndex.style.display = tab === 'index' ? 'block' : 'none';
+            if (pVis) pVis.style.display = tab === 'visibilidad' ? 'block' : 'none';
+
+            if (tab === 'visibilidad') {
+                cargarApuntesVisibilidadModulos();
+            } else {
                 cargarApuntesDeIndexHtml();
             }
         };
@@ -1213,5 +1238,324 @@
                 console.error("Error al eliminar el apunte:", err);
                 alert("Error al eliminar el apunte: " + err.message);
             }
+        };
+
+        // --- 4. GESTIÓN DE VISIBILIDAD (OCULTAR / MOSTRAR PDFs Y HTMLs EN MODULOS/*/INDEX.HTML) ---
+        let apuntesVisibilidadList = [];
+        let apuntesVisibilidadFiltrados = [];
+
+        function actualizarBannerVisibilidadGithub(mensajeExtra = '', colorExtra = '') {
+            const banner = document.getElementById('visibilidadGithubStatus');
+            if (!banner) return;
+            if (mensajeExtra) {
+                banner.style.color = colorExtra || '#38bdf8';
+                banner.innerHTML = mensajeExtra;
+                return;
+            }
+            const ghCfg = getGithubConfig();
+            if (ghCfg.token) {
+                banner.style.color = '#4ade80';
+                banner.innerHTML = `✓ <strong>Modo GitHub activo (${ghCfg.repo} · ${ghCfg.branch})</strong>: Al pulsar <em>Ocultar</em> o <em>Mostrar</em> desde el móvil o PC, los cambios se guardan directamente en GitHub para todos los dispositivos`;
+            } else if (localProjectHandle) {
+                banner.style.color = '#4ade80';
+                banner.innerHTML = `Los cambios se guardan directamente en <code>modulos/*/index.html</code>`;
+            } else {
+                banner.style.color = '#fbbf24';
+                banner.innerHTML = `Los cambios no se guardan en ningún sitio hasta que no configures tu Token en Ajustes`;
+            }
+        }
+
+        async function leerHtmlDeModulo(mod) {
+            const relPath = `modulos/${mod}/index.html`;
+            const ghCfg = getGithubConfig();
+            // Priorizar GitHub API si hay Token configurado (fundamental en móvil para no leer caché antigua de GitHub Pages)
+            if (ghCfg.token) {
+                try {
+                    const ghFile = await githubGetFile(relPath, ghCfg);
+                    if (ghFile && ghFile.text) return { text: ghFile.text, fromGithub: true };
+                } catch (_) {}
+            }
+            if (localProjectHandle) {
+                try {
+                    const modulosDir = await localProjectHandle.getDirectoryHandle('modulos', { create: false });
+                    const modDir = await modulosDir.getDirectoryHandle(mod, { create: false });
+                    const fileHandle = await modDir.getFileHandle('index.html', { create: false });
+                    const fileObj = await fileHandle.getFile();
+                    return { text: await fileObj.text(), fromLocal: true };
+                } catch (_) {}
+            }
+            try {
+                const resp = await fetch(`${relPath}?t=${Date.now()}`, { cache: 'no-store' });
+                if (resp.ok) return { text: await resp.text(), fromFetch: true };
+            } catch (_) {}
+            return { text: '' };
+        }
+
+        window.cargarApuntesVisibilidadModulos = async function() {
+            const container = document.getElementById('listaApuntesVisibilidad');
+            actualizarBannerVisibilidadGithub();
+            if (container) {
+                container.innerHTML = '<div style="text-align: center; padding: 2rem; color: var(--text-muted);">Leyendo documentos de todos los módulos...</div>';
+            }
+
+            apuntesVisibilidadList = [];
+            const parser = new DOMParser();
+
+            // Leer todos los módulos en paralelo para que cargue rápido en móvil
+            const resultados = await Promise.all(
+                MODULOS_LIST.map(async (mod) => ({ mod, res: await leerHtmlDeModulo(mod) }))
+            );
+
+            for (const { mod, res } of resultados) {
+                const htmlText = res.text;
+                if (!htmlText) continue;
+
+                const doc = parser.parseFromString(htmlText, 'text/html');
+                let savedMap = {};
+                try {
+                    const raw = localStorage.getItem(`ocultos_${mod}`);
+                    if (raw) savedMap = JSON.parse(raw);
+                } catch (_) {}
+
+                const hiddenSec = doc.getElementById('hiddenSection') || doc.querySelector('.hidden-section');
+                const items = doc.querySelectorAll('.pdf-item');
+
+                items.forEach(li => {
+                    const a = li.querySelector('a');
+                    if (!a) return;
+                    const href = (a.getAttribute('href') || '').trim();
+                    const titleSpan = a.querySelector('span:first-child');
+                    const tagSpan = a.querySelector('.pdf-tag');
+                    const titulo = titleSpan ? titleSpan.textContent.trim() : a.textContent.trim();
+                    const tipo = tagSpan ? tagSpan.textContent.trim() : (href.toLowerCase().endsWith('.pdf') ? 'PDF' : 'HTML');
+
+                    const inHiddenHtml = hiddenSec ? hiddenSec.contains(li) : false;
+                    // Si viene de GitHub o disco local, la verdad es la posición real en el HTML; si además se acaba de cambiar en localStorage, sincronizarlo
+                    const isHidden = res.fromGithub || res.fromLocal
+                        ? inHiddenHtml
+                        : (Object.prototype.hasOwnProperty.call(savedMap, href) ? Boolean(savedMap[href]) : inHiddenHtml);
+
+                    apuntesVisibilidadList.push({
+                        modulo: mod,
+                        titulo,
+                        href,
+                        tipo,
+                        oculto: isHidden
+                    });
+                });
+            }
+
+            filtrarApuntesVisibilidad();
+        };
+
+        window.filtrarApuntesVisibilidad = function() {
+            const texto = (document.getElementById('filtroVisTexto')?.value || '').trim().toLowerCase();
+            const modulo = (document.getElementById('filtroVisModulo')?.value || '').trim().toUpperCase();
+            const estado = (document.getElementById('filtroVisEstado')?.value || '').trim().toLowerCase();
+
+            apuntesVisibilidadFiltrados = apuntesVisibilidadList.filter(item => {
+                const coincideTexto = !texto || item.titulo.toLowerCase().includes(texto) || item.href.toLowerCase().includes(texto);
+                const coincideModulo = !modulo || item.modulo === modulo;
+                const coincideEstado = !estado || (estado === 'oculto' ? item.oculto : !item.oculto);
+                return coincideTexto && coincideModulo && coincideEstado;
+            });
+
+            renderizarApuntesVisibilidad();
+        };
+
+        function renderizarApuntesVisibilidad() {
+            const container = document.getElementById('listaApuntesVisibilidad');
+            if (!container) return;
+
+            if (apuntesVisibilidadFiltrados.length === 0) {
+                container.innerHTML = `<div style="text-align: center; padding: 2.5rem; color: var(--text-muted);">
+                    No se encontraron documentos con los filtros seleccionados.
+                </div>`;
+                return;
+            }
+
+            container.innerHTML = apuntesVisibilidadFiltrados.map((item, idx) => {
+                const badgeClass = item.tipo.toLowerCase() === 'pdf' ? 'badge-pdf' : 'badge-html';
+                const statusBadge = item.oculto
+                    ? `<span style="font-size:0.75rem;padding:0.15rem 0.5rem;border-radius:5px;background:rgba(251,191,36,0.15);color:#fbbf24;border:1px solid rgba(251,191,36,0.35);font-weight:700;">🔒 Oculto</span>`
+                    : `<span style="font-size:0.75rem;padding:0.15rem 0.5rem;border-radius:5px;background:rgba(74,222,128,0.14);color:#4ade80;border:1px solid rgba(74,222,128,0.35);font-weight:700;">👁️ Visible</span>`;
+
+                const btnStyle = item.oculto
+                    ? `background:rgba(74,222,128,0.14);border:1px solid rgba(74,222,128,0.4);color:#4ade80;`
+                    : `background:rgba(251,191,36,0.14);border:1px solid rgba(251,191,36,0.4);color:#fbbf24;`;
+
+                const btnIcon = item.oculto
+                    ? `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>`
+                    : `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>`;
+
+                const btnLabel = item.oculto ? 'Mostrar en lista principal' : 'Ocultar (mover a 🔒)';
+
+                return `
+                    <div class="file-item-card">
+                        <div class="file-item-info">
+                            <span class="file-icon-badge ${badgeClass}">${item.tipo}</span>
+                            <div style="min-width: 0; flex: 1;">
+                                <div class="file-name-text" title="${item.titulo}" style="display:flex;align-items:center;gap:0.5rem;flex-wrap:wrap;">
+                                    <span>${item.titulo}</span>
+                                    ${statusBadge}
+                                </div>
+                                <div class="file-path-subtext"><strong>${item.modulo}</strong> &bull; ${item.href}</div>
+                            </div>
+                        </div>
+                        <div class="file-actions-group">
+                            <button type="button" id="btnVisToggle_${idx}" class="btn-delete-file" style="${btnStyle}" onclick="alternarVisibilidadApunteModulo(${idx})" title="${btnLabel}">
+                                ${btnIcon}
+                                <span>${item.oculto ? 'Mostrar' : 'Ocultar'}</span>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function moverLiEntreVisibleYOcultoEnHtml(htmlText, targetHref, moverAOcultos) {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(htmlText, 'text/html');
+            const visibleList = doc.getElementById('visibleList') || doc.querySelector('main.card > ul.pdf-list');
+            let hiddenSection = doc.getElementById('hiddenSection') || doc.querySelector('.hidden-section');
+            if (!visibleList) return null;
+
+            if (!hiddenSection) {
+                const mainCard = doc.querySelector('main.card');
+                if (!mainCard) return null;
+                hiddenSection = doc.createElement('section');
+                hiddenSection.className = 'hidden-section';
+                hiddenSection.id = 'hiddenSection';
+                hiddenSection.innerHTML = `\n            <p class="hidden-title">🔒 PDFs / HTMLs ocultos</p>\n            <ul class="pdf-list" id="hiddenList">\n            </ul>\n        `;
+                mainCard.appendChild(hiddenSection);
+            }
+
+            const hiddenList = doc.getElementById('hiddenList') || hiddenSection.querySelector('ul.pdf-list');
+            if (!hiddenList) return null;
+
+            const targetNorm = decodeURIComponent(targetHref).trim();
+            let targetLi = null;
+            doc.querySelectorAll('.pdf-item').forEach(li => {
+                const a = li.querySelector('a');
+                if (!a) return;
+                const h = (a.getAttribute('href') || '').trim();
+                if (h === targetHref || decodeURIComponent(h).trim() === targetNorm) {
+                    targetLi = li;
+                }
+            });
+
+            if (!targetLi) return null;
+
+            if (moverAOcultos) {
+                hiddenList.appendChild(targetLi);
+            } else {
+                visibleList.appendChild(targetLi);
+            }
+
+            return '<!DOCTYPE html>\n' + doc.documentElement.outerHTML;
+        }
+
+        window.alternarVisibilidadApunteModulo = async function(idx) {
+            const item = apuntesVisibilidadFiltrados[idx];
+            if (!item) return;
+
+            const ghCfg = getGithubConfig();
+            const btn = document.getElementById(`btnVisToggle_${idx}`);
+
+            // Si estamos en móvil (o sin carpeta local) y no hay Token de GitHub configurado, avisar claramente igual que al subir/eliminar
+            if (!ghCfg.token && !localProjectHandle) {
+                if (typeof window.showDirectoryPicker === 'function') {
+                    try {
+                        localProjectHandle = await window.showDirectoryPicker({
+                            id: 'apuntes_folder',
+                            mode: 'readwrite'
+                        });
+                    } catch (_) {
+                        alert("Para ocultar o mostrar documentos desde el móvil o sin carpeta local, configura primero tu Token de GitHub en ⚙️ Ajustes (arriba a la derecha).");
+                        return;
+                    }
+                } else {
+                    alert("Para ocultar o mostrar documentos desde el móvil (iPhone / Android) o Firefox, configura tu Token de GitHub en ⚙️ Ajustes (arriba a la derecha).");
+                    return;
+                }
+            }
+
+            const nuevoEstadoOculto = !item.oculto;
+            const mod = item.modulo;
+            const storageKey = `ocultos_${mod}`;
+
+            if (btn) {
+                btn.disabled = true;
+                btn.style.opacity = '0.65';
+                btn.innerHTML = `<span>Guardando...</span>`;
+            }
+
+            // 1. Si hay Token de GitHub configurado (funciona en móvil y PC), actualizar modulos/<MOD>/index.html en el repositorio de GitHub
+            if (ghCfg.token) {
+                try {
+                    actualizarBannerVisibilidadGithub(`⏳ Guardando cambio en GitHub (<code>modulos/${mod}/index.html</code>)...`, '#38bdf8');
+                    const modPath = `modulos/${mod}/index.html`;
+                    const ghMod = await githubGetFile(modPath, ghCfg);
+                    if (!ghMod) {
+                        throw new Error(`No se encontró ${modPath} en el repositorio de GitHub.`);
+                    }
+                    const nuevoHtml = moverLiEntreVisibleYOcultoEnHtml(ghMod.text, item.href, nuevoEstadoOculto);
+                    if (!nuevoHtml) {
+                        throw new Error(`No se encontró el enlace "${item.href}" dentro de ${modPath}.`);
+                    }
+                    await githubPutFile(
+                        modPath,
+                        utf8ToBase64(nuevoHtml),
+                        `${nuevoEstadoOculto ? 'Ocultar' : 'Mostrar'} ${item.titulo} en ${modPath}`,
+                        ghCfg,
+                        ghMod.sha
+                    );
+                    actualizarBannerVisibilidadGithub(
+                        `✓ <strong>¡Guardado en GitHub!</strong> "${item.titulo}" ahora está <strong>${nuevoEstadoOculto ? '🔒 Oculto' : '👁️ Visible'}</strong> en <code>modulos/${mod}/index.html</code>.`,
+                        '#4ade80'
+                    );
+                } catch (e) {
+                    console.error("Error al sincronizar visibilidad en GitHub:", e);
+                    actualizarBannerVisibilidadGithub(`❌ Error al guardar en GitHub: ${e.message}`, '#f87171');
+                    alert("Error al guardar en GitHub: " + e.message);
+                    renderizarApuntesVisibilidad();
+                    return;
+                }
+            } else if (localProjectHandle) {
+                // 2. Si tiene la carpeta local conectada en PC, actualizar modulos/<MOD>/index.html en disco
+                try {
+                    const modulosDir = await localProjectHandle.getDirectoryHandle('modulos', { create: false });
+                    const modDir = await modulosDir.getDirectoryHandle(mod, { create: false });
+                    const modIndexHandle = await modDir.getFileHandle('index.html', { create: false });
+                    const modFile = await modIndexHandle.getFile();
+                    const modHtml = await modFile.text();
+                    const nuevoHtml = moverLiEntreVisibleYOcultoEnHtml(modHtml, item.href, nuevoEstadoOculto);
+                    if (nuevoHtml) {
+                        const writable = await modIndexHandle.createWritable();
+                        await writable.write(nuevoHtml);
+                        await writable.close();
+                        actualizarBannerVisibilidadGithub(
+                            `✓ <strong>¡Guardado en carpeta local!</strong> "${item.titulo}" ahora está <strong>${nuevoEstadoOculto ? '🔒 Oculto' : '👁️ Visible'}</strong> en <code>modulos/${mod}/index.html</code>.`,
+                            '#4ade80'
+                        );
+                    }
+                } catch (e) {
+                    console.error("No se pudo actualizar el archivo local:", e);
+                    alert("Error al guardar en la carpeta local: " + e.message);
+                    renderizarApuntesVisibilidad();
+                    return;
+                }
+            }
+
+            // 3. Guardar también en localStorage para que el cambio se vea al instante sin esperar a la caché de GitHub Pages
+            try {
+                const raw = localStorage.getItem(storageKey);
+                const map = raw ? JSON.parse(raw) : {};
+                map[item.href] = nuevoEstadoOculto;
+                localStorage.setItem(storageKey, JSON.stringify(map));
+            } catch (_) {}
+
+            item.oculto = nuevoEstadoOculto;
+            renderizarApuntesVisibilidad();
         };
     

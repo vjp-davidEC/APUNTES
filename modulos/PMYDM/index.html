@@ -16,7 +16,7 @@
             <button type="button" class="theme-toggle-btn" id="btnToggleTema" onclick="alternarTema()" aria-label="Cambiar tema">
                 <span id="theme-icon" style="display:inline-flex;align-items:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-3px"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></span> <span id="theme-text">Oscuro</span>
             </button>
-            <span class="badge" style="display:inline-flex;align-items:center;gap:0.35rem"><svg width="15" height="15" viewBox="0 0 24 24" aria-hidden="true"><path fill="#3DDC84" d="M17.6 11.48 L19.44 8.3 a0.63 0.63 0 0 0 -1.09 -0.63 l-1.88 3.24 a11.43 11.43 0 0 0 -8.94 0 L5.65 7.67 a0.63 0.63 0 0 0 -1.09 0.63 L6.4 11.48 A10.81 10.81 0 0 0 1 20 h22 A10.81 10.81 0 0 0 17.6 11.48 Z M7 17.25 A1.25 1.25 0 1 1 8.25 16 A1.25 1.25 0 0 1 7 17.25 Z M17 17.25 A1.25 1.25 0 1 1 18.25 16 A1.25 1.25 0 0 1 17 17.25 Z"/></svg><span>PMYDM</span></span>
+            <button type="button" class="badge" id="toggleHiddenBtn" title="Mostrar u ocultar documentos ocultos" style="display:inline-flex;align-items:center;gap:0.35rem"><svg width="15" height="15" viewBox="0 0 24 24" aria-hidden="true"><path fill="#3DDC84" d="M17.6 11.48 L19.44 8.3 a0.63 0.63 0 0 0 -1.09 -0.63 l-1.88 3.24 a11.43 11.43 0 0 0 -8.94 0 L5.65 7.67 a0.63 0.63 0 0 0 -1.09 0.63 L6.4 11.48 A10.81 10.81 0 0 0 1 20 h22 A10.81 10.81 0 0 0 17.6 11.48 Z M7 17.25 A1.25 1.25 0 1 1 8.25 16 A1.25 1.25 0 0 1 7 17.25 Z M17 17.25 A1.25 1.25 0 1 1 18.25 16 A1.25 1.25 0 0 1 17 17.25 Z"/></svg><span>PMYDM</span></button>
         </div>
     </div>
     <header>
@@ -27,10 +27,16 @@
         </div>
     </header>
     <main class="card">
-        <ul class="pdf-list">
+        <ul class="pdf-list" id="visibleList">
             <li class="pdf-item"><a href="./Temas-PMYDM/PMYDM-UT1-2.html"><span>UT 01-02 · Android y Kotlin</span><span class="pdf-tag">HTML</span></a></li>
             <li class="pdf-item"><a href="./Varios/explicacion_Kotlin.html"><span>UT 03-04-05-06-07-08 · Android Studio</span><span class="pdf-tag">HTML</span></a></li>
         </ul>
+
+        <section class="hidden-section" id="hiddenSection">
+            <p class="hidden-title">🔒 PDFs / HTMLs ocultos</p>
+            <ul class="pdf-list" id="hiddenList">
+            </ul>
+        </section>
     </main>
 </div>
 <script src="../../script/modulo-PMYDM-2.js"></script>
