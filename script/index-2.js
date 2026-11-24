@@ -165,9 +165,10 @@
         }
     });
 
-    // Ocultar en index.html cualquier documento que haya sido marcado como oculto (🔒) en su módulo
-    function sincronizarOcultosDesdeLocalStorage() {
-        document.querySelectorAll('.card').forEach(card => {
+    // Ocultar en index.html cualquier documento que esté en la sección #hiddenSection de modulos/*/index.html o en localStorage
+    async function sincronizarOcultosConModulos() {
+        const cardsList = Array.from(document.querySelectorAll('.card'));
+        await Promise.all(cardsList.map(async (card) => {
             const badgeText = card.querySelector('.badge')?.textContent?.trim() || '';
             const dataMod = (card.getAttribute('data-module') || '').split(' ')[0];
             const mod = (badgeText || dataMod || '').toUpperCase();
@@ -179,18 +180,44 @@
                 if (raw) savedMap = JSON.parse(raw);
             } catch (_) {}
 
+            // Leer también modulos/<MOD>/index.html para detectar qué enlaces están dentro de #hiddenSection
+            const hiddenHrefsInFile = new Set();
+            try {
+                const resp = await fetch(`./modulos/${mod}/index.html?t=${Date.now()}`, { cache: 'no-store' });
+                if (resp.ok) {
+                    const modHtml = await resp.text();
+                    const parser = new DOMParser();
+                    const modDoc = parser.parseFromString(modHtml, 'text/html');
+                    const hiddenSec = modDoc.getElementById('hiddenSection') || modDoc.querySelector('.hidden-section');
+                    if (hiddenSec) {
+                        hiddenSec.querySelectorAll('.pdf-item a').forEach(a => {
+                            const h = (a.getAttribute('href') || '').trim();
+                            if (h) {
+                                hiddenHrefsInFile.add(h);
+                                hiddenHrefsInFile.add(decodeURIComponent(h).split('/').pop() || '');
+                            }
+                        });
+                    }
+                }
+            } catch (_) {}
+
             card.querySelectorAll('.pdf-item').forEach(li => {
                 const a = li.querySelector('a');
                 if (!a) return;
                 const href = (a.getAttribute('href') || '').trim();
                 const relHref = href.replace(new RegExp(`^\\.?\\/modulos\\/${mod}\\/`, 'i'), './');
-                if (savedMap[relHref] === true || savedMap[href] === true) {
+                const fileName = decodeURIComponent(href).split('/').pop() || '';
+                const hiddenByStorage = savedMap[relHref] === true || savedMap[href] === true;
+                const shownByStorage = savedMap[relHref] === false || savedMap[href] === false;
+                const hiddenInModHtml = !shownByStorage && (hiddenHrefsInFile.has(relHref) || (fileName && hiddenHrefsInFile.has(fileName)));
+
+                if (hiddenByStorage || hiddenInModHtml) {
                     li.remove();
                 }
             });
-        });
+        }));
     }
-    sincronizarOcultosDesdeLocalStorage();
+    sincronizarOcultosConModulos();
 
     // Filtro en tiempo real por tema o asignatura
     const searchInput = document.getElementById('searchInput');
