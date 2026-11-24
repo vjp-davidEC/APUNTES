@@ -1244,26 +1244,7 @@
         let apuntesVisibilidadList = [];
         let apuntesVisibilidadFiltrados = [];
 
-        function actualizarBannerVisibilidadGithub(mensajeExtra = '', colorExtra = '') {
-            const banner = document.getElementById('visibilidadGithubStatus');
-            if (!banner) return;
-            if (mensajeExtra) {
-                banner.style.color = colorExtra || '#38bdf8';
-                banner.innerHTML = mensajeExtra;
-                return;
-            }
-            const ghCfg = getGithubConfig();
-            if (ghCfg.token) {
-                banner.style.color = '#4ade80';
-                banner.innerHTML = `✓ <strong>Modo GitHub activo (${ghCfg.repo} · ${ghCfg.branch})</strong>: Al pulsar <em>Ocultar</em> o <em>Mostrar</em> desde el móvil o PC, los cambios se guardan directamente en GitHub para todos los dispositivos`;
-            } else if (localProjectHandle) {
-                banner.style.color = '#4ade80';
-                banner.innerHTML = `Los cambios se guardan directamente en <code>modulos/*/index.html</code>`;
-            } else {
-                banner.style.color = '#fbbf24';
-                banner.innerHTML = `Los cambios no se guardan en ningún sitio hasta que no configures tu Token en Ajustes`;
-            }
-        }
+        function actualizarBannerVisibilidadGithub() {}
 
         async function leerHtmlDeModulo(mod) {
             const relPath = `modulos/${mod}/index.html`;
