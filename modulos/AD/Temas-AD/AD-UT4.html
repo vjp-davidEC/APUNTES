@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -15,8 +15,7 @@
       <span>Volver al inicio</span>
     </a>
   </div>
-
-  <h1 class="doc-title">Acceso a Datos - RA3: Herramientas ORM</h1>
+<h1 class="doc-title">Acceso a Datos - RA3: Herramientas ORM</h1>
   <p class="doc-subtitle">Mapeo Objeto-Relacional: Arquitectura y Configuración con Hibernate y JPA</p>
 
   <!-- SECCIÓN 1: INTRODUCCIÓN Y CONCEPTO ORM -->
@@ -358,7 +357,7 @@ public static void main(String[] args) {
   </table>
 
   <!-- ========================================================================= -->
-  <!-- NUEVO BLOQUE: ENTIDADES, VALORES Y CICLO DE VIDA (PDF 02)                 -->
+  <!-- BLOQUE 2: ENTIDADES, VALORES Y CICLO DE VIDA (PDF 02)                     -->
   <!-- ========================================================================= -->
   <div class="page-break"></div>
   <p class="doc-subtitle">Entidades, Valores y Ciclo de Vida en JPA e Hibernate</p>
@@ -575,7 +574,7 @@ EntityTransaction tx = em.getTransaction();
 try {
     tx.begin();
 
-    // 1. PERSIST: Guardar nuevo objeto (Transient -> Managed)
+    // 1. PERSIST: Guardar nuevo objeto (Transient -&gt; Managed)
     Estudiante nuevo = new Estudiante("Ana", "Ruiz");
     em.persist(nuevo); // Con IDENTITY ejecuta INSERT inmediatamente y asigna ID
 
@@ -636,6 +635,494 @@ try {
         <td><strong>Se pierden cambios realizados después de llamar a <code>merge()</code></strong></td>
         <td>Se continúa modificando la variable original (que permanece en estado <em>detached</em>) en lugar de la copia devuelta.</td>
         <td>Asignar y trabajar siempre con la referencia gestionada que retorna el método: <code>entidad = em.merge(entidad);</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ========================================================================= -->
+  <!-- BLOQUE 3: ASOCIACIONES ENTRE ENTIDADES (PDF 03)                           -->
+  <!-- ========================================================================= -->
+  <div class="page-break"></div>
+  <p class="doc-subtitle">Asociaciones entre Entidades en JPA e Hibernate</p>
+
+  <!-- SECCIÓN 12: INTRODUCCIÓN A ASOCIACIONES -->
+  <div class="pdf-section">12. Introducción a las Asociaciones entre Entidades</div>
+  <p>En los modelos de dominio relacionales, las entidades están conectadas entre sí mediante <strong>claves externas (<em>foreign keys</em>)</strong>, que consisten en la presencia de la clave primaria de una tabla dentro de otra (o en la misma tabla en relaciones reflexivas).</p>
+  <p>En JPA, una asociación se modela como un atributo cuyo tipo es otra entidad o una colección de entidades, pudiendo configurarse de forma <strong>unidireccional</strong> (navegable solo desde un extremo) o <strong>bidireccional</strong> (navegable desde ambos extremos).</p>
+
+  <!-- SECCIÓN 13: MANY-TO-ONE Y JOINCOLUMN -->
+  <div class="pdf-section">13. Asociación Many-To-One (Muchos a Uno) y @JoinColumn</div>
+  <p>Es la asociación más habitual y representa una relación padre/hijo donde el lado <em>muchos</em> es el hijo y el lado <em>uno</em> es el padre (sin confundirse con herencia). En su versión unidireccional, la asociación se define únicamente en el lado <em>muchos</em> mediante <code>@ManyToOne</code>.</p>
+
+  <h2>13.1. Propiedades de @JoinColumn y @ForeignKey</h2>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 28%;">Propiedad</th>
+        <th style="width: 72%;">Función y Comportamiento</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>name</code></td>
+        <td>Especifica el nombre de la columna clave externa en la tabla (ej. <code>persona_id</code>).</td>
+      </tr>
+      <tr>
+        <td><code>foreignKey</code></td>
+        <td>Permite nombrar la restricción de clave externa mediante <code>@ForeignKey(name = "fk_...")</code> o desactivarla con <code>ConstraintMode.NO_CONSTRAINT</code>.</td>
+      </tr>
+      <tr>
+        <td><code>referencedColumnName</code></td>
+        <td>Indica la columna destino del <code>JOIN</code> (por defecto JPA asume la clave primaria de la entidad objetivo).</td>
+      </tr>
+      <tr>
+        <td><code>nullable</code> / <code>unique</code></td>
+        <td>Añaden restricciones <code>NOT NULL</code> (default <code>true</code>) o <code>UNIQUE</code> (default <code>false</code>) sobre la columna clave externa.</td>
+      </tr>
+      <tr>
+        <td><code>insertable</code> / <code>updatable</code></td>
+        <td>Indican si la columna participa en <code>INSERT</code> y <code>UPDATE</code> (default <code>true</code>). Se establecen a <code>false</code> si la misma columna está mapeada dos veces en la entidad (como atributo escalar y como asociación) para evitar el error de columna duplicada.</td>
+      </tr>
+      <tr>
+        <td><code>columnDefinition</code> / <code>table</code></td>
+        <td>Definen el fragmento SQL exacto de creación de columna o la tabla específica donde realizar el <code>JOIN</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Código Ejemplo: Asociación @ManyToOne Unidireccional (Telefono &rarr; Persona)</div>
+    <pre><code>@Entity
+@Table(name = "personas")
+public class Persona {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String nombre;
+
+    protected Persona() {}
+    public Persona(String nombre) { this.nombre = nombre; }
+    // getters y setters...
+}
+
+@Entity
+@Table(name = "telefonos")
+public class Telefono {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String numero;
+
+    @ManyToOne
+    @JoinColumn(name = "persona_id", foreignKey = @ForeignKey(name = "fk_telefono_persona"))
+    private Persona persona;
+
+    protected Telefono() {}
+    public Telefono(String numero) { this.numero = numero; }
+    public void setPersona(Persona persona) { this.persona = persona; }
+}
+
+// Uso: persistir primero el lado padre ("uno") y después el hijo ("muchos")
+Persona pepe = new Persona("Pepe");
+Telefono telefono = new Telefono("924000000");
+telefono.setPersona(pepe);
+em.persist(pepe);
+em.persist(telefono); // Ejecuta INSERT con persona_id = id de Pepe</code></pre>
+  </div>
+
+  <!-- SECCIÓN 14: ONE-TO-MANY -->
+  <div class="page-break"></div>
+  <div class="pdf-section">14. Asociación One-To-Many (Uno a Muchos)</div>
+  <p>Enlaza la entidad padre con una colección de entidades hijas. Puede implementarse de forma unidireccional o bidireccional, existiendo diferencias importantes en el esquema relacional generado y en su eficiencia.</p>
+
+  <h2>14.1. One-To-Many Unidireccional vs. Bidireccional</h2>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 24%;">Modalidad</th>
+        <th style="width: 38%;">Esquema Generado en BD</th>
+        <th style="width: 38%;">Sincronización y Eficiencia</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Unidireccional</strong><br><code>@OneToMany</code> solo en el padre</td>
+        <td>Crea <strong>3 tablas</strong>: padre, hija y una tabla intermedia (ej. <code>personas_telefonos</code>) con restricción <code>UNIQUE</code> en el ID del hijo.</td>
+        <td>Se gestiona añadiendo elementos directamente a la lista del padre. Quitar un hijo requiere borrar una fila de la tabla intermedia.</td>
+      </tr>
+      <tr>
+        <td><strong>Bidireccional</strong><br><code>@OneToMany(mappedBy)</code> en padre + <code>@ManyToOne</code> en hijo</td>
+        <td>Crea solo <strong>2 tablas</strong>: la clave externa reside en la tabla hija (el <strong>lado propietario</strong>). Sin tabla intermedia.</td>
+        <td>Más eficiente (quitar un hijo es un simple <code>UPDATE</code> a <code>NULL</code> o un <code>DELETE</code> con <code>orphanRemoval</code>). Requiere métodos auxiliares (<code>addX</code> / <code>removeX</code>) para sincronizar ambos lados.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p><strong>Atributos clave de <code>@OneToMany</code>:</strong> <code>cascade = CascadeType.ALL</code> propaga las operaciones del padre (guardar, borrar) a sus hijos, y <code>orphanRemoval = true</code> elimina automáticamente de la base de datos cualquier hijo que sea retirado de la colección del padre.</p>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Código Ejemplo: @OneToMany Bidireccional con Métodos de Sincronización</div>
+    <pre><code>// LADO INVERSO (Padre)
+@Entity
+@Table(name = "personas")
+public class PersonaBidireccional {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String nombre;
+
+    @OneToMany(mappedBy = "persona", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List&lt;TelefonoBidireccional&gt; telefonos = new ArrayList&lt;&gt;();
+
+    protected PersonaBidireccional() {}
+    public PersonaBidireccional(String nombre) { this.nombre = nombre; }
+
+    // Métodos auxiliares obligatorios para mantener ambos lados sincronizados
+    public void addTelefono(TelefonoBidireccional telefono) {
+        telefonos.add(telefono);
+        telefono.setPersona(this); // Actualiza el lado propietario
+    }
+
+    public void removeTelefono(TelefonoBidireccional telefono) {
+        telefonos.remove(telefono);
+        telefono.setPersona(null);
+    }
+}
+
+// LADO PROPIETARIO (Hijo: contiene la clave externa en BD)
+@Entity
+@Table(name = "telefonos")
+public class TelefonoBidireccional {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String numero;
+
+    @ManyToOne
+    @JoinColumn(name = "persona_id")
+    private PersonaBidireccional persona;
+
+    protected TelefonoBidireccional() {}
+    public TelefonoBidireccional(String numero) { this.numero = numero; }
+    public void setPersona(PersonaBidireccional persona) { this.persona = persona; }
+}</code></pre>
+  </div>
+
+  <!-- SECCIÓN 15: ONE-TO-ONE -->
+  <div class="page-break"></div>
+  <div class="pdf-section">15. Asociación One-To-One (Uno a Uno)</div>
+  <p>Asocia una única instancia de una entidad con una única instancia de otra. En la variante unidireccional, la clave externa con restricción de unicidad (<code>UQ</code>) reside en la entidad que declara <code>@OneToOne</code> y <code>@JoinColumn</code>. En la variante bidireccional, es recomendable situar la clave externa en la entidad dependiente (lado propietario) y usar <code>mappedBy</code> en la entidad principal.</p>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Código Ejemplo: @OneToOne Bidireccional (TelefonoOneBi &harr; DetallesTelefonoBi)</div>
+    <pre><code>// LADO INVERSO (Principal)
+@Entity
+@Table(name = "telefonos")
+public class TelefonoOneBi {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String numero;
+
+    @OneToOne(mappedBy = "telefono", cascade = CascadeType.ALL, orphanRemoval = true)
+    private DetallesTelefonoBi detalles;
+
+    protected TelefonoOneBi() {}
+    public TelefonoOneBi(String numero) { this.numero = numero; }
+
+    public void addDetalles(DetallesTelefonoBi detalles) {
+        detalles.setTelefono(this);
+        this.detalles = detalles;
+    }
+
+    public void removeDetalles() {
+        if (detalles != null) {
+            detalles.setTelefono(null);
+            this.detalles = null;
+        }
+    }
+}
+
+// LADO PROPIETARIO (Dependiente: aloja la FK telefono_id con restricción UNIQUE)
+@Entity
+@Table(name = "detalles_telefono")
+public class DetallesTelefonoBi {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String proveedor;
+    private String tecnologia;
+
+    @OneToOne
+    @JoinColumn(name = "telefono_id")
+    private TelefonoOneBi telefono;
+
+    protected DetallesTelefonoBi() {}
+    public DetallesTelefonoBi(String proveedor, String tecnologia) {
+        this.proveedor = proveedor;
+        this.tecnologia = tecnologia;
+    }
+    public void setTelefono(TelefonoOneBi telefono) { this.telefono = telefono; }
+}</code></pre>
+  </div>
+
+  <!-- SECCIÓN 16: MANY-TO-MANY Y CRITERIOS DE DISEÑO -->
+  <div class="page-break"></div>
+  <div class="pdf-section">16. Asociación Many-To-Many (Muchos a Muchos)</div>
+  <p>Modela relaciones donde múltiples registros de una tabla se vinculan con múltiples registros de otra (ej. <code>Libro</code> y <code>Autor</code>). A nivel físico requiere una <strong>tabla intermedia</strong> con dos claves externas. El lado propietario define dicha tabla con <code>@JoinTable</code>, mientras que el lado inverso utiliza <code>mappedBy</code>.</p>
+
+  <ul>
+    <li><strong>Uso de <code>Set</code> en lugar de <code>List</code>:</strong> Evita duplicados en la colección (un mismo autor no debe figurar dos veces en el mismo libro).</li>
+    <li><strong>Precaución con <code>CascadeType</code>:</strong> Nunca se debe aplicar <code>CascadeType.REMOVE</code> ni <code>CascadeType.ALL</code> en una relación <code>@ManyToMany</code>, ya que borrar un libro eliminaría también a sus autores aunque tengan otros libros asociados.</li>
+    <li><strong>Tablas intermedias con atributos propios:</strong> Si la relación necesita guardar datos adicionales (ej. orden de firma de autores), la tabla intermedia debe transformarse en una entidad intermedia con dos relaciones <code>@ManyToOne</code>.</li>
+    <li><strong>¿Unidireccional o bidireccional?:</strong> Solo conviene implementar bidireccionalidad cuando se vaya a navegar frecuentemente en ambos sentidos; si no, es preferible mantenerla unidireccional o resolver el lado inverso mediante consultas JPQL.</li>
+  </ul>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Código Ejemplo: @ManyToMany Bidireccional (Libro &harr; Autor)</div>
+    <pre><code>// LADO PROPIETARIO (Define la tabla intermedia con @JoinTable)
+@Entity
+@Table(name = "libros")
+public class Libro {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String titulo;
+
+    @ManyToMany
+    @JoinTable(
+        name = "libro_autor",
+        joinColumns = @JoinColumn(name = "libro_id"),
+        inverseJoinColumns = @JoinColumn(name = "autor_id")
+    )
+    private Set&lt;Autor&gt; autores = new HashSet&lt;&gt;();
+
+    protected Libro() {}
+    public Libro(String titulo) { this.titulo = titulo; }
+
+    public void addAutor(Autor autor) {
+        autores.add(autor);
+        autor.getLibros().add(this);
+    }
+
+    public void removeAutor(Autor autor) {
+        autores.remove(autor);
+        autor.getLibros().remove(this);
+    }
+}
+
+// LADO INVERSO
+@Entity
+@Table(name = "autores")
+public class Autor {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private String nombre;
+
+    @ManyToMany(mappedBy = "autores")
+    private Set&lt;Libro&gt; libros = new HashSet&lt;&gt;();
+
+    protected Autor() {}
+    public Autor(String nombre) { this.nombre = nombre; }
+    public Set&lt;Libro&gt; getLibros() { return libros; }
+}</code></pre>
+  </div>
+
+  <!-- SECCIÓN 17: ERRORES FRECUENTES EN ASOCIACIONES -->
+  <div class="pdf-section">17. Diagnóstico de Errores Frecuentes en Asociaciones</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 32%;">Error o Síntoma</th>
+        <th style="width: 34%;">Causa</th>
+        <th style="width: 34%;">Solución</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>"failed to lazily initialize a collection ... no Session"</code></td>
+        <td>Se intenta recorrer una colección (<code>@OneToMany</code> o <code>@ManyToMany</code>) con carga perezosa (<em>Lazy</em>) después de haber cerrado el <code>EntityManager</code>.</td>
+        <td>Acceder y procesar la colección mientras el <code>EntityManager</code> sigue abierto.</td>
+      </tr>
+      <tr>
+        <td><code>TransientPropertyValueException</code><br><em>("references an unsaved transient instance")</em></td>
+        <td>Se intenta guardar una entidad hija cuya entidad padre asociada aún está en estado <em>transient</em> (no guardada en BD).</td>
+        <td>Persistir primero la entidad padre antes que la hija, o configurar propagación en cascada desde el padre.</td>
+      </tr>
+      <tr>
+        <td><strong>La clave externa queda a <code>NULL</code> y no se produce ningún error</strong></td>
+        <td>En una asociación bidireccional solo se actualizó la colección del lado inverso (<code>mappedBy</code>) sin asignar el lado propietario.</td>
+        <td>Utilizar siempre los métodos auxiliares que sincronizan ambos extremos (<code>addTelefono()</code>, <code>addAutor()</code>).</td>
+      </tr>
+      <tr>
+        <td><code>"Column 'persona_id' is duplicated in mapping for entity"</code></td>
+        <td>La misma columna física está mapeada dos veces en la entidad (como atributo escalar y como relación).</td>
+        <td>Configurar <code>insertable = false, updatable = false</code> en una de las dos declaraciones.</td>
+      </tr>
+      <tr>
+        <td><strong>Se eliminan entidades relacionadas que no debían borrarse</strong></td>
+        <td>Uso indebido de <code>cascade = CascadeType.ALL</code> o <code>REMOVE</code> en una relación <code>@ManyToMany</code> o en el extremo <code>@ManyToOne</code>.</td>
+        <td>Limitar la cascada de borrado únicamente del padre hacia sus hijos dependientes (<code>@OneToMany</code> / <code>@OneToOne</code>).</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ========================================================================= -->
+  <!-- BLOQUE 4: GENERACIÓN AUTOMÁTICA DE ENTIDADES / HBM2JAVA (PDF 04)          -->
+  <!-- ========================================================================= -->
+  <div class="page-break"></div>
+  <p class="doc-subtitle">Generación Automática de Entidades: Ingeniería Inversa con Hibernate (hbm2java)</p>
+
+  <!-- SECCIÓN 18: INTRODUCCIÓN A LA INGENIERÍA INVERSA -->
+  <div class="pdf-section">18. Ingeniería Inversa en Hibernate (hbm2java)</div>
+  <p><strong>Enfoque inverso:</strong> A diferencia del desarrollo dirigido por el modelo (donde escribimos las entidades Java y Hibernate genera las tablas con <code>drop-and-create</code>), la <strong>ingeniería inversa</strong> parte de una base de datos relacional ya existente para generar automáticamente las clases <code>@Entity</code> correspondientes.</p>
+  <p><strong>Cuándo utilizarla:</strong> Resulta especialmente útil cuando la base de datos ya contiene datos en producción, ha sido diseñada por especialistas en SQL aprovechando características avanzadas del SGBD, o consta de un elevado número de tablas cuya codificación manual sería tediosa y propensa a errores.</p>
+  <p><strong>La herramienta <code>hbm2java</code>:</strong> Es un objetivo (<em>goal</em>) integrado en el plugin oficial de Maven <code>hibernate-maven-plugin</code>. Al ejecutarse mediante Maven, no requiere instalar extensiones adicionales ni depende del IDE utilizado (funciona igual en Eclipse, IntelliJ IDEA, NetBeans, VS Code o terminal).</p>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Flujo de Trabajo de Generación Automática (hbm2java)</div>
+    <pre><code>[1. Base de Datos (ej. ra3_videojuegos)] ──┐
+[2. reveng/conexion.properties]         ──┼──► [4. Objetivo Maven: hbm2java]
+[3. reveng/hibernate-reverse-engineering.xml]┘               │
+                                                             ▼
+[6. Revisar y corregir] ◄──(copiar a mano)── [5. target/generated-sources/...]
+(Many-To-Many, catalog, formato)             ──► [ src/main/java/... ]</code></pre>
+  </div>
+
+  <!-- SECCIÓN 19: CONFIGURACIÓN DEL GENERADOR -->
+  <div class="pdf-section">19. Configuración de Maven y Ficheros de Ingeniería Inversa</div>
+  <p>Los archivos utilizados por el generador se alojan habitualmente en una carpeta específica del proyecto (ej. <code>reveng/</code>) para mantenerlos separados de los recursos de ejecución de la aplicación (<code>src/main/resources</code>).</p>
+
+  <h2>19.1. Declaración del Plugin en pom.xml</h2>
+  <div class="diagram-box">
+    <div class="diagram-title">Configuración de hibernate-maven-plugin en pom.xml</div>
+    <pre><code>&lt;build&gt;
+    &lt;plugins&gt;
+        &lt;plugin&gt;
+            &lt;groupId&gt;org.hibernate.orm&lt;/groupId&gt;
+            &lt;artifactId&gt;hibernate-maven-plugin&lt;/artifactId&gt;
+            &lt;version&gt;${hibernate.version}&lt;/version&gt;
+            &lt;configuration&gt;
+                &lt;propertyFile&gt;${project.basedir}/reveng/conexion.properties&lt;/propertyFile&gt;
+                &lt;revengFile&gt;${project.basedir}/reveng/hibernate-reverse-engineering.xml&lt;/revengFile&gt;
+            &lt;/configuration&gt;
+        &lt;/plugin&gt;
+    &lt;/plugins&gt;
+&lt;/build&gt;</code></pre>
+  </div>
+
+  <h2>19.2. Fichero reveng/conexion.properties</h2>
+  <p>Define los parámetros JDBC de acceso al esquema que se va a inspeccionar. Es fundamental especificar <code>hibernate.default_catalog</code> con el nombre exacto de la base de datos: sin esta propiedad, el generador podría mezclar tablas homónimas de otras bases de datos del servidor (generando atributos duplicados) y añadiría el atributo <code>catalog="..."</code> en todas las anotaciones <code>@Table</code>.</p>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Contenido de reveng/conexion.properties</div>
+    <pre><code>hibernate.connection.driver_class=com.mysql.cj.jdbc.Driver
+hibernate.connection.url=jdbc:mysql://localhost:3306/ra3_videojuegos
+hibernate.connection.username=root
+hibernate.connection.password=
+hibernate.default_catalog=ra3_videojuegos</code></pre>
+  </div>
+
+  <div class="page-break"></div>
+  <h2>19.3. Personalización en reveng/hibernate-reverse-engineering.xml</h2>
+  <p>Este archivo XML controla la conversión de tipos de datos, el filtrado de tablas, el paquete de destino y el renombrado de las clases resultantes:</p>
+  <ul>
+    <li><strong><code>&lt;type-mapping&gt;</code>:</strong> Establece la correspondencia entre tipos SQL y tipos Java. Sin este bloque, las columnas <code>NOT NULL</code> se generarían como tipos primitivos (<code>int</code>, <code>long</code>, <code>double</code>) y las fechas como <code>java.util.Date</code> en lugar de <code>Long</code>, <code>Integer</code>, <code>Double</code> y <code>java.time.LocalDate</code>.</li>
+    <li><strong><code>&lt;table-filter&gt;</code>:</strong> Filtra qué tablas se procesan y asigna el paquete Java destino. Los tres atributos <code>match-catalog</code>, <code>match-schema</code> y <code>match-name</code> son obligatorios (<code>".*"</code> indica cualquiera); omitir alguno provoca un <code>NullPointerException</code>.</li>
+    <li><strong><code>&lt;table&gt;</code>:</strong> Asigna nombres de clase en singular (ej. <code>Videojuego</code>) a tablas nombradas en plural en la BD (ej. <code>videojuegos</code>).</li>
+  </ul>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Ejemplo Completo de reveng/hibernate-reverse-engineering.xml</div>
+    <pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;!DOCTYPE hibernate-reverse-engineering PUBLIC
+  "-//Hibernate/Hibernate Reverse Engineering DTD 3.0//EN"
+  "http://hibernate.org/dtd/hibernate-reverse-engineering-3.0.dtd"&gt;
+
+&lt;hibernate-reverse-engineering&gt;
+    &lt;!-- 1. Mapeo de tipos SQL a tipos envoltorio y java.time --&gt;
+    &lt;type-mapping&gt;
+        &lt;sql-type jdbc-type="BIGINT"  hibernate-type="java.lang.Long"/&gt;
+        &lt;sql-type jdbc-type="INTEGER" hibernate-type="java.lang.Integer"/&gt;
+        &lt;sql-type jdbc-type="DOUBLE"  hibernate-type="java.lang.Double"/&gt;
+        &lt;sql-type jdbc-type="DATE"    hibernate-type="java.time.LocalDate"/&gt;
+    &lt;/type-mapping&gt;
+
+    &lt;!-- 2. Filtro de tablas y paquete destino (los 3 match-* son obligatorios) --&gt;
+    &lt;table-filter match-catalog=".*" match-schema=".*" match-name=".*"
+                  package="com.iesvjp.orm.modelo"/&gt;
+
+    &lt;!-- 3. Renombrado de tablas en plural a clases en singular --&gt;
+    &lt;table name="estudios_desarrollo" class="com.iesvjp.orm.modelo.EstudioDesarrollo"/&gt;
+    &lt;table name="videojuegos"         class="com.iesvjp.orm.modelo.Videojuego"/&gt;
+    &lt;table name="plataformas"         class="com.iesvjp.orm.modelo.Plataforma"/&gt;
+&lt;/hibernate-reverse-engineering&gt;</code></pre>
+  </div>
+
+  <!-- SECCIÓN 20: EJECUCIÓN Y REVISIÓN DE CLASES -->
+  <div class="pdf-section">20. Ejecución del Objetivo Maven y Revisión Manual</div>
+  <p><strong>Ejecución:</strong> Tras crear la base de datos en MySQL, se lanza el objetivo Maven <code>org.hibernate.orm:hibernate-maven-plugin:hbm2java</code> (en Eclipse: <em>Run As &rarr; Maven build...</em> y escribir el goal; en terminal: <code>mvn org.hibernate.orm:hibernate-maven-plugin:hbm2java</code>).</p>
+  <p><strong>Copia manual a <code>src/main/java</code>:</strong> Las clases se generan en <code>target/generated-sources/...</code> y deben copiarse manualmente a <code>src/main/java/...</code>. Se generan en <code>target/</code> de forma intencionada para que una futura reejecución del generador no sobrescriba las correcciones manuales aplicadas en el código fuente del proyecto.</p>
+
+  <h2>20.1. Particularidades y Corrección Obligatoria de Many-To-Many</h2>
+  <ul>
+    <li><strong>Anotaciones en los getters:</strong> El generador sitúa las anotaciones JPA sobre los métodos <code>getXXX()</code> en lugar de los atributos (Hibernate lo soporta de forma equivalente).</li>
+    <li><strong>Características adicionales:</strong> Implementan <code>Serializable</code>, incluyen carga <code>FetchType.LAZY</code> en asociaciones, generan tres constructores (vacío, campos obligatorios y completo) y carecen de métodos auxiliares <code>addX()</code> / <code>removeX()</code>. Las relaciones <code>@ManyToOne</code> y <code>@OneToMany</code> y las tablas intermedias puras se detectan correctamente.</li>
+    <li><strong>Corrección crítica en <code>@ManyToMany</code>:</strong> El generador configura <strong>ambos extremos como lados propietarios</strong> (ambos incluyen <code>@JoinTable</code> y ninguno tiene <code>mappedBy</code>). Si se guardan datos actualizando los dos lados, Hibernate intentará insertar la fila intermedia dos veces provocando un error de clave duplicada. Se debe dejar <code>@JoinTable</code> en un único lado propietario (ej. <code>Videojuego</code>) y sustituirlo por <code>mappedBy</code> en el lado inverso (ej. <code>Plataforma</code>).</li>
+  </ul>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Código Ejemplo: Corrección de @ManyToMany en el Lado Inverso (Plataforma.java)</div>
+    <pre><code>// ANTES (Generado por hbm2java — INCORRECTO: dos lados propietarios)
+@ManyToMany(fetch = FetchType.LAZY)
+@JoinTable(name = "videojuego_plataforma", catalog = "ra3_videojuegos",
+    joinColumns = { @JoinColumn(name = "plataforma_id", nullable = false, updatable = false) },
+    inverseJoinColumns = { @JoinColumn(name = "videojuego_id", nullable = false, updatable = false) })
+public Set&lt;Videojuego&gt; getVideojuegos() {
+    return this.videojuegos;
+}
+
+// DESPUÉS (Corregido — Lado inverso referenciando al atributo propietario)
+@ManyToMany(fetch = FetchType.LAZY, mappedBy = "plataformas")
+public Set&lt;Videojuego&gt; getVideojuegos() {
+    return this.videojuegos;
+}</code></pre>
+  </div>
+
+  <!-- SECCIÓN 21: DIAGNÓSTICO DE ERRORES HBM2JAVA -->
+  <div class="pdf-section">21. Diagnóstico de Errores en Generación Automática</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 36%;">Mensaje o Síntoma</th>
+        <th style="width: 64%;">Causa y Solución</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>Property file cannot be found, aborting</code></td>
+        <td>Falta el archivo <code>reveng/conexion.properties</code> o la ruta indicada en <code>&lt;propertyFile&gt;</code> del <code>pom.xml</code> es errónea.</td>
+      </tr>
+      <tr>
+        <td><code>NullPointerException</code> con <code>match</code> en el mensaje</td>
+        <td>Al elemento <code>&lt;table-filter&gt;</code> le falta alguno de los tres atributos obligatorios (<code>match-catalog</code>, <code>match-schema</code> o <code>match-name</code>).</td>
+      </tr>
+      <tr>
+        <td><code>Communications link failure</code> / <code>Access denied</code></td>
+        <td>El servicio MySQL no está iniciado, o la URL, usuario o contraseña en <code>conexion.properties</code> son incorrectos.</td>
+      </tr>
+      <tr>
+        <td><code>BUILD SUCCESS</code>, pero no se genera ninguna clase</td>
+        <td>La base de datos no existe o no contiene tablas (ejecutar primero el script SQL). En Eclipse, pulsar <code>F5</code> para refrescar la carpeta <code>target/</code>.</td>
+      </tr>
+      <tr>
+        <td><strong>Se generan clases de otras BD o atributos repetidos</strong></td>
+        <td>La propiedad <code>hibernate.default_catalog</code> no está definida o no coincide con el nombre de la base de datos en la URL.</td>
+      </tr>
+      <tr>
+        <td><strong>Clave duplicada en tabla intermedia al guardar</strong></td>
+        <td>No se ha corregido la relación <code>@ManyToMany</code> para eliminar el segundo <code>@JoinTable</code> y añadir <code>mappedBy</code>.</td>
       </tr>
     </tbody>
   </table>
