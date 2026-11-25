@@ -623,6 +623,14 @@
                 if (modal && modal.style.display === 'flex') {
                     modal.style.display = 'none';
                 }
+                const modalRenombrar = document.getElementById('modalCambiarNombreApunte');
+                if (modalRenombrar && modalRenombrar.style.display === 'flex') {
+                    if (typeof window.cerrarModalCambiarNombre === 'function') {
+                        window.cerrarModalCambiarNombre();
+                    } else {
+                        modalRenombrar.style.display = 'none';
+                    }
+                }
             }
         });
 
@@ -1066,7 +1074,14 @@
                             </div>
                         </div>
                         <div class="file-actions-group">
-                            <a href="visor.html?file=${encodeURIComponent(item.href)}&modulo=${encodeURIComponent(item.modulo)}&from=admin.html" target="_blank" class="btn-view-file">Abrir en visor</a>
+                            <a href="visor.html?file=${encodeURIComponent(item.href)}&modulo=${encodeURIComponent(item.modulo)}&from=admin.html" target="_blank" class="btn-view-file" title="Ver archivo en el visor">Visor</a>
+                            <button type="button" class="btn-edit-title" onclick="abrirModalCambiarNombre(${idx})" title="Cambiar el nombre que sale en index.html">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                </svg>
+                                <span>Cambiar Nombre</span>
+                            </button>
                             <button type="button" class="btn-delete-file" onclick="eliminarApunteDeIndex(${idx})" title="Quitar este apunte de index.html">
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                     <polyline points="3 6 5 6 21 6"></polyline>
@@ -1079,6 +1094,255 @@
                 `;
             }).join('');
         }
+
+        function escapeHtmlText(str) {
+            if (!str) return '';
+            return String(str).replace(/[&<>"']/g, (m) => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#39;'
+            }[m]));
+        }
+
+        function modificarTituloLi(sourceHtml, debeModificarHref, nuevoNombre) {
+            let modificado = false;
+            const nuevoHtml = sourceHtml.replace(
+                /[ \t]*<li class="pdf-item">(?:(?!<\/li>)[\s\S])*?<\/li>[ \t]*\r?\n?/gi,
+                (bloqueLi) => {
+                    const m = bloqueLi.match(/href=["']([^"']+)["']/i);
+                    if (m && debeModificarHref(m[1])) {
+                        let actualizado = bloqueLi.replace(
+                            /(<a[^>]*>[\s\S]*?<span(?:\s+[^>]*?)?>)([\s\S]*?)(<\/span>[\s\S]*?<span class="pdf-tag">)/i,
+                            (match, pre, viejo, post) => {
+                                modificado = true;
+                                return `${pre}${escapeHtmlText(nuevoNombre)}${post}`;
+                            }
+                        );
+                        if (!modificado) {
+                            actualizado = bloqueLi.replace(
+                                /(<span>)([\s\S]*?)(<\/span>)/i,
+                                (match, pre, viejo, post) => {
+                                    modificado = true;
+                                    return `${pre}${escapeHtmlText(nuevoNombre)}${post}`;
+                                }
+                            );
+                        }
+                        return actualizado;
+                    }
+                    return bloqueLi;
+                }
+            );
+            return { nuevoHtml, modificado };
+        }
+
+        let editandoApunteIdx = null;
+
+        window.abrirModalCambiarNombre = function(idx) {
+            const item = apuntesIndexFiltrados[idx];
+            if (!item) return;
+            editandoApunteIdx = idx;
+
+            const modal = document.getElementById('modalCambiarNombreApunte');
+            const hrefInput = document.getElementById('editModalHref');
+            const tituloInput = document.getElementById('editModalTitulo');
+
+            if (hrefInput) hrefInput.value = `${item.modulo} • ${item.href}`;
+            if (tituloInput) {
+                tituloInput.value = item.titulo;
+                setTimeout(() => {
+                    tituloInput.focus();
+                    tituloInput.select();
+                }, 100);
+            }
+            if (modal) modal.style.display = 'flex';
+        };
+
+        window.cerrarModalCambiarNombre = function(event) {
+            if (event && event.target && event.target.id !== 'modalCambiarNombreApunte' && !event.target.classList.contains('modal-close-btn')) {
+                return;
+            }
+            const modal = document.getElementById('modalCambiarNombreApunte');
+            if (modal) modal.style.display = 'none';
+            editandoApunteIdx = null;
+        };
+
+        document.getElementById('editModalTitulo')?.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                window.confirmarCambiarNombreApunte();
+            }
+        });
+
+        window.confirmarCambiarNombreApunte = async function() {
+            if (editandoApunteIdx === null) return;
+            const item = apuntesIndexFiltrados[editandoApunteIdx];
+            if (!item) return;
+
+            const tituloInput = document.getElementById('editModalTitulo');
+            const nuevoTitulo = tituloInput ? tituloInput.value.trim() : '';
+
+            if (!nuevoTitulo) {
+                alert("Por favor, introduce un nombre válido para el apunte.");
+                return;
+            }
+
+            if (nuevoTitulo === item.titulo.trim()) {
+                alert("El nombre introducido es idéntico al actual. No hay cambios.");
+                window.cerrarModalCambiarNombre();
+                return;
+            }
+
+            const btnGuardar = document.getElementById('btnGuardarNuevoTitulo');
+            const textoOriginal = btnGuardar ? btnGuardar.innerText : 'Guardar Cambios';
+            if (btnGuardar) {
+                btnGuardar.disabled = true;
+                btnGuardar.innerText = 'Guardando...';
+            }
+
+            const targetHrefNorm = decodeURIComponent(item.href).trim();
+            const cleanHref = item.href.replace(/^\.\//, '');
+            const fileName = decodeURIComponent(cleanHref.split('/').pop() || '');
+            const moduloTarget = item.modulo.trim();
+
+            try {
+                // Opción A: Guardado mediante GitHub API (si hay token configurado)
+                if (getGithubConfig().token || (!localProjectHandle && typeof window.showDirectoryPicker !== 'function')) {
+                    const ghCfg = getGithubConfig();
+                    if (!ghCfg.token) {
+                        alert("Para guardar cambios desde este dispositivo, por favor configura tu Token de GitHub en ⚙️ Ajustes.");
+                        if (btnGuardar) {
+                            btnGuardar.disabled = false;
+                            btnGuardar.innerText = textoOriginal;
+                        }
+                        return;
+                    }
+
+                    const ghIndex = await githubGetFile('index.html', ghCfg);
+                    let modificadoPrincipal = false;
+                    if (ghIndex) {
+                        const resP = modificarTituloLi(ghIndex.text, (h) => h.trim() === item.href.trim() || decodeURIComponent(h).trim() === targetHrefNorm, nuevoTitulo);
+                        if (resP.modificado) {
+                            await githubPutFile('index.html', utf8ToBase64(resP.nuevoHtml), `Cambiar nombre de "${item.titulo}" a "${nuevoTitulo}" en index.html`, ghCfg, ghIndex.sha);
+                            modificadoPrincipal = true;
+                        }
+                    }
+
+                    let modificadoModulo = false;
+                    if (moduloTarget) {
+                        const modPath = `modulos/${moduloTarget}/index.html`;
+                        const ghMod = await githubGetFile(modPath, ghCfg);
+                        if (ghMod) {
+                            const resM = modificarTituloLi(ghMod.text, (h) => {
+                                const dec = decodeURIComponent(h).trim();
+                                return h.trim() === item.href.trim() || (fileName !== '' && (dec.split('/').pop() || '') === fileName);
+                            }, nuevoTitulo);
+                            if (resM.modificado) {
+                                await githubPutFile(modPath, utf8ToBase64(resM.nuevoHtml), `Cambiar nombre de "${item.titulo}" a "${nuevoTitulo}" en ${modPath}`, ghCfg, ghMod.sha);
+                                modificadoModulo = true;
+                            }
+                        }
+                    }
+
+                    if (modificadoPrincipal || modificadoModulo) {
+                        alert(`✓ Nombre actualizado en GitHub:\n\n• Nuevo título en index.html: "${nuevoTitulo}"\n• Enlace/URL conservado intacto: "${item.href}"`);
+                        window.cerrarModalCambiarNombre();
+                        await cargarApuntesDeIndexHtml();
+                    } else {
+                        alert("No se pudo localizar el bloque HTML exacto en index.html.");
+                    }
+                    return;
+                }
+
+                // Opción B: Guardado en disco local con File System Access API
+                if (!localProjectHandle) {
+                    try {
+                        localProjectHandle = await window.showDirectoryPicker({
+                            id: 'apuntes_folder',
+                            mode: 'readwrite'
+                        });
+                    } catch(err) {
+                        if (btnGuardar) {
+                            btnGuardar.disabled = false;
+                            btnGuardar.innerText = textoOriginal;
+                        }
+                        return;
+                    }
+                }
+
+                // 1. Modificar index.html principal
+                const handle = await localProjectHandle.getFileHandle('index.html');
+                const f = await handle.getFile();
+                const html = await f.text();
+
+                const resPrincipal = modificarTituloLi(html, (hrefActual) => {
+                    return hrefActual.trim() === item.href.trim() || decodeURIComponent(hrefActual).trim() === targetHrefNorm;
+                }, nuevoTitulo);
+
+                let modificadoPrincipal = false;
+                if (resPrincipal.modificado) {
+                    const writable = await handle.createWritable();
+                    await writable.write(resPrincipal.nuevoHtml);
+                    await writable.close();
+                    modificadoPrincipal = true;
+                }
+
+                // 2. Modificar modulos/[MODULO]/index.html
+                let modulosActualizados = 0;
+                try {
+                    const modulosDir = await localProjectHandle.getDirectoryHandle('modulos', { create: false });
+                    const modDirs = [];
+                    if (moduloTarget) {
+                        try {
+                            modDirs.push(await modulosDir.getDirectoryHandle(moduloTarget, { create: false }));
+                        } catch (_) {}
+                    }
+                    if (modDirs.length === 0) {
+                        for await (const [, entryHandle] of modulosDir.entries()) {
+                            if (entryHandle.kind === 'directory') modDirs.push(entryHandle);
+                        }
+                    }
+
+                    for (const entryHandle of modDirs) {
+                        try {
+                            const modIndexHandle = await entryHandle.getFileHandle('index.html', { create: false });
+                            const modFile = await modIndexHandle.getFile();
+                            const modHtml = await modFile.text();
+                            const resMod = modificarTituloLi(modHtml, (hrefActual) => {
+                                const hrefDec = decodeURIComponent(hrefActual).trim();
+                                const fileActual = hrefDec.split('/').pop() || '';
+                                return hrefActual.trim() === item.href.trim() || (fileName !== '' && fileActual === fileName);
+                            }, nuevoTitulo);
+
+                            if (resMod.modificado) {
+                                const writableMod = await modIndexHandle.createWritable();
+                                await writableMod.write(resMod.nuevoHtml);
+                                await writableMod.close();
+                                modulosActualizados++;
+                            }
+                        } catch (_) {}
+                    }
+                } catch (_) {}
+
+                if (modificadoPrincipal || modulosActualizados > 0) {
+                    alert(`✓ Nombre actualizado correctamente:\n\n• Título anterior: "${item.titulo}"\n• Nuevo título en index.html: "${nuevoTitulo}"\n\nℹ La URL y el archivo (${item.href}) se mantienen intactos sin tocar.`);
+                    window.cerrarModalCambiarNombre();
+                    await cargarApuntesDeIndexHtml();
+                } else {
+                    alert("No se pudo localizar el bloque HTML exacto en index.html.");
+                }
+
+            } catch (err) {
+                console.error("Error al cambiar nombre del apunte:", err);
+                alert("Error al guardar el nuevo nombre: " + err.message);
+            } finally {
+                if (btnGuardar) {
+                    btnGuardar.disabled = false;
+                    btnGuardar.innerText = textoOriginal;
+                }
+            }
+        };
 
         window.eliminarApunteDeIndex = async function(idx) {
             const item = apuntesIndexFiltrados[idx];

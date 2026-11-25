@@ -581,6 +581,27 @@
             border-color: #ef4444;
         }
 
+        .btn-edit-title {
+            background-color: rgba(56, 189, 248, 0.12);
+            border: 1px solid rgba(56, 189, 248, 0.35);
+            color: var(--accent);
+            padding: 0.4rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            transition: all 0.15s;
+        }
+
+        .btn-edit-title:hover {
+            background-color: var(--accent);
+            color: #0d1117;
+            border-color: var(--accent);
+        }
+
         .btn-view-file {
             background-color: var(--bg-card);
             border: 1px solid var(--border);
@@ -655,7 +676,7 @@
   .file-name-text { white-space: normal; word-break: break-word; }
   .file-path-subtext { white-space: normal; word-break: break-all; }
   .file-actions-group { width: 100%; justify-content: flex-end; }
-  .file-actions-group .btn-delete-file, .file-actions-group .btn-view-file { flex: 1; justify-content: center; padding: 0.55rem 0.75rem; }
+  .file-actions-group .btn-delete-file, .file-actions-group .btn-view-file, .file-actions-group .btn-edit-title { flex: 1; justify-content: center; padding: 0.55rem 0.75rem; }
 }
 
 /* ==========================================================================
