@@ -10,12 +10,13 @@
 </head>
 <body>
 
+    <!-- Botón flotante de cambio de tema abajo a la derecha (solo icono) -->
+    <button type="button" class="theme-toggle-window-btn" id="btnLoginToggleTema" onclick="alternarTema()" aria-label="Cambiar modo claro / oscuro" title="Cambiar tema claro / oscuro">
+        <span id="theme-login-icon" style="display:inline-flex;align-items:center;justify-content:center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg></span>
+    </button>
+
     <!-- 1. PANTALLA DE LOGIN DEL PANEL ADMIN -->
     <div id="login-screen">
-        <!-- Botón de cambio de tema en la esquina inferior derecha -->
-        <button type="button" class="theme-toggle-window-btn" id="btnLoginToggleTema" onclick="alternarTema()" aria-label="Cambiar modo claro / oscuro" title="Cambiar tema claro / oscuro">
-            <span id="theme-login-icon" style="display:inline-flex;align-items:center;justify-content:center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg></span>
-        </button>
         <script src="script/admin-2.js"></script>
 
         <h2>Panel Admin</h2>
@@ -48,6 +49,14 @@
                 <p id="device-mode-badge" style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.2rem;"></p>
             </div>
             <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <button type="button" class="btn-settings" id="btnRecargarAdmin" onclick="recargarPagina(this)" title="Recargar pestaña / ventana">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <polyline points="23 4 23 10 17 10"></polyline>
+                        <polyline points="1 20 1 14 7 14"></polyline>
+                        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                    </svg>
+                    <span>Recargar</span>
+                </button>
                 <div class="settings-dropdown">
                     <button type="button" class="btn-settings" id="btnAjustes" onclick="toggleMenuAjustes(event)">
                         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -59,20 +68,6 @@
 
                     <div id="menuAjustes" class="settings-menu">
                         <div class="menu-title">⚙️ Ajustes</div>
-                        
-                        <span class="menu-subtitle">Tema de apariencia</span>
-                        <div class="theme-options">
-                            <button type="button" class="theme-option-btn" id="btnModoOscuro" onclick="cambiarTema('dark')">
-                                <span style="display:inline-flex;align-items:center;gap:0.45rem"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-3px"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg> Modo Oscuro</span>
-                                <span class="check-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
-                            </button>
-                            <button type="button" class="theme-option-btn" id="btnModoClaro" onclick="cambiarTema('light')">
-                                <span style="display:inline-flex;align-items:center;gap:0.45rem"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-3px"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg> Modo Claro</span>
-                                <span class="check-icon"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg></span>
-                            </button>
-                        </div>
-
-                        <div class="menu-divider"></div>
 
                         <span class="menu-subtitle">GitHub Token</span>
                         <div style="display: flex; flex-direction: column; gap: 0.45rem; padding: 0.25rem 0;" onclick="event.stopPropagation()">
@@ -94,6 +89,15 @@
                             </svg>
                             <span>Acceder a la web</span>
                         </a>
+
+                        <button type="button" class="menu-btn-action" onclick="recargarPagina(this)" style="color: var(--text-main);">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <polyline points="23 4 23 10 17 10"></polyline>
+                                <polyline points="1 20 1 14 7 14"></polyline>
+                                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                            </svg>
+                            <span>Recargar página</span>
+                        </button>
 
                         <div class="menu-divider"></div>
 

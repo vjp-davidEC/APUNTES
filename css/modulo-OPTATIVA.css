@@ -139,3 +139,31 @@ body *:not(code):not(pre):not(pre *):not(kbd):not(samp):not(i[class*="fa-"]):not
   text-transform: uppercase;
   letter-spacing: 0.6px;
 }
+@keyframes spinReload {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+#btnToggleTema.theme-toggle-btn {
+  position: fixed !important;
+  bottom: 1.5rem !important;
+  right: 1.5rem !important;
+  z-index: 9999 !important;
+  width: 46px !important;
+  height: 46px !important;
+  border-radius: 50% !important;
+  padding: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-shadow: 0 6px 20px var(--shadow) !important;
+  transition: transform 0.2s, border-color 0.2s, background-color 0.2s !important;
+}
+#btnToggleTema.theme-toggle-btn:hover {
+  transform: scale(1.06) !important;
+  border-color: var(--accent) !important;
+  background-color: var(--bg-hover) !important;
+}
+#btnToggleTema #theme-text {
+  display: none !important;
+}

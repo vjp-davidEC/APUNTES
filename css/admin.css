@@ -223,6 +223,11 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        @keyframes spinReload {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
         .menu-title {
             font-size: 0.78rem;
             font-weight: 700;

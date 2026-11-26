@@ -25,16 +25,17 @@
     <div class="absolute -bottom-28 -right-28 w-80 h-80 sm:w-96 sm:h-96 rounded-full bg-android/10 blur-3xl"></div>
   </div>
 
-  <!-- Botón flotante de cambio de tema (Oscuro / Claro) -->
+  <!-- Botón flotante de cambio de tema abajo a la derecha (solo icono) -->
   <button
     id="theme-toggle"
     type="button"
     onclick="toggleTheme()"
     aria-label="Cambiar entre modo oscuro y modo claro"
-    class="fixed top-4 right-4 sm:top-6 sm:right-6 z-20 inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-lightPanel2/90 dark:bg-idePanel2/90 backdrop-blur-md border border-lightBorder dark:border-ideBorder hover:border-kotlin dark:hover:border-kotlin text-xs sm:text-sm font-semibold text-lightText dark:text-ideText shadow-sm transition-all duration-200 active:scale-95"
+    title="Cambiar entre modo oscuro y modo claro"
+    class="fixed bottom-6 right-6 z-50 w-11 h-11 rounded-full bg-lightPanel2/95 dark:bg-idePanel2/95 backdrop-blur-md border border-lightBorder dark:border-ideBorder hover:border-kotlin dark:hover:border-kotlin text-lightText dark:text-ideText shadow-lg flex items-center justify-center transition-all duration-200 hover:scale-105 active:scale-95"
   >
     <!-- Icono Sol (visible en modo oscuro) -->
-    <svg class="w-4 h-4 hidden dark:block text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <svg class="w-5 h-5 hidden dark:block text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
       <circle cx="12" cy="12" r="5"></circle>
       <line x1="12" y1="1" x2="12" y2="3"></line>
       <line x1="12" y1="21" x2="12" y2="23"></line>
@@ -46,11 +47,9 @@
       <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
     </svg>
     <!-- Icono Luna (visible en modo claro) -->
-    <svg class="w-4 h-4 block dark:hidden text-kotlin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <svg class="w-5 h-5 block dark:hidden text-kotlin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
       <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
     </svg>
-    <span class="hidden dark:inline">Modo claro</span>
-    <span class="inline dark:hidden">Modo oscuro</span>
   </button>
 
   <!-- Tarjeta principal centrada -->
