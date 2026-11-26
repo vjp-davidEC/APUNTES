@@ -99,6 +99,47 @@
             box-shadow: 0 0 0 3px var(--accent-glow);
         }
 
+        .password-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+
+        .password-wrapper input {
+            padding-right: 2.85rem !important;
+        }
+
+        .password-wrapper input::-ms-reveal,
+        .password-wrapper input::-ms-clear {
+            display: none !important;
+        }
+
+        .btn-toggle-pass {
+            position: absolute;
+            right: 0.65rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 26px;
+            height: 26px;
+            border: none;
+            background: transparent;
+            color: #64748b;
+            opacity: 0.6;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            padding: 0;
+            z-index: 2;
+            transition: opacity 0.18s, color 0.18s;
+        }
+
+        .btn-toggle-pass:hover {
+            opacity: 1;
+            color: var(--accent);
+        }
+
         .btn-login {
             width: 100%;
             padding: 0.8rem;
