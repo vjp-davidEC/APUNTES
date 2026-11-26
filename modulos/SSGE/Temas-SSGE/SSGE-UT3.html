@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark" class="dark"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manual Completo de Iniciación a Python + Práctica Operación Bóveda (SSGE)</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2032%2032'%3E%3Cdefs%3E%3ClinearGradient%20id='g'%20x1='0'%20y1='1'%20x2='1'%20y2='0'%3E%3Cstop%20offset='0%25'%20stop-color='%232563eb'/%3E%3Cstop%20offset='52%25'%20stop-color='%233b82f6'/%3E%3Cstop%20offset='100%25'%20stop-color='%2306b6d4'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width='32'%20height='32'%20rx='8'%20fill='%230f172a'%20stroke='url%28%23g%29'%20stroke-width='1.8'/%3E%3Cg%20transform=%22translate%286,6%29%20scale%280.833%29%22%20fill=%22none%22%20stroke=%22%2338bdf8%22%20stroke-width=%222.2%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%3E%3Cline%20x1=%2218%22%20y1=%2220%22%20x2=%2218%22%20y2=%2210%22/%3E%3Cline%20x1=%2212%22%20y1=%2220%22%20x2=%2212%22%20y2=%224%22/%3E%3Cline%20x1=%226%22%20y1=%2220%22%20x2=%226%22%20y2=%2214%22/%3E%3Cline%20x1=%223%22%20y1=%2220%22%20x2=%2221%22%20y2=%2220%22/%3E%3C/g%3E%3C/svg%3E">
+  <style data-inlined-from="../../../css/SSGE-UT3.css">    @page {
+      size: A4;
+      margin: 1.8cm 1.5cm 2cm 1.5cm;
+      @bottom-right {
+        content: counter(page);
+        font-family: 'Times New Roman', Times, serif;
+        font-size: 9pt;
+        color: #64748b;
+      }
+      @bottom-left {
+        content: "SGE (2º DAM) | Manual Práctico de Python desde Cero + Operación Bóveda";
+        font-family: 'Times New Roman', Times, serif;
+        font-size: 9pt;
+        color: #64748b;
+      }
+    }
+
+    body {
+      font-family: 'Times New Roman', Times, serif;
+      font-size: 10pt;
+      line-height: 1.5;
+      color: #1e293b;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1.doc-title {
+      font-size: 17pt;
+      font-weight: 700;
+      color: #0f172a;
+      text-align: center;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    p.doc-subtitle {
+      text-align: center;
+      font-size: 10.5pt;
+      color: #15803d;
+      font-weight: 600;
+      margin-top: 0;
+      margin-bottom: 25px;
+      border-bottom: 2px solid #16a34a;
+      padding-bottom: 10px;
+    }
+
+    .pdf-section {
+      background-color: #0f172a;
+      color: #ffffff;
+      padding: 8px 14px;
+      font-size: 11.5pt;
+      font-weight: 700;
+      border-radius: 4px;
+      margin-top: 25px;
+      margin-bottom: 15px;
+      page-break-after: avoid;
+    }
+
+    .page-break {
+      page-break-before: always;
+    }
+
+    h2 {
+      font-size: 11.5pt;
+      color: #15803d;
+      border-bottom: 1.5px solid #e2e8f0;
+      padding-bottom: 4px;
+      margin-top: 18px;
+      margin-bottom: 10px;
+      page-break-after: avoid;
+    }
+
+    h3 {
+      font-size: 10pt;
+      color: #334155;
+      margin-top: 12px;
+      margin-bottom: 6px;
+      page-break-after: avoid;
+    }
+
+    p {
+      margin: 0 0 8px 0;
+      text-align: justify;
+    }
+
+    ul, ol {
+      margin: 0 0 10px 0;
+      padding-left: 20px;
+    }
+
+    li {
+      margin-bottom: 4px;
+    }
+
+    .diagram-box {
+      background-color: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-left: 4px solid #16a34a;
+      padding: 10px 14px;
+      margin: 10px 0;
+      font-size: 9pt;
+      border-radius: 2px;
+      page-break-inside: avoid;
+    }
+
+    .diagram-title {
+      font-weight: bold;
+      color: #0f172a;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      font-size: 8.5pt;
+      letter-spacing: 0.5px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+      font-size: 8.5pt;
+      page-break-inside: avoid;
+    }
+
+    th, td {
+      border: 1px solid #cbd5e1;
+      padding: 6px 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background-color: #f1f5f9;
+      color: #0f172a;
+      font-weight: 700;
+    }
+
+    tr:nth-child(even) td {
+      background-color: #f8fafc;
+    }
+
+    pre, code {
+      font-family: 'Consolas', 'Courier New', monospace;
+    }
+
+    pre {
+      background-color: #0f172a;
+      color: #f8fafc;
+      padding: 10px 12px;
+      border-radius: 4px;
+      font-size: 8.5pt;
+      line-height: 1.4;
+      overflow-x: auto;
+      margin: 10px 0;
+      page-break-inside: avoid;
+    }
+
+    p code, li code, td code {
+      background-color: #f1f5f9;
+      color: #15803d;
+      padding: 1px 4px;
+      border-radius: 3px;
+      font-size: 8.5pt;
+      border: 1px solid #e2e8f0;
+    }
+
+/* ==========================================================================
+   Adaptación para pantallas de móvil y tablet
+   ========================================================================== */
+@media screen {
+  body {
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 1.5rem 1.25rem;
+    box-sizing: border-box;
+    overflow-x: hidden;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  body {
+    padding: 1rem 0.75rem;
+    font-size: 10.5pt;
+    line-height: 1.55;
+  }
+
+  h1.doc-title {
+    font-size: 14pt;
+    line-height: 1.25;
+  }
+
+  p.doc-subtitle {
+    font-size: 9.5pt;
+    margin-bottom: 16px;
+  }
+
+  .pdf-section {
+    font-size: 10.5pt;
+    padding: 8px 10px;
+  }
+
+  h2 {
+    font-size: 11pt;
+  }
+
+  h3 {
+    font-size: 10pt;
+  }
+
+  p {
+    text-align: left;
+  }
+
+  table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    font-size: 8.5pt;
+  }
+
+  pre {
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    font-size: 8pt;
+    padding: 8px 10px;
+  }
+
+  p code, li code, td code {
+    word-break: break-word;
+  }
+
+  .diagram-box, .exercise-box {
+    padding: 8px 10px;
+    overflow-x: auto;
+  }
+}
+
+/* ==========================================================================
+   Paleta de Colores Unificada (idéntica a explicacion_Kotlin.html)
+   ========================================================================== */
+@media screen {
+  :root {
+    --bg-main: #070d19;
+    --bg-card: #0f172a;
+    --bg-panel2: #1e293b;
+    --border: #1e3a5f;
+    --text-main: #f0f6ff;
+    --text-muted: #94a3b8;
+    --kt-purple: #3b82f6;
+    --kt-light: #38bdf8;
+    --kt-magenta: #2563eb;
+    --kt-orange: #06b6d4;
+    --and-green: #60a5fa;
+    --code-bg: #050912;
+  }
+
+  :root[data-theme="light"] {
+    --bg-main: #f0f6ff;
+    --bg-card: #ffffff;
+    --bg-panel2: #e2eeff;
+    --border: #c7dbf7;
+    --text-main: #0f172a;
+    --text-muted: #475569;
+    --kt-light: #1d4ed8;
+    --and-green: #0284c7;
+    --code-bg: #0f172a;
+  }
+
+  html, body {
+    background-color: var(--bg-main) !important;
+    color: var(--text-main) !important;
+  }
+
+  body {
+    background-image: none !important;
+  }
+
+  h1, h1.doc-title {
+    background: linear-gradient(90deg, #60a5fa, #38bdf8, #818cf8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: #f0f6ff !important;
+  }
+
+  p.doc-subtitle {
+    color: var(--and-green) !important;
+    border-bottom-color: var(--kt-purple) !important;
+  }
+
+  .pdf-section {
+    background: linear-gradient(135deg, #2563eb 0%, #3b82f6 52%, #06b6d4 100%) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 10px !important;
+    box-shadow: 0 6px 20px -4px rgba(37, 99, 235, 0.35);
+  }
+
+  h2 {
+    color: var(--kt-light) !important;
+    border-bottom-color: var(--border) !important;
+  }
+
+  h3, h4 {
+    color: var(--and-green) !important;
+  }
+
+  p, li, td {
+    color: var(--text-main) !important;
+  }
+
+  .diagram-box, .math-formula {
+    background-color: var(--bg-card) !important;
+    background-image: linear-gradient(135deg, rgba(59, 130, 246, 0.10) 0%, rgba(6, 182, 212, 0.06) 100%) !important;
+    border: 1px solid var(--border) !important;
+    border-left: 4px solid var(--kt-purple) !important;
+    color: var(--text-main) !important;
+    border-radius: 10px !important;
+  }
+
+  .diagram-title {
+    color: var(--kt-light) !important;
+  }
+
+  .exercise-box {
+    background-color: var(--bg-card) !important;
+    background-image: linear-gradient(135deg, rgba(56, 189, 248, 0.10) 0%, rgba(37, 99, 235, 0.08) 100%) !important;
+    border: 1px solid var(--border) !important;
+    border-left: 4px solid var(--and-green) !important;
+    color: var(--text-main) !important;
+    border-radius: 10px !important;
+  }
+
+  .exercise-title {
+    color: var(--and-green) !important;
+  }
+
+  table {
+    background-color: var(--bg-card) !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  th {
+    background-color: var(--bg-panel2) !important;
+    color: var(--kt-light) !important;
+    border-color: var(--border) !important;
+  }
+
+  td {
+    background-color: var(--bg-card) !important;
+    border-color: var(--border) !important;
+  }
+
+  tr:nth-child(even) td {
+    background-color: var(--bg-panel2) !important;
+  }
+
+  pre {
+    background-color: var(--code-bg) !important;
+    color: #eae8f5 !important;
+    border: 1px solid var(--border) !important;
+    border-radius: 10px !important;
+  }
+
+  p code, li code, td code {
+    background-color: var(--bg-panel2) !important;
+    color: var(--kt-light) !important;
+    border-color: var(--border) !important;
+  }
+
+  a {
+    color: var(--and-green) !important;
+  }
+}
+
+/* ==========================================================================
+   Ancho completo (100%) y Botón Flotante de Tema Abajo a la Izquierda
+   ========================================================================== */
+@media screen {
+  body {
+    max-width: 100% !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 1.75rem clamp(1rem, 3vw, 2.75rem) 4.5rem !important;
+    box-sizing: border-box !important;
+  }
+
+  .ut-floating-theme-btn {
+    position: fixed;
+    bottom: 1.35rem;
+    right: 1.35rem;
+    width: 46px;
+    height: 46px;
+    border-radius: 14px;
+    background-color: var(--bg-card, #0f172a);
+    border: 1px solid var(--border, #1e3a5f);
+    color: var(--text-main, #f0f6ff);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(56, 189, 248, 0.25);
+    z-index: 9999;
+    transition: transform 0.18s ease, border-color 0.18s ease, background-color 0.18s ease, box-shadow 0.18s ease;
+    padding: 0;
+  }
+
+  .ut-floating-theme-btn:hover {
+    transform: scale(1.08);
+    border-color: #38bdf8;
+    background-color: var(--bg-panel2, #1e293b);
+    box-shadow: 0 8px 25px rgba(37, 99, 235, 0.35);
+  }
+
+  .ut-floating-theme-btn:active {
+    transform: scale(0.95);
+  }
+}
+
+@media print {
+  .ut-floating-theme-btn {
+    display: none !important;
+  }
+}
+
+@media print {
+  .ut-top-bar,
+  .ut-floating-back-btn {
+    display: none !important;
+  }
+}
+
+@media screen {
+  .ut-top-bar {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .ut-back-btn,
+  .ut-floating-back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.55rem 1.05rem;
+    border-radius: 11px;
+    background: linear-gradient(135deg, #2563eb 0%, #3b82f6 52%, #06b6d4 100%) !important;
+    color: #ffffff !important;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 0.88rem;
+    font-weight: 700;
+    text-decoration: none !important;
+    box-shadow: 0 8px 22px -5px rgba(37, 99, 235, 0.45);
+    transition: transform 0.18s ease, filter 0.18s ease, box-shadow 0.18s ease;
+  }
+
+  .ut-back-btn:hover,
+  .ut-floating-back-btn:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.08);
+    box-shadow: 0 10px 26px -5px rgba(37, 99, 235, 0.6);
+  }
+
+  .ut-floating-back-btn {
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    z-index: 9999;
+  }
+}
+
+/* ==========================================================================
+   Tipografía unificada: Times New Roman en toda la web
+   ========================================================================== */
+html, body, button, input, select, textarea,
+body *:not(code):not(pre):not(pre *):not(kbd):not(samp):not(i[class*="fa-"]):not(span[class^="ff"]) {
+  font-family: "Times New Roman", Times, "Liberation Serif", Georgia, serif !important;
+}
+</style>
+</head>
+<body>
+
+  <h1 class="doc-title">Guía de Iniciación a Python desde Cero y Práctica SSGE</h1>
+  <p class="doc-subtitle">Aprende a programar paso a paso con ejemplos cotidianos + Sesión 1: Operación Bóveda + Sesión 2: El Rastro del Dinero (2º DAM)</p>
+
+  <!-- ========================================================================= -->
+  <!-- BLOQUE 1: CONTENIDO DEL HTML (GUÍA CON EJEMPLOS COTIDIANOS)               -->
+  <!-- ========================================================================= -->
+
+  <!-- SECCIÓN 1 -->
+  <div class="pdf-section">1. El cambio de mentalidad: De Java a Python</div>
+  <p>Si vienes de programar en Java, lo primero que vas a notar al abrir un archivo de Python (que terminan en <code>.py</code>) es una sensación de ligereza total. Python fue creado con una regla de oro: <strong>el código debe leerse casi como si fuera inglés normal</strong>.</p>
+
+  <h2>1.1. Las 4 cosas que desaparecen respecto a Java</h2>
+  <ul>
+    <li><strong>Adiós al punto y coma (<code>;</code>):</strong> En Python cada línea es una orden. Para terminar una instrucción, simplemente pulsas <code>Enter</code> y pasas a la línea siguiente.</li>
+    <li><strong>Adiós a la clase envolvente y al <code>public static void main</code>:</strong> No necesitas crear una clase solo para probar cuatro líneas de código. Escribes tus órdenes desde la línea 1 del archivo y Python las ejecuta de arriba abajo.</li>
+    <li><strong>Adiós a las llaves <code>{ }</code> en bloques:</strong> En lugar de usar llaves para saber qué está dentro de un <code>if</code> o de un bucle, Python te obliga a usar <strong>sangría (4 espacios hacia la derecha)</strong>.</li>
+    <li><strong>Adiós a declarar el tipo de las variables:</strong> No escribes <code>String nombre</code> ni <code>int edad</code>. Escribes directamente el nombre de la variable y Python deduce el tipo automáticamente.</li>
+  </ul>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Ejemplo 1: Tu primer programa (Comparativa visual)</div>
+    <p>Observa cuántas líneas necesitas en Java frente a Python para mostrar un mensaje por pantalla:</p>
+    <pre><code># --- EN JAVA (5 líneas obligatorias) ---
+# public class MiPrograma {
+#     public static void main(String[] args) {
+#         System.out.println("¡Bienvenido a la tienda de videojuegos!");
+#     }
+# }
+
+# --- EN PYTHON (1 sola línea) ---
+print("¡Bienvenido a la tienda de videojuegos!")</code></pre>
+  </div>
+
+  <!-- SECCIÓN 2 -->
+  <div class="pdf-section">2. Variables, Tipos de Datos e Interacción</div>
+  <p>Imagina que una variable es una caja donde guardas un dato. En Java tienes cajas exclusivas para números y cajas exclusivas para textos. En Python, <strong>la misma caja sirve para guardar cualquier cosa</strong>.</p>
+
+  <h2>2.1. Los 4 tipos básicos que necesitas conocer</h2>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 20%;">Tipo en Python</th>
+        <th style="width: 25%;">Cómo se escribe</th>
+        <th style="width: 55%;">Explicación para principiantes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Texto (<code>str</code>)</td>
+        <td><code>juego = "Zelda"</code></td>
+        <td>Puedes usar comillas dobles <code>" "</code> o simples <code>' '</code> indistintamente.</td>
+      </tr>
+      <tr>
+        <td>Entero (<code>int</code>)</td>
+        <td><code>vidas = 3</code></td>
+        <td>Números sin decimales (positivos o negativos).</td>
+      </tr>
+      <tr>
+        <td>Decimal (<code>float</code>)</td>
+        <td><code>precio = 59.99</code></td>
+        <td>Números con decimales (se usa siempre el punto <code>.</code>, nunca la coma).</td>
+      </tr>
+      <tr>
+        <td>Booleano (<code>bool</code>)</td>
+        <td><code>conectado = True</code></td>
+        <td>Solo puede ser <code>True</code> o <code>False</code>. <strong>¡Ojo! La primera letra va SIEMPRE en mayúscula</strong> (en Java iba en minúscula).</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>2.2. Unir textos y variables: El truco de la letra "f" (f-strings)</h2>
+  <p>En Java, para juntar texto y variables usabas el símbolo <code>+</code> (como <code>"Tienes " + vidas + " vidas"</code>), lo cual era incómodo. En Python, basta con poner una letra <strong><code>f</code></strong> antes de las comillas y meter las variables entre llaves <code>{ }</code> directamente dentro de la frase:</p>
+  <pre><code>personaje = "Mario"
+monedas = 45
+precio_vida = 12.50
+
+# Ponemos una 'f' antes de abrir las comillas y metemos las variables entre { }
+print(f"El jugador {personaje} tiene {monedas} monedas y cada vida cuesta {precio_vida} euros.")</code></pre>
+
+  <h2>2.3. Pedir datos al usuario por teclado con <code>input()</code></h2>
+  <p>Olvídate de crear un <code>Scanner teclado = new Scanner(System.in)</code>. En Python usas directamente la palabra <code>input()</code>. Solo debes recordar una regla muy importante: <strong><code>input()</code> siempre devuelve texto (<code>str</code>)</strong>. Si vas a pedir un número para sumar o restar, debes envolverlo con <code>int(...)</code> o <code>float(...)</code>:</p>
+  <pre><code># Pedir un texto normal
+nombre_usuario = input("¿Cómo te llamas?: ")
+
+# Pedir un número entero (envolvemos input con int para poder sumar con él)
+anio_nacimiento = int(input("¿En qué año naciste?: "))
+
+edad = 2026 - anio_nacimiento
+print(f"Hola {nombre_usuario}, en 2026 cumples {edad} años.")</code></pre>
+
+  <!-- SECCIÓN 3 -->
+  <div class="page-break"></div>
+  <div class="pdf-section">3. Tomar Decisiones: Condicionales y la Regla de la Sangría</div>
+  <p>Para que tu programa tome caminos distintos según una condición, usamos <code>if</code> (si ocurre esto...), <code>elif</code> (si no, pero ocurre esto otro...) y <code>else</code> (en cualquier otro caso).</p>
+
+  <h2>3.1. ¿Cómo funciona la sangría (indentación)?</h2>
+  <p>En Python, después de escribir la condición ponemos <strong>dos puntos <code>:</code></strong>. Al pulsar Enter, todas las líneas que tengan <strong>4 espacios a la izquierda (un tabulador)</strong> están dentro de ese bloque. Cuando vuelves a escribir pegado al margen izquierdo, el bloque se ha cerrado.</p>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Ejemplo 2: Sistema de entrada a un cine según tu edad</div>
+    <pre><code>edad = 16
+tiene_carnet_joven = True
+
+if edad &lt; 12:
+    print("Entrada infantil: 5 euros.")
+    print("Regalo de palomitas pequeñas incluido.")
+elif edad &gt;= 12 and tiene_carnet_joven:
+    print("Entrada joven con descuento: 6 euros.")
+else:
+    print("Entrada general de adulto: 9 euros.")
+
+print("¡Disfruta de la película!") # Esta línea está fuera del if porque no tiene sangría</code></pre>
+  </div>
+
+  <h2>3.2. Operadores lógicos en inglés claro</h2>
+  <p>En vez de símbolos raros como en Java, en Python escribes las palabras directamente en inglés:</p>
+  <ul>
+    <li>En lugar de <code>&amp;&amp;</code> se escribe <strong><code>and</code></strong> (se tienen que cumplir las dos cosas).</li>
+    <li>En lugar de <code>||</code> se escribe <strong><code>or</code></strong> (basta con que se cumpla una de las dos).</li>
+    <li>En lugar de <code>!</code> se escribe <strong><code>not</code></strong> (invierte el valor: si algo es verdad, pasa a falso).</li>
+  </ul>
+
+  <!-- SECCIÓN 4 -->
+  <div class="pdf-section">4. Repetir Tareas: Bucles <code>for</code> y <code>while</code></div>
+  <p>Cuando quieres repetir una acción varias veces o recorrer una colección de datos, dispones de dos herramientas muy simples.</p>
+
+  <h2>4.1. El bucle <code>for</code> con <code>range()</code> (Para contar números)</h2>
+  <p>Si quieres repetir algo un número determinado de veces, usas <code>range(n)</code>. Ten en cuenta que Python siempre empieza a contar desde el <code>0</code> y se detiene justo antes del número que le digas:</p>
+  <pre><code># Repetir algo 3 veces (i valdrá 0, luego 1 y luego 2)
+for i in range(3):
+    print(f"Intento número {i}")
+
+# También puedes decirle desde qué número hasta qué número contar: range(inicio, fin_sin_incluir)
+for nivel in range(1, 4):
+    print(f"Superando el nivel {nivel}...") # Imprime los niveles 1, 2 y 3</code></pre>
+
+  <h2>4.2. El bucle <code>while</code> (Repetir mientras se cumpla una condición)</h2>
+  <p>Funciona exactamente igual que en Java: mientras la condición sea verdadera, sigue dando vueltas.</p>
+  <pre><code>bateria = 30
+
+while bateria &gt; 0:
+    print(f"Jugando... Batería restante: {bateria}%")
+    bateria -= 10  # Restamos 10 en cada vuelta (en Python no existe el operador ++)
+
+print("El móvil se ha apagado.")</code></pre>
+
+  <!-- SECCIÓN 5 -->
+  <div class="page-break"></div>
+  <div class="pdf-section">5. Guardar Colecciones de Datos: Listas, Tuplas y Diccionarios</div>
+  <p>Aquí es donde Python brilla de verdad frente a Java. No tienes que importar librerías complejas para crear listas o mapas; todo se hace usando tres tipos de símbolos: <strong>corchetes <code>[ ]</code></strong>, <strong>paréntesis <code>( )</code></strong> y <strong>llaves <code>{ }</code></strong>.</p>
+
+  <h2>5.1. Las Listas <code>[ ]</code> (Tu carrito de la compra modificable)</h2>
+  <p>Una lista equivale a un <code>ArrayList</code> de Java. Guarda varios elementos en orden, empezando en la posición <code>0</code>. Puedes añadir cosas nuevas, borrar o cambiar las que ya hay:</p>
+  <pre><code># 1. Crear una lista con corchetes [ ]
+mochila = ["Espada", "Escudo", "Poción"]
+
+# 2. Leer elementos por su posición
+print(mochila[0])   # Imprime "Espada" (el primero)
+print(mochila[-1])  # Truco de Python: el -1 SIEMPRE te da el último elemento ("Poción")
+
+# 3. Añadir un objeto nuevo al final con .append()
+mochila.append("Arco")
+
+# 4. Saber cuántas cosas hay dentro con len()
+print(f"Llevas {len(mochila)} objetos en la mochila.")
+
+# 5. Recorrer la lista directamente con un bucle for (sin necesitar índices)
+for objeto in mochila:
+    print(f"- Tienes equipado: {objeto}")</code></pre>
+
+  <h2>5.2. Las Tuplas <code>( )</code> (Cajas precintadas que no se pueden tocar)</h2>
+  <p>Se escriben con paréntesis <code>( )</code>. Son idénticas a las listas, con una única diferencia: <strong>son inmutables (una vez creadas, nadie puede cambiar ni borrar sus datos por accidente)</strong>. Además, permiten un truco llamado <em>desempaquetado</em> para guardar cada dato en una variable de golpe:</p>
+  <pre><code># Una tupla con las coordenadas de un tesoro y el nombre de la isla
+ubicacion = (40, -3, "Isla Calavera")
+
+# Desempaquetado: repartimos los 3 datos en 3 variables en una sola línea
+latitud, longitud, nombre_isla = ubicacion
+
+print(f"El tesoro de {nombre_isla} está en ({latitud}, {longitud})")</code></pre>
+
+  <h2>5.3. Los Diccionarios <code>{ }</code> (Fichas con etiquetas Clave : Valor)</h2>
+  <p>Imagina la ficha de un alumno o un producto de Amazon. En vez de buscar los datos por su posición (posición 0, posición 1...), les pones una <strong>etiqueta con nombre (clave)</strong> y su <strong>dato (valor)</strong> separados por dos puntos <code>:</code>.</p>
+  <pre><code># Creamos la ficha de un coche usando llaves { }
+coche = {
+    "marca": "Toyota",
+    "modelo": "Supra",
+    "caballos": 340,
+    "en_venta": True
+}
+
+# Leer un dato usando su etiqueta entre corchetes
+print(coche["marca"])  # Imprime: Toyota
+
+# Modificar un dato existente o añadir una etiqueta nueva es igual de fácil:
+coche["caballos"] = 380          # Cambiamos los caballos de 340 a 380
+coche["color"] = "Rojo brillante" # Añadimos una etiqueta nueva al diccionario</code></pre>
+
+  <!-- SECCIÓN 6 -->
+  <div class="page-break"></div>
+  <div class="pdf-section">6. Trucos Muy Útiles de Python (Recortar textos y Funciones)</div>
+
+  <h2>6.1. El "Slicing" o Rebanado: Cortar textos como un pan de molde</h2>
+  <p>Si tienes un texto largo (como una matrícula, un DNI o una fecha) y quieres extraer solo un trozo, en Python usas corchetes indicando <code>[desde_donde : hasta_donde_sin_incluir]</code>:</p>
+  <pre><code>codigo_vuelo = "IB-3489-MAD"
+# Posiciones:   0123456789...
+
+compania = codigo_vuelo[0:2]  # Corta desde la posición 0 hasta la 2 -&gt; "IB"
+numero   = codigo_vuelo[3:7]  # Corta desde la posición 3 hasta la 7 -&gt; "3489"
+destino  = codigo_vuelo[8:11] # Corta desde la posición 8 hasta la 11 -&gt; "MAD"
+
+print(f"Vuelo {numero} de {compania} con destino a {destino}")</code></pre>
+
+  <h2>6.2. Crear tus propias Funciones con <code>def</code></h2>
+  <p>Para no repetir código, puedes crear tus propias órdenes reutilizables usando la palabra clave <strong><code>def</code></strong> (de definir):</p>
+  <pre><code># Definimos una función que calcula el precio final con el 21% de IVA
+def calcular_con_iva(precio_sin_iva):
+    total = precio_sin_iva * 1.21
+    return round(total, 2)  # round(..., 2) redondea a 2 decimales
+
+# Ahora podemos usar nuestra función todas las veces que queramos:
+precio_teclado = calcular_con_iva(40)
+precio_monitor = calcular_con_iva(150)
+
+print(f"El teclado con IVA cuesta {precio_teclado}€ y el monitor {precio_monitor}€")</code></pre>
+
+  <!-- SECCIÓN 7 -->
+  <div class="pdf-section">7. Proyecto Práctico Completo: Gestor de una Tienda de Informática</div>
+  <p>Para ver cómo encajan todas las piezas juntas en un caso de la vida real, imagina que tienes una tienda de informática con una lista de productos (una lista de diccionarios) y quieres analizar tu inventario automáticamente:</p>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Código Completo Explicado Línea a Línea: tienda.py</div>
+    <pre><code># 1. Creamos nuestro catálogo: una LISTA [ ] que contiene DICCIONARIOS { }
+catalogo = [
+    {"nombre": "Ratón Gaming", "categoria": "Periféricos", "precio": 25.50, "stock": 12},
+    {"nombre": "Teclado Mecánico", "categoria": "Periféricos", "precio": 65.00, "stock": 0},
+    {"nombre": "Monitor 27 pulgadas", "categoria": "Pantallas", "precio": 199.99, "stock": 4},
+    {"nombre": "Alfombrilla XL", "categoria": "Periféricos", "precio": 12.00, "stock": 20}
+]
+
+# OBJETIVO 1: Mostrar qué productos están agotados (stock igual a 0)
+print("--- 1. PRODUCTOS AGOTADOS ---")
+for prod in catalogo:
+    if prod["stock"] == 0:
+        print(f"¡Alerta! Hay que pedir más unidades de: {prod['nombre']}")
+
+# OBJETIVO 2: Calcular cuánto dinero cuestan todos los "Periféricos" juntos
+print("\n--- 2. SUMA DE PRECIOS DE PERIFÉRICOS ---")
+suma_perifericos = 0
+
+for prod in catalogo:
+    if prod["categoria"] == "Periféricos":
+        suma_perifericos += prod["precio"]
+
+print(f"Comprar un periférico de cada cuesta en total: {suma_perifericos} €")
+
+# OBJETIVO 3: Truco pro de Python -&gt; Sumar el stock total de toda la tienda en 1 sola línea
+total_unidades = sum(prod["stock"] for prod in catalogo)
+print(f"\n--- 3. UNIDADES TOTALES EN EL ALMACÉN: {total_unidades} unidades ---")</code></pre>
+  </div>
+
+  <!-- SECCIÓN 8 -->
+  <div class="diagram-box">
+    <div class="diagram-title">Chuleta Rápida de Supervivencia: Traductor Java → Python</div>
+    <table>
+      <thead>
+        <tr>
+          <th style="width: 30%;">¿Qué quieres hacer?</th>
+          <th style="width: 35%;">Así lo hacías en Java</th>
+          <th style="width: 35%;">Así se hace en Python</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Imprimir por consola</td>
+          <td><code>System.out.println("Hola");</code></td>
+          <td><code>print("Hola")</code></td>
+        </tr>
+        <tr>
+          <td>Pasar texto a minúsculas</td>
+          <td><code>texto.toLowerCase()</code></td>
+          <td><code>texto.lower()</code></td>
+        </tr>
+        <tr>
+          <td>Reemplazar letras en texto</td>
+          <td><code>texto.replace(" ", "_")</code></td>
+          <td><code>texto.replace(" ", "_")</code></td>
+        </tr>
+        <tr>
+          <td>Comprobar cómo empieza un texto</td>
+          <td><code>texto.startsWith("A")</code></td>
+          <td><code>texto.startswith("A")</code> <em>(todo minúscula)</em></td>
+        </tr>
+        <tr>
+          <td>Saber el tamaño de una lista</td>
+          <td><code>lista.size()</code> o <code>array.length</code></td>
+          <td><code>len(lista)</code></td>
+        </tr>
+        <tr>
+          <td>Condición "Si no, si..."</td>
+          <td><code>else if (condicion) { ... }</code></td>
+          <td><code>elif condicion:</code></td>
+        </tr>
+        <tr>
+          <td>Sumar 1 a un contador</td>
+          <td><code>contador++;</code></td>
+          <td><code>contador += 1</code></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- BLOQUE 2: CONTENIDO DEL PDF (SESIÓN 1 - OPERACIÓN BÓVEDA)                 -->
+  <!-- ========================================================================= -->
+
+  <div class="page-break"></div>
+  <h1 class="doc-title">Sistemas de Gestión Empresarial (2º DAM)</h1>
+  <p class="doc-subtitle">Guía Paso a Paso para Principiantes: Fundamentos de Python (Sesión 1 - Operación Bóveda)</p>
+
+  <div class="diagram-box">
+    <div class="diagram-title">¿Cómo leer esta guía si nunca has usado Python?</div>
+    <p>En 2º de DAM ya conoces Java. La buena noticia es que la lógica de programar (variables, condiciones, bucles y listas) es exactamente la misma. La diferencia es que Python elimina todo el "ruido" visual de Java para que escribas mucho menos código. Esta sección recoge paso a paso cada herramienta vista en la Sesión 1 aplicándola directamente a la práctica «Operación Bóveda».</p>
+  </div>
+
+  <!-- SECCIÓN 9 -->
+  <div class="pdf-section">8. Estructura Básica y Ejecución en «Operación Bóveda» (Lección 01)</div>
+  <p>En Java, para mostrar un simple mensaje por pantalla necesitas crear una clase <code>public class...</code>, abrir llaves, declarar <code>public static void main(String[] args)</code> y escribir <code>System.out.println()</code> terminado en punto y coma. En Python todo eso desaparece: escribes directamente las órdenes una debajo de otra.</p>
+
+  <h2>8.1. Las 4 Reglas de Oro frente a Java</h2>
+  <ul>
+    <li><strong>Sin clases ni método <code>main</code> obligatorios:</strong> El archivo empieza a ejecutarse directamente desde la primera línea de arriba hacia abajo.</li>
+    <li><strong>Sin punto y coma (<code>;</code>):</strong> El final de una línea marca el final de la instrucción.</li>
+    <li><strong>Sin compilación previa manual:</strong> No hay que generar un archivo intermedio antes de probarlo; el intérprete lee y ejecuta tu archivo <code>.py</code> directamente.</li>
+    <li><strong>Comentarios con almohadilla (<code>#</code>):</strong> Todo lo que escribas después de <code>#</code> en una línea es un comentario (equivale al <code>//</code> de Java).</li>
+  </ul>
+  <pre><code># En Java: System.out.println("Hola");
+# En Python basta con escribir esta única línea en el archivo hola.py:
+print("Hola")</code></pre>
+
+  <h2>8.2. Cómo ejecutar tu programa y estructura de la práctica</h2>
+  <ul>
+    <li><strong>Ejecución desde terminal:</strong> Abres la consola en la carpeta de tu archivo y escribes <code>python hola.py</code> (o <code>py hola.py</code> si estás en Windows).</li>
+    <li><strong>Organización en «Operación Bóveda»:</strong> Trabajamos con dos ficheros en la misma carpeta:
+      <ul>
+        <li><code>datos.py</code>: Contiene los datos de los empleados y registros de acceso. <strong>No se debe modificar</strong>.</li>
+        <li><code>mision.py</code>: Es tu archivo de trabajo donde programas las soluciones y el que ejecutas en la terminal.</li>
+      </ul>
+    </li>
+  </ul>
+
+  <!-- SECCIÓN 10 -->
+  <div class="pdf-section">9. Variables, Tipado Dinámico y Entrada/Salida en la Sesión 1 (Lección 02)</div>
+  <p>En Java tienes que declarar el tipo antes del nombre (por ejemplo, <code>int nivel = 3;</code> o <code>String agente = "Vega";</code>) y esa variable jamás podrá guardar otra cosa. En Python existe el <strong>tipado dinámico</strong>: no escribes el tipo de dato al crear la variable, simplemente escribes el nombre, el signo <code>=</code> y el valor.</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 20%;">Tipo / Función</th>
+        <th style="width: 30%;">Ejemplo en Python</th>
+        <th style="width: 50%;">Explicación para Novatos</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>str</code> (Cadena)</td>
+        <td><code>agente = "Vega"</code></td>
+        <td>Texto normal. Puedes usar comillas dobles <code>"..."</code> o simples <code>'...'</code> indistintamente.</td>
+      </tr>
+      <tr>
+        <td><code>int</code> (Entero)</td>
+        <td><code>nivel = 3</code></td>
+        <td>Números sin decimales. Como el tipado es dinámico, si luego escribes <code>nivel = "tres"</code> cambia a texto sin dar error.</td>
+      </tr>
+      <tr>
+        <td><code>float</code> (Decimal)</td>
+        <td><code>salario = 3200.50</code></td>
+        <td>Números con decimales (se separan siempre con un punto).</td>
+      </tr>
+      <tr>
+        <td><code>bool</code> (Booleano)</td>
+        <td><code>activo = True</code></td>
+        <td>Verdadero o falso. Muy importante: la primera letra va siempre en mayúscula (<code>True</code> / <code>False</code>).</td>
+      </tr>
+      <tr>
+        <td><code>type()</code></td>
+        <td><code>print(type(nivel))</code></td>
+        <td>Te dice de qué tipo es lo que hay guardado ahora mismo en la variable (ej. muestra <code>&lt;class 'int'&gt;</code>).</td>
+      </tr>
+      <tr>
+        <td><code>input()</code></td>
+        <td><code>edad = int(input("Edad: "))</code></td>
+        <td>Pide un dato por teclado al usuario. Como <code>input()</code> siempre devuelve texto (<code>str</code>), si quieres hacer cuentas con él debes envolverlo en <code>int(...)</code> para convertirlo a número.</td>
+      </tr>
+      <tr>
+        <td><code>f-strings</code></td>
+        <td><code>f"Agente {agente}, nivel {nivel}"</code></td>
+        <td>Pon una letra <code>f</code> antes de las comillas y podrás meter cualquier variable directamente dentro del texto encerrándola entre llaves <code>{ }</code>, sin tener que concatenar con el signo <code>+</code>.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <pre><code># Ejemplo completo de variables y f-strings de la Sesión 1:
+agente = "Vega"
+nivel = 3
+activo = True
+
+# Mostramos un mensaje combinando texto y variables fácilmente:
+print(f"La agente {agente} tiene nivel {nivel}. ¿Está activa?: {activo}")
+
+# Comprobamos cómo una variable puede cambiar de tipo dinámicamente:
+x = 7          # Aquí 'x' es un número entero (int)
+x = "siete"    # Ahora 'x' pasa a ser texto (str) sin ningún error
+print(type(x)) # Imprime por pantalla: &lt;class 'str'&gt;</code></pre>
+
+  <!-- SECCIÓN 11 -->
+  <div class="page-break"></div>
+  <div class="pdf-section">10. Condicionales, Bucles y Colecciones de «Operación Bóveda» (Lecciones 03 a 06)</div>
+
+  <h2>10.1. Condicionales y método <code>startswith()</code> (Lección 03)</h2>
+  <ul>
+    <li><strong>Palabras clave:</strong> Se usa <code>if</code> (si), <code>elif</code> (equivale al <code>else if</code> de Java) y <code>else</code> (sino), cerrados por dos puntos (<code>:</code>) y con 4 espacios de sangría.</li>
+    <li><strong>Operadores lógicos:</strong> En lugar de <code>&amp;&amp;</code>, <code>||</code>, <code>!</code>, se escriben en inglés: <code>and</code>, <code>or</code>, <code>not</code>.</li>
+    <li><strong>Comparar textos:</strong> En lugar de <code>texto.equals("...")</code>, usas directamente <code>==</code> tanto para números como para textos.</li>
+    <li><strong>Comprobar cómo empieza un texto:</strong> El método <code>ip.startswith("10.")</code> devuelve <code>True</code> si la cadena guardada en <code>ip</code> empieza por <code>"10."</code>.</li>
+  </ul>
+  <pre><code>ip = "185.220.101.47"
+
+# Fíjate en los dos puntos (:) al final de cada condición y en los 4 espacios de sangría:
+if ip.startswith("10."):
+    print("Es una IP de la red interna")
+elif ip == "":
+    print("La dirección IP está vacía")
+else:
+    print("¡Alerta! Es una IP externa")
+
+# Ejemplo con operadores lógicos en inglés (not, and, or):
+if not ip.startswith("10."):
+    print("Confirmado: el acceso NO viene de la red local 10.x")</code></pre>
+
+  <h2>10.2. Bucles <code>for</code> y <code>while</code> aplicados a la práctica (Lección 04)</h2>
+  <pre><code># 1. Recorrer directamente los elementos de una lista (for-each):
+nombres = ["Ana", "Luis", "Carlos"]
+for n in nombres:
+    print("Empleado:", n)
+
+# 2. Repetir con contador numérico usando range(3) -&gt; toma valores 0, 1 y 2:
+for i in range(3):
+    print("Intento número:", i)
+
+# 3. Bucle while tradicional:
+intentos = 3
+while intentos &gt; 0:
+    print("Quedan intentos:", intentos)
+    intentos -= 1  # Restamos 1 en cada vuelta</code></pre>
+
+  <h2>10.3. Listas, Tuplas y Slicing de Fechas/Horas (Lección 05)</h2>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 22%;">Característica</th>
+        <th style="width: 39%;">Listas (<code>list</code>)</th>
+        <th style="width: 39%;">Tuplas (<code>tuple</code>)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Cómo se escriben</strong></td>
+        <td>Entre corchetes <code>[ ]</code>:<br><code>ips = ["10.0.0.15", "10.0.0.22"]</code></td>
+        <td>Entre paréntesis <code>( )</code>:<br><code>acceso = (6, "2026-10-15 03:17", "185.220.101.47")</code></td>
+      </tr>
+      <tr>
+        <td><strong>¿Se pueden cambiar? (Mutabilidad)</strong></td>
+        <td><strong>Mutables (SÍ):</strong> Puedes añadir elementos nuevos con <code>ips.append("10.0.0.99")</code> o cambiar uno existente.</td>
+        <td><strong>Inmutables (NO):</strong> Una vez creadas son fijas y no se pueden alterar. Se usan para registros cerrados (como una fila de un log).</td>
+      </tr>
+      <tr>
+        <td><strong>Operaciones más útiles</strong></td>
+        <td>
+          • <code>len(ips)</code>: Cantidad de elementos.<br>
+          • <code>ips[0]</code>: Primer elemento.<br>
+          • <code>ips[-1]</code>: Último elemento.<br>
+          • <code>"10.0.0.22" in ips</code>: Devuelve <code>True</code> si está dentro.
+        </td>
+        <td>
+          <strong>Desempaquetado automático:</strong><br>
+          <code>id_emp, fecha, ip = acceso</code><br>
+          Reparte los 3 datos de la tupla en 3 variables individuales de golpe en una sola línea.
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p><strong>Recortar textos (Slicing) y comparar horas:</strong> En Python puedes recortar un trozo de cualquier texto con <code>texto[inicio:fin]</code> (la posición <code>fin</code> no se incluye). Además, las horas con dos dígitos (formato <code>"HH:MM"</code>) se pueden comparar directamente con <code>&lt;</code> y <code>&gt;</code>:</p>
+  <pre><code>fecha = "2026-10-15 03:17"
+# Posiciones: "2026-10-15 " ocupa de la 0 a la 10. La hora "03:17" va de la 11 a la 15.
+hora = fecha[11:16]  # Extrae exactamente "03:17"
+print("Hora extraída:", hora)
+
+# Comparación directa de horas en texto:
+if hora &lt; "08:00" or hora &gt;= "22:00":
+    print("Acceso fuera del horario laboral")</code></pre>
+
+  <h2>10.4. Diccionarios e Importación de Módulos (Lección 06)</h2>
+  <ul>
+    <li><strong>Importar datos de otro archivo:</strong> Para traer las listas guardadas en <code>datos.py</code> a tu programa, escribes arriba del todo: <code>from datos import empleados, accesos</code>.</li>
+    <li><strong>Tablas en memoria (Listas de diccionarios):</strong> Varios diccionarios dentro de una lista <code>[ {...}, {...} ]</code> conforman una tabla completa donde cada diccionario es la ficha de un empleado.</li>
+    <li><strong>Sumar datos en una sola línea con <code>sum()</code>:</strong> Permite sumar un campo de todos los diccionarios de una lista directamente: <code>sum(e["salario"] for e in empleados)</code>.</li>
+  </ul>
+  <pre><code>from datos import empleados
+
+# Así es un diccionario individual (una ficha de un empleado):
+e = {"id": 6, "nombre": "Raúl Quintero", "depto": "Ventas", "salario": 2950}
+
+print(e["nombre"])   # Leemos el valor de la etiqueta "nombre" -&gt; Raúl Quintero
+e["salario"] = 3000  # Modificamos el salario directamente por su etiqueta
+
+# Recorremos la lista de diccionarios 'empleados' para filtrar los del depto "Sistemas":
+for e in empleados:
+    if e["depto"] == "Sistemas":
+        print(e["nombre"], "cobra:", e["salario"])
+
+# Sumamos todos los salarios de la empresa en una sola línea:
+total_nominas = sum(e["salario"] for e in empleados)
+print("Gasto total en nóminas:", total_nominas)</code></pre>
+
+  <!-- SECCIÓN 12 -->
+  <div class="page-break"></div>
+  <div class="pdf-section">11. Práctica Resuelta Paso a Paso: Misiones 1 a 7 (Operación Bóveda)</div>
+  <p>En el ejercicio «Operación Bóveda» importamos dos variables desde <code>datos.py</code>: <code>empleados</code> (una lista de diccionarios con las claves <code>"id"</code>, <code>"nombre"</code>, <code>"depto"</code> y <code>"salario"</code>) y <code>accesos</code> (una lista de tuplas donde cada tupla contiene 3 datos: <code>(id_empleado, fecha, ip)</code>). A continuación tienes cómo se resuelve cada misión y por qué:</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 18%;">Misión</th>
+        <th style="width: 27%;">Qué nos piden</th>
+        <th style="width: 55%;">Lógica paso a paso para resolverla</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Misión 1</strong><br>Sin etiquetas</td>
+        <td>Ver qué tipo tiene una variable tras reasignarla.</td>
+        <td>Asignamos <code>x = 7</code> y luego <code>x = "siete"</code>. Al hacer <code>print(type(x))</code> manda el último valor guardado, devolviendo <code>&lt;class 'str'&gt;</code>.</td>
+      </tr>
+      <tr>
+        <td><strong>Misión 2</strong><br>La nómina fantasma</td>
+        <td>Sumar el sueldo de todos los empleados.</td>
+        <td>Usamos la función <code>sum()</code> recorriendo la clave <code>"salario"</code> de cada diccionario: <code>sum(e["salario"] for e in empleados)</code>.</td>
+      </tr>
+      <tr>
+        <td><strong>Misión 3</strong><br>El intruso</td>
+        <td>Encontrar el nombre del empleado que entró desde una IP externa.</td>
+        <td>Recorremos las tuplas de <code>accesos</code> desempaquetando <code>id_empleado, fecha, ip</code>. Si <code>not ip.startswith("10.")</code>, buscamos ese <code>id_empleado</code> en <code>empleados</code> y pasamos su nombre a minúsculas y con guion bajo usando <code>.lower().replace(" ", "_")</code>.</td>
+      </tr>
+      <tr>
+        <td><strong>Misión 4</strong><br>Rastro digital</td>
+        <td>Mostrar cuál es la dirección IP externa intrusa.</td>
+        <td>Con el mismo bucle y condición <code>if not ip.startswith("10."):</code> de la misión anterior, imprimimos directamente la variable <code>ip</code>.</td>
+      </tr>
+      <tr>
+        <td><strong>Misión 5</strong><br>Hora cero</td>
+        <td>Obtener la fecha y hora del último acceso desde la IP externa.</td>
+        <td>Como la lista <code>accesos</code> está ordenada cronológicamente, filtramos por la IP externa (<code>if ip == "185.220.101.47":</code>) y la última fecha que coincida es el acceso más reciente.</td>
+      </tr>
+      <tr>
+        <td><strong>Misión 6</strong><br>La caja fuerte</td>
+        <td>Calcular el sueldo medio del depto. "Sistemas" redondeado.</td>
+        <td>Filtramos con <code>if e["depto"] == "Sistemas":</code>, sumamos sus sueldos en un acumulador <code>suma</code> y contamos cuántos hay en <code>contador</code>. Finalmente dividimos y redondeamos con <code>round(suma / contador)</code>.</td>
+      </tr>
+      <tr>
+        <td><strong>Misión 7</strong><br>Fuera de horario</td>
+        <td>Contar cuántos accesos ocurrieron antes de las 08:00 o a partir de las 22:00.</td>
+        <td>Recortamos la hora de la fecha con <code>hora = fecha[11:16]</code>. Si se cumple <code>if hora &lt; "08:00" or hora &gt;= "22:00":</code>, sumamos 1 a nuestro contador.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>11.1. Código Completo de <code>mision.py</code> Comentado</h2>
+  <div class="diagram-box">
+    <div class="diagram-title">Plantilla de resolución completa: mision.py</div>
+    <pre><code># Importamos las dos colecciones de datos desde el archivo datos.py
+from datos import empleados, accesos
+
+# --- MISIÓN 1: Tipado dinámico ---
+x = 7
+x = "siete"
+print("Misión 1:", type(x))
+
+# --- MISIÓN 2: Suma total de salarios ---
+print("Misión 2:", sum(e["salario"] for e in empleados))
+
+# --- MISIÓN 3: Identificar al intruso cruzando accesos y empleados ---
+for id_empleado, fecha, ip in accesos:
+    if not ip.startswith("10."):
+        for e in empleados:
+            if e["id"] == id_empleado:
+                print("Misión 3:", e["nombre"].lower().replace(" ", "_"))
+
+# --- MISIÓN 4: Mostrar la IP externa detectada ---
+for id_empleado, fecha, ip in accesos:
+    if not ip.startswith("10."):
+        print("Misión 4:", ip)
+
+# --- MISIÓN 5: Fecha y hora del acceso desde la IP externa ---
+for id_empleado, fecha, ip in accesos:
+    if ip == "185.220.101.47":
+        print("Misión 5:", fecha)
+
+# --- MISIÓN 6: Sueldo medio redondeado del departamento de Sistemas ---
+suma = 0
+contador = 0
+for e in empleados:
+    if e["depto"] == "Sistemas":
+        suma += e["salario"]
+        contador += 1
+print("Misión 6:", round(suma / contador))
+
+# --- MISIÓN 7: Contador de accesos fuera de horario (antes de 08:00 o desde 22:00) ---
+fuera = 0
+for id_empleado, fecha, ip in accesos:
+    hora = fecha[11:16]
+    if hora &lt; "08:00" or hora &gt;= "22:00":
+        fuera += 1
+print("Misión 7:", fuera)</code></pre>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- BLOQUE 3: CONTENIDO DEL PDF (SESIÓN 2 - EL RASTRO DEL DINERO)             -->
+  <!-- ========================================================================= -->
+
+  <div class="page-break"></div>
+  <h1 class="doc-title">Sistemas de Gestión Empresarial (2º DAM) — Caso 2026-10</h1>
+  <p class="doc-subtitle">Sesión 2: El Rastro del Dinero — Funciones, Ficheros, CSV, JSON y Excepciones (Novacorp)</p>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Expediente 03: Se llevaron algo más que datos (03:41)</div>
+    <p>El atacante dejó la bóveda vacía... y la cartera de clientes bajo sospecha. En esta segunda sesión los datos ya no vienen hardcodeados en listas de Python: llegan en <strong>ficheros reales</strong>, como en cualquier sistema empresarial:</p>
+    <ul>
+      <li><code>clientes.csv</code>: 12 clientes con ciudad, segmento y facturación.</li>
+      <li><code>pedidos.json</code>: Pedidos con fecha, importe y estado (pista clave en la hora <strong>03:41</strong>).</li>
+    </ul>
+  </div>
+
+  <!-- SECCIÓN 13 -->
+  <div class="pdf-section">12. Funciones: Métodos sin Clase y Parámetros por Defecto (Lección 01)</div>
+  <p>En Python las funciones se declaran con la palabra clave <code>def</code> sin necesidad de pertenecer a una clase ni especificar tipos de retorno o de argumentos. Además, en lugar de sobrecargar métodos como en Java, los parámetros opcionales se resuelven directamente asignándoles <strong>valores por defecto</strong>.</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 48%;">En Java (Sobrecarga y tipos explícitos)</th>
+        <th style="width: 52%;">En Python (Sin tipos, sin clase y valores por defecto)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <pre><code>public static int doble(int n) {
+    return n * 2;
+}
+
+// Sobrecarga para parámetros
+// opcionales: varios métodos</code></pre>
+        </td>
+        <td>
+          <pre><code>def doble(n):
+    return n * 2
+
+def saludar(nombre, cargo="agente"):
+    return f"Hola, {cargo} {nombre}"
+
+print(saludar("Vega"))                # Hola, agente Vega
+print(saludar("Vega", cargo="jefa"))  # Hola, jefa Vega</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- SECCIÓN 14 -->
+  <div class="pdf-section">13. Ficheros de Texto: Abrir, Leer y Cerrar con <code>with</code> (Lección 02)</div>
+  <p>Para trabajar con archivos en Python se emplea la sentencia <code>with open(...) as f:</code>, que garantiza que el fichero se cierre automáticamente al terminar el bloque (exactamente igual que el <em>try-with-resources</em> de Java), incluso si ocurre un error.</p>
+
+  <pre><code># Lectura línea a línea
+with open("notas.txt", encoding="utf-8") as f:
+    for linea in f:
+        print(linea.strip())  # .strip() elimina saltos de línea y espacios sobrantes
+
+# Escritura en fichero (sobrescribe si ya existe)
+with open("salida.txt", "w", encoding="utf-8") as f:
+    f.write("Caso cerrado\n")</code></pre>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Reglas clave para el manejo de ficheros</div>
+    <ul>
+      <li><strong>Cierre automático:</strong> <code>with</code> cierra el fichero solo (como <code>try-with-resources</code>).</li>
+      <li><strong>Modos de apertura:</strong> <code>"r"</code> leer (por defecto si no se indica), <code>"w"</code> escribir (sobrescribe), <code>"a"</code> añadir al final (<em>append</em>) y <code>"x"</code> crear nuevo (falla si ya existe).</li>
+      <li><strong>Codificación en Windows:</strong> Usa siempre <code>encoding="utf-8"</code> para evitar problemas con tildes y la letra ñ.</li>
+    </ul>
+  </div>
+
+  <!-- SECCIÓN 15 -->
+  <div class="page-break"></div>
+  <div class="pdf-section">14. Ficheros CSV: Una Fila, un Diccionario (Lección 03)</div>
+  <p>El módulo integrado <code>csv</code> permite leer tablas separadas por comas (o punto y coma) convirtiendo automáticamente cada fila en un <strong>diccionario</strong> mediante <code>csv.DictReader(f)</code>, usando la primera fila de cabecera como claves.</p>
+
+  <pre><code>import csv
+
+with open("clientes.csv", encoding="utf-8") as f:
+    clientes = list(csv.DictReader(f))
+
+print(clientes[0]["nombre"])  # Ferretería Ortega
+
+# Convertimos a int() porque en CSV todo llega como texto
+total = sum(int(c["facturacion"]) for c in clientes)</code></pre>
+
+  <div class="diagram-box">
+    <div class="diagram-title">¡OJO! Detalles críticos al leer CSV</div>
+    <ul>
+      <li><strong>Todo valor del CSV llega como texto (<code>str</code>):</strong> Si necesitas sumar importes o comparar números, recuerda convertirlos explícitamente con <code>int(...)</code> o <code>float(...)</code>.</li>
+      <li><strong>Celdas vacías:</strong> Un campo vacío se lee como cadena vacía <code>""</code> y en Python evalúa como falso (<em>falsy</em>) dentro de un <code>if</code> (por ejemplo, <code>if c["ciudad"]:</code> será <code>False</code> si está vacío).</li>
+    </ul>
+  </div>
+
+  <!-- SECCIÓN 16 -->
+  <div class="pdf-section">15. Ficheros JSON: De Fichero a Diccionario y List Comprehension (Lección 04)</div>
+  <p>El módulo nativo <code>json</code> traduce de forma directa la estructura de un archivo <code>.json</code> a listas y diccionarios de Python (<code>json.load()</code>) y viceversa (<code>json.dump()</code>).</p>
+
+  <pre><code>import json
+
+# 1. Leer JSON a lista de diccionarios
+with open("pedidos.json", encoding="utf-8") as f:
+    pedidos = json.load(f)  # Devuelve directamente una lista de dicts
+
+# 2. Filtrar con comprensión de listas (List Comprehension)
+pendientes = [p for p in pedidos if p["estado"] == "pendiente"]
+
+# Equivale al bucle tradicional:
+# pendientes = []
+# for p in pedidos:
+#     if p["estado"] == "pendiente":
+#         pendientes.append(p)
+
+# 3. Guardar datos en un nuevo fichero JSON legible y con tildes
+with open("pendientes.json", "w", encoding="utf-8") as f:
+    json.dump(pendientes, f, indent=2, ensure_ascii=False)</code></pre>
+
+  <ul>
+    <li><code>indent=2</code>: Escribe el JSON formateado y sangrado con 2 espacios, un dato por línea. Sin este parámetro, todo se guardaría en una única línea ilegible.</li>
+    <li><code>ensure_ascii=False</code>: Conserva las tildes y caracteres especiales tal cual (por ejemplo <code>"Logística"</code>). Sin él, se escaparían como códigos Unicode (<code>"Log\u00edstica"</code>).</li>
+  </ul>
+
+  <!-- SECCIÓN 17 -->
+  <div class="page-break"></div>
+  <div class="pdf-section">16. Control de Excepciones: <code>try / except / finally</code> (Lección 05)</div>
+  <p>En Python la estructura de control de errores sustituye la palabra <code>catch</code> de Java por <code>except</code>, manteniendo idéntico el funcionamiento de <code>try</code> y <code>finally</code>.</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 48%;">En Java (<code>try / catch</code>)</th>
+        <th style="width: 52%;">En Python (<code>try / except / finally</code>)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <pre><code>try {
+    leer("clientes.csv");
+} catch (IOException e) {
+    System.out.println("Sin fichero");
+}</code></pre>
+        </td>
+        <td>
+          <pre><code>try:
+    clientes = cargar("clientes.csv")
+except FileNotFoundError:
+    print("Sin fichero")
+finally:
+    print("Fin de la lectura")</code></pre>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- SECCIÓN 18 -->
+  <div class="pdf-section">17. Reglas de la Operación: Cómo Jugar en la Sesión 2</div>
+  <div class="diagram-box">
+    <div class="diagram-title">Hoja de Ruta de la Misión — Novacorp Caso 2026-10</div>
+    <ol>
+      <li><strong>Descargad los ficheros:</strong> Colocad <code>clientes.csv</code> y <code>pedidos.json</code> en la misma carpeta junto a vuestro script de Python.</li>
+      <li><strong>Escribid funciones:</strong> Reutilizad código estructurando el programa con <strong>una función por cada pregunta</strong> o misión.</li>
+      <li><strong>Cazad las flags:</strong> Cada resultado/flag de la plataforma sale directamente de la ejecución de vuestro código.</li>
+    </ol>
+    <p><strong>Normas importantes:</strong> Trabajo individual. Las pistas restan puntos. Y recordad siempre en Windows: <code>encoding="utf-8"</code>.</p>
+  </div>
+
+  <script data-inlined-from="../../../script/ut-theme.js">/* ==========================================================================
+   ut-theme.js — Botón flotante abajo a la izquierda (solo icono) para
+   alternar entre Modo Oscuro y Modo Claro en las Unidades Temáticas.
+   ========================================================================== */
+(function () {
+  "use strict";
+  const STORAGE_KEY = "tema_apuntes";
+
+  const SVG_SUN = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>`;
+  const SVG_MOON = `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`;
+
+  function getSavedTheme() {
+    try {
+      return localStorage.getItem(STORAGE_KEY) || localStorage.getItem("teoriaKotlin.theme") || "dark";
+    } catch (e) {
+      return "dark";
+    }
+  }
+
+  function applyTheme(theme) {
+    const isLight = theme === "light";
+    const root = document.documentElement;
+    if (isLight) {
+      root.setAttribute("data-theme", "light");
+      root.classList.remove("dark");
+      root.classList.add("light");
+    } else {
+      root.setAttribute("data-theme", "dark");
+      root.classList.add("dark");
+      root.classList.remove("light");
+    }
+    const btn = document.getElementById("ut-floating-theme-btn");
+    if (btn) {
+      btn.innerHTML = isLight ? SVG_MOON : SVG_SUN;
+      btn.title = isLight ? "Cambiar a modo oscuro" : "Cambiar a modo claro";
+      btn.setAttribute("aria-label", btn.title);
+    }
+    try {
+      localStorage.setItem(STORAGE_KEY, isLight ? "light" : "dark");
+      localStorage.setItem("teoriaKotlin.theme", isLight ? "light" : "dark");
+      localStorage.setItem("psp-theme", isLight ? "light" : "dark");
+    } catch (e) {}
+  }
+
+  function toggleTheme() {
+    const isLight = document.documentElement.getAttribute("data-theme") === "light";
+    applyTheme(isLight ? "dark" : "light");
+  }
+
+  // Aplicar tema de inmediato para evitar parpadeo
+  applyTheme(getSavedTheme());
+
+  function mountButton() {
+    if (window.self !== window.top) {
+      // Si estamos dentro de un iframe (visor.html), no montar botón duplicado
+      return;
+    }
+    let btn = document.getElementById("ut-floating-theme-btn");
+    if (!btn) {
+      btn = document.createElement("button");
+      btn.id = "ut-floating-theme-btn";
+      btn.type = "button";
+      btn.className = "ut-floating-theme-btn";
+      document.body.appendChild(btn);
+    }
+    btn.onclick = toggleTheme;
+    applyTheme(getSavedTheme());
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", mountButton);
+  } else {
+    mountButton();
+  }
+
+  window.toggleTheme = toggleTheme;
+  window.applyTheme = applyTheme;
+})();
+</script>
+
+</body></html>
