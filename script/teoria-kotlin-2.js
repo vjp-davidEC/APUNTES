@@ -62,7 +62,7 @@
         <a class="nav-home ${route.view === "todo" ? "active" : ""}" href="#/todo">
           ${SVG.android}<span>Toda la Teoría Continua</span>
         </a>
-        <div class="nav-divider"><span>Temario Oficial (3 – 7)</span><span>${TEMAS.length} temas</span></div>
+        <div class="nav-divider"><span>Temario Oficial (3 – 8)</span><span>${TEMAS.length} temas</span></div>
       `;
 
       TEMAS.forEach((t) => {
@@ -110,13 +110,13 @@
                 <span class="tech-pill">${SVG.compose}<span>Jetpack Compose & Material 3</span></span>
               </div>
               <h1>Manual de Teoría <span class="grad-text">Kotlin</span> & <span class="grad-and-text">Android</span></h1>
-              <p>Toda la teoría oficial de la carpeta <strong>ApuntesKotlin</strong> (Temas 3 al 7): sintaxis del lenguaje Kotlin, Logcat, arquitectura de una App Android, ciclo de vida de una Activity, diseño declarativo con Jetpack Compose, Material Design 3, componentes, estados y listas Lazy.</p>
+              <p>Toda la teoría oficial de la carpeta <strong>ApuntesKotlin</strong> (Temas 3 al 8): sintaxis del lenguaje Kotlin, Logcat, arquitectura de una App Android, ciclo de vida de una Activity, diseño declarativo con Jetpack Compose, Material Design 3, componentes, estados, listas Lazy, navegación con Navigation Compose e Intents implícitos.</p>
               <div class="hero-actions">
                 <a class="btn primary" href="#/${TEMAS[0].id}/${TEMAS[0].secciones[0].id}">
                   ${SVG.kotlin}<span>Empezar por el Tema 3</span>
                 </a>
                 <a class="btn and-pill" href="#/todo">
-                  ${SVG.android}<span>Leer los 5 Temas Seguidos</span>
+                  ${SVG.android}<span>Leer los 6 Temas Seguidos</span>
                 </a>
               </div>
             </div>
@@ -130,7 +130,7 @@
         <div class="stats-row">
           <div class="stat-card">
             <div class="stat-ic">${SVG.kotlin}</div>
-            <div class="stat-info"><strong>${TEMAS.length} Temas</strong><span>Temas 3, 4, 5, 6 y 7</span></div>
+            <div class="stat-info"><strong>${TEMAS.length} Temas</strong><span>Temas 3, 4, 5, 6, 7 y 8</span></div>
           </div>
           <div class="stat-card">
             <div class="stat-ic">${SVG.android}</div>
@@ -229,7 +229,7 @@
         <header class="sec-header">
           <nav class="crumbs"><a href="#/inicio">Inicio</a><span>›</span><span>Modo Lectura Completa</span></nav>
           <div class="sec-title-row">
-            <h1>Toda la Teoría de Kotlin y Android (Temas 3 al 7)</h1>
+            <h1>Toda la Teoría de Kotlin y Android (Temas 3 al 8)</h1>
             <div style="display:flex;gap:.5rem">
               <span class="tech-pill">${SVG.kotlin}<span>Kotlin</span></span>
               <span class="tech-pill">${SVG.android}<span>Android</span></span>

@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PMYDM - Temario Completo (Temas 3, 4, 5, 6 y 7)</title>
+  <title>PMYDM - Temario Completo (Temas 3, 4, 5, 6, 7 y 8)</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2032%2032'%3E%3Cdefs%3E%3ClinearGradient%20id='g'%20x1='0'%20y1='1'%20x2='1'%20y2='0'%3E%3Cstop%20offset='0%25'%20stop-color='%232563eb'/%3E%3Cstop%20offset='52%25'%20stop-color='%233b82f6'/%3E%3Cstop%20offset='100%25'%20stop-color='%2306b6d4'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width='32'%20height='32'%20rx='8'%20fill='%230f172a'%20stroke='url%28%23g%29'%20stroke-width='1.8'/%3E%3Cg%20transform=%22translate%286,6%29%20scale%280.833%29%22%3E%3Cpath%20fill=%22%233DDC84%22%20d=%22M17.6%2011.48%20L19.44%208.3%20a0.63%200.63%200%200%200%20-1.09%20-0.63%20l-1.88%203.24%20a11.43%2011.43%200%200%200%20-8.94%200%20L5.65%207.67%20a0.63%200.63%200%200%200%20-1.09%200.63%20L6.4%2011.48%20A10.81%2010.81%200%200%200%201%2020%20h22%20A10.81%2010.81%200%200%200%2017.6%2011.48%20Z%20M7%2017.25%20A1.25%201.25%200%201%201%208.25%2016%20A1.25%201.25%200%200%201%207%2017.25%20Z%20M17%2017.25%20A1.25%201.25%200%201%201%2018.25%2016%20A1.25%201.25%200%200%201%2017%2017.25%20Z%22/%3E%3C/g%3E%3C/svg%3E">
-  <link rel="stylesheet" href="../../../css/PMYDM-UT3_4_5_6_7.css">
+  <link rel="stylesheet" href="../../../css/PMYDM-UT3_4_5_6_7_8.css">
 </head>
 <body>
 
@@ -17,11 +17,11 @@
   </div>
 
   <h1 class="doc-title">Programación Multimedia y Dispositivos Móviles</h1>
-  <p class="doc-subtitle">Guía de Estudio Integral y Catálogo Técnico (Temas 3, 4, 5, 6 y 7)</p>
+  <p class="doc-subtitle">Guía de Estudio Integral y Catálogo Técnico (Temas 3, 4, 5, 6, 7 y 8)</p>
 
   <div class="diagram-box">
     <div class="diagram-title">Propósito, Referencias y Configuración de Recursos</div>
-    <p>Documento unificado y completo que combina la <strong>guía didáctica y temática exhaustiva</strong> (teoría completa, sintaxis, explicaciones detalladas y enunciados de consolidación de los temas 3, 4, 5, 6 y 7) con las <strong>tablas de referencia rápida y catálogo canónico</strong> de componentes, modificadores, estados, menús y ciclo de vida en Android con Jetpack Compose (IES Valle del Jerte, Plasencia).</p>
+    <p>Documento unificado y completo que combina la <strong>guía didáctica y temática exhaustiva</strong> (teoría completa, sintaxis, explicaciones detalladas y enunciados de consolidación de los temas 3, 4, 5, 6, 7 y 8) con las <strong>tablas de referencia rápida y catálogo canónico</strong> de componentes, modificadores, estados, menús, navegación, intents y ciclo de vida en Android con Jetpack Compose (IES Valle del Jerte, Plasencia).</p>
     <p><strong>Selector y Conversor de Colores Web (HTML / Hex / RGB):</strong> Consulta la paleta y códigos en <a href="https://htmlcolorcodes.com/es/" target="_blank">HTML Color Codes (Español)</a>.</p>
     <div class="diagram-title" style="margin-top: 8px;">Configuración de Dependencias: Material Icons Extended</div>
     <p><strong>1. Archivo <code>libs.versions.toml</code> (carpeta gradle del proyecto):</strong><br>
@@ -958,6 +958,589 @@ fun TextFieldNombre(nombre: String, onTextChange: (String) -> Unit) {
     )
 }</code></pre>
   </div>
+
+  <!-- ========================================== -->
+  <!-- TEMA 8: NAVEGACIÓN E INTENTS               -->
+  <!-- ========================================== -->
+  <div class="page-break"></div>
+  <div class="pdf-section">TEMA 8: Navegación e Intents</div>
+
+  <h2>1. Navigation Compose</h2>
+  <p>La navegación permite desplazarnos entre las diferentes pantallas de una aplicación. En Jetpack Compose es común utilizar una única <code>Activity</code>, por lo que la navegación entre pantallas se realiza dentro de esta actividad: cuando nos desplazamos a una pantalla, esta se añade a la <strong>pila de navegación</strong>; si volvemos atrás, la pantalla actual se retira de la pila y se muestra la anterior. <strong>Navigation Compose</strong> es la forma moderna de manejar la navegación cuando trabajamos con Jetpack Compose.</p>
+
+  <h3>Componentes y Métodos de Navigation Compose</h3>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 28%;">Componente / Método</th>
+        <th style="width: 72%;">Descripción y Función</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>NavController</code></td>
+        <td>Controla la navegación entre las diferentes pantallas.</td>
+      </tr>
+      <tr>
+        <td><code>NavHost</code></td>
+        <td>Contenedor donde se muestran las pantallas de la aplicación. Recibe <code>navController</code>, <code>startDestination</code> (primera pantalla que se mostrará en la app) y opcionalmente <code>modifier</code>.</td>
+      </tr>
+      <tr>
+        <td><code>composable</code></td>
+        <td>Define y registra cada pantalla como una ruta de navegación (<code>composable&lt;Ruta&gt;</code>).</td>
+      </tr>
+      <tr>
+        <td><code>rememberNavController</code></td>
+        <td>Crea el <code>NavController</code> y lo recupera para usarlo en futuras recomposiciones de la UI, evitando que la app pierda el historial de navegación cada vez que se redibuja la pantalla.</td>
+      </tr>
+      <tr>
+        <td><code>navController.navigate()</code></td>
+        <td>Permite navegar hacia otra pantalla recibiendo un objeto de la ruta a la que queremos acceder.</td>
+      </tr>
+      <tr>
+        <td><code>navController.popBackStack()</code></td>
+        <td>Permite volver a la pantalla anterior, retirando la pantalla actual de la pila de navegación.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Configuración Previa (Dependencias y Kotlin Serialization)</h3>
+  <p>Para utilizar Navigation Compose con seguridad de tipos (<strong>Type-safe Navigation</strong>), debemos añadir las dependencias necesarias y configurar el plugin de Kotlin Serialization en el proyecto, y finalmente pulsar <em>Sync Now</em> para sincronizar:</p>
+
+  <div class="diagram-box">
+    <div class="diagram-title">1. Archivo libs.versions.toml</div>
+    <pre><code>[versions]
+# Navigation Compose y Serialización
+navigationCompose = "2.8.8" # Versión estable de Navigation Compose que introduce Type-safe navigation
+kotlinxSerialization = "1.7.3" # Herramientas de serialización que utiliza Navigation Compose
+
+[libraries]
+# Navigation Compose y Serialización
+androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
+kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerialization" }
+
+[plugins]
+# Plugin para la Serialización de objetos Kotlin
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }</code></pre>
+    <div class="diagram-title" style="margin-top: 8px;">2. Archivo build.gradle.kts (Módulo :app)</div>
+    <pre><code>plugins {
+    // Plugin para Serialización de objetos Kotlin
+    alias(libs.plugins.kotlin.serialization)
+}
+
+dependencies {
+    // Navigation Compose y Serialización
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.kotlinx.serialization.json)
+}</code></pre>
+  </div>
+
+  <h3>Type-safe Navigation: Rutas, NavGraph y Paso de Parámetros</h3>
+  <p>En Navigation Compose, <strong>Type-safe Navigation</strong> permite definir las rutas hacia las pantallas mediante clases u objetos serializables de Kotlin en lugar de cadenas de texto, reduciendo los errores durante la navegación:</p>
+  <ul>
+    <li><code>@Serializable</code>: Indica que una clase u objeto puede serializarse.</li>
+    <li><code>object</code>: Para pantallas que <strong>no necesitan recibir parámetros</strong>.</li>
+    <li><code>data class</code>: Para pantallas que <strong>necesitan recibir parámetros</strong>.</li>
+  </ul>
+  <p><strong>Estructura de paquetes del ejemplo (Tienda de Productos):</strong> Nuestra aplicación tiene dos pantallas: <code>Home</code> (muestra inicialmente el nombre y el identificador de un producto) y <code>Detail</code> (muestra el detalle del producto al pulsar sobre él; pulsando el botón "Atrás" del dispositivo vuelve a <code>Home</code>). Los archivos se organizan en <code>ui.navigation</code> (<code>Routes.kt</code> y <code>NavGraph.kt</code>), <code>ui.screens</code> (<code>HomeScreen.kt</code> y <code>DetailScreen.kt</code>) y <code>MainActivity.kt</code>.</p>
+  <ul>
+    <li><strong>Desacoplamiento de pantallas:</strong> <code>HomeScreen</code> recibe la función lambda <code>onNavigateToDetail: (Int, String) -&gt; Unit</code>. No conoce directamente el <code>NavController</code>; simplemente comunica su intención de navegar invocando la lambda, y es el <code>NavGraph</code> el encargado de ejecutar <code>navController.navigate(...)</code>.</li>
+    <li><strong>Recuperación de argumentos en destino:</strong> En <code>composable&lt;DetailRoute&gt; { backStackEntry -&gt; ... }</code>, <code>backStackEntry</code> representa la entrada de la pantalla en la pila de navegación y <code>toRoute&lt;DetailRoute&gt;()</code> recupera el objeto de la ruta para pasar sus propiedades a <code>DetailScreen</code>.</li>
+  </ul>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Ejemplo 1 · ui/navigation/Routes.kt</div>
+    <pre><code>package com.example.cursojetpackcompose.ui.navigation
+
+import kotlinx.serialization.Serializable
+
+// Representa la pantalla Home, que no recibe parámetros
+@Serializable
+object HomeRoute
+
+// Representa la pantalla Detail, que recibe id y nombre del producto
+@Serializable
+data class DetailRoute(
+    val productId: Int,
+    val productName: String
+)</code></pre>
+  </div>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Ejemplo 1 · ui/navigation/NavGraph.kt</div>
+    <pre><code>@Composable
+fun NavGraph(navController: NavHostController) {
+    // Grafo de navegación que controla qué pantalla mostrar
+    NavHost(
+        navController = navController,
+        startDestination = HomeRoute // Pantalla que se cargará de inicio en la app
+    ) {
+        // Comportamiento de la pantalla "Home"
+        composable&lt;HomeRoute&gt; {
+            HomeScreen(
+                onNavigateToDetail = { id, name -&gt;
+                    navController.navigate(
+                        route = DetailRoute(
+                            productId = id,
+                            productName = name
+                        )
+                    )
+                }
+            )
+        }
+
+        // Comportamiento de la pantalla "Detail"
+        composable&lt;DetailRoute&gt; { backStackEntry -&gt;
+            val args = backStackEntry.toRoute&lt;DetailRoute&gt;()
+            DetailScreen(
+                productId = args.productId,
+                productName = args.productName
+            )
+        }
+    }
+}</code></pre>
+  </div>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Ejemplo 1 · ui/screens/HomeScreen.kt</div>
+    <pre><code>@Composable
+fun HomeScreen(
+    onNavigateToDetail: (Int, String) -&gt; Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(all = 16.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = "Tienda de Productos",
+            style = MaterialTheme.typography.headlineMedium,
+            color = MaterialTheme.colorScheme.primary
+        )
+
+        Spacer(modifier = Modifier.height(32.dp))
+
+        // Producto seleccionable
+        Text(
+            text = "PC Gaming (ID = 1)",
+            style = MaterialTheme.typography.headlineSmall,
+            modifier = Modifier
+                .padding(top = 24.dp)
+                .clickable {
+                    onNavigateToDetail(1, "PC Gaming")
+                }
+        )
+    }
+}</code></pre>
+  </div>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Ejemplo 1 · ui/screens/DetailScreen.kt</div>
+    <pre><code>@Composable
+fun DetailScreen(
+    productId: Int,
+    productName: String
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(all = 16.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = "Detalle del Producto",
+            style = MaterialTheme.typography.headlineMedium,
+            color = MaterialTheme.colorScheme.primary
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        // Mostramos los datos recibidos por parámetros procedentes de la pantalla "HomeScreen"
+        Text(
+            text = "Nombre: $productName",
+            style = MaterialTheme.typography.headlineSmall
+        )
+        Text(
+            text = "ID del Producto: $productId",
+            style = MaterialTheme.typography.headlineSmall
+        )
+    }
+}</code></pre>
+  </div>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Ejemplo 1 · MainActivity.kt</div>
+    <pre><code>package com.example.cursojetpackcompose
+
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
+        setContent {
+            EjemploNavigationComposeTheme {
+                NavigationComposeExample()
+            }
+        }
+    }
+}
+
+@Composable
+fun NavigationComposeExample() {
+    // Creamos el control de navegación
+    val navController = rememberNavController()
+    // Invocamos a la función que contiene el grafo de navegación pasándole el control de navegación
+    NavGraph(navController = navController)
+}</code></pre>
+  </div>
+
+  <h2>2. Navegación con TopAppBar</h2>
+  <p>También podemos utilizar una barra superior para facilitar la navegación entre pantallas (por ejemplo, añadiendo a la tienda de productos un icono para volver atrás y otro para acceder al detalle del producto). Para integrar la <code>TopAppBar</code> y el <code>NavGraph</code> utilizamos un componente <code>Scaffold</code>: la barra superior se coloca en el parámetro <code>topBar</code> y el grafo de navegación en el contenido respetando <code>paddingValues</code>.</p>
+  <p>En este caso, la navegación se ejecuta directamente desde el propio <code>Scaffold</code> utilizando <code>navController.navigate()</code> y <code>navController.popBackStack()</code>, ya que el Composable que contiene el <code>Scaffold</code> actúa como coordinador y tiene visibilidad directa del <code>NavController</code>. Por tanto, <strong>no es necesario notificar la intención de navegación al NavGraph mediante funciones lambdas</strong> desde <code>HomeScreen</code>.</p>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Ejemplo 2 (TopAppBar) · MainActivity.kt</div>
+    <pre><code>@Composable
+fun NavigationComposeExample() {
+    // Creamos el control de navegación
+    val navController = rememberNavController()
+
+    // Scaffold que contiene la TopAppBar y el NavGraph
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text("Navigation Compose")
+                },
+                navigationIcon = {
+                    IconButton( // Icono de volver atrás
+                        onClick = {
+                            navController.popBackStack()
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Volver"
+                        )
+                    }
+                },
+                actions = {
+                    IconButton( // Producto seleccionable
+                        onClick = {
+                            navController.navigate(
+                                route = DetailRoute(
+                                    productId = 1,
+                                    productName = "PC Gaming"
+                                )
+                            )
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Info,
+                            contentDescription = "Producto"
+                        )
+                    }
+                }
+            )
+        }
+    ) { paddingValues -&gt;
+        // Contenido del Scaffold
+        NavGraph(
+            navController = navController,
+            modifier = Modifier.padding(paddingValues)
+        )
+    }
+}</code></pre>
+  </div>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Ejemplo 2 (TopAppBar) · NavGraph.kt y HomeScreen.kt</div>
+    <pre><code>// NavGraph.kt (no necesita implementar comportamiento para HomeScreen)
+@Composable
+fun NavGraph(
+    navController: NavHostController,
+    modifier: Modifier = Modifier
+) {
+    // Grafo de navegación que controla qué pantalla mostrar
+    NavHost(
+        navController = navController,
+        startDestination = HomeRoute, // Pantalla que se cargará de inicio en la app
+        modifier = modifier
+    ) {
+        // Comportamiento de la pantalla "Home"
+        composable&lt;HomeRoute&gt; {
+            HomeScreen()
+        }
+
+        // Comportamiento de la pantalla "Detail"
+        composable&lt;DetailRoute&gt; { backStackEntry -&gt;
+            val args = backStackEntry.toRoute&lt;DetailRoute&gt;()
+            DetailScreen(
+                productId = args.productId,
+                productName = args.productName
+            )
+        }
+    }
+}
+
+// HomeScreen.kt (sin parámetros ni .clickable; DetailScreen se mantiene igual)
+@Composable
+fun HomeScreen() {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(all = 16.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = "Tienda de Productos",
+            style = MaterialTheme.typography.headlineMedium,
+            color = MaterialTheme.colorScheme.primary
+        )
+
+        Spacer(modifier = Modifier.height(32.dp))
+
+        Text(
+            text = "PC Gaming (ID = 1)",
+            style = MaterialTheme.typography.headlineSmall,
+            modifier = Modifier.padding(top = 24.dp)
+        )
+    }
+}</code></pre>
+  </div>
+
+  <h2>3. Navegación con NavigationBar</h2>
+  <p><code>NavigationBar</code> permite mostrar una barra de navegación en la parte inferior de la pantalla, resultando especialmente útil cuando una aplicación dispone de varias secciones principales (por ejemplo: <code>Home</code>, <code>Favourites</code> y <code>Settings</code>). Se integra mediante el parámetro <code>bottomBar</code> de <code>Scaffold</code> y puede personalizarse con <code>containerColor</code> (color del contenedor) y <code>contentColor</code> (color del contenido interno). Al igual que con la barra superior, el <code>Scaffold</code> conoce el <code>NavController</code>, por lo que cada ítem ejecuta <code>navController.navigate(...)</code> directamente sin necesidad de lambdas.</p>
+  <p>Cada sección de la barra se representa mediante un <code>NavigationBarItem</code>, cuyos parámetros principales son:</p>
+  <ul>
+    <li><code>selected</code>: Indica si el ítem está seleccionado o no (se comprueba obteniendo el destino actual con <code>navController.currentBackStackEntryAsState()</code> y evaluando <code>destination?.hasRoute&lt;Ruta&gt;() == true</code>).</li>
+    <li><code>onClick</code>: Función lambda de tipo <code>() -&gt; Unit</code> que se ejecuta al pulsar el ítem.</li>
+    <li><code>icon</code>: Icono que representa la opción.</li>
+    <li><code>label</code>: Texto descriptivo de la opción.</li>
+    <li><code>colors</code>: Permite configurar los colores de fondo, iconos y texto del ítem mediante <code>NavigationBarItemDefaults.colors()</code>.</li>
+  </ul>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Ejemplo 3 (NavigationBar) · MainActivity.kt</div>
+    <pre><code>@Composable
+fun NavigationComposeExample() {
+    // Creamos el control de navegación
+    val navController = rememberNavController()
+    // Se obtiene el destino actual de la navegación
+    val navBackStackEntry = navController.currentBackStackEntryAsState()
+    // Se comprueba si estamos en la pantalla "Home" (y de forma análoga para Favourites y Settings)
+    val isHome = navBackStackEntry.value?.destination?.hasRoute&lt;HomeRoute&gt;() == true
+    val isFavourites = navBackStackEntry.value?.destination?.hasRoute&lt;FavouritesRoute&gt;() == true
+    val isSettings = navBackStackEntry.value?.destination?.hasRoute&lt;SettingsRoute&gt;() == true
+
+    // Scaffold que contiene la NavigationBar y el NavGraph
+    Scaffold(
+        bottomBar = {
+            NavigationBar {
+                NavigationBarItem(
+                    selected = isHome,
+                    onClick = { navController.navigate(HomeRoute) },
+                    icon = {
+                        Icon(
+                            imageVector = Icons.Default.Home,
+                            contentDescription = "Navegación a HomeScreen"
+                        )
+                    },
+                    label = { Text("Home") }
+                )
+                NavigationBarItem(
+                    selected = isFavourites,
+                    onClick = { navController.navigate(FavouritesRoute) },
+                    icon = {
+                        Icon(
+                            imageVector = Icons.Default.Favorite,
+                            contentDescription = "Navegación a FavouritesScreen"
+                        )
+                    },
+                    label = { Text("Favourites") }
+                )
+                NavigationBarItem(
+                    selected = isSettings,
+                    onClick = { navController.navigate(SettingsRoute) },
+                    icon = {
+                        Icon(
+                            imageVector = Icons.Default.Settings,
+                            contentDescription = "Navegación a SettingsScreen"
+                        )
+                    },
+                    label = { Text("Settings") }
+                )
+            }
+        }
+    ) { paddingValues -&gt;
+        // Contenido del Scaffold
+        NavGraph(
+            navController = navController,
+            modifier = Modifier.padding(paddingValues)
+        )
+    }
+}</code></pre>
+  </div>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Ejemplo 3 (NavigationBar) · NavGraph.kt y HomeScreen.kt</div>
+    <pre><code>// NavGraph.kt
+@Composable
+fun NavGraph(
+    navController: NavHostController,
+    modifier: Modifier = Modifier
+) {
+    NavHost(
+        navController = navController,
+        startDestination = HomeRoute,
+        modifier = modifier
+    ) {
+        composable&lt;HomeRoute&gt; {
+            HomeScreen()
+        }
+        composable&lt;FavouritesRoute&gt; {
+            FavouritesScreen()
+        }
+        composable&lt;SettingsRoute&gt; {
+            SettingsScreen()
+        }
+    }
+}
+
+// HomeScreen.kt (FavouritesScreen y SettingsScreen siguen la misma estructura)
+@Composable
+fun HomeScreen() {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(all = 16.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = "Home",
+            style = MaterialTheme.typography.headlineMedium,
+            color = MaterialTheme.colorScheme.primary
+        )
+    }
+}</code></pre>
+  </div>
+
+  <h2>4. Intents Implícitos</h2>
+  <p>Los <strong>Intents implícitos</strong> permiten reutilizar aplicaciones instaladas en el dispositivo para realizar determinadas acciones. Declaramos la intención de realizar una acción genérica sin indicar qué aplicación concreta debe ejecutarla, y el sistema operativo Android busca una app instalada capaz de realizarla (abrir una página web, mostrar el marcador telefónico, abrir una ubicación en un mapa, enviar un correo electrónico o abrir la cámara).</p>
+
+  <h3>Componentes de un Intent Implícito</h3>
+  <ul>
+    <li><strong>Acción:</strong> Se establece mediante constantes de la clase <code>Intent</code>, como <code>Intent.ACTION_DIAL</code> (abrir el marcador telefónico), <code>Intent.ACTION_SENDTO</code> (crear un correo electrónico listo para enviar a un destinatario) o <code>Intent.ACTION_WEB_SEARCH</code> (abrir un buscador web).</li>
+    <li><strong>Datos:</strong> Información necesaria para la acción, proporcionada mediante <code>putExtra(clave, valor)</code> o creando objetos <code>Uri</code> (<em>Uniform Resource Identifier</em>) a partir de cadenas de texto con <code>.toUri()</code>. Esquemas comunes: <code>tel:</code> (teléfonos), <code>https:</code> (páginas web), <code>geo:</code> (ubicaciones geográficas) o <code>mailto:</code> (correos electrónicos).</li>
+    <li><strong>Referencia oficial de acciones y parámetros:</strong> <a href="https://developer.android.com/guide/components/intents-common?hl=es-419" target="_blank">Documentación de Intents comunes en Android Developers</a>.</li>
+  </ul>
+
+  <h3>Procedimiento para Lanzar un Intent Implícito desde un Composable</h3>
+  <ol>
+    <li>Obtener el contexto de la aplicación utilizando <code>LocalContext.current</code>.</li>
+    <li>Crear el <code>Intent</code> implícito con la acción deseada.</li>
+    <li>Añadir los datos al <code>Intent</code> si son necesarios (<code>data</code> y/o <code>putExtra</code>).</li>
+    <li>Lanzar el intent ejecutando la función <code>context.startActivity(intent)</code>.</li>
+  </ol>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Ejemplo: Creación de Intent para Enviar un Correo (ACTION_SENDTO)</div>
+    <pre><code>val intent = Intent(action = Intent.ACTION_SENDTO).apply {
+    data = "mailto:ejemplo@gmail.com".toUri()
+    putExtra(Intent.EXTRA_SUBJECT, "Asunto")
+    putExtra(Intent.EXTRA_TEXT, "Cuerpo del email")
+}</code></pre>
+  </div>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Ejemplo: Abrir el Marcador Telefónico (ACTION_DIAL · Permiso Normal)</div>
+    <pre><code>val context = LocalContext.current
+
+Button(
+    onClick = {
+        val intent = Intent(action = Intent.ACTION_DIAL).apply {
+            data = "tel:111222333".toUri()
+        }
+        context.startActivity(intent)
+    }
+) {
+    Text("Llamar")
+}</code></pre>
+  </div>
+
+  <h3>Sistema de Permisos en Tiempo de Ejecución (Android 6.0 / API 23+)</h3>
+  <p>A partir de Android 6.0 (API 23), los usuarios conceden permisos a las apps <strong>mientras se ejecutan</strong> (no al instalarlas), lo que simplifica la instalación y brinda mayor control al usuario (por ejemplo, conceder acceso a la cámara pero no a la ubicación, y revocar permisos en cualquier momento desde la configuración de la app). Los permisos se dividen en dos categorías:</p>
+  <ul>
+    <li><strong>Permisos Normales:</strong> No ponen en riesgo la privacidad del usuario de forma directa. Si la app declara un permiso normal en <code>AndroidManifest.xml</code>, el sistema lo concede automáticamente. Un ejemplo de Intent implícito con permiso normal es <code>ACTION_DIAL</code>: muestra el marcador con el número introducido, pero es el usuario quien decide pulsar el botón de llamar.</li>
+    <li><strong>Permisos Peligrosos:</strong> Permiten acceder a información confidencial del usuario o ejecutar acciones sensibles directamente (como <code>ACTION_CALL</code> para iniciar una llamada telefónica directa). Deben declararse en <code>AndroidManifest.xml</code> y, además, el usuario debe <strong>autorizarlos explícitamente durante la ejecución</strong> de la aplicación.</li>
+  </ul>
+
+  <div class="diagram-box">
+    <div class="diagram-title">Ejemplo Completo: Llamada Directa (ACTION_CALL · Permiso Peligroso CALL_PHONE)</div>
+    <pre><code>&lt;!-- 1. Declaración en app/manifests/AndroidManifest.xml --&gt;
+&lt;?xml version="1.0" encoding="utf-8"?&gt;
+&lt;manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"&gt;
+
+    &lt;!-- Permiso para realizar llamadas telefónicas --&gt;
+    &lt;uses-permission android:name="android.permission.CALL_PHONE" /&gt;
+    &lt;!-- La app podrá instalarse en dispositivos sin hardware para realizar llamadas --&gt;
+    &lt;uses-feature android:name="android.hardware.telephony" android:required="false" /&gt;
+
+&lt;/manifest&gt;</code></pre>
+    <pre><code>// 2. Función encargada de lanzar el Intent implícito en MainActivity.kt
+private fun realizarLlamada(context: Context) {
+    val intentLlamar = Intent(action = Intent.ACTION_CALL).apply {
+        data = "tel:111222333".toUri()
+    }
+    context.startActivity(intentLlamar)
+}
+
+// 3. Composable que solicita permisos en tiempo de ejecución y realiza la llamada
+@Composable
+fun ActionCall() {
+    // Se obtiene el contexto de la aplicación
+    val context = LocalContext.current
+
+    // rememberLauncherForActivityResult(): Crea el launcher que solicita los permisos al usuario
+    // y recibe el resultado. "remember" conserva el launcher durante las recomposiciones.
+    val permisoLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { permisoConcedido -&gt;
+        if (permisoConcedido) {
+            realizarLlamada(context)
+        } else {
+            Toast.makeText(
+                context,
+                "No se ha concedido el permiso para llamar",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+    }
+
+    // Botón que comprueba el permiso y lanza la llamada o solicita autorización
+    Button(
+        onClick = {
+            if (ContextCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.CALL_PHONE
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
+                realizarLlamada(context)
+            } else {
+                permisoLauncher.launch(Manifest.permission.CALL_PHONE)
+            }
+        }
+    ) {
+        Text(text = "LLAMAR")
+    }
+}</code></pre>
+  </div>
+
   <script src="../../../script/ut-theme.js"></script>
 </body>
 </html>
