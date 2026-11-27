@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#2563eb">
+  <meta name="description" content="Manual completo de la UT2: Semáforos en Java · Programación de Servicios y Procesos (2º DAM).">
+  <title>UT2: Semáforos en Java · PSP (2º DAM)</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2032%2032'%3E%3Cdefs%3E%3ClinearGradient%20id='g'%20x1='0'%20y1='1'%20x2='1'%20y2='0'%3E%3Cstop%20offset='0%25'%20stop-color='%232563eb'/%3E%3Cstop%20offset='52%25'%20stop-color='%233b82f6'/%3E%3Cstop%20offset='100%25'%20stop-color='%2306b6d4'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width='32'%20height='32'%20rx='8'%20fill='%230f172a'%20stroke='url%28%23g%29'%20stroke-width='1.8'/%3E%3Cg%20transform=%22translate%286,6%29%20scale%280.833%29%22%20fill=%22none%22%20stroke=%22%23fb923c%22%20stroke-width=%222.2%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%3E%3Crect%20x=%225%22%20y=%225%22%20width=%2214%22%20height=%2214%22%20rx=%222%22/%3E%3Crect%20x=%229%22%20y=%229%22%20width=%226%22%20height=%226%22%20rx=%221%22/%3E%3Cline%20x1=%229%22%20y1=%222%22%20x2=%229%22%20y2=%225%22/%3E%3Cline%20x1=%2215%22%20y1=%222%22%20x2=%2215%22%20y2=%225%22/%3E%3Cline%20x1=%229%22%20y1=%2219%22%20x2=%229%22%20y2=%2222%22/%3E%3Cline%20x1=%2215%22%20y1=%2219%22%20x2=%2215%22%20y2=%2222%22/%3E%3Cline%20x1=%2219%22%20y1=%229%22%20x2=%2222%22%20y2=%229%22/%3E%3Cline%20x1=%2219%22%20y1=%2215%22%20x2=%2222%22%20y2=%2215%22/%3E%3Cline%20x1=%222%22%20y1=%229%22%20x2=%225%22%20y2=%229%22/%3E%3Cline%20x1=%222%22%20y1=%2215%22%20x2=%225%22%20y2=%2215%22/%3E%3C/g%3E%3C/svg%3E">
+  <link rel="stylesheet" href="../../../css/teoria-kotlin.css">
+  <style>
+    .code[data-lang="java"] .code-lang-pill {
+      background: rgba(251, 146, 60, 0.18);
+      color: #fdba74;
+      border-color: rgba(251, 146, 60, 0.38);
+    }
+    .callout.warn-box {
+      border-left-color: var(--warn);
+      background: var(--warn-soft);
+    }
+    .ex-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 1rem;
+      margin: 1.25rem 0;
+    }
+    .ex-card {
+      background: var(--panel2);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 1rem 1.15rem;
+      transition: transform 0.16s ease, border-color 0.16s ease;
+    }
+    .ex-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--accent);
+    }
+    .ex-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: .6rem;
+      margin-bottom: .55rem;
+    }
+    .ex-num {
+      font-family: var(--mono);
+      font-size: .74rem;
+      font-weight: 700;
+      padding: .15rem .5rem;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+    }
+    .ex-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin: 0 0 .45rem;
+      color: var(--txt);
+    }
+    .ex-card p {
+      margin: 0;
+      font-size: .94rem;
+      color: var(--txt2);
+    }
+  </style>
+</head>
+<body>
+
+  <div id="progress-bar"></div>
+
+  <!-- ============================ TOPBAR ============================ -->
+  <header class="topbar">
+    <button id="btn-menu" class="icon-btn only-mobile" aria-label="Abrir índice"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg></button>
+
+    <a class="btn" href="../../../index.html" title="Volver al inicio (Apuntes 2º DAM)">
+      <svg class="ic-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+      <span class="btn-label-full">Volver al inicio</span>
+      <span class="only-mobile-inline">Inicio</span>
+    </a>
+
+    <a class="brand" href="#/inicio">
+      <div class="brand-logos" title="PSP · Semáforos en Java">
+        <!-- Icono Módulo PSP -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="#fb923c" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="5" y="5" width="14" height="14" rx="2"/>
+          <rect x="9" y="9" width="6" height="6" rx="1"/>
+          <line x1="9" y1="2" x2="9" y2="5"/><line x1="15" y1="2" x2="15" y2="5"/>
+          <line x1="9" y1="19" x2="9" y2="22"/><line x1="15" y1="19" x2="15" y2="22"/>
+          <line x1="19" y1="9" x2="22" y2="9"/><line x1="19" y1="15" x2="22" y2="15"/>
+          <line x1="2" y1="9" x2="5" y2="9"/><line x1="2" y1="15" x2="5" y2="15"/>
+        </svg>
+        <span class="sep">+</span>
+        <!-- Icono Semáforo -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="7" y="2" width="10" height="20" rx="3"/>
+          <circle cx="12" cy="7" r="1.7" fill="#ef4444" stroke="none"/>
+          <circle cx="12" cy="12" r="1.7" fill="#fbbf24" stroke="none"/>
+          <circle cx="12" cy="17" r="1.7" fill="#3DDC84" stroke="none"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <span>UT2 · Semáforos en Java</span>
+        <small>PSP · 2º DAM · java.util.concurrent.Semaphore</small>
+      </div>
+    </a>
+
+    <div class="search" id="caja-buscar">
+      <div class="search-input-wrap">
+        <svg class="s-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input id="buscador" type="search" placeholder="Buscar en UT2 (ej. acquire, fairness, mutex, Queue, Parking, Deadlock)…" autocomplete="off" enterkeyhint="search">
+        <span class="kbd-hint hide-mobile">Ctrl+K</span>
+        <button type="button" id="cerrar-buscar" class="icon-btn only-mobile" aria-label="Cerrar búsqueda"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button>
+      </div>
+      <div id="resultados" class="search-results" hidden></div>
+    </div>
+
+    <div class="top-actions">
+      <button type="button" id="btn-buscar-movil" class="icon-btn only-mobile" title="Buscar en los apuntes" aria-label="Buscar"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg></button>
+      <a class="btn primary" href="../index.html" title="Abrir índice del módulo PSP">
+        <svg class="ic-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+        <span>Módulo PSP</span>
+      </a>
+      <a class="btn primary" href="PSP-UT02.pdf" target="_blank" title="Abrir PDF original de PSP-UT02">
+        <svg class="ic-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><line x1="10" y1="9" x2="8" y2="9"/></svg>
+        <span class="btn-label-full">PDF Original</span>
+        <span class="only-mobile-inline">PDF</span>
+      </a>
+      <a class="btn and-pill hide-mobile" href="#/todo" title="Ver toda la UT2 seguida en una sola página">
+        <svg class="ic-svg" viewBox="0 0 24 24"><path fill="currentColor" d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+        <span>Modo Todo Continuo</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- ============================ SIDEBAR ============================ -->
+  <aside id="sidebar" class="sidebar"></aside>
+  <div id="overlay" class="overlay"></div>
+
+  <!-- ============================ CONTENT ============================ -->
+  <main id="contenido" class="content" tabindex="-1"></main>
+
+  <button id="btn-top" title="Volver arriba" aria-label="Volver arriba"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="18 15 12 9 6 15"></polyline></svg></button>
+  <button id="btn-tema" class="icon-btn" title="Cambiar modo claro / oscuro" aria-label="Cambiar tema"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg></button>
+
+  <!-- ============================ DATOS Y LÓGICA ============================ -->
+  <script>
+  (function () {
+    "use strict";
+
+    const ICON_PSP = `<svg class="ic-svg" viewBox="0 0 24 24" fill="none" stroke="#fb923c" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2"/><rect x="9" y="9" width="6" height="6" rx="1"/><line x1="9" y1="2" x2="9" y2="5"/><line x1="15" y1="2" x2="15" y2="5"/><line x1="9" y1="19" x2="9" y2="22"/><line x1="15" y1="19" x2="15" y2="22"/><line x1="19" y1="9" x2="22" y2="9"/><line x1="19" y1="15" x2="22" y2="15"/><line x1="2" y1="9" x2="5" y2="9"/><line x1="2" y1="15" x2="5" y2="15"/></svg>`;
+    const ICON_SEM = `<svg class="ic-svg" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7" y="2" width="10" height="20" rx="3"/><circle cx="12" cy="7" r="1.7" fill="#ef4444" stroke="none"/><circle cx="12" cy="12" r="1.7" fill="#fbbf24" stroke="none"/><circle cx="12" cy="17" r="1.7" fill="#3DDC84" stroke="none"/></svg>`;
+    const ICON_JAVA = `<svg class="ic-svg" viewBox="0 0 24 24" fill="none" stroke="#3DDC84" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>`;
+    const ICON_TASKS = `<svg class="ic-svg" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>`;
+    const COPY_ICON = `<svg class="ic-svg" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>`;
+
+    const SVG = {
+      psp: ICON_PSP,
+      sem: ICON_SEM,
+      java: ICON_JAVA,
+      tasks: ICON_TASKS
+    };
+
+    function codeBlock(fileName, codeHtml) {
+      return `<div class="code" data-lang="java"><div class="code-head"><div class="code-title"><span class="code-dots"><i></i><i></i><i></i></span>${ICON_PSP}<span class="code-file">${fileName}</span><span class="code-lang-pill">JAVA</span></div><button class="copy" type="button">${COPY_ICON}<span>Copiar</span></button></div><pre><code>${codeHtml}</code></pre></div>`;
+    }
+
+    function callout(bodyHtml, type = "nota", icon = ICON_SEM) {
+      return `<div class="callout ${type}"><div class="callout-ic">${icon}</div><div class="callout-body">${bodyHtml}</div></div>`;
+    }
+
+    window.TEMAS = [
+      {
+        id: "bloque1",
+        numero: 1,
+        titulo: "Introducción y Clase Semaphore",
+        resumen: "Origen de los semáforos de Dijkstra, semáforos binarios y generales, funcionamiento de java.util.concurrent.Semaphore, justicia (fairness) y tabla completa de métodos.",
+        badge: "Fundamentos",
+        tech: "kotlin",
+        icon: "sem",
+        secciones: [
+          {
+            id: "b1-s1",
+            titulo: "1.1. Introducción, Definición y Tipos",
+            codes: 0,
+            tables: 1,
+            subs: [
+              { id: "origen-semaforos", titulo: "Origen y propósito" },
+              { id: "definicion-tipos", titulo: "Definición y Tipos" },
+              { id: "estructura-operaciones", titulo: "Estructura y operaciones atómicas" }
+            ],
+            html: `
+              <h3 id="origen-semaforos"><span class="h3-dot"></span><span>Origen y propósito</span></h3>
+              <p>El concepto de <strong>semáforos</strong> fue el primero en solucionar problemas de sincronización <strong>sin espera activa</strong>. Fue inventado por <strong>Edsger W. Dijkstra</strong> a finales de la década de 1960 e inspirado en las señales visuales ferroviarias que indican si un tren está habilitado para entrar en una vía.</p>
+              <p>Es una construcción sencilla y eficiente implementada habitualmente como servicio del núcleo del sistema operativo, con capacidad de <strong>bloquear y planificar procesos e hilos</strong> condicionados únicamente por el valor de una variable entera.</p>
+
+              <h3 id="definicion-tipos"><span class="h3-dot"></span><span>Definición y Tipos</span></h3>
+              <p>Un semáforo es una estructura de datos cuyos valores asociados son enteros positivos (en los <strong>semáforos generales</strong>, de <code>0..N</code>) o las constantes <code>0</code> y <code>1</code> (en el <strong>semáforo binario</strong>).</p>
+              <ul>
+                <li>El valor <code>0</code> indica que el semáforo está <strong>cerrado (en rojo)</strong>.</li>
+                <li>Cualquier valor positivo indica que está <strong>abierto (en verde)</strong>, representando el número exacto de procesos que pueden pasar.</li>
+                <li>Estos valores se modifican exclusivamente mediante <strong>operaciones atómicas</strong>.</li>
+              </ul>
+
+              <h3 id="estructura-operaciones"><span class="h3-dot"></span><span>Estructura y operaciones atómicas</span></h3>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Elemento</th>
+                      <th>Componente / Operación</th>
+                      <th>Descripción y Comportamiento</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Estructura de datos</strong></td>
+                      <td><code>contador</code></td>
+                      <td><code>0-1</code> → Semáforo binario (Mutex).<br><code>0..N</code> → Semáforo general.</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Operaciones atómicas</strong></td>
+                      <td><code>adquirir()</code> / <code>liberar()</code></td>
+                      <td>Intentamos adquirir un permiso del semáforo o liberamos y devolvemos un permiso al semáforo.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              ${callout("Al ser operaciones <strong>atómicas</strong>, el sistema operativo o la JVM garantizan que dos hilos no pueden consultar y modificar el contador de forma simultánea produciendo condiciones de carrera.")}
+            `
+          },
+          {
+            id: "b1-s2",
+            titulo: "1.2. La Clase java.util.concurrent.Semaphore",
+            codes: 1,
+            tables: 1,
+            subs: [
+              { id: "clase-semaphore", titulo: "Funcionamiento en Java" },
+              { id: "justicia-fairness", titulo: "Constructores y Justicia (Fairness)" },
+              { id: "tabla-metodos-semaphore", titulo: "Constructores y Métodos de Semaphore" }
+            ],
+            html: `
+              <h3 id="clase-semaphore"><span class="h3-dot"></span><span>Funcionamiento en Java</span></h3>
+              <p>En Java los semáforos se representan como objetos de la clase <code>java.util.concurrent.Semaphore</code>. Gestionan un contador interno que:</p>
+              <ul>
+                <li>Se <strong>decrementa</strong> en cada llamada a <code>acquire()</code>.</li>
+                <li>Se <strong>incrementa</strong> en cada llamada a <code>release()</code>.</li>
+                <li>El contador <strong>nunca puede bajar de cero</strong>: si una llamada a <code>acquire()</code> encuentra el contador a cero, bloquea la ejecución del hilo en curso hasta que otro hilo llame a <code>release()</code>.</li>
+              </ul>
+              ${callout("<strong>Nota sobre permisos dinámicos:</strong> Si se instancia un semáforo con <code>0</code> permisos (<code>new Semaphore(0)</code>) y se invoca <code>semaphore.release(10)</code>, el semáforo pasa a tener <code>10</code> permisos disponibles.", "nota", ICON_PSP)}
+
+              ${codeBlock("PermisosDinamicos.java", `<span class="k">import</span> java.util.concurrent.<span class="t">Semaphore</span>;
+
+<span class="t">Semaphore</span> semaphore = <span class="k">new</span> <span class="t">Semaphore</span>(<span class="n">0</span>); <span class="c">// Empieza cerrado (0 permisos)</span>
+semaphore.<span class="f">release</span>(<span class="n">10</span>);                 <span class="c">// Ahora dispone de 10 permisos</span>`)}
+
+              <h3 id="justicia-fairness"><span class="h3-dot"></span><span>Constructores y Justicia (Fairness)</span></h3>
+              <p>En el constructor se puede configurar la <strong>justicia o imparcialidad (<em>fairness</em>)</strong> del semáforo:</p>
+              <ul>
+                <li><strong>Si es justo (<code>fair = true</code>)</strong>: los hilos se desbloquean en estricto orden de llegada (<strong>cola FIFO</strong>).</li>
+                <li><strong>Si no es justo (<code>fair = false</code>)</strong>: se desbloquean de forma aleatoria.</li>
+              </ul>
+              <p>Por defecto <strong>no son justos</strong> porque resulta más eficiente y en usos normales no plantea problemas de inanición (<em>starvation</em>).</p>
+
+              <h3 id="tabla-metodos-semaphore"><span class="h3-dot"></span><span>Constructores y Métodos de Semaphore</span></h3>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Constructor / Método</th>
+                      <th>Función y Excepciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><code>Semaphore(int permits)</code></td>
+                      <td>Crea un <code>Semaphore</code> con el número dado de permisos (no justo por defecto).</td>
+                    </tr>
+                    <tr>
+                      <td><code>Semaphore(int permits, boolean fair)</code></td>
+                      <td>Crea un <code>Semaphore</code> con el número dado de permisos y la configuración de justicia/imparcialidad (FIFO si es <code>true</code>).</td>
+                    </tr>
+                    <tr>
+                      <td><code>void acquire()</code></td>
+                      <td>Adquiere un permiso del semáforo o se bloquea si no hay disponibles. Puede lanzar <code>InterruptedException</code>.</td>
+                    </tr>
+                    <tr>
+                      <td><code>void acquire(int permits)</code></td>
+                      <td>Adquiere varios permisos según <code>permits</code>, bloqueándose si no hay suficientes. Lanza <code>InterruptedException</code>.</td>
+                    </tr>
+                    <tr>
+                      <td><code>int availablePermits()</code></td>
+                      <td>Devuelve el número actual de permisos disponibles en el semáforo.</td>
+                    </tr>
+                    <tr>
+                      <td><code>int getQueueLength()</code></td>
+                      <td>Devuelve una estimación del número de hilos que están esperando adquirir un permiso.</td>
+                    </tr>
+                    <tr>
+                      <td><code>boolean tryAcquire()</code></td>
+                      <td>Adquiere un permiso solo si está disponible en el momento de la invocación (devuelve <code>true</code> y decrementa, o devuelve <code>false</code> inmediatamente sin bloquearse).</td>
+                    </tr>
+                    <tr>
+                      <td><code>void release()</code></td>
+                      <td>Libera un permiso y lo devuelve al semáforo (incrementa el contador).</td>
+                    </tr>
+                    <tr>
+                      <td><code>void release(int permits)</code></td>
+                      <td>Libera el número dado de permisos y los devuelve al semáforo.</td>
+                    </tr>
+                    <tr>
+                      <td><code>String toString()</code></td>
+                      <td>Devuelve una cadena que identifica el semáforo así como su estado actual.</td>
+                    </tr>
+                    <tr>
+                      <td><code>void reducePermits(int reduction)</code></td>
+                      <td>Reduce el número de permisos disponibles según la cantidad indicada.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            `
+          }
+        ]
+      },
+      {
+        id: "bloque2",
+        numero: 2,
+        titulo: "Sincronización y Región Crítica",
+        resumen: "Sincronización directa entre hilos (Ejemplo 1: BUENAS TARDES), limitación de hilos en región crítica, consejos fundamentales de diseño y Ejemplo 2: Parking con capacidad limitada.",
+        badge: "Patrones y Ejemplos",
+        tech: "android",
+        icon: "psp",
+        secciones: [
+          {
+            id: "b2-s1",
+            titulo: "2.1. Sincronización Directa entre Hilos (Ejemplo 1)",
+            codes: 1,
+            tables: 0,
+            subs: [
+              { id: "mecanismo-turno", titulo: "Semáforo de turno (0 permisos)" },
+              { id: "ejemplo1-buenas-tardes", titulo: "Ejemplo 1: Ordenar mensajes \"BUENAS TARDES\"" }
+            ],
+            html: `
+              <h3 id="mecanismo-turno"><span class="h3-dot"></span><span>Semáforo de turno (0 permisos)</span></h3>
+              <p>Si declaramos un semáforo inicializado con <code>0</code> permisos (<code>Semaphore turno = new Semaphore(0);</code>), el primer hilo que invoque <code>turno.acquire()</code> quedará <strong>bloqueado</strong> hasta que otro hilo ejecute <code>turno.release()</code>.</p>
+
+              <h3 id="ejemplo1-buenas-tardes"><span class="h3-dot"></span><span>Ejemplo 1: Ordenar mensajes "BUENAS TARDES"</span></h3>
+              <p>Programa con dos hilos donde <code>HiloBuenas</code> espera <strong>1000 ms</strong>, imprime <code>"BUENAS"</code> y libera un permiso con <code>release()</code>, mientras que <code>HiloTardes</code> no tiene espera pero ejecuta <code>acquire()</code> antes de imprimir <code>"TARDES"</code>, garantizando siempre el orden correcto.</p>
+
+              ${codeBlock("ejemplo1/Principal.java", `<span class="k">package</span> ejemplo1;
+<span class="k">import</span> java.util.concurrent.<span class="t">Semaphore</span>;
+
+<span class="k">public class</span> <span class="t">HiloTardes</span> <span class="k">extends</span> <span class="t">Thread</span> {
+    <span class="t">Semaphore</span> semaforo;
+    <span class="k">public</span> <span class="f">HiloTardes</span>(<span class="t">Semaphore</span> semaforo) { <span class="k">this</span>.semaforo = semaforo; }
+
+    <span class="a">@Override</span>
+    <span class="k">public void</span> <span class="f">run</span>() {
+        <span class="t">System</span>.out.<span class="f">println</span>(<span class="s">"HiloTardes: permisos del semáforo: "</span> + semaforo.<span class="f">availablePermits</span>());
+        <span class="k">try</span> {
+            semaforo.<span class="f">acquire</span>(); <span class="c">// Se bloquea si hay 0 permisos</span>
+        } <span class="k">catch</span> (<span class="t">InterruptedException</span> e) { e.<span class="f">printStackTrace</span>(); }
+        <span class="t">System</span>.out.<span class="f">println</span>(<span class="s">"TARDES"</span>);
+    }
+}
+
+<span class="k">public class</span> <span class="t">HiloBuenas</span> <span class="k">extends</span> <span class="t">Thread</span> {
+    <span class="t">Semaphore</span> semaforo;
+    <span class="k">public</span> <span class="f">HiloBuenas</span>(<span class="t">Semaphore</span> semaforo) { <span class="k">this</span>.semaforo = semaforo; }
+
+    <span class="a">@Override</span>
+    <span class="k">public void</span> <span class="f">run</span>() {
+        <span class="k">try</span> { <span class="f">sleep</span>(<span class="n">1000</span>); } <span class="k">catch</span> (<span class="t">InterruptedException</span> e) { e.<span class="f">printStackTrace</span>(); }
+        <span class="t">System</span>.out.<span class="f">println</span>(<span class="s">"BUENAS"</span>);
+        semaforo.<span class="f">release</span>(); <span class="c">// Libera un permiso y desbloquea a HiloTardes</span>
+        <span class="t">System</span>.out.<span class="f">println</span>(<span class="s">"HiloBuenas: permisos del semáforo: "</span> + semaforo.<span class="f">availablePermits</span>());
+    }
+}
+
+<span class="k">public class</span> <span class="t">Principal</span> {
+    <span class="k">public static void</span> <span class="f">main</span>(<span class="t">String</span>[] args) {
+        <span class="t">Semaphore</span> semaforo = <span class="k">new</span> <span class="t">Semaphore</span>(<span class="n">0</span>); <span class="c">// 0 permisos iniciales</span>
+        <span class="t">HiloBuenas</span> hiloBuenas = <span class="k">new</span> <span class="t">HiloBuenas</span>(semaforo);
+        <span class="t">HiloTardes</span> hiloTardes = <span class="k">new</span> <span class="t">HiloTardes</span>(semaforo);
+        hiloTardes.<span class="f">start</span>();
+        hiloBuenas.<span class="f">start</span>();
+    }
+}`)}
+            `
+          },
+          {
+            id: "b2-s2",
+            titulo: "2.2. Limitar Hilos en Región Crítica y Consejos de Diseño",
+            codes: 1,
+            tables: 0,
+            subs: [
+              { id: "limitar-region-critica", titulo: "Limitar el número de hilos simultáneos" },
+              { id: "consejos-diseno", titulo: "Consejos fundamentales de diseño con semáforos" }
+            ],
+            html: `
+              <h3 id="limitar-region-critica"><span class="h3-dot"></span><span>Limitar el número de hilos simultáneos</span></h3>
+              <p>El número máximo de hilos que pueden acceder simultáneamente a una sección crítica se especifica al instanciar el semáforo:</p>
+              ${codeBlock("RegionCritica.java", `<span class="t">Semaphore</span> mutex = <span class="k">new</span> <span class="t">Semaphore</span>(<span class="n">5</span>); <span class="c">// Máximo de 5 hilos simultáneos en la sección crítica</span>`)}
+
+              <h3 id="consejos-diseno"><span class="h3-dot"></span><span>Consejos fundamentales de diseño con semáforos</span></h3>
+              ${callout(`
+                <p style="margin-top:0"><strong>CONSEJOS FUNDAMENTALES DE DISEÑO CON SEMÁFOROS</strong></p>
+                <ul style="margin-bottom:0">
+                  <li><strong>Mutex (Mutual Exclusive):</strong> Se denomina así a los semáforos binarios (inicializados a <code>1</code>) destinados al acceso en exclusión mutua a variables o recursos compartidos.</li>
+                  <li><strong>Semáforos de condición:</strong> Utiliza un semáforo sin permisos (<code>0</code>) para bloquear hilos que deban esperar mientras no se cumpla una condición. Usa un semáforo distinto por cada condición de bloqueo.</li>
+                  <li><strong>Prevención de interbloqueos (Deadlocks):</strong> Abre o libera el semáforo <code>mutex</code> siempre que sea posible, especialmente antes de adquirir o bloquear otro semáforo.</li>
+                  <li><strong>Ausencia de <code>notifyAll()</code>:</strong> En los semáforos no existe un método <code>notifyAll()</code> como en los monitores; se debe llamar a <code>release()</code> tantas veces como llamadas a <code>acquire()</code> se deseen desbloquear.</li>
+                </ul>
+              `, "warn-box", ICON_PSP)}
+            `
+          },
+          {
+            id: "b2-s3",
+            titulo: "2.3. Ejemplo 2: Gestión de Parking con Capacidad Limitada",
+            codes: 2,
+            tables: 0,
+            subs: [
+              { id: "enunciado-parking", titulo: "Descripción del problema" },
+              { id: "clase-parking", titulo: "Clase Parking" },
+              { id: "clase-coche", titulo: "Clase Coche (Runnable)" }
+            ],
+            html: `
+              <h3 id="enunciado-parking"><span class="h3-dot"></span><span>Descripción del problema</span></h3>
+              <p>Simulación de un parking en la <strong>calle Velázquez de Plasencia</strong> con capacidad máxima para <strong>2 plazas</strong> (<code>CAPACIDAD = 2</code>) y política justa (<strong>FIFO</strong>). Cinco coches intentan entrar tras pasear un tiempo aleatorio, aparcan durante otro intervalo aleatorio y finalmente salen liberando su plaza.</p>
+
+              <h3 id="clase-parking"><span class="h3-dot"></span><span>Clase Parking</span></h3>
+              ${codeBlock("ejemplo2_v1/Parking.java", `<span class="k">package</span> ejemplo2_v1;
+<span class="k">import</span> java.util.concurrent.<span class="t">Semaphore</span>;
+
+<span class="k">public class</span> <span class="t">Parking</span> {
+    <span class="k">static final int</span> CAPACIDAD = <span class="n">2</span>;
+    <span class="k">private</span> <span class="t">Semaphore</span> semaforo = <span class="k">new</span> <span class="t">Semaphore</span>(CAPACIDAD, <span class="k">true</span>); <span class="c">// 2 permisos y FIFO</span>
+
+    <span class="k">public void</span> <span class="f">entrarParking</span>(<span class="t">Coche</span> coche) {
+        <span class="k">try</span> {
+            semaforo.<span class="f">acquire</span>();
+            <span class="t">System</span>.out.<span class="f">println</span>(<span class="s">"\\t\\t=>El coche número "</span> + coche.<span class="f">getNumcoche</span>()
+                + <span class="s">" entra al Parking. Plazas libres: "</span> + semaforo.<span class="f">availablePermits</span>());
+            <span class="t">System</span>.out.<span class="f">println</span>(<span class="s">"Coches esperando para entrar: "</span> + semaforo.<span class="f">getQueueLength</span>());
+        } <span class="k">catch</span> (<span class="t">InterruptedException</span> e) { e.<span class="f">printStackTrace</span>(); }
+    }
+
+    <span class="k">public void</span> <span class="f">salirParking</span>(<span class="t">Coche</span> coche) {
+        <span class="t">System</span>.out.<span class="f">println</span>(<span class="s">"\\t<=El coche número "</span> + coche.<span class="f">getNumcoche</span>()
+            + <span class="s">" sale del Parking. Plazas libres: "</span> + semaforo.<span class="f">availablePermits</span>());
+        semaforo.<span class="f">release</span>();
+    }
+}`)}
+
+              <h3 id="clase-coche"><span class="h3-dot"></span><span>Clase Coche (Runnable)</span></h3>
+              ${codeBlock("ejemplo2_v1/Coche.java", `<span class="k">public class</span> <span class="t">Coche</span> <span class="k">implements</span> <span class="t">Runnable</span> {
+    <span class="t">Parking</span> parking;
+    <span class="k">int</span> numcoche;
+
+    <span class="k">public</span> <span class="f">Coche</span>(<span class="t">Parking</span> parking, <span class="k">int</span> numcoche) {
+        <span class="k">this</span>.parking = parking;
+        <span class="k">this</span>.numcoche = numcoche;
+    }
+
+    <span class="k">public int</span> <span class="f">getNumcoche</span>() { <span class="k">return</span> numcoche; }
+
+    <span class="a">@Override</span>
+    <span class="k">public void</span> <span class="f">run</span>() {
+        <span class="t">System</span>.out.<span class="f">println</span>(<span class="s">"Arranca el coche número "</span> + <span class="f">getNumcoche</span>());
+        <span class="k">try</span> {
+            <span class="t">Thread</span>.<span class="f">sleep</span>((<span class="k">long</span>) (<span class="t">Math</span>.<span class="f">random</span>() * <span class="n">40000</span>));
+            <span class="t">System</span>.out.<span class="f">println</span>(<span class="s">"\\t||El coche número "</span> + <span class="f">getNumcoche</span>() + <span class="s">" llega al parking"</span>);
+            parking.<span class="f">entrarParking</span>(<span class="k">this</span>);
+            <span class="t">Thread</span>.<span class="f">sleep</span>((<span class="k">long</span>) (<span class="t">Math</span>.<span class="f">random</span>() * <span class="n">90000</span>));
+            parking.<span class="f">salirParking</span>(<span class="k">this</span>);
+        } <span class="k">catch</span> (<span class="t">InterruptedException</span> e) { e.<span class="f">printStackTrace</span>(); }
+    }
+}`)}
+            `
+          }
+        ]
+      },
+      {
+        id: "bloque3",
+        numero: 3,
+        titulo: "Productor-Consumidor con Colas (Queue)",
+        resumen: "Implementación clásica del patrón Productor-Consumidor mediante Queue<String> (LinkedList), tabla de métodos FIFO y coordinación con los 3 semáforos (vacio, lleno y mutex).",
+        badge: "Productor-Consumidor",
+        tech: "compose",
+        icon: "java",
+        secciones: [
+          {
+            id: "b3-s1",
+            titulo: "3.1. Interfaz Queue y Arquitectura de 3 Semáforos",
+            codes: 0,
+            tables: 1,
+            subs: [
+              { id: "colas-queue", titulo: "Estructura Queue<String> (FIFO)" },
+              { id: "metodos-queue", titulo: "Métodos de la interfaz Queue" },
+              { id: "arquitectura-3-semaforos", titulo: "Arquitectura de los 3 Semáforos" }
+            ],
+            html: `
+              <h3 id="colas-queue"><span class="h3-dot"></span><span>Estructura Queue&lt;String&gt; (FIFO)</span></h3>
+              <p>En esta implementación del problema clásico <strong>Productor-Consumidor</strong>, el buffer compartido se construye mediante una estructura <code>Queue&lt;String&gt;</code> (implementada con <code>LinkedList</code>). Las colas son listas con política <strong>FIFO (First Input First Output)</strong> donde los elementos se insertan por el final y se extraen por el frente.</p>
+
+              <h3 id="metodos-queue"><span class="h3-dot"></span><span>Métodos de la interfaz Queue</span></h3>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Método de Queue</th>
+                      <th>Descripción y Comportamiento</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><code>boolean add(E e)</code></td>
+                      <td>Inserta el elemento en la cola. Devuelve <code>true</code> si lo logra o lanza <code>IllegalStateException</code> si no hay espacio.</td>
+                    </tr>
+                    <tr>
+                      <td><code>boolean offer(E e)</code></td>
+                      <td>Inserta el elemento especificado en la cola. Devuelve <code>true</code> si tuvo éxito y <code>false</code> en caso contrario. <strong>(Preferible)</strong>.</td>
+                    </tr>
+                    <tr>
+                      <td><code>E poll()</code></td>
+                      <td>Recupera y elimina el elemento en el frente de la cola, o devuelve <code>null</code> si la cola está vacía. <strong>(Preferible)</strong>.</td>
+                    </tr>
+                    <tr>
+                      <td><code>E remove()</code></td>
+                      <td>Recupera y elimina el elemento en el frente de la cola; si está vacía lanza <code>NoSuchElementException</code>.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h3 id="arquitectura-3-semaforos"><span class="h3-dot"></span><span>Arquitectura de los 3 Semáforos</span></h3>
+              <ul>
+                <li><code>Semaphore vacio = new Semaphore(0);</code> → Bloquea a los <strong>consumidores</strong> cuando la cola no tiene elementos producidos.</li>
+                <li><code>Semaphore lleno = new Semaphore(5);</code> → Limita la capacidad máxima del buffer a <strong>5 elementos</strong>, bloqueando a los <strong>productores</strong> si se llena.</li>
+                <li><code>Semaphore mutex = new Semaphore(1);</code> → Garantiza la <strong>exclusión mutua</strong> al modificar o leer la estructura <code>Buffer.cola</code>.</li>
+              </ul>
+              ${callout("<strong>Orden crítico de adquisición:</strong> Adquiere siempre primero el semáforo de condición (<code>lleno</code> en el Productor, <code>vacio</code> en el Consumidor) y <strong>después</strong> el <code>mutex</code>. Invertir este orden provocaría un interbloqueo (<em>deadlock</em>).", "warn-box", ICON_SEM)}
+            `
+          },
+          {
+            id: "b3-s2",
+            titulo: "3.2. Implementación Completa en Java (Buffer, Productor y Consumidor)",
+            codes: 3,
+            tables: 0,
+            subs: [
+              { id: "clase-buffer", titulo: "Clase Buffer" },
+              { id: "clase-productor", titulo: "Clase Productor" },
+              { id: "clase-consumidor", titulo: "Clase Consumidor" }
+            ],
+            html: `
+              <h3 id="clase-buffer"><span class="h3-dot"></span><span>Clase Buffer</span></h3>
+              ${codeBlock("Buffer.java", `<span class="k">import</span> java.util.<span class="t">LinkedList</span>;
+<span class="k">import</span> java.util.<span class="t">Queue</span>;
+<span class="k">import</span> java.util.concurrent.<span class="t">Semaphore</span>;
+
+<span class="k">public class</span> <span class="t">Buffer</span> {
+    <span class="k">static</span> <span class="t">Queue</span>&lt;<span class="t">String</span>&gt; cola = <span class="k">new</span> <span class="t">LinkedList</span>&lt;<span class="t">String</span>&gt;();
+
+    <span class="k">public static void</span> <span class="f">mostrarCola</span>() {
+        <span class="t">String</span>[] arr = cola.<span class="f">toArray</span>(<span class="k">new</span> <span class="t">String</span>[cola.<span class="f">size</span>()]);
+        <span class="k">for</span> (<span class="k">int</span> i = arr.length - <span class="n">1</span>; i &gt;= <span class="n">0</span>; i--) {
+            <span class="t">System</span>.out.<span class="f">print</span>(<span class="s">"| "</span> + arr[i] + <span class="s">" "</span>);
+        }
+        <span class="t">System</span>.out.<span class="f">println</span>(<span class="s">"\\n----------------------------------\\n"</span>);
+    }
+}`)}
+
+              <h3 id="clase-productor"><span class="h3-dot"></span><span>Clase Productor</span></h3>
+              ${codeBlock("Productor.java", `<span class="k">public class</span> <span class="t">Productor</span> <span class="k">extends</span> <span class="t">Thread</span> {
+    <span class="t">String</span> name;
+    <span class="t">Semaphore</span> vacio, lleno, mutex;
+
+    <span class="k">public</span> <span class="f">Productor</span>(<span class="t">String</span> name, <span class="t">Semaphore</span> vacio, <span class="t">Semaphore</span> lleno, <span class="t">Semaphore</span> mutex) {
+        <span class="k">this</span>.name = name;
+        <span class="k">this</span>.vacio = vacio;
+        <span class="k">this</span>.lleno = lleno;
+        <span class="k">this</span>.mutex = mutex;
+    }
+
+    <span class="a">@Override</span>
+    <span class="k">public void</span> <span class="f">run</span>() {
+        <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; <span class="n">5</span>; i++) {
+            <span class="k">try</span> {
+                lleno.<span class="f">acquire</span>();  <span class="c">// Toma permiso de hueco disponible (inicialmente 5)</span>
+                mutex.<span class="f">acquire</span>();  <span class="c">// Entra en sección crítica</span>
+            } <span class="k">catch</span> (<span class="t">InterruptedException</span> e) { e.<span class="f">printStackTrace</span>(); }
+
+            <span class="t">String</span> produce = name + <span class="s">"-"</span> + i;
+            <span class="t">Buffer</span>.cola.<span class="f">offer</span>(produce);
+            <span class="t">System</span>.out.<span class="f">println</span>(<span class="s">"Productor "</span> + name + <span class="s">" produce "</span> + produce);
+            <span class="t">Buffer</span>.<span class="f">mostrarCola</span>();
+
+            mutex.<span class="f">release</span>();  <span class="c">// Sale de exclusión mutua</span>
+            vacio.<span class="f">release</span>();  <span class="c">// Avisa al consumidor que hay 1 elemento disponible</span>
+        }
+    }
+}`)}
+
+              <h3 id="clase-consumidor"><span class="h3-dot"></span><span>Clase Consumidor</span></h3>
+              ${codeBlock("Consumidor.java", `<span class="k">public class</span> <span class="t">Consumidor</span> <span class="k">extends</span> <span class="t">Thread</span> {
+    <span class="t">String</span> name;
+    <span class="t">Semaphore</span> vacio, lleno, mutex;
+
+    <span class="k">public</span> <span class="f">Consumidor</span>(<span class="t">String</span> name, <span class="t">Semaphore</span> vacio, <span class="t">Semaphore</span> lleno, <span class="t">Semaphore</span> mutex) {
+        <span class="k">this</span>.name = name;
+        <span class="k">this</span>.vacio = vacio;
+        <span class="k">this</span>.lleno = lleno;
+        <span class="k">this</span>.mutex = mutex;
+    }
+
+    <span class="a">@Override</span>
+    <span class="k">public void</span> <span class="f">run</span>() {
+        <span class="k">for</span> (<span class="k">int</span> i = <span class="n">0</span>; i &lt; <span class="n">5</span>; i++) {
+            <span class="k">try</span> {
+                vacio.<span class="f">acquire</span>();  <span class="c">// Espera a que exista al menos 1 producto</span>
+                mutex.<span class="f">acquire</span>();  <span class="c">// Entra en sección crítica</span>
+            } <span class="k">catch</span> (<span class="t">InterruptedException</span> e) { e.<span class="f">printStackTrace</span>(); }
+
+            <span class="t">String</span> consumido = <span class="t">Buffer</span>.cola.<span class="f">poll</span>();
+            <span class="t">System</span>.out.<span class="f">println</span>(<span class="s">"Consumidor "</span> + name + <span class="s">" ==> "</span> + consumido);
+            <span class="t">Buffer</span>.<span class="f">mostrarCola</span>();
+
+            mutex.<span class="f">release</span>();  <span class="c">// Sale de exclusión mutua</span>
+            lleno.<span class="f">release</span>();  <span class="c">// Libera un hueco para que el productor pueda insertar</span>
+        }
+    }
+}`)}
+            `
+          }
+        ]
+      },
+      {
+        id: "bloque4",
+        numero: 4,
+        titulo: "Catálogo de Actividades Propuestas (1 al 14)",
+        resumen: "Los 14 problemas prácticos de concurrencia diseñados para resolverse mediante el uso exclusivo de semáforos en Java.",
+        badge: "14 Ejercicios",
+        tech: "kotlin",
+        icon: "tasks",
+        secciones: [
+          {
+            id: "b4-s1",
+            titulo: "4.1. Sincronización Básica y Control de Aforo (Ejercicios 1 al 7)",
+            codes: 0,
+            tables: 1,
+            subs: [
+              { id: "tabla-ej-1-7", titulo: "Resumen de Ejercicios 1 al 7" },
+              { id: "fichas-ej-1-7", titulo: "Detalle por actividad (1–7)" }
+            ],
+            html: `
+              <p>El documento plantea <strong>14 problemas prácticos de concurrencia</strong> diseñados para resolverse mediante el uso exclusivo de semáforos. En esta primera parte se agrupan los ejercicios <strong>1 al 7</strong>.</p>
+
+              <h3 id="tabla-ej-1-7"><span class="h3-dot"></span><span>Resumen de Ejercicios 1 al 7</span></h3>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Actividad</th>
+                      <th>Requisitos de Sincronización y Reglas del Problema</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>1. Reloj TIC-TAC</strong></td>
+                      <td>Dos clases con interfaz <code>Runnable</code> (<code>hiloTIC</code> e <code>hiloTAC</code>) en bucle continuo. Coordinar con semáforos para obtener una salida estrictamente alternada <code>TIC-TAC-TIC-TAC...</code> comenzando siempre por <code>TIC</code>.</td>
+                    </tr>
+                    <tr>
+                      <td><strong>2. 30 Hilos Iniciales y 1 Hilo Final</strong></td>
+                      <td>30 instancias de <code>HiloInicial</code> imprimen su identificador (del 1 al 30, sin orden entre sí) y 1 <code>HiloFinal</code> imprime <em>"Hola soy el hilo final"</em> únicamente cuando los 30 anteriores hayan terminado.</td>
+                    </tr>
+                    <tr>
+                      <td><strong>3. Parking con Plazas Numeradas</strong></td>
+                      <td>Ampliación del Ejemplo 2: controlar exactamente qué número de plaza (ej. plaza 0 o plaza 1) ocupa cada coche al entrar, asignando siempre la que quede libre y mostrando en orden lógico las plazas restantes.</td>
+                    </tr>
+                    <tr>
+                      <td><strong>4. Explotar 1000 Globos</strong></td>
+                      <td>3 amigos compiten por explotar globos compartiendo una variable <code>explotados</code>. Sin usar <code>synchronized</code>, asegurar con semáforos que el total exacto sea 1000 y mostrar el recuento individual al finalizar.</td>
+                    </tr>
+                    <tr>
+                      <td><strong>5. Sala de Profesores</strong></td>
+                      <td>7 profesores (Encarni, Bacterio, La de mates, Eusebio, Topo Gigio, Rompetechos, El gallego) y aforo máximo de <strong>3 profesores simultáneos</strong>. Permanecen 200 ms dentro y esperan 20 ms fuera antes de reintentar.</td>
+                    </tr>
+                    <tr>
+                      <td><strong>6. Canarios: Plato y Columpio</strong></td>
+                      <td>10 canarios en una jaula. Primero comen del plato de alpiste (tardan 5 s, <strong>máximo 3 canarios a la vez</strong>) y después pasan al columpio (tardan 6 s, <strong>máximo 1 canario a la vez</strong>). Usar solo semáforos sin variables extra.</td>
+                    </tr>
+                    <tr>
+                      <td><strong>7. Productor-Consumidor en Fichero</strong></td>
+                      <td>Modificar el Ejemplo 3 para que los procesos <code>Productor</code> escriban una cadena de texto en un fichero físico y los procesos <code>Consumidor</code> lean la cadena desde ese mismo fichero.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h3 id="fichas-ej-1-7"><span class="h3-dot"></span><span>Detalle rápido de patrones recomendados</span></h3>
+              <div class="ex-grid">
+                <div class="ex-card">
+                  <div class="ex-head"><span class="ex-num">EJERCICIO 01</span></div>
+                  <h4 class="ex-title">Reloj TIC-TAC</h4>
+                  <p>Dos semáforos binarios alternos: <code>semTic = new Semaphore(1)</code> y <code>semTac = new Semaphore(0)</code>.</p>
+                </div>
+                <div class="ex-card">
+                  <div class="ex-head"><span class="ex-num">EJERCICIO 02</span></div>
+                  <h4 class="ex-title">30 Hilos Iniciales y 1 Final</h4>
+                  <p>Semáforo barrera con <code>0</code> permisos donde <code>HiloFinal</code> hace <code>acquire(30)</code> y cada hilo inicial hace <code>release()</code>.</p>
+                </div>
+                <div class="ex-card">
+                  <div class="ex-head"><span class="ex-num">EJERCICIO 04</span></div>
+                  <h4 class="ex-title">Explotar 1000 Globos</h4>
+                  <p><code>Semaphore mutex = new Semaphore(1)</code> protegiendo la comprobación e incremento de <code>explotados</code>.</p>
+                </div>
+                <div class="ex-card">
+                  <div class="ex-head"><span class="ex-num">EJERCICIO 06</span></div>
+                  <h4 class="ex-title">Canarios: Plato y Columpio</h4>
+                  <p>Dos semáforos de capacidad: <code>plato = new Semaphore(3)</code> y <code>columpio = new Semaphore(1)</code>.</p>
+                </div>
+              </div>
+            `
+          },
+          {
+            id: "b4-s2",
+            titulo: "4.2. Problemas Avanzados de Concurrencia (Ejercicios 8 al 14)",
+            codes: 0,
+            tables: 1,
+            subs: [
+              { id: "tabla-ej-8-14", titulo: "Resumen de Ejercicios 8 al 14" },
+              { id: "claves-avanzadas", titulo: "Claves de resolución (8–14)" }
+            ],
+            html: `
+              <h3 id="tabla-ej-8-14"><span class="h3-dot"></span><span>Resumen de Ejercicios 8 al 14</span></h3>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Actividad</th>
+                      <th>Requisitos de Sincronización y Reglas del Problema</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>8. Baño Público y Limpiador</strong></td>
+                      <td>Aforo ilimitado para usuarios (10 personas), pero cuando el empleado de limpieza coloca el cartel de <em>baño cerrado</em>, ningún usuario nuevo puede entrar; el limpiador espera a que el último usuario dentro salga y le avise, limpia el recinto y retira el cartel.</td>
+                    </tr>
+                    <tr>
+                      <td><strong>9. Equilibrio en Sala de Baile</strong></td>
+                      <td>Acceso a un salón procurando un número equitativo de hombres y mujeres. Si una persona intenta entrar y ya hay más asistentes de su mismo sexo que del opuesto, debe esperar en la puerta hasta que se equilibre el balance.</td>
+                    </tr>
+                    <tr>
+                      <td><strong>10. Canarios y Encargado de Tienda</strong></td>
+                      <td>10 canarios quieren comer cada 10 ms en un comedero (<strong>máximo 3 a la vez</strong>). El encargado repone alpiste cada 10 ms: cuando quiere reponer, espera a que salgan los canarios que estén comiendo y bloquea nuevas entradas hasta terminar de reponer.</td>
+                    </tr>
+                    <tr>
+                      <td><strong>11. Depósito de Agua (200 Litros)</strong></td>
+                      <td>Capacidad máxima de 200 L con operaciones <code>mete_agua(hilo, litros)</code> y <code>saca_agua(hilo, litros)</code>. Si al meter agua se rebosa la capacidad, el hilo espera; si al sacar no hay caudal suficiente, se bloquea hasta disponer de litros suficientes.</td>
+                    </tr>
+                    <tr>
+                      <td><strong>12. Ascensor (Personas y Peso)</strong></td>
+                      <td>Capacidad máxima de <strong>6 personas y 450 kg</strong>. Operaciones <code>sube_persona(nombre, peso)</code> y <code>baja_persona(nombre, peso)</code>. El hilo persona se bloquea si supera el cupo de ocupantes o el límite de peso, desbloqueándose cuando bajan otros pasajeros.</td>
+                    </tr>
+                    <tr>
+                      <td><strong>13. Cancha de Pádel</strong></td>
+                      <td>Los jugadores entran de uno en uno hasta reunir exactamente <strong>4 jugadores</strong> para iniciar el partido (dura 10 s). Los nuevos que lleguen durante el juego esperan fuera. Al acabar, los 4 salen y el último en abandonar la pista avisa a los siguientes.</td>
+                    </tr>
+                    <tr>
+                      <td><strong>14. Empaquetado de Plátanos (A y B)</strong></td>
+                      <td>Cinta transportadora ilimitada (FIFO) donde los productores colocan manojos etiquetados con calidad <code>A</code> o <code>B</code>. El <em>Señor A</em> y el <em>Señor B</em> recogen solo los de su letra: si el primer manojo en el frente de la cinta no es de su calidad, debe esperar a que el otro consumidor lo retire y le avise.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <h3 id="claves-avanzadas"><span class="h3-dot"></span><span>Claves de resolución (8–14)</span></h3>
+              ${callout("En los ejercicios <strong>8 al 14</strong> es fundamental combinar un semáforo <code>mutex</code> (inicializado a <code>1</code>) para proteger contadores/estado compartido con <strong>semáforos de condición</strong> (inicializados a <code>0</code>) para dormir y despertar hilos selectivamente sin producir <em>deadlocks</em>.", "nota", ICON_TASKS)}
+            `
+          }
+        ]
+      }
+    ];
+
+    /* ==========================================================================
+       Lógica SPA (idéntica a teoria-kotlin.html)
+       ========================================================================== */
+    const $ = (s, el = document) => el.querySelector(s);
+    const $$ = (s, el = document) => Array.from(el.querySelectorAll(s));
+    const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    const TEMAS = window.TEMAS || [];
+
+    /* ---------------- Tema Claro / Oscuro (sincronizado con visor.html) ---------------- */
+    const THEME_KEY = "pspUt02.theme";
+    function applyTheme(t) {
+      document.documentElement.dataset.theme = t;
+      document.documentElement.setAttribute("data-theme", t);
+      if (t === "dark") {
+        document.documentElement.classList.add("dark");
+        document.documentElement.classList.remove("light");
+      } else {
+        document.documentElement.classList.remove("dark");
+        document.documentElement.classList.add("light");
+      }
+      const btnTema = $("#btn-tema");
+      if (btnTema) {
+        btnTema.innerHTML = t === "dark"
+          ? `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fbbf24" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>`
+          : `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>`;
+      }
+      try { localStorage.setItem("tema_apuntes", t); } catch (e) {}
+    }
+    window.applyTheme = applyTheme;
+    applyTheme(localStorage.getItem("tema_apuntes") || localStorage.getItem(THEME_KEY) || "dark");
+
+    const btnTemaEl = $("#btn-tema");
+    if (btnTemaEl) {
+      if (window.self !== window.top) {
+        btnTemaEl.style.setProperty("display", "none", "important");
+      }
+      btnTemaEl.addEventListener("click", () => {
+        const t = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+        try { localStorage.setItem(THEME_KEY, t); } catch (e) {}
+        applyTheme(t);
+      });
+    }
+
+    /* ---------------- Progreso de lectura y botón arriba ---------------- */
+    window.addEventListener("scroll", () => {
+      const h = document.documentElement;
+      const scrolled = h.scrollTop || document.body.scrollTop;
+      const max = (h.scrollHeight - h.clientHeight) || 1;
+      $("#progress-bar").style.width = Math.min(100, (scrolled / max) * 100) + "%";
+      $("#btn-top").classList.toggle("show", scrolled > 380);
+    }, { passive: true });
+    $("#btn-top").addEventListener("click", () => window.scrollTo({ top: 0, behavior: "smooth" }));
+
+    /* ---------------- Sidebar ---------------- */
+    function renderSidebar(route) {
+      let h = `
+        <a class="nav-home ${route.view === "inicio" ? "active" : ""}" href="#/inicio">
+          ${SVG.sem}<span>Portada e Índice General</span>
+        </a>
+        <a class="nav-home ${route.view === "todo" ? "active" : ""}" href="#/todo">
+          ${SVG.psp}<span>Toda la UT2 Continua</span>
+        </a>
+        <div class="nav-divider"><span>UT 02 · Semáforos en Java</span><span>${TEMAS.length} bloques</span></div>
+      `;
+
+      TEMAS.forEach((t) => {
+        const cur = route.tema === t.id || route.view === "todo";
+        const ic = SVG[t.icon] || SVG.sem;
+        h += `<div class="nav-tema ${cur ? "open" : ""} ${route.tema === t.id ? "current" : ""}" data-tema="${t.id}" data-tech="${t.tech}">
+          <button type="button">
+            <span class="t-icon-box">${ic}<span class="t-num">${t.numero}</span></span>
+            <span class="t-title">Bloque ${t.numero}: ${esc(t.titulo)}</span>
+            <span class="chev"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px"><polyline points="9 18 15 12 9 6"></polyline></svg></span>
+          </button>
+          <ul>
+            ${t.secciones.map((s) => `
+              <li>
+                <a href="#/${t.id}/${s.id}" class="${route.sec === s.id ? "active" : ""}">
+                  <span>${esc(s.titulo)}</span>
+                </a>
+              </li>`).join("")}
+          </ul>
+        </div>`;
+      });
+
+      const sb = $("#sidebar");
+      sb.innerHTML = h;
+      $$(".nav-tema > button", sb).forEach((b) =>
+        b.addEventListener("click", () => b.parentElement.classList.toggle("open"))
+      );
+      const act = $("a.active", sb);
+      if (act && act.scrollIntoView) act.scrollIntoView({ block: "nearest" });
+    }
+
+    /* ---------------- Vista Inicio ---------------- */
+    function viewInicio() {
+      const totalSecs = TEMAS.reduce((a, t) => a + t.secciones.length, 0);
+      const totalCodes = TEMAS.reduce((a, t) => a + t.secciones.reduce((b, s) => b + s.codes, 0), 0);
+      const totalTables = TEMAS.reduce((a, t) => a + t.secciones.reduce((b, s) => b + s.tables, 0), 0);
+
+      return `
+        <section class="hero-banner">
+          <div class="hero-grid">
+            <div>
+              <div class="hero-pills">
+                <span class="tech-pill">${SVG.psp}<span>PSP · 2º DAM</span></span>
+                <span class="tech-pill">${SVG.sem}<span>java.util.concurrent.Semaphore</span></span>
+                <span class="tech-pill">${SVG.java}<span>Concurrencia en Java</span></span>
+              </div>
+              <h1>UT2: <span class="grad-text">Semáforos</span> en <span class="grad-and-text">Java</span></h1>
+              <p>Apuntes completos de <strong>Programación de Servicios y Procesos (2º DAM)</strong> · IES Valle del Jerte (Plasencia) · Marcos Fernández Sellers: definición y tipos de semáforos de Dijkstra, clase <code>Semaphore</code>, justicia (<em>fairness</em>), sincronización directa, región crítica, Parking FIFO, modelo Productor-Consumidor con <code>Queue</code> y catálogo de los 14 ejercicios propuestos.</p>
+              <div class="hero-actions">
+                <a class="btn primary" href="#/${TEMAS[0].id}/${TEMAS[0].secciones[0].id}">
+                  ${SVG.sem}<span>Empezar por la Introducción</span>
+                </a>
+                <a class="btn and-pill" href="#/todo">
+                  ${SVG.psp}<span>Leer Toda la UT2 Seguida</span>
+                </a>
+              </div>
+            </div>
+            <div class="hero-art">
+              <div class="hero-emblem kt-emblem" title="PSP">${SVG.psp}</div>
+              <div class="hero-emblem and-emblem" title="Semáforos">${SVG.sem}</div>
+            </div>
+          </div>
+        </section>
+
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="stat-ic">${SVG.sem}</div>
+            <div class="stat-info"><strong>${TEMAS.length} Bloques</strong><span>Teoría, patrones y práctica</span></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-ic">${SVG.psp}</div>
+            <div class="stat-info"><strong>${totalSecs} Apartados</strong><span>100% del temario UT2</span></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-ic">${SVG.java}</div>
+            <div class="stat-info"><strong>${totalCodes} Bloques Java</strong><span>Código listo para copiar</span></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-ic">${SVG.tasks}</div>
+            <div class="stat-info"><strong>14 Actividades</strong><span>${totalTables} tablas de referencia</span></div>
+          </div>
+        </div>
+
+        <div class="section-heading">
+          <h2>${SVG.sem}<span>Índice Completo de la UT2</span></h2>
+        </div>
+
+        <div class="temas-grid">
+          ${TEMAS.map((t) => {
+            const ic = SVG[t.icon] || SVG.sem;
+            const codes = t.secciones.reduce((a, s) => a + s.codes, 0);
+            return `
+              <article class="tema-card" data-tech="${t.tech}">
+                <div>
+                  <div class="tc-top">
+                    <span class="tc-badge">${ic}<span>${esc(t.badge)}</span></span>
+                    <span class="tc-num">BLOQUE 0${t.numero}</span>
+                  </div>
+                  <h3><a href="#/${t.id}/${t.secciones[0].id}">${esc(t.titulo)}</a></h3>
+                  <p>${esc(t.resumen)}</p>
+                  <ul class="tc-secs">
+                    ${t.secciones.map((s) => `
+                      <li>
+                        <a href="#/${t.id}/${s.id}">
+                          <span class="dot"></span>
+                          <span>${esc(s.titulo)}</span>
+                        </a>
+                      </li>`).join("")}
+                  </ul>
+                </div>
+                <div class="tc-foot">
+                  <span>${t.secciones.length} apartados</span>
+                  <span>${codes} bloques de código</span>
+                </div>
+              </article>
+            `;
+          }).join("")}
+        </div>
+      `;
+    }
+
+    /* ---------------- Vista Sección Individual ---------------- */
+    function viewSeccion(tema, sec) {
+      const all = TEMAS.flatMap((t) => t.secciones.map((s) => ({ t, s })));
+      const idx = all.findIndex((x) => x.s.id === sec.id);
+      const prev = all[idx - 1], next = all[idx + 1];
+      const ic = SVG[tema.icon] || SVG.sem;
+
+      const subToc = sec.subs && sec.subs.length
+        ? `<div class="sub-toc">
+            <span class="sub-toc-label">En este apartado:</span>
+            ${sec.subs.map((sub) => `<a class="sub-chip" href="javascript:void(0)" data-scroll="${esc(sub.id)}">${esc(sub.titulo)}</a>`).join("")}
+           </div>`
+        : "";
+
+      return `
+        <header class="sec-header" data-tech="${tema.tech}">
+          <nav class="crumbs">
+            <a href="#/inicio">Inicio</a>
+            <span>›</span>
+            <a href="#/${tema.id}/${tema.secciones[0].id}">Bloque ${tema.numero} · ${esc(tema.titulo)}</a>
+          </nav>
+          <div class="sec-title-row">
+            <h1>${esc(sec.titulo)}</h1>
+            <span class="tech-pill">${ic}<span>Bloque ${tema.numero} · ${esc(tema.badge)}</span></span>
+          </div>
+          ${subToc}
+        </header>
+
+        <article class="section-card">
+          <div class="section-body">${sec.html}</div>
+        </article>
+
+        <nav class="pager">
+          ${prev ? `<a class="prev" href="#/${prev.t.id}/${prev.s.id}"><small><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px"><polyline points="15 18 9 12 15 6"></polyline></svg> Apartado anterior (Bloque ${prev.t.numero})</small><strong>${esc(prev.s.titulo)}</strong></a>` : "<span></span>"}
+          ${next ? `<a class="next" href="#/${next.t.id}/${next.s.id}"><small>Siguiente apartado (Bloque ${next.t.numero}) <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px"><polyline points="9 18 15 12 9 6"></polyline></svg></small><strong>${esc(next.s.titulo)}</strong></a>` : ""}
+        </nav>
+      `;
+    }
+
+    /* ---------------- Vista Todo Continuo ---------------- */
+    function viewTodo() {
+      let out = `
+        <header class="sec-header">
+          <nav class="crumbs"><a href="#/inicio">Inicio</a><span>›</span><span>Modo Lectura Completa</span></nav>
+          <div class="sec-title-row">
+            <h1>UT2: Semáforos en Java (Temario Completo)</h1>
+            <div style="display:flex;gap:.5rem">
+              <span class="tech-pill">${SVG.psp}<span>PSP</span></span>
+              <span class="tech-pill">${SVG.sem}<span>Semaphore</span></span>
+            </div>
+          </div>
+        </header>
+      `;
+
+      TEMAS.forEach((t) => {
+        const ic = SVG[t.icon] || SVG.sem;
+        out += `
+          <div class="tema-banner" id="${t.id}">
+            <div class="tb-icon">${ic}</div>
+            <div class="tb-info">
+              <span>BLOQUE ${t.numero} · ${esc(t.badge)}</span>
+              <h2>${esc(t.titulo)}</h2>
+              <p>${esc(t.resumen)}</p>
+            </div>
+          </div>
+        `;
+        t.secciones.forEach((s) => {
+          out += `
+            <article class="section-card" id="${s.id}">
+              <div class="crumbs" style="margin-bottom:.35rem"><span>Bloque ${t.numero}</span><span>›</span><span>${esc(t.titulo)}</span></div>
+              <h2 style="margin:0 0 1.2rem;font-size:1.5rem">${esc(s.titulo)}</h2>
+              <div class="section-body">${s.html}</div>
+            </article>
+          `;
+        });
+      });
+      return out;
+    }
+
+    /* ---------------- Router ---------------- */
+    function parseRoute() {
+      const parts = location.hash.replace(/^#\/?/, "").split("/").filter(Boolean);
+      if (!parts.length || parts[0] === "inicio") return { view: "inicio" };
+      if (parts[0] === "todo") return { view: "todo" };
+      return { view: "seccion", tema: parts[0], sec: parts[1] };
+    }
+
+    function render() {
+      const route = parseRoute();
+      const main = $("#contenido");
+      let html = "";
+      if (route.view === "todo") {
+        html = viewTodo();
+      } else if (route.view === "seccion") {
+        const tema = TEMAS.find((t) => t.id === route.tema) || TEMAS[0];
+        const sec = tema.secciones.find((s) => s.id === route.sec) || tema.secciones[0];
+        route.tema = tema.id;
+        route.sec = sec.id;
+        html = viewSeccion(tema, sec);
+      } else {
+        html = viewInicio();
+      }
+      renderSidebar(route);
+      main.innerHTML = html;
+      window.scrollTo(0, 0);
+      $("#sidebar").classList.remove("open");
+      $("#overlay").classList.remove("show");
+    }
+
+    window.addEventListener("hashchange", render);
+
+    /* ---------------- Eventos delegados (Copiar, Tabs, Scroll a H3) ---------------- */
+    document.addEventListener("click", (e) => {
+      const scrollBtn = e.target.closest("[data-scroll]");
+      if (scrollBtn) {
+        const target = document.getElementById(scrollBtn.dataset.scroll);
+        if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+        return;
+      }
+
+      const copy = e.target.closest(".copy");
+      if (copy) {
+        const code = copy.closest(".code").querySelector("pre").innerText;
+        const span = copy.querySelector("span");
+        const done = () => {
+          if (span) span.textContent = "¡Copiado!";
+          setTimeout(() => { if (span) span.textContent = "Copiar"; }, 1500);
+        };
+        if (navigator.clipboard && window.isSecureContext) {
+          navigator.clipboard.writeText(code).then(done, () => fallbackCopy(code, done));
+        } else {
+          fallbackCopy(code, done);
+        }
+        return;
+      }
+
+      const tab = e.target.closest(".tab");
+      if (tab) {
+        const box = tab.closest(".tabs");
+        $$(":scope > .tab-heads > .tab", box).forEach((b) => b.classList.toggle("active", b === tab));
+        $$(":scope > .tab-body", box).forEach((b) => b.classList.toggle("active", b.dataset.i === tab.dataset.i));
+      }
+    });
+
+    function fallbackCopy(text, done) {
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand("copy"); done(); } catch (err) {}
+      ta.remove();
+    }
+
+    /* ---------------- Menú móvil y buscador móvil ---------------- */
+    $("#btn-menu").addEventListener("click", () => {
+      $("#sidebar").classList.toggle("open");
+      $("#overlay").classList.toggle("show");
+    });
+    $("#overlay").addEventListener("click", () => {
+      $("#sidebar").classList.remove("open");
+      $("#overlay").classList.remove("show");
+    });
+
+    const cajaBuscar = $("#caja-buscar");
+    const btnBuscarMovil = $("#btn-buscar-movil");
+    const btnCerrarBuscar = $("#cerrar-buscar");
+    const input = $("#buscador"), box = $("#resultados");
+
+    function toggleMobileSearch(open) {
+      if (!cajaBuscar) return;
+      cajaBuscar.classList.toggle("open", open);
+      if (open) {
+        input.focus();
+        input.select();
+      } else {
+        input.value = "";
+        box.hidden = true;
+        input.blur();
+      }
+    }
+    if (btnBuscarMovil) btnBuscarMovil.addEventListener("click", () => toggleMobileSearch(!cajaBuscar.classList.contains("open")));
+    if (btnCerrarBuscar) btnCerrarBuscar.addEventListener("click", () => toggleMobileSearch(false));
+
+    /* ---------------- Buscador instantáneo ---------------- */
+    let index = null;
+    function buildIndex() {
+      const tmp = document.createElement("div");
+      index = [];
+      TEMAS.forEach((t) => t.secciones.forEach((s) => {
+        tmp.innerHTML = s.html;
+        index.push({ t, s, text: (s.titulo + " " + tmp.textContent).replace(/\s+/g, " ") });
+      }));
+    }
+    const norm = (s) => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+    input.addEventListener("input", () => {
+      const q = input.value.trim();
+      if (q.length < 2) { box.hidden = true; return; }
+      if (!index) buildIndex();
+      const nq = norm(q);
+      const res = index.filter((x) => norm(x.text).includes(nq)).slice(0, 20);
+      box.innerHTML = res.length ? res.map((x, i) => {
+        const pos = norm(x.text).indexOf(nq);
+        const frag = x.text.slice(Math.max(0, pos - 38), pos + q.length + 62);
+        const fpos = norm(frag).indexOf(nq);
+        const snip = esc(frag.slice(0, fpos)) + "<mark>" + esc(frag.slice(fpos, fpos + q.length)) + "</mark>" + esc(frag.slice(fpos + q.length));
+        const ic = SVG[x.t.icon] || SVG.sem;
+        return `<a href="#/${x.t.id}/${x.s.id}" class="${i === 0 ? "sel" : ""}">
+          <div class="sr-head">${ic}<span>${esc(x.s.titulo)}</span></div>
+          <small>Bloque ${x.t.numero} (${esc(x.t.titulo)}) · …${snip}…</small>
+        </a>`;
+      }).join("") : `<a href="javascript:void(0)">Sin resultados para «${esc(q)}»</a>`;
+      box.hidden = false;
+    });
+
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        const a = $("a.sel", box);
+        if (a && a.getAttribute("href") && a.getAttribute("href").startsWith("#")) {
+          location.hash = a.getAttribute("href");
+          box.hidden = true;
+          input.blur();
+        }
+      }
+      if (e.key === "Escape") { box.hidden = true; input.blur(); if (cajaBuscar) cajaBuscar.classList.remove("open"); }
+    });
+    box.addEventListener("click", () => { box.hidden = true; if (cajaBuscar) cajaBuscar.classList.remove("open"); });
+    document.addEventListener("click", (e) => { if (!e.target.closest(".search")) box.hidden = true; });
+    document.addEventListener("keydown", (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        input.focus();
+        input.select();
+      }
+    });
+
+    render();
+  })();
+  </script>
+</body>
+</html>
